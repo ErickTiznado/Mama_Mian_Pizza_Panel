@@ -1,0 +1,31 @@
+.sidebar{
+    background-color: var(--color-primary);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.items{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    width: 80%;
+    border-radius: 10px;
+    transition: color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.items:hover{
+    background-color: var(--color-quinary);
+    color: var(--color-primary);
+}
+
+.items span{
+    font-size: 1.2rem;
+    color: var(--color-septenary);
+    font-weight: bold;
+}

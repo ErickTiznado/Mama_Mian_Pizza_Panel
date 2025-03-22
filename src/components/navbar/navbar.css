@@ -1,0 +1,51 @@
+:root {
+    --color-primary: #111828;
+    --color-secundary: #17202a;
+    --color-tertiary: #616a6b;
+    --color-quaternary: #717d7e;
+    --color-quinary: #909497;
+    --color-senary: #b3b6b7;
+    --color-septenary: #ffffff;
+}
+
+.brand{
+    display: flex;
+    align-items: center;
+    font-size: 1.6rem;
+    color: var(--color-septenary);
+}
+
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 0 20px;
+    background-color: var(--color-primary);
+}
+
+.buttons-container{
+    display: flex;
+    gap: 10px;
+}
+
+.buttons-container button{
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: transparent;
+}
+
+.buttons-container button:hover{
+    cursor: pointer;
+}
+
+.icon{
+    font-size: 1.6rem;
+    color: var(--color-septenary);
+    transition: all 0.3s ease-in-out;
+}
+
+.icon:hover{
+    color: var(--color-tertiary);
+}
