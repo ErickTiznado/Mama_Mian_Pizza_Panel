@@ -1,0 +1,9 @@
+{
+  "deploy": {
+    "buildCommand": "npm run build",
+    "startCommand": "npm run preview -- --host",
+    "healthCheckPath": "/",
+    "publish": "dist",
+    "port": 5173
+  }
+}
