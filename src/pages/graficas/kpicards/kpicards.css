@@ -1,0 +1,59 @@
+:root {
+    --color-primary: #111828;           /* Negro ligeramente más suave */
+    --color-secondary: #1E1E1E;        /* Azul oscuro profesional */
+    --color-tertiary: #242424;         /* Azul-gris para profundidad */
+    --color-quaternary: #EDEDED;        /* Gris muy claro para fondos */
+    --color-quinary: #F5F5F5;           /* Blanco roto para contraste */
+    --color-accent: #3D84B8;           /* Azul corporativo para acentos */
+    --color-success: #4CAF50;          /* Verde para acciones positivas */
+    --color-warning: #FFC107;          /* Amarillo para advertencias */
+    --color-danger: #E53935;           /* Rojo para acciones críticas */
+    --color-text: #333333;             /* Texto principal más suave */
+    --color-septenary: #FFFFFF;        /* Blanco puro */
+  }
+
+.kpicard-container{
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    height: 90%;
+    background-color: var(--color-secondary);
+    padding: 10px;
+    border-radius: 10px;
+    justify-content: space-between;
+}
+
+.kpicard-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 5px;
+}
+.kpicard-header h5{
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--color-septenary);
+}
+
+.kpicard-value{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 100%;
+    padding: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--color-septenary);
+}
+
+.kpicard-description{
+    text-align: left;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 100%;
+    padding: 5px;
+    font-size: 0.7rem;
+    gap: 5px;
+}

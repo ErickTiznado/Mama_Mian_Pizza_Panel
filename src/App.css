@@ -6,8 +6,8 @@
 
 :root {
   --color-primary: #111828;           /* Negro ligeramente más suave */
-  --color-secondary: #2D4059;        /* Azul oscuro profesional */
-  --color-tertiary: #3B4F63;         /* Azul-gris para profundidad */
+  --color-secondary: #1E1E1E;        /* Azul oscuro profesional */
+  --color-tertiary: #242424;         /* Azul-gris para profundidad */
   --color-quaternary: #EDEDED;        /* Gris muy claro para fondos */
   --color-quinary: #F5F5F5;           /* Blanco roto para contraste */
   --color-accent: #3D84B8;           /* Azul corporativo para acentos */
@@ -41,4 +41,11 @@
   grid-column: span 2 / span 2;
   grid-row: span 10 / span 10;
   background-color: var(--color-secundary);
+}
+
+.content-container {
+  display: grid;
+  grid-column: span 8 / span 8;
+  grid-row: span 10 / span 10;
+  background-color: var(--color-tertiary);
 }
