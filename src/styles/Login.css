@@ -1,0 +1,97 @@
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #fff9ed;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.login-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.form-box h2 {
+  color: rgba(130, 23, 23, 1); /* 👈 o el color que tú quieras */
+}
+.login-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-box {
+  background: white;
+  border: 2px solid #991b1b;
+  border-radius: 6px;
+  padding: 30px 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 45px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.password-container {
+  position: relative;
+}
+
+.password-container i {
+  position: absolute;
+  top: 80%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #991b1b;
+}
+
+.error-message {
+  color: #c53030;
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.login-form button {
+  background-color: rgba(254, 178, 72, 1);
+  color: rgba(130, 23, 23, 1);
+  border: none;
+  padding: 6px;
+  width: 40%;
+  border-radius: 6px;
+  margin-top: 15px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.forgot-link {
+  color: rgba(130, 23, 23, 1);
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+
+.register-text, .forgot-text {
+  margin-top: 15px;
+  font-size: 14px;
+  color: rgb(67, 1, 1);
+}
+
+.register-text a {
+  color:rgba(130, 23, 23, 1);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.register-text a:hover {
+  text-decoration: underline;
+}

@@ -1,28 +1,25 @@
-import { useState } from 'react'
-import './App.css'
-import Navbar from './components/navbar/nabvar'
-import Sidebar from './components/sidebar/sidebar'
-import Graficas from './pages/graficas/graficas'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './components/Login1';     // Asegúrate que esté bien el nombre del archivo
+import Register from './components/Register'; // Ruta correcta al componente Register
+import Recuperar from './components/Recuperar';
+import VerificarCodigo from './components/VerificarCodigo';
+import Restablecer from './components/Restablecer';
+
 function App() {
-
-
   return (
-    <>
-    <main className='container'>
-      <nav className='navbar-container'>
-        <Navbar/>    
-      </nav>
-      <aside className='sidebar-container'>
-        <Sidebar/>
-      </aside>
-      <div className='content-container'>
-        <Graficas/>
-      </div>
-    </main>
-    </>
-  )
-
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/registro" element={<Register />} />
+        <Route path="/recuperar" element={<Recuperar />} />
+        <Route path="/verificar-codigo" element={<VerificarCodigo />} />
+        <Route path="/restablecer" element={<Restablecer />} />
+        
+      </Routes>
+    </Router>
+  );
 }
 
-
-export default App
+export default App;
