@@ -1,0 +1,82 @@
+.pedidos-container{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-around;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
+.pedidos-header{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 5px;
+}
+
+.pedidos-header h3{
+    font-size: 1.6rem;
+    color: var(--color-quinary);
+}
+
+.pedidos-header p{
+    font-size: 0.9rem;
+    color: var(--color-quinary);
+}
+
+.pedido-item{
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.pedido-name{
+    font-size: 1.2rem;
+    color: var(--color-quinary);
+}
+.pedido-info{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5px;
+}
+
+.pedido-id{
+    font-size: 0.9rem;
+    color: var(--color-quinary);
+}
+
+.pedidos-content{
+    width: 100%;
+    padding: 20px;
+}
+
+.pedidos-list{
+    width: 100%;
+}
+
+.pedido-details{
+    display: flex;
+    justify-content: space-between;
+    width: 40%;
+}
+
+.status{
+    width: 100%;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.entregado{
+    background-color: var(--color-success);
+    color: var(--color-txtwarning);
+    font-weight: bold;
+}
+
+.cancelado{
+    background-color: var(--color-danger);
+    color: var(--color-txtdanger);
+    font-weight: bold;
+}

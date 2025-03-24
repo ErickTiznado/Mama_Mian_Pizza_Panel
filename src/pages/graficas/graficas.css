@@ -1,3 +1,21 @@
+:root {
+  --color-primary: #111828;           /* Negro ligeramente más suave */
+  --color-secondary: #1E1E1E;        /* Azul oscuro profesional */
+  --color-tertiary: #242424;         /* Azul-gris para profundidad */
+  --color-quaternary: #EDEDED;        /* Gris muy claro para fondos */
+  --color-quinary: #F5F5F5;           /* Blanco roto para contraste */
+  --color-accent: #3D84B8;           /* Azul corporativo para acentos */
+  --color-success: #B1F6BB;
+  --color-txtsuccess: #007712;             /* Verde para acciones positivas */
+  --color-warning: #ECFE48;          /* Amarillo para advertencias */
+  --color-txtwarning: #776D00;
+  --color-danger: #F6B1B1;           /* Rojo para acciones críticas */
+  --color-text: #333333;             /* Texto principal más suave */
+  --color-septenary: #FFFFFF;        /* Blanco puro */
+  --color-txtdanger: #821717;
+
+}
+
 .graficas-container {
   display: flex;
   flex-direction: column;
@@ -28,6 +46,22 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  width: 100%;
-  height: 100%;
+  width: 60%;
+  height: 80%;
+  background-color: var(--color-secondary);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.graficas-content-2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 35%;
+  height: 80%;
+  background-color: var(--color-secondary);
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

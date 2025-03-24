@@ -5,12 +5,14 @@
     --color-quaternary: #E5D79A;        /* Gris muy claro para fondos */
     --color-quinary: #F5F5F5;           /* Blanco roto para contraste */
     --color-accent: #3D84B8;           /* Azul corporativo para acentos */
-    --color-success: #4CAF50;          /* Verde para acciones positivas */
-    --color-warning: #FFC107;          /* Amarillo para advertencias */
-    --color-danger: #E53935;           /* Rojo para acciones críticas */
+    --color-success: #B1F6BB;          /* Verde para acciones positivas */
+    --color-warning: #ECFE48;          /* Amarillo para advertencias */
+    --color-txtwarning: #776D00;
+    --color-danger: #F6B1B1;           /* Rojo para acciones críticas */
     --color-text: #333333;             /* Texto principal más suave */
     --color-septenary: #FFFFFF;        /* Blanco puro */
-  }
+    --color-txtdanger: #821717;
+}
 
 .kpicard-container{
     display: flex;

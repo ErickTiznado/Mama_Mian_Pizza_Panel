@@ -18,7 +18,7 @@ const lineGraf = ({ data, xKey = "month" }) => {
           bottom: 5,
         }}
       >
-        <CartesianGrid strokeDasharray="3 3" />
+        <CartesianGrid stroke='#fff' strokeDasharray="0" />
         <XAxis dataKey={xKey} />
         <YAxis />
         <Tooltip />
