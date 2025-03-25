@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '/src/styles/VerificarCodigo.css';
+import './VerificarCodigo.css';
 
 const VerificarCodigo = () => {
   const [codigo, setCodigo] = useState('');

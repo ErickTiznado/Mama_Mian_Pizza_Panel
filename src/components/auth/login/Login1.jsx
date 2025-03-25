@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import '/src/styles/Login.css';
+import './Login.css'; 
 
 const Login = () => {
   const [correo, setCorreo] = useState('');

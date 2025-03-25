@@ -5,12 +5,7 @@
     --error: rgba(130, 23, 23, 1);
     --bg: #fff9ed;
   }
-  
-  body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: var(--bg);
-  }
+
   
   .login-container {
     flex: 1;

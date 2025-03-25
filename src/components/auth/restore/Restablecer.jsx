@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '/src/styles/Restablecer.css';
+import './Restablecer.css';
 
 
 const Restablecer = () => {

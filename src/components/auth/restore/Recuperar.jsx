@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '/src/styles/Recuperar.css';
+import './Recuperar.css';
 
 const Recuperar = () => {
   const [correo, setCorreo] = useState('');
