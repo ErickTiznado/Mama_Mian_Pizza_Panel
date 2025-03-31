@@ -25,7 +25,7 @@ const Login = () => {
 
       if (data.success) {
         setError(false);
-        navigate('/src/components/prueba.jsx'); // Redirige a Prueba.jsx
+        navigate('/home'); // Redirige a Prueba.jsx
       } else {
         setError(true); // Muestra mensaje de error en pantalla
       }
