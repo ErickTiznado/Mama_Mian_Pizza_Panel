@@ -39,7 +39,12 @@ const Login = () => {
     <div className="login-page">
       <main className="login-container">
         <div className="form-box">
-          <h2>Iniciar Sesión</h2>
+        <header className='login-header'>
+          <h2 className='login-title'>
+            Mama Mian Pizza Panel
+          </h2>
+        </header>
+          <h2 className='login-form-title'>Iniciar Sesión</h2>
           <form className="login-form" onSubmit={handleLogin}>
             <input
               type="email"
@@ -72,7 +77,7 @@ const Login = () => {
             <button type="submit">Ingresar</button>
 
             <p className="register-text">
-              ¿No tienes cuenta? <Link to="/registro">Regístrate</Link>
+            Por seguridad, cambie su contraseña predeterminada después del primer acceso.
             </p>
 
             <p className="forgot-text">

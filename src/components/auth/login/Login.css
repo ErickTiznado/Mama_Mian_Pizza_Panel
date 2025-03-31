@@ -1,4 +1,13 @@
+:root {
+  --login-background: #1F1F1F;
+  --secondary-color: #FEB248;
+}
 
+.login-title{
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--secondary-color);
+}
 
 .login-page {
   display: flex;
@@ -9,8 +18,8 @@
   width: 100vw;
 }
 
-.form-box h2 {
-  color: rgba(130, 23, 23, 1); /* 👈 o el color que tú quieras */
+.login-form-title {
+  color: #FFF; /* 👈 o el color que tú quieras */
 }
 .login-container {
   flex: 1;
@@ -22,12 +31,12 @@
 }
 
 .form-box {
-  background: white;
-  border: 2px solid #991b1b;
+  background: var(--login-background);
+  border: 2px solid #FFF;
   border-radius: 6px;
   padding: 30px 40px;
   width: 100%;
-  max-width: 400px;
+  max-width: 600px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   text-align: center;
 }
@@ -50,7 +59,7 @@
   right: 10px;
   transform: translateY(-50%);
   cursor: pointer;
-  color: #991b1b;
+  color: #FFF;
 }
 
 .error-message {
@@ -58,6 +67,15 @@
   font-size: 14px;
   margin: 10px 0;
 }
+
+.login-header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 20px;
+}
+
 
 .login-form button {
   background-color: rgba(254, 178, 72, 1);
@@ -71,7 +89,7 @@
   font-weight: bold;
 }
 .forgot-link {
-  color: rgba(130, 23, 23, 1);
+  color: #FFF;
   text-decoration: none;
 }
 
@@ -80,10 +98,17 @@
 }
 
 
-.register-text, .forgot-text {
+.register-text {
   margin-top: 15px;
   font-size: 14px;
-  color: rgb(67, 1, 1);
+  color: #FFF;
+  border-left: rgba(254, 178, 72, 1) 3px solid;
+}
+
+.forgot-text{
+  margin-top: 15px;
+  font-size: 14px;
+  color: #FFF;
 }
 
 .register-text a {

@@ -6,6 +6,7 @@ import Recuperar from './components/auth/restore/Recuperar'; // Ruta correcta al
 import VerificarCodigo from './components/auth/restore/VerificarCodigo'; // Ruta correcta al componente VerificarCodigo
 import Restablecer from './components/auth/restore/Restablecer'; // Ruta correcta al componente Restablecer
 import Home from './pages/app/home'; 
+import Prueba from './components/prueba';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/verificar-codigo" element={<VerificarCodigo />} />
         <Route path="/restablecer" element={<Restablecer />} />
         <Route path="/home" element={<Home/> } />
+        <Route path='/prueba' element={<Prueba/>}/>
       </Routes>
     </Router>
   );
