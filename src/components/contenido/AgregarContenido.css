@@ -1,0 +1,244 @@
+/* src/components/contenido/AgregarContenido.css */
+
+.agregar-contenido-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.contenido-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  width: 100%;
+}
+
+.contenido-principal {
+  flex: 1;
+  padding: 270px;
+  background-color: #1f1f1f;
+  color: white;
+  overflow-y: auto;
+}
+
+/* Formulario */
+.formulario-contenido {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: rgba(31, 31, 31, 1);
+  border: 1px solid white;  
+  margin-top: -190px; 
+}
+
+.formulario-contenido h2 {
+  margin-bottom: 0.5rem;
+  font-size: 33px;
+}
+
+.formulario-contenido p {
+  color: #ccc;
+  font-size: 24px;
+  margin-bottom: 1.5rem;
+  margin-top: -40px;
+}
+.texto-upload {
+  font-size: 18px;
+  color: rgba(0, 0, 0, 1);
+  
+  margin-bottom: 0.8rem;
+  text-align: center;
+  margin-top: 10px;
+}
+
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  font-size: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+}
+
+.upload-box {
+  background-color: white;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 10px;
+  margin-top: 1rem;
+}
+
+.upload-box button {
+  padding: 0.5rem 1rem;
+  background-color: rgba(32, 41, 56, 1);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  border-radius: 10px;
+  width: 165px;
+  font-size: 15px;
+  margin-left: 310px;
+  margin-top: 35px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.cancelar {
+  background: rgba(32, 41, 56, 1);
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 10px;
+  margin-left: 200px;
+}
+
+.guardar {
+  background-color: rgba(32, 41, 56, 1);
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 10px;
+  margin-right: 200px;
+}
+.contenido-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.boton-nuevo {
+  background-color: rgba(32, 41, 56, 1);
+  color: white;
+  border: none;
+  padding: 8px 34px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s ease;
+  font-size: 14px;
+  margin-left: 650px;
+  top: -50px;  
+  position: relative; 
+  
+}
+
+.boton-nuevo:hover {
+  background-color: rgb(50, 61, 81);
+}
+.toggle-activo {
+  margin-top: 1rem;
+}
+
+.toggle-label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: block;
+  margin-top: -25px;
+  color: rgba(0, 0, 0, 1);
+}
+
+.toggle-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  color: black;
+  border-radius: 8px;
+  padding: 0 0.8rem;  
+  height: 50px; 
+  box-sizing: border-box;
+  max-width: 400px;
+  margin-top: 30px;
+}
+
+.toggle-text {
+  font-size: 14px;
+  margin-left: -133px;
+  margin-top: 25px;
+}
+
+.custom-toggle {
+  width: 50px;
+  height: 26px;
+  background-color: #1e293b;
+  border-radius: 26px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-toggle.activo {
+  background-color: #0f172a;
+}
+
+.toggle-circle {
+  width: 22px;
+  height: 22px;
+  background-color: #e6dca2;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s ease;
+}
+
+.custom-toggle.activo .toggle-circle {
+  transform: translateX(24px);
+}
+.btn-subir {
+  background-color: #e6dca2;  
+  color: rgba(32, 41, 56, 1);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-subir:hover {
+  background-color: rgb(51, 64, 88);
+}
+.texto-ayuda {
+  font-size: 20px; 
+  color: white;
+  display: block;
+  margin-top: 6px;
+  margin-left: 155px;
+}
+.icono-upload {
+  font-size: 80px;         
+  color: rgba(32, 41, 56, 1);           
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+.icono-upload:hover {
+  transform: scale(1.1);
+  color: rgb(60, 76, 103);
+}
