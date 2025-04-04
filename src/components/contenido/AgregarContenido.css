@@ -4,6 +4,8 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  width: 100vw;        /* ✅ para que abarque todo el ancho */
+  
 }
 
 .contenido-layout {
@@ -15,25 +17,36 @@
 
 .contenido-principal {
   flex: 1;
-  padding: 270px;
+  padding: 2rem;
   background-color: #1f1f1f;
   color: white;
   overflow-y: auto;
+  height: calc(100vh - 70px);
+  box-sizing: border-box;
+  
 }
+
 
 /* Formulario */
 .formulario-contenido {
-  max-width: 900px;
+  width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 3rem 2rem;
   background-color: rgba(31, 31, 31, 1);
-  border: 1px solid white;  
-  margin-top: -190px; 
+  border: 1px solid white;
+  margin-top:70px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  overflow-x: hidden;
+  
+
 }
 
 .formulario-contenido h2 {
   margin-bottom: 0.5rem;
   font-size: 33px;
+  
 }
 
 .formulario-contenido p {
@@ -41,27 +54,34 @@
   font-size: 24px;
   margin-bottom: 1.5rem;
   margin-top: -40px;
+  
 }
 .texto-upload {
   font-size: 18px;
   color: rgba(0, 0, 0, 1);
-  
   margin-bottom: 0.8rem;
   text-align: center;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  column-gap: 6rem; /* 👉 más espacio entre columnas */
+  row-gap: 1.5rem;
   font-size: 24px;
+  
+  
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
+  margin-left: 20px;
+  width: 580px;
+  margin-top: 10px;
+  
 }
 
 .form-group label {
@@ -73,14 +93,17 @@
   padding: 10px;
   border-radius: 6px;
   border: none;
+  height: 45px;
 }
 
 .upload-box {
   background-color: white;
-  padding: 2rem;
+  padding: 5rem;
   text-align: center;
   border-radius: 10px;
-  margin-top: 1rem;
+  margin-top: 140px;
+  width: 1270px;
+  margin-left: 10px;
 }
 
 .upload-box button {
@@ -93,8 +116,8 @@
   border-radius: 10px;
   width: 165px;
   font-size: 15px;
-  margin-left: 310px;
-  margin-top: 35px;
+  margin-left: 440px;
+  margin-top: 55px;
 }
 
 .form-actions {
@@ -108,7 +131,9 @@
   color: white;
   padding: 0.5rem 1.5rem;
   border-radius: 10px;
-  margin-left: 200px;
+  margin-left: 450px;
+  margin-top: 4px;
+  width: 200px;
 }
 
 .guardar {
@@ -116,7 +141,9 @@
   color: white;
   padding: 0.5rem 1.5rem;
   border-radius: 10px;
-  margin-right: 200px;
+  margin-right: 400px;
+  margin-top: 4px;
+  width: 200px;
 }
 .contenido-header {
   display: flex;
@@ -129,15 +156,17 @@
   background-color: rgba(32, 41, 56, 1);
   color: white;
   border: none;
-  padding: 8px 34px;
+  padding: 8px 24px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
   transition: 0.3s ease;
-  font-size: 14px;
+  font-size: 24px;
   margin-left: 650px;
   top: -50px;  
   position: relative; 
+  width: 250px;
+  margin-left: 1000px;
   
 }
 
@@ -167,13 +196,13 @@
   padding: 0 0.8rem;  
   height: 50px; 
   box-sizing: border-box;
-  max-width: 400px;
+  max-width: 700px;
   margin-top: 30px;
 }
 
 .toggle-text {
   font-size: 14px;
-  margin-left: -133px;
+  margin-left: -323px;
   margin-top: 25px;
 }
 
@@ -214,21 +243,25 @@
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s ease;
-  font-size: 14px;
+  font-size: 24px;
   display: flex;
   align-items: center;
   gap: 8px;
+ 
+  
 }
 
 .btn-subir:hover {
   background-color: rgb(51, 64, 88);
 }
 .texto-ayuda {
-  font-size: 20px; 
+  font-size: 20px;
   color: white;
   display: block;
-  margin-top: 6px;
-  margin-left: 155px;
+  margin-top: 16px;
+  text-align: right; /* ✅ esto lo empuja a la derecha */
+  width: 150%;
+  
 }
 .icono-upload {
   font-size: 80px;         
@@ -236,9 +269,109 @@
   cursor: pointer;
   transition: transform 0.2s ease;
   margin-bottom: 1rem;
+  margin-top: -15px;
 }
 
 .icono-upload:hover {
   transform: scale(1.1);
   color: rgb(60, 76, 103);
+  
+}
+.categoria-wrapper {
+  position: relative;
+}
+
+.categoria-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Dropdown */
+.categoria-dropdown {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  color: black;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.categoria-item {
+  font-size: 18px;
+  padding: 0.4rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.categoria-item:hover {
+  background-color: #f1f1f1;
+}
+
+
+.categoria-buttons .cancelar {
+  background-color: transparent;
+  color: black;
+  
+}
+
+.categoria-buttons .guardar {
+  background-color: rgba(32, 41, 56, 1);
+  color: white;
+}
+
+
+.categoria-inline {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.input-nueva-categoria {
+  flex: 1;
+  font-size: 16px;
+  padding: 0.6rem 1rem;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.btn-categoria-cancelar,
+.btn-categoria-guardar {
+  font-size: 14px;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-categoria-cancelar {
+  background-color: transparent;
+  color: black;
+}
+
+.btn-categoria-guardar {
+  background-color: #1e293b;
+  color: white;
+}
+.categoria-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.dropdown-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #1e293b;
+  pointer-events: none; /* para que el clic pase al input */
 }
