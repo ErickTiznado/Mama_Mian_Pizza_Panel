@@ -276,7 +276,7 @@ const AgregarContenido = () => {
                 </button>
               </div>
               <small className="texto-ayuda">
-                Sube una imagen para la sección de Promociones
+                Sube una imagen para la sección de la pagina
               </small>
             </div>
 

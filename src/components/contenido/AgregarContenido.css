@@ -1,10 +1,8 @@
-/* src/components/contenido/AgregarContenido.css */
-
 .agregar-contenido-wrapper {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  width: 100vw;        /* ✅ para que abarque todo el ancho */
+  width: 100vw;       
   
 }
 
@@ -26,8 +24,6 @@
   
 }
 
-
-/* Formulario */
 .formulario-contenido {
   width: 100%;
   max-width: 1400px;
@@ -40,7 +36,6 @@
   border-radius: 12px;
   overflow-x: hidden;
   
-
 }
 
 .formulario-contenido h2 {
@@ -68,7 +63,7 @@
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  column-gap: 6rem; /* 👉 más espacio entre columnas */
+  column-gap: 6rem; 
   row-gap: 1.5rem;
   font-size: 24px;
   
@@ -104,21 +99,9 @@
   margin-top: 140px;
   width: 1270px;
   margin-left: 10px;
+
 }
 
-.upload-box button {
-  padding: 0.5rem 1rem;
-  background-color: rgba(32, 41, 56, 1);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  border-radius: 10px;
-  width: 165px;
-  font-size: 15px;
-  margin-left: 440px;
-  margin-top: 55px;
-}
 
 .form-actions {
   display: flex;
@@ -127,11 +110,12 @@
 }
 
 .cancelar {
-  background: rgba(32, 41, 56, 1);
+  
+  background-color: transparent;
   color: white;
   padding: 0.5rem 1.5rem;
   border-radius: 10px;
-  margin-left: 450px;
+  margin-left: 460px;
   margin-top: 4px;
   width: 200px;
 }
@@ -194,7 +178,7 @@
   color: black;
   border-radius: 8px;
   padding: 0 0.8rem;  
-  height: 50px; 
+  height: 80px; 
   box-sizing: border-box;
   max-width: 700px;
   margin-top: 30px;
@@ -203,7 +187,7 @@
 .toggle-text {
   font-size: 14px;
   margin-left: -323px;
-  margin-top: 25px;
+  margin-top: 45px;
 }
 
 .custom-toggle {
@@ -235,19 +219,21 @@
   transform: translateX(24px);
 }
 .btn-subir {
-  background-color: #e6dca2;  
-  color: rgba(32, 41, 56, 1);
+  background-color: rgba(32, 41, 56, 1);  
+  color: white;
   border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
+  border-radius: 10px;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s ease;
-  font-size: 24px;
+  font-size: 20px;
   display: flex;
   align-items: center;
-  gap: 8px;
- 
+  gap: 18px;
+  padding: 5px 29px !important;
+  width: 23% !important; 
+  margin-left: 425px;
+ margin-top: 70px;
   
 }
 
@@ -270,6 +256,7 @@
   transition: transform 0.2s ease;
   margin-bottom: 1rem;
   margin-top: -15px;
+  margin-left: -28px;
 }
 
 .icono-upload:hover {
