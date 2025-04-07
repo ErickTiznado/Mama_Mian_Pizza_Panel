@@ -22,7 +22,7 @@ function Sidebar() {
             Pedidos
             </button>
             <button className="items">
-                <ClipboardList size={38}  onClick={() => handleNavigation('/AgregarContenido')} />
+                <ClipboardList size={38}  onClick={handleNavigation('/AgregarContenido')} />
                     Contenido
             </button>
             <button className="items">
