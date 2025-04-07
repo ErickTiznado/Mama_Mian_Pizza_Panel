@@ -1,10 +1,19 @@
 import './sidebar.css';
 import { House, ShoppingCart, Users, ClipboardList, Package, ChartLine, Store  } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+
 
 function Sidebar() {
+    const navigate = useNavigate();
+
+    const handleNavigation = (path) => {
+        navigate(path);
+    }
+
     return(
         <div className='sidebar'>
-            <button className="items">
+            <button className="items" onClick={() => handleNavigation('/home')}>
                 <House size={38} />
                 Inicio
             </button>
@@ -13,7 +22,7 @@ function Sidebar() {
             Pedidos
             </button>
             <button className="items">
-                <ClipboardList size={38}  />
+                <ClipboardList size={38}  onClick={() => handleNavigation('/AgregarContenido')} />
                     Contenido
             </button>
             <button className="items">
