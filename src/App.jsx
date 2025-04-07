@@ -7,7 +7,7 @@ import VerificarCodigo from './components/auth/restore/VerificarCodigo'; // Ruta
 import Restablecer from './components/auth/restore/Restablecer'; // Ruta correcta al componente Restablecer
 import Home from './pages/app/home'; 
 import Prueba from './components/prueba';
-
+import AgregarContenido from './components/contenido/AgregarContenido';
 function App() {
   return (
     <Router>
@@ -20,6 +20,7 @@ function App() {
         <Route path="/restablecer" element={<Restablecer />} />
         <Route path="/home" element={<Home/> } />
         <Route path='/prueba' element={<Prueba/>}/>
+        <Route path='/AgregarContenido' element={<AgregarContenido/>}/>
       </Routes>
     </Router>
   );
