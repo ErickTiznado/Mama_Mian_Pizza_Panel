@@ -102,7 +102,7 @@ const AgregarContenido = () => {
               </div>
                   {/* Sesiones */}
                   <div className="form-group">
-                <label>Sesiones</label>
+                <label>Secciones</label>
                 <div className="categoria-wrapper" ref={sesionesRef}>
                   <input
                     type="text"
