@@ -31,6 +31,7 @@ const AgregarContenido = () => {
     'Sobre Nosotros',
     'Recomendación de la casa',
     'Banner',
+    'Sin Seccion',
   ];
 
   const [showDropdown, setShowDropdown] = useState(false);
