@@ -118,7 +118,7 @@ const AgregarContenido = () => {
     
     try {
       // Send the data to the backend
-      const response = await axios.post('/api/content/submit', submitFormData, {
+      const response = await axios.post('http://bkcww48c8swokk0s4wo4gkk8.82.29.198.111.sslip.io/api/content/submit', submitFormData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
