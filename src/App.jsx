@@ -8,6 +8,12 @@ import Restablecer from './components/auth/restore/Restablecer'; // Ruta correct
 import Home from './pages/app/home'; 
 import Prueba from './components/prueba';
 import AgregarContenido from './components/contenido/AgregarContenido';
+import OrderManager from './components/pedidos/OrderManager';
+import GestionClientes from './components/GestionClientes/GestionClientes';
+import Inventario from './components/Inventario/Inventario';
+
+
+
 function App() {
   return (
     <Router>
@@ -21,6 +27,12 @@ function App() {
         <Route path="/home" element={<Home/> } />
         <Route path='/prueba' element={<Prueba/>}/>
         <Route path='/AgregarContenido' element={<AgregarContenido/>}/>
+        <Route path="/pedidos" element={<OrderManager />} />
+        <Route path="/GestionClientes" element={<GestionClientes />} />
+        <Route path="/inventario" element={<Inventario />} />
+
+        
+        
       </Routes>
     </Router>
   );

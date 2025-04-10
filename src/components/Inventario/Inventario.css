@@ -1,0 +1,217 @@
+/* CONTENEDOR GENERAL */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0 40px 0;
+  }
+  
+  /* HEADER DEL FORMULARIO */
+  .header-formulario {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1400px;
+    margin: 30px auto 20px auto;
+    padding: 0 20px;
+    color: white;
+  }
+  
+  /* HEADER DE LA TABLA */
+  .header-inventario {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1400px;
+    margin-top: 50px;
+    padding: 0 20px;
+    color: white;
+  }
+  
+  /* TITULO */
+  .titulo-inventario {
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  /* BOTÓN + AGREGAR INVENTARIO */
+  .agregarBtn {
+    background-color: rgba(254, 178, 72, 1);
+    color: rgba(153, 27, 27, 1);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 30px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .agregarBtn:hover {
+    background-color: #ffb066;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* BUSCADOR */
+  .buscador {
+    display: flex;
+    align-items: center;
+   margin-top: -100px;
+    width: 100%;
+    max-width: 630px;
+    position: relative;
+    margin-right: 760px;
+  }
+  
+  .buscador input {
+    width: 100%;
+    padding: 10px 40px 10px 12px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+  }
+  
+
+  .icono-buscar {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-30%);
+    font-size: 18px;
+    color: black;
+    pointer-events: none;
+   font-size: 29px;
+  }
+  
+  .acciones-columna {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Botón Eliminar */
+  .btn-eliminar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: color 0.2s ease;
+  }
+  
+  .btn-eliminar:hover {
+    color: #ff1a1a;
+    text-decoration: underline;
+  }
+  
+  /* Botón Editar */
+  .btn-editar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: color 0.2s ease;
+    margin-left: -10px;
+  }
+  
+  .btn-editar:hover {
+    color: #1a8cff;
+    text-decoration: underline;
+  }
+  
+  
+  /* TABLA */
+  .tabla-inventario {
+    width: 100%;
+    max-width: 1400px;
+    overflow-y: auto;
+    margin-top: 20px;
+    position: static;
+
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+    font-size: 16px;
+    background-color: rgba(31, 31, 31, 1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  th, td {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 12px;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #1f1f1f;
+    font-weight: bold;
+  }
+  
+  /* ESTADO */
+  .estado {
+    color: lightgreen;
+    font-weight: bold;
+  }
+  
+  /* BOTONES DE ACCIONES */
+  .eliminar {
+    color: red;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .editar {
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .eliminar:hover, .editar:hover {
+    text-decoration: underline;
+  }
+  
+  /* PAGINACIÓN */
+  .paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+    color: white;
+  }
+  
+  .paginacion button {
+    background-color: #f4a259;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    color: #1f1f1f;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .paginacion button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
