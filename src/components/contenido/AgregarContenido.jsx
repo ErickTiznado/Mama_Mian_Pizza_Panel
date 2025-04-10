@@ -17,6 +17,7 @@ const AgregarContenido = () => {
     sesion: '',
     imagen: null,
     activo: false,
+    precio: '', // Add precio field to formData
   });
 
   const [categorias, setCategorias] = useState([
@@ -81,8 +82,8 @@ const AgregarContenido = () => {
   };
 
   const validateForm = () => {
-    const { titulo, descripcion, porciones, categoria, sesion } = formData;
-    if (!titulo || !descripcion || !porciones || !categoria || !sesion) {
+    const { titulo, descripcion, porciones, categoria, sesion, precio } = formData;
+    if (!titulo || !descripcion || !porciones || !categoria || !sesion || !precio) {
       setSubmitStatus({ 
         type: 'error', 
         message: 'Por favor completa todos los campos obligatorios' 
@@ -111,6 +112,7 @@ const AgregarContenido = () => {
     submitFormData.append('categoria', formData.categoria);
     submitFormData.append('sesion', formData.sesion);
     submitFormData.append('activo', formData.activo);
+    submitFormData.append('precio', formData.precio); // Add precio to the submitted data
     
     // Append the image if it exists
     if (formData.imagen) {
@@ -142,6 +144,7 @@ const AgregarContenido = () => {
         sesion: '',
         imagen: null,
         activo: false,
+        precio: '', // Reset precio
       });
       setPreviewUrl(null);
       
@@ -164,7 +167,6 @@ const AgregarContenido = () => {
         <div className="contenido-principal">
           <form className="formulario-contenido" onSubmit={handleSubmit}>
             <h2>Añadir Nuevo Contenido</h2>
-            <button className="boton-nuevo">+ Nuevo pedido</button>
             <p>Sube imágenes para las secciones de tu sitio web</p>
 
             {submitStatus.message && (
@@ -229,6 +231,20 @@ const AgregarContenido = () => {
                   name="descripcion"
                   value={formData.descripcion}
                   onChange={handleChange}
+                />
+              </div>
+              
+              {/* Añadir campo de precio */}
+              <div className="form-group">
+                <label>Precio</label>
+                <input
+                  type="number"
+                  name="precio"
+                  value={formData.precio}
+                  onChange={handleChange}
+                  placeholder="0.00"
+                  step="0.01"
+                  min="0"
                 />
               </div>
               
@@ -411,6 +427,7 @@ const AgregarContenido = () => {
                     sesion: '',
                     imagen: null,
                     activo: false,
+                    precio: '', // Reset precio field
                   });
                   setPreviewUrl(null);
                   setSubmitStatus({ type: '', message: '' });
