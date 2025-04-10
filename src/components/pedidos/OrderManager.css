@@ -1,0 +1,158 @@
+.wrapper {
+    padding: 40px;
+    background-color: rgba(31, 31, 31, 1);
+    height: 100vh;
+    overflow-y: auto;
+  }
+  
+ /* Card interna (la caja central) */
+.card {
+  background-color: rgba(31, 31, 31, 1);
+  border-radius: 12px;
+  padding: 50px;
+  max-width: 2000px;
+  margin: auto;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  color: white;
+  border: 2px solid white;
+  font-size: 16px;
+}
+
+/* Fondo del body por si hace falta */
+body {
+  margin: 0;
+  background-color: #1e1e1e;
+}
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .newOrderBtn {
+    background-color: rgba(254, 178, 72, 1);
+    border: none;
+    padding: 8px 50px;
+    border-radius: 10px;
+    color: rgba(153, 27, 27, 1);
+    font-weight: bold;
+    cursor: pointer;
+    gap: 80px; 
+  }
+  
+  .tabs {
+    display: flex;
+    margin-bottom: 30px;
+  }
+  .icon1 {
+    font-size: 20px;
+    font-weight: bold;
+    color: rgba(153, 27, 27, 1);
+  }
+  
+  
+  .tab,
+  .tabActive {
+    flex: 1;
+    padding: 10px 0;
+    background-color: rgba(31, 31, 31, 1);
+    color: white;
+    margin-top: 30px;
+    
+
+  }
+  
+  .tabActive {
+    background-color: rgba(32, 41, 56, 1);  
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+   
+  }
+  
+  .form label {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  .inputsRow {
+    display: flex;
+    gap: 100px;
+    margin-top: 10px;
+  }
+  .inputGroup {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  
+  
+  input,
+  select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    background-color: #fff;
+    color: #000;
+    margin-top: 10px;
+  }
+  
+  .sectionTitle {
+    margin: 20px 0 10px;
+    font-weight: bold;
+  }
+  
+  .tableWrapper {
+    overflow-x: auto;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    color: #000;
+  }
+  
+  .table th,
+  .table td {
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .image {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    object-fit: cover;
+  }
+  
+  .layout {
+    display: flex;
+    height: 100vh;
+    background-color: #1e1e1e;
+    width: 100vw;
+  }
+  
+  .main-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .navbar {
+    width: 100%;
+   
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    box-sizing: border-box;
+  }
+  
