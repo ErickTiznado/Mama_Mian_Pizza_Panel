@@ -325,33 +325,42 @@ const Inventario = () => {
                         <th>Categoría</th>
                         <th>Stock Actual</th>
                         <th>Unidad</th>
-                        <th>Estado</th>
+                        <th>Fecha Caducidad</th>
+                        <th>Proveedor</th>
                         <th>Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {productosEnPagina.map((prod, i) => (
-                        <tr key={i}>
-                          <td>{prod.nombre}</td>
-                          <td>{prod.categoria}</td>
-                          <td>{prod.stock}</td>
-                          <td>{prod.unidad}</td>
-                          <td className="estado">{prod.estado}</td>
-                          <td className="acciones-columna">
-                            <button className="btn-eliminar" onClick={() => handleEliminar(i)}>
-                              <FaTrashAlt /> Eliminar
-                            </button>
-                            <button className="btn-editar" onClick={() => handleEditar(i)}>
-                              <FaPen /> Editar
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
+                      {invetory
+                        .filter(item => 
+                          item.nombre.toLowerCase().includes(busqueda.toLowerCase())
+                        )
+                        .slice(indexInicio, indexFin)
+                        .map((item) => (
+                          <tr key={item.id_ingrediente}>
+                            <td>{item.nombre}</td>
+                            <td>{item.categoria || 'No especificada'}</td>
+                            <td>{item.cantidad_actual}</td>
+                            <td>{item.unidad}</td>
+                            <td>{new Date(item.fecha_caducidad).toLocaleDateString()}</td>
+                            <td>{item.proveedor}</td>
+                            <td className="acciones-columna">
+                              <button className="btn-eliminar" onClick={() => handleEliminar(item.id_ingrediente)}>
+                                <FaTrashAlt /> Eliminar
+                              </button>
+                              <button className="btn-editar" onClick={() => handleEditar(item.id_ingrediente)}>
+                                <FaPen /> Editar
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>
 
-                {totalPaginas > 1 && (
+                {Math.ceil(invetory.filter(item => 
+                  item.nombre.toLowerCase().includes(busqueda.toLowerCase())).length / 
+                  productosPorPagina) > 1 && (
                   <div className="paginacion">
                     <button
                       disabled={paginaActual === 1}
@@ -359,9 +368,13 @@ const Inventario = () => {
                     >
                       ⬅ Anterior
                     </button>
-                    <span>Página {paginaActual} de {totalPaginas}</span>
+                    <span>Página {paginaActual} de {Math.ceil(invetory.filter(item => 
+                      item.nombre.toLowerCase().includes(busqueda.toLowerCase())).length / 
+                      productosPorPagina)}</span>
                     <button
-                      disabled={paginaActual === totalPaginas}
+                      disabled={paginaActual === Math.ceil(invetory.filter(item => 
+                        item.nombre.toLowerCase().includes(busqueda.toLowerCase())).length / 
+                        productosPorPagina)}
                       onClick={() => setPaginaActual(paginaActual + 1)}
                     >
                       Siguiente ➡
