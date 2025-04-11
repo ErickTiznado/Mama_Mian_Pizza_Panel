@@ -471,14 +471,15 @@
 .estado-activo {
   color: #00ff73 !important;
   font-weight: bold;
-  align-items: center; /
+  align-items: center;
 }
 
 .estado-inactivo {
   color: #ff5252 !important;
   font-weight: bold;
-  align-items: center; /
-=======
+  align-items: center;
+}
+
 /* Add these styles to your existing CSS file */
 .status-message {
   padding: 10px;
