@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Inventario.css';
 import Sidebar from '../sidebar/sidebar';
@@ -8,6 +8,16 @@ import { FaSearch, FaTrashAlt, FaPen } from 'react-icons/fa';
 const API_URL = 'http://bkcww48c8swokk0s4wo4gkk8.82.29.198.111.sslip.io';
 
 const Inventario = () => {
+
+
+
+
+
+
+
+
+
+
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [modoEdicion, setModoEdicion] = useState(false);
   const [productoEditando, setProductoEditando] = useState(null);
@@ -39,6 +49,28 @@ const Inventario = () => {
       [name]: value,
     }));
   };
+
+
+  const [invetory, setInventory] = useState([]);
+
+  useEffect(() => {
+    const fetchInventory = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/inventory/getInventori`);
+        const data = await response.json();
+        setInventory(data);
+      }catch(error){
+        console.error('Error fetching inventory:', error);
+      }finally{
+        console.log('Inventory fetched:', invetory);
+      }
+    }
+    fetchInventory();
+  },[]);
+  console.log('Inventory:', invetory);
+
+
+
 
   const resetForm = () => {
     setNuevoProducto({
