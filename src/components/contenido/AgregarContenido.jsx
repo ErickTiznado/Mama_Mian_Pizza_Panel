@@ -24,6 +24,7 @@ const AgregarContenido = () => {
     'Pizzas',
     'Postres',
     'Bebidas',
+    'Complementos'
   ]);
 
   const sesionesOptions = [
