@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './Inventario.css';
 import Sidebar from '../sidebar/sidebar';
 import Navbar from '../navbar/nabvar';
 import { FaSearch, FaTrashAlt, FaPen } from 'react-icons/fa';
+
+const API_URL = 'http://bkcww48c8swokk0s4wo4gkk8.82.29.198.111.sslip.io';
 
 const Inventario = () => {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -12,6 +15,11 @@ const Inventario = () => {
   const [productos, setProductos] = useState([]);
   const [paginaActual, setPaginaActual] = useState(1);
   const productosPorPagina = 5;
+  
+  // Estado para manejar respuestas del API
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const [nuevoProducto, setNuevoProducto] = useState({
     nombre: '',
@@ -32,16 +40,7 @@ const Inventario = () => {
     }));
   };
 
-  const handleGuardar = () => {
-    if (modoEdicion && productoEditando !== null) {
-      const nuevos = productos.map((prod, i) =>
-        i === productoEditando ? nuevoProducto : prod
-      );
-      setProductos(nuevos);
-    } else {
-      setProductos([...productos, nuevoProducto]);
-    }
-
+  const resetForm = () => {
     setNuevoProducto({
       nombre: '',
       categoria: '',
@@ -55,7 +54,60 @@ const Inventario = () => {
     setModoEdicion(false);
     setProductoEditando(null);
     setMostrarFormulario(false);
-    setPaginaActual(1);
+    setError(null);
+    setSuccessMessage('');
+  };
+
+  const handleGuardar = async () => {
+    // Validación de campos requeridos
+    if (!nuevoProducto.nombre || !nuevoProducto.categoria || !nuevoProducto.stock || 
+        !nuevoProducto.unidad || !nuevoProducto.fecha_caducidad || !nuevoProducto.proveedor || 
+        !nuevoProducto.costo) {
+      setError('Todos los campos son obligatorios');
+      return;
+    }
+    
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Mapear campos del formulario a los esperados por la API
+      const inventarioData = {
+        nombre: nuevoProducto.nombre,
+        categoria: nuevoProducto.categoria,
+        cantidad: nuevoProducto.stock, // Mapeado de stock a cantidad como espera el backend
+        unidad: nuevoProducto.unidad,
+        fecha_caducidad: nuevoProducto.fecha_caducidad,
+        proveedor: nuevoProducto.proveedor,
+        costo: nuevoProducto.costo
+      };
+
+      if (modoEdicion && productoEditando !== null) {
+        // Si implementamos edición en el futuro, aquí iría el código
+        const nuevos = productos.map((prod, i) =>
+          i === productoEditando ? nuevoProducto : prod
+        );
+        setProductos(nuevos);
+        setSuccessMessage('Producto actualizado con éxito');
+      } else {
+        // Llamada a la API para crear nuevo inventario
+        const response = await axios.post(`${API_URL}/api/inventory/addInventori`, inventarioData);
+        
+        // Si la llamada a la API es exitosa, añadimos el producto al estado local
+        setProductos([...productos, nuevoProducto]);
+        setSuccessMessage('Producto agregado con éxito');
+      }
+
+      // Reiniciar el formulario
+      resetForm();
+      setPaginaActual(1);
+      
+    } catch (error) {
+      console.error('Error al guardar el producto:', error);
+      setError(error.response?.data?.message || 'Error al guardar el producto');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEliminar = (index) => {
@@ -105,6 +157,9 @@ const Inventario = () => {
           <div className="wrapper">
             {mostrarFormulario ? (
               <div className="card">
+                {error && <div className="error-message">{error}</div>}
+                {successMessage && <div className="success-message">{successMessage}</div>}
+                
                 <div className="form">
                   <div className="inputsRow">
                     <div className="inputGroup">
@@ -205,24 +260,15 @@ const Inventario = () => {
                   </div>
 
                   <div className="actions">
-                    <button className="cancelar" onClick={() => {
-                      setMostrarFormulario(false);
-                      setModoEdicion(false);
-                      setNuevoProducto({
-                        nombre: '',
-                        categoria: '',
-                        stock: '',
-                        unidad: '',
-                        estado: 'Normal',
-                        fecha_caducidad: '',
-                        proveedor: '',
-                        costo: ''
-                      });
-                    }}>
+                    <button className="cancelar" onClick={resetForm}>
                       Cancelar
                     </button>
-                    <button className="guardar" onClick={handleGuardar}>
-                      {modoEdicion ? 'Actualizar' : 'Guardar'}
+                    <button 
+                      className="guardar" 
+                      onClick={handleGuardar}
+                      disabled={loading}
+                    >
+                      {loading ? 'Guardando...' : modoEdicion ? 'Actualizar' : 'Guardar'}
                     </button>
                   </div>
                 </div>
