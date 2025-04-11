@@ -24,6 +24,11 @@ const Inventario = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
 
+
+  const handleDelete = (e) =>{
+    e.eventpreventDefault();
+  }
+
   // Estado para el nuevo producto con valores por defecto
   const [nuevoProducto, setNuevoProducto] = useState({
     nombre: '',
