@@ -325,6 +325,7 @@ const Inventario = () => {
                         <th>Categoría</th>
                         <th>Stock Actual</th>
                         <th>Unidad</th>
+                        <th>Estado</th>
                         <th>Fecha Caducidad</th>
                         <th>Proveedor</th>
                         <th>Acciones</th>
@@ -342,6 +343,7 @@ const Inventario = () => {
                             <td>{item.categoria || 'No especificada'}</td>
                             <td>{item.cantidad_actual}</td>
                             <td>{item.unidad}</td>
+                            <td className="estado" style={{color: 'green'}}>Normal</td>
                             <td>{new Date(item.fecha_caducidad).toLocaleDateString()}</td>
                             <td>{item.proveedor}</td>
                             <td className="acciones-columna">
