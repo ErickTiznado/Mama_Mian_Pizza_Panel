@@ -39,6 +39,17 @@
 }
 
 .formulario-contenido h2 {
+  margin-bottom: 0.5rem;
+  font-size: 33px;
+  margin-top: -30px;
+  
+}
+
+.formulario-contenido p {
+  color: #ccc;
+  font-size: 24px;
+  margin-bottom: 1.5rem;
+  margin-top: 20px;
   font-size: 24px;
   font-weight: 600;
   color: #FFF;
@@ -144,8 +155,8 @@
 }
 
 .boton-nuevo {
-  background-color: rgba(32, 41, 56, 1);
-  color: white;
+  background-color: rgba(254, 178, 72, 1);
+  color: rgba(153, 27, 27, 1);
   border: none;
   padding: 8px 24px;
   border-radius: 6px;
@@ -156,13 +167,13 @@
   margin-left: 650px;
   top: -50px;  
   position: relative; 
-  width: 250px;
+  width: 270px;
   margin-left: 1000px;
   
 }
 
 .boton-nuevo:hover {
-  background-color: rgb(50, 61, 81);
+  background-color: rgb(230, 162, 66);
 }
 .toggle-activo {
   margin-top: 1rem;
@@ -370,6 +381,104 @@
   pointer-events: none; /* para que el clic pase al input */
 }
 
+
+.vista-principal {
+  padding: 2rem;
+}
+
+.tabs-contenido {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  border: 1px solid white;
+  border-radius: 10px;
+  
+}
+
+.tab-btn {
+  background-color: rgba(31, 31, 31, 1);
+  border: 1px solid rgba(32, 41, 56, 1);
+  color: white;
+  padding: 5px 50px; 
+  border-radius: 8px;
+  cursor: pointer;
+ 
+}
+
+/* Borde blanco para toda la tabla */
+.tabla-contenido {
+  width: 100%;
+  margin-top: 2rem;
+  border-collapse: collapse;
+  background-color: rgba(31, 31, 31, 1);
+  border: 2px solid white; /* borde completo blanco */
+  border-radius: 12px;
+  overflow: hidden;
+  
+}
+
+/* Bordes internos blancos */
+.tabla-contenido th,
+.tabla-contenido td {
+  padding: 16px;
+  border: 1px solid white;
+  color: white;
+  align-items: center; /
+}
+
+/* Hover en fila */
+.tabla-contenido tr:hover {
+  background-color: rgba(32, 41, 56, 1);
+}
+
+/* Celda de acciones con borde blanco */
+.tabla-contenido td:last-child {
+  border: 1px solid white;
+}
+
+.acciones-botones {
+  display: flex;
+  flex-direction: column;
+  width: 100%;           /* 👈 esto es CLAVE */
+  align-items: center; 
+  gap: 10px;
+
+}
+
+.btn-editar {
+  color: #61dafb;
+  margin-left: 25px;  /* 👈 ¡ESTO es lo que mueve el botón a la derecha! */
+  margin-top: 50px;
+}
+
+.btn-eliminar {
+  color: #ff4d4d;
+}
+
+
+/* Hover efecto para botones */
+.btn-editar:hover,
+.btn-eliminar:hover {
+  background-color: rgba(32, 41, 56, 1); /* tu color solicitado */
+  color: white;
+}
+.tab-btn.activo {
+  background-color: rgba(32, 41, 56, 1);
+  color: white;
+  font-weight: bold;
+}
+
+.estado-activo {
+  color: #00ff73 !important;
+  font-weight: bold;
+  align-items: center; /
+}
+
+.estado-inactivo {
+  color: #ff5252 !important;
+  font-weight: bold;
+  align-items: center; /
+=======
 /* Add these styles to your existing CSS file */
 .status-message {
   padding: 10px;

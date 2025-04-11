@@ -3,11 +3,19 @@ import Navbar from '../navbar/nabvar';
 import Sidebar from '../sidebar/sidebar';
 import './AgregarContenido.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUpFromBracket, faImage } from '@fortawesome/free-solid-svg-icons';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUpFromBracket, faImage, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
 const AgregarContenido = () => {
+  // Estados generales
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [contenidos, setContenidos] = useState([]);
+  const [paginaActual, setPaginaActual] = useState(1);
+  const elementosPorPagina = 5;
+  const [filtroSesion, setFiltroSesion] = useState('Todos');
+
+  // Estado del formulario
   const [formData, setFormData] = useState({
     titulo: '',
     descripcion: '',
@@ -17,16 +25,16 @@ const AgregarContenido = () => {
     sesion: '',
     imagen: null,
     activo: false,
-    precio: '', // Add precio field to formData
+    precio: '',
   });
 
+  // Estado para categorías y opciones de sesión (únicos)
   const [categorias, setCategorias] = useState([
     'Pizzas',
     'Postres',
     'Bebidas',
     'Complementos'
   ]);
-
   const sesionesOptions = [
     'Las más populares',
     'Menú',
@@ -36,6 +44,7 @@ const AgregarContenido = () => {
     'Sin Seccion',
   ];
 
+  // Otros estados y referencias
   const [showDropdown, setShowDropdown] = useState(false);
   const [showSesiones, setShowSesiones] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -73,7 +82,6 @@ const AgregarContenido = () => {
         ...prev,
         imagen: file,
       }));
-      
       const fileReader = new FileReader();
       fileReader.onload = () => {
         setPreviewUrl(fileReader.result);
@@ -96,46 +104,43 @@ const AgregarContenido = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Validate the form
+
+    // Valida el formulario antes de continuar
     if (!validateForm()) return;
-    
+
+    // Actualiza el estado local agregando el nuevo contenido
+    setContenidos((prev) => [...prev, formData]);
+
     setIsSubmitting(true);
     setSubmitStatus({ type: '', message: '' });
-    
-    // Create a new FormData object for submission
+
+    // Prepara un objeto FormData para enviar al backend
     const submitFormData = new FormData();
-    
-    // Append all form fields to the FormData
     submitFormData.append('titulo', formData.titulo);
     submitFormData.append('descripcion', formData.descripcion);
     submitFormData.append('porciones', formData.porciones);
     submitFormData.append('categoria', formData.categoria);
     submitFormData.append('sesion', formData.sesion);
     submitFormData.append('activo', formData.activo);
-    submitFormData.append('precio', formData.precio); // Add precio to the submitted data
-    
-    // Append the image if it exists
+    submitFormData.append('precio', formData.precio);
+
     if (formData.imagen) {
       submitFormData.append('imagen', formData.imagen);
     }
     
     try {
-      // Send the data to the backend
+      // Envío al backend
       const response = await axios.post('http://bkcww48c8swokk0s4wo4gkk8.82.29.198.111.sslip.io/api/content/submit', submitFormData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      
-      // Handle successful response
       console.log('Respuesta del servidor:', response.data);
       setSubmitStatus({ 
         type: 'success', 
         message: 'Contenido guardado exitosamente!' 
       });
-      
-      // Reset form after successful submission
+      // Reinicia el formulario y cierra la vista de alta
       setFormData({
         titulo: '',
         descripcion: '',
@@ -145,10 +150,10 @@ const AgregarContenido = () => {
         sesion: '',
         imagen: null,
         activo: false,
-        precio: '', // Reset precio
+        precio: '',
       });
       setPreviewUrl(null);
-      
+      setMostrarFormulario(false);
     } catch (error) {
       console.error('Error al enviar el formulario:', error);
       setSubmitStatus({ 
@@ -166,285 +171,367 @@ const AgregarContenido = () => {
       <div className="contenido-layout">
         <Sidebar />
         <div className="contenido-principal">
-          <form className="formulario-contenido" onSubmit={handleSubmit}>
-            <h2>Añadir Nuevo Contenido</h2>
-            <p>Sube imágenes para las secciones de tu sitio web</p>
+          {/* Vista Listado: se muestra cuando no se está agregando contenido nuevo */}
+          {!mostrarFormulario ? (
+            <div className="vista-principal">
+              <h2>Gestión de Contenido</h2>
+              <button className="boton-nuevo" onClick={() => setMostrarFormulario(true)}>
+                + Nuevo Contenido
+              </button>
 
-            {submitStatus.message && (
-              <div className={`status-message ${submitStatus.type}`}>
-                {submitStatus.message}
+              <div className="tabs-contenido">
+                {['Todos', ...sesionesOptions].map((sesion, i) => (
+                  <button
+                    key={i}
+                    className={`tab-btn ${filtroSesion === sesion ? 'activo' : ''}`}
+                    onClick={() => {
+                      setPaginaActual(1); // resetea la paginación
+                      setFiltroSesion(sesion);
+                    }}
+                  >
+                    {sesion}
+                  </button>
+                ))}
               </div>
-            )}
 
-            <div className="form-grid">
-              {/* Título */}
-              <div className="form-group">
-                <label>Título</label>
-                <input
-                  type="text"
-                  name="titulo"
-                  value={formData.titulo}
-                  onChange={handleChange}
-                />
+              <table className="tabla-contenido">
+                <thead>
+                  <tr>
+                    <th>Imagen</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {contenidos
+                    .filter((item) => filtroSesion === 'Todos' || item.sesion === filtroSesion)
+                    .slice((paginaActual - 1) * elementosPorPagina, paginaActual * elementosPorPagina)
+                    .map((item, index) => (
+                      <tr key={index}>
+                        <td>
+                          {item.imagen ? (
+                            <img
+                              src={URL.createObjectURL(item.imagen)}
+                              alt="preview"
+                              style={{ width: '60px', height: '60px', borderRadius: '8px', objectFit: 'cover' }}
+                            />
+                          ) : (
+                            <img
+                              src="https://via.placeholder.com/60"
+                              alt="preview"
+                              style={{ width: '60px', height: '60px', borderRadius: '8px', objectFit: 'cover' }}
+                            />
+                          )}
+                        </td>
+                        <td>{item.descripcion}</td>
+                        <td>${item.precio || '0.00'}</td>
+                        <td>
+                          <span className={item.activo ? 'estado-activo' : 'estado-inactivo'}>
+                            {item.activo ? 'Activo' : 'Inactivo'}
+                          </span>
+                        </td>
+                        <td>
+                          <div className="acciones-botones">
+                            <button className="btn-eliminar">
+                              <FontAwesomeIcon icon={faTrashAlt} style={{ marginRight: '6px' }} />
+                              Eliminar
+                            </button>
+                            <button className="btn-editar">
+                              <FontAwesomeIcon icon={faPen} style={{ marginRight: '6px' }} />
+                              Editar
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+
+              <div className="paginacion">
+                <button
+                  disabled={paginaActual === 1}
+                  onClick={() => setPaginaActual((prev) => prev - 1)}
+                >
+                  ⬅ Anterior
+                </button>
+                <span>Página {paginaActual}</span>
+                <button
+                  disabled={paginaActual * elementosPorPagina >= contenidos.length}
+                  onClick={() => setPaginaActual((prev) => prev + 1)}
+                >
+                  Siguiente ➡
+                </button>
               </div>
-              
-              {/* Sesiones */}
-              <div className="form-group">
-                <label>Secciones</label>
-                <div className="categoria-wrapper" ref={sesionesRef}>
-                  <input
-                    type="text"
-                    readOnly
-                    placeholder="Selecciona una sesión"
-                    className="categoria-input"
-                    value={formData.sesion}
-                    onClick={() => setShowSesiones(!showSesiones)}
-                  />
-                  <FontAwesomeIcon icon={faChevronDown} className="dropdown-icon" />
+            </div>
+          ) : (
+            // Vista Formulario: se muestra para agregar o editar contenido
+            <form className="formulario-contenido" onSubmit={handleSubmit}>
+              <h2>Añadir Nuevo Contenido</h2>
+              <p>Sube imágenes para las secciones de tu sitio web</p>
 
-                  {showSesiones && (
-                    <div className="categoria-dropdown">
-                      {sesionesOptions.map((s, i) => (
-                        <div
-                          key={i}
-                          className="categoria-item"
-                          onClick={() => {
-                            setFormData((prev) => ({
-                              ...prev,
-                              sesion: s,
-                            }));
-                            setShowSesiones(false);
-                          }}
-                        >
-                          {s}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+              {submitStatus.message && (
+                <div className={`status-message ${submitStatus.type}`}>
+                  {submitStatus.message}
                 </div>
-              </div>
-          
-              {/* Descripción */}
-              <div className="form-group">
-                <label>Descripción</label>
-                <input
-                  type="text"
-                  name="descripcion"
-                  value={formData.descripcion}
-                  onChange={handleChange}
-                />
-              </div>
-              
-              {/* Añadir campo de precio */}
-              <div className="form-group">
-                <label>Precio</label>
-                <input
-                  type="number"
-                  name="precio"
-                  value={formData.precio}
-                  onChange={handleChange}
-                  placeholder="0.00"
-                  step="0.01"
-                  min="0"
-                />
-              </div>
-              
-              {/* Categoría */}
-              <div className="form-group">
-                <label>Categoría</label>
-                <div className="categoria-wrapper" ref={dropdownRef}>
+              )}
+
+              <div className="form-grid">
+                {/* Campo Título */}
+                <div className="form-group">
+                  <label>Título</label>
                   <input
                     type="text"
-                    readOnly
-                    placeholder="Selecciona una categoría"
-                    className="categoria-input"
-                    value={formData.categoria}
-                    onClick={() => setShowDropdown(!showDropdown)}
+                    name="titulo"
+                    value={formData.titulo}
+                    onChange={handleChange}
                   />
-                  <FontAwesomeIcon icon={faChevronDown} className="dropdown-icon" />
+                </div>
 
-                  {showDropdown && (
-                    <div className="categoria-dropdown">
-                      {categorias.map((cat, index) => (
-                        <div
-                          key={index}
-                          className="categoria-item"
-                          onClick={() => {
-                            setFormData((prev) => ({
-                              ...prev,
-                              categoria: cat,
-                              nuevaCategoria: '',
-                            }));
-                            setShowDropdown(false);
-                          }}
-                        >
-                          {cat}
-                        </div>
-                      ))}
+                {/* Campo Secciones */}
+                <div className="form-group">
+                  <label>Secciones</label>
+                  <div className="categoria-wrapper" ref={sesionesRef}>
+                    <input
+                      type="text"
+                      readOnly
+                      placeholder="Selecciona una sesión"
+                      className="categoria-input"
+                      value={formData.sesion}
+                      onClick={() => setShowSesiones(!showSesiones)}
+                    />
+                    <FontAwesomeIcon icon={faChevronDown} className="dropdown-icon" />
+                    {showSesiones && (
+                      <div className="categoria-dropdown">
+                        {sesionesOptions.map((s, i) => (
+                          <div
+                            key={i}
+                            className="categoria-item"
+                            onClick={() => {
+                              setFormData((prev) => ({ ...prev, sesion: s }));
+                              setShowSesiones(false);
+                            }}
+                          >
+                            {s}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
 
-                      {/* Inline input + buttons */}
-                      <div className="categoria-inline">
-                        <input
-                          type="text"
-                          placeholder="Agregar nueva categoría"
-                          value={formData.nuevaCategoria}
-                          onChange={(e) =>
-                            setFormData((prev) => ({
-                              ...prev,
-                              nuevaCategoria: e.target.value,
-                            }))
-                          }
-                          className="input-nueva-categoria"
-                        />
+                {/* Campo Descripción */}
+                <div className="form-group">
+                  <label>Descripción</label>
+                  <input
+                    type="text"
+                    name="descripcion"
+                    value={formData.descripcion}
+                    onChange={handleChange}
+                  />
+                </div>
 
-                        <button
-                          type="button"
-                          className="btn-categoria-cancelar"
-                          onClick={() => {
-                            setFormData((prev) => ({
-                              ...prev,
-                              nuevaCategoria: '',
-                            }));
-                            setShowDropdown(false);
-                          }}
-                        >
-                          Cancelar
-                        </button>
+                {/* Campo Precio */}
+                <div className="form-group">
+                  <label>Precio</label>
+                  <input
+                    type="number"
+                    name="precio"
+                    value={formData.precio}
+                    onChange={handleChange}
+                    placeholder="0.00"
+                    step="0.01"
+                    min="0"
+                  />
+                </div>
 
-                        <button
-                          type="button"
-                          className="btn-categoria-guardar"
-                          onClick={() => {
-                            const nueva = formData.nuevaCategoria.trim();
-                            if (nueva && !categorias.includes(nueva)) {
-                              setCategorias((prev) => [...prev, nueva]);
+                {/* Campo Categoría */}
+                <div className="form-group">
+                  <label>Categoría</label>
+                  <div className="categoria-wrapper" ref={dropdownRef}>
+                    <input
+                      type="text"
+                      readOnly
+                      placeholder="Selecciona una categoría"
+                      className="categoria-input"
+                      value={formData.categoria}
+                      onClick={() => setShowDropdown(!showDropdown)}
+                    />
+                    <FontAwesomeIcon icon={faChevronDown} className="dropdown-icon" />
+                    {showDropdown && (
+                      <div className="categoria-dropdown">
+                        {categorias.map((cat, index) => (
+                          <div
+                            key={index}
+                            className="categoria-item"
+                            onClick={() => {
                               setFormData((prev) => ({
                                 ...prev,
-                                categoria: nueva,
+                                categoria: cat,
                                 nuevaCategoria: '',
                               }));
                               setShowDropdown(false);
+                            }}
+                          >
+                            {cat}
+                          </div>
+                        ))}
+                        <div className="categoria-inline">
+                          <input
+                            type="text"
+                            placeholder="Agregar nueva categoría"
+                            value={formData.nuevaCategoria}
+                            onChange={(e) =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                nuevaCategoria: e.target.value,
+                              }))
                             }
-                          }}
-                        >
-                          Guardar
-                        </button>
+                            className="input-nueva-categoria"
+                          />
+                          <button
+                            type="button"
+                            className="btn-categoria-cancelar"
+                            onClick={() => {
+                              setFormData((prev) => ({ ...prev, nuevaCategoria: '' }));
+                              setShowDropdown(false);
+                            }}
+                          >
+                            Cancelar
+                          </button>
+                          <button
+                            type="button"
+                            className="btn-categoria-guardar"
+                            onClick={() => {
+                              const nueva = formData.nuevaCategoria.trim();
+                              if (nueva && !categorias.includes(nueva)) {
+                                setCategorias((prev) => [...prev, nueva]);
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  categoria: nueva,
+                                  nuevaCategoria: '',
+                                }));
+                                setShowDropdown(false);
+                              }
+                            }}
+                          >
+                            Guardar
+                          </button>
+                        </div>
                       </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Campo Porciones */}
+                <div className="form-group">
+                  <label>Porciones</label>
+                  <input
+                    type="text"
+                    name="porciones"
+                    value={formData.porciones}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* Toggle Activo */}
+                <div className="form-group toggle-activo">
+                  <div className="toggle-box">
+                    <label className="toggle-label">Activo</label>
+                    <span className="toggle-text">Mostrar este contenido en el sitio web</span>
+                    <div
+                      className={`custom-toggle ${formData.activo ? 'activo' : ''}`}
+                      onClick={() =>
+                        setFormData((prev) => ({ ...prev, activo: !prev.activo }))
+                      }
+                    >
+                      <div className="toggle-circle" />
                     </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sección de subida de imagen */}
+              <div className="form-group imagen-upload">
+                <div className="upload-box">
+                  {previewUrl ? (
+                    <div className="preview-container">
+                      <img src={previewUrl} alt="Vista previa" className="image-preview" />
+                      <button 
+                        type="button" 
+                        className="remove-image" 
+                        onClick={() => {
+                          setPreviewUrl(null);
+                          setFormData((prev) => ({ ...prev, imagen: null }));
+                        }}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <FontAwesomeIcon
+                        icon={faImage}
+                        className="icono-upload"
+                        onClick={() => document.getElementById('input-imagen').click()}
+                      />
+                      <div className="texto-upload">
+                        Arrastra y suelta una imagen o haz clic para seleccionar
+                      </div>
+                      <button 
+                        type="button" 
+                        className="btn-subir"
+                        onClick={() => document.getElementById('input-imagen').click()}
+                      >
+                        <FontAwesomeIcon icon={faArrowUpFromBracket} />
+                        Subir Imagen
+                      </button>
+                    </>
                   )}
                 </div>
-              </div>
-              
-              {/* Porciones */}
-              <div className="form-group">
-                <label>Porciones</label>
                 <input
-                  type="text"
-                  name="porciones"
-                  value={formData.porciones}
-                  onChange={handleChange}
+                  id="input-imagen"
+                  type="file"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={handleImageUpload}
                 />
+                <small className="texto-ayuda">
+                  Sube una imagen para la sección de la pagina
+                </small>
               </div>
 
-              {/* Activo */}
-              <div className="form-group toggle-activo">
-                <div className="toggle-box">
-                  <label className="toggle-label">Activo</label>
-                  <span className="toggle-text">Mostrar este contenido en el sitio web</span>
-                  <div
-                    className={`custom-toggle ${formData.activo ? 'activo' : ''}`}
-                    onClick={() =>
-                      setFormData((prev) => ({ ...prev, activo: !prev.activo }))
-                    }
-                  >
-                    <div className="toggle-circle" />
-                  </div>
-                </div>
+              {/* Botones de acción */}
+              <div className="form-actions">
+                <button
+                  type="button"
+                  className="cancelar"
+                  onClick={() => {
+                    setFormData({
+                      titulo: '',
+                      descripcion: '',
+                      porciones: '',
+                      categoria: '',
+                      nuevaCategoria: '',
+                      sesion: '',
+                      imagen: null,
+                      activo: false,
+                      precio: '',
+                    });
+                    setPreviewUrl(null);
+                    setSubmitStatus({ type: '', message: '' });
+                    setMostrarFormulario(false);
+                  }}
+                >
+                  Cancelar
+                </button>
+                <button type="submit" className="guardar" disabled={isSubmitting}>
+                  {isSubmitting ? 'Guardando...' : 'Guardar contenido'}
+                </button>
               </div>
-            </div>
-
-            {/* Imagen */}
-            <div className="form-group imagen-upload">
-              <div className="upload-box">
-                {previewUrl ? (
-                  <div className="preview-container">
-                    <img src={previewUrl} alt="Vista previa" className="image-preview" />
-                    <button 
-                      type="button" 
-                      className="remove-image" 
-                      onClick={() => {
-                        setPreviewUrl(null);
-                        setFormData(prev => ({...prev, imagen: null}));
-                      }}
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                ) : (
-                  <>
-                    <FontAwesomeIcon
-                      icon={faImage}
-                      className="icono-upload"
-                      onClick={() => document.getElementById('input-imagen').click()}
-                    />
-                    <div className="texto-upload">
-                      Arrastra y suelta una imagen o haz clic para seleccionar
-                    </div>
-                    <button 
-                      type="button" 
-                      className="btn-subir"
-                      onClick={() => document.getElementById('input-imagen').click()}
-                    >
-                      <FontAwesomeIcon icon={faArrowUpFromBracket} />
-                      Subir Imagen
-                    </button>
-                  </>
-                )}
-              </div>
-              <input
-                id="input-imagen"
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={handleImageUpload}
-              />
-              <small className="texto-ayuda">
-                Sube una imagen para la sección de la pagina
-              </small>
-            </div>
-
-            {/* Botones */}
-            <div className="form-actions">
-              <button
-                type="button"
-                className="cancelar"
-                onClick={() => {
-                  setFormData({
-                    titulo: '',
-                    descripcion: '',
-                    porciones: '',
-                    categoria: '',
-                    nuevaCategoria: '',
-                    sesion: '',
-                    imagen: null,
-                    activo: false,
-                    precio: '', // Reset precio field
-                  });
-                  setPreviewUrl(null);
-                  setSubmitStatus({ type: '', message: '' });
-                }}
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                className="guardar"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Guardando...' : 'Guardar contenido'}
-              </button>
-            </div>
-          </form>
+            </form>
+          )}
         </div>
       </div>
     </div>
