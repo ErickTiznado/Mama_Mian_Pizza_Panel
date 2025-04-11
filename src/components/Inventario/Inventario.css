@@ -59,7 +59,7 @@
   .buscador {
     display: flex;
     align-items: center;
-   margin-top: -100px;
+    margin-top: -100px;
     width: 100%;
     max-width: 630px;
     position: relative;
@@ -83,7 +83,7 @@
     font-size: 18px;
     color: black;
     pointer-events: none;
-   font-size: 29px;
+    font-size: 29px;
   }
   
   .acciones-columna {
@@ -232,4 +232,165 @@
   margin-bottom: 15px;
   border: 1px solid #c3e6cb;
   border-radius: 4px;
+}
+
+/* Estilos para el diseño de cards */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1400px;
+  margin-top: 20px;
+}
+
+.inventory-card {
+  background-color: rgba(31, 31, 31, 1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.inventory-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+  padding: 15px;
+  background-color: rgba(32, 41, 56, 0.8);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h3 {
+  margin: 0;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.card-status {
+  background-color: #B1F6BB;
+  color: #007712;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.card-status.bajo {
+  background-color: #F6B1B1;
+  color: #821717;
+}
+
+.card-status.crítico {
+  background-color: #ff6b6b;
+  color: #ffffff;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-info p {
+  margin: 0;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 5px;
+}
+
+.card-info p span:first-child {
+  font-weight: bold;
+  color: #ECFE48;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-editar-card,
+.btn-eliminar-card {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.btn-editar-card {
+  color: white;
+}
+
+.btn-editar-card:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #1a8cff;
+}
+
+.btn-eliminar-card {
+  color: #ff4d4d;
+}
+
+.btn-eliminar-card:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+  color: #ff1a1a;
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 30px;
+  background-color: rgba(31, 31, 31, 0.5);
+  border-radius: 8px;
+  color: white;
+}
+
+/* Estilos para campos requeridos */
+.campo-requerido {
+  color: #ff4d4d;
+  margin-left: 4px;
+}
+
+/* Mejora de estilos para el formulario */
+.inputGroup label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  color: white;
+  font-weight: 500;
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus {
+  outline: 2px solid rgba(254, 178, 72, 0.7);
+  box-shadow: 0 0 5px rgba(254, 178, 72, 0.4);
+}
+
+.inputGroup input:invalid,
+.inputGroup select:invalid {
+  border: 1px solid #ff6b6b;
+}
+
+/* Mejora visual para inputs deshabilitados durante la carga */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
