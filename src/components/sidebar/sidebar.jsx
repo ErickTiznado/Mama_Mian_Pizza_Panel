@@ -17,7 +17,7 @@ function Sidebar() {
                 <House size={38} />
                 Inicio
             </button>
-            <button className="items">
+            <button className="items" onClick={() => handleNavigation('/pedidos')}>
             <ShoppingCart  size={38} />
             Pedidos
             </button>
@@ -25,8 +25,8 @@ function Sidebar() {
                 <ClipboardList size={38} />
                     Contenido
             </button>
-            <button className="items">
-                <Package size={38}  />
+            <button className="items" onClick={() => handleNavigation('/inventario')}>
+                <Package size={38} />
                     Inventario
             </button>
             <button className="items">
