@@ -3,7 +3,7 @@ import axios from 'axios';
 import './Inventario.css';
 import Sidebar from '../sidebar/sidebar';
 import Navbar from '../navbar/nabvar';
-import { FaSearch, FaTrashAlt, FaPen } from 'react-icons/fa';
+import { FaSearch, FaTrashAlt, FaPen, FaExclamationTriangle } from 'react-icons/fa';
 
 const API_URL = 'http://bkcww48c8swokk0s4wo4gkk8.82.29.198.111.sslip.io';
 
@@ -18,6 +18,13 @@ const Inventario = () => {
   const [productos, setProductos] = useState([]);
   const [paginaActual, setPaginaActual] = useState(1);
   const productosPorPagina = 5;
+  
+  // Estado para manejar el modal de confirmación de eliminación
+  const [modalConfirmacion, setModalConfirmacion] = useState({
+    visible: false,
+    productoId: null,
+    nombreProducto: ''
+  });
   
   // Estado para manejar respuestas del API
   const [loading, setLoading] = useState(false);
@@ -209,13 +216,36 @@ const Inventario = () => {
     }
   };
 
-  const handleEliminar = async (id) => {
-    if (!id) {
+  // Mostrar confirmación de eliminación
+  const mostrarConfirmacion = (id) => {
+    const producto = inventory.find(item => item.id_ingrediente === id);
+    if (!producto) {
       setError('No se pudo identificar el producto a eliminar');
       return;
     }
     
-    if (!confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+    setModalConfirmacion({
+      visible: true,
+      productoId: id,
+      nombreProducto: producto.nombre || 'Producto' // Usamos el nombre o "Producto" si no tiene nombre
+    });
+  };
+  
+  // Cancelar eliminación
+  const cancelarEliminacion = () => {
+    setModalConfirmacion({
+      visible: false,
+      productoId: null,
+      nombreProducto: ''
+    });
+  };
+  
+  // Eliminar producto (ahora separado de la lógica de confirmación)
+  const confirmarEliminacion = async () => {
+    const id = modalConfirmacion.productoId;
+    
+    if (!id) {
+      setError('No se pudo identificar el producto a eliminar');
       return;
     }
     
@@ -229,6 +259,13 @@ const Inventario = () => {
         setInventory(prev => prev.filter(item => item.id_ingrediente !== id));
         setMenu(prev => prev.filter(item => item.id_ingrediente !== id));
         setSuccessMessage('Producto eliminado correctamente');
+        
+        // Cerrar el modal
+        setModalConfirmacion({
+          visible: false,
+          productoId: null,
+          nombreProducto: ''
+        });
       }
     } catch (error) {
       console.error('Error al eliminar producto:', error);
@@ -479,7 +516,7 @@ const Inventario = () => {
                           <button className="btn-editar-card" onClick={() => handleEditar(item.id_ingrediente)}>
                             <FaPen /> Editar
                           </button>
-                          <button className="btn-eliminar-card" onClick={() => handleEliminar(item.id_ingrediente)}>
+                          <button className="btn-eliminar-card" onClick={() => mostrarConfirmacion(item.id_ingrediente)}>
                             <FaTrashAlt /> Eliminar
                           </button>
                         </div>
@@ -513,6 +550,40 @@ const Inventario = () => {
             )}
           </div>
         </div>
+        
+        {/* Modal de confirmación de eliminación */}
+        {modalConfirmacion.visible && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h3>
+                  <FaExclamationTriangle /> Confirmar eliminación
+                </h3>
+              </div>
+              <div className="modal-body">
+                <p>¿Estás seguro de que deseas eliminar este producto del inventario?</p>
+                <p className="modal-producto">{modalConfirmacion.nombreProducto}</p>
+                <p>Esta acción no se puede deshacer.</p>
+              </div>
+              <div className="modal-actions">
+                <button 
+                  className="btn-cancelar-modal" 
+                  onClick={cancelarEliminacion}
+                  disabled={loading}
+                >
+                  Cancelar
+                </button>
+                <button 
+                  className="btn-confirmar-eliminar" 
+                  onClick={confirmarEliminacion}
+                  disabled={loading}
+                >
+                  {loading ? 'Eliminando...' : 'Eliminar'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
