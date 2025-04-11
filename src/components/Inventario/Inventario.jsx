@@ -19,6 +19,9 @@ const Inventario = () => {
     stock: '',
     unidad: '',
     estado: 'Normal',
+    fecha_caducidad: '',
+    proveedor: '',
+    costo: ''
   });
 
   const handleChange = (e) => {
@@ -45,6 +48,9 @@ const Inventario = () => {
       stock: '',
       unidad: '',
       estado: 'Normal',
+      fecha_caducidad: '',
+      proveedor: '',
+      costo: ''
     });
     setModoEdicion(false);
     setProductoEditando(null);
@@ -161,6 +167,43 @@ const Inventario = () => {
                     </div>
                   </div>
 
+                  <div className="inputsRow">
+                    <div className="inputGroup">
+                      <label>Fecha de caducidad</label>
+                      <input
+                        type="date"
+                        name="fecha_caducidad"
+                        value={nuevoProducto.fecha_caducidad}
+                        onChange={handleChange}
+                      />
+                    </div>
+
+                    <div className="inputGroup">
+                      <label>Proveedor</label>
+                      <input
+                        type="text"
+                        name="proveedor"
+                        value={nuevoProducto.proveedor}
+                        onChange={handleChange}
+                        placeholder="Nombre del proveedor"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="inputsRow">
+                    <div className="inputGroup">
+                      <label>Costo</label>
+                      <input
+                        type="number"
+                        name="costo"
+                        value={nuevoProducto.costo}
+                        onChange={handleChange}
+                        step="0.01"
+                        placeholder="0.00"
+                      />
+                    </div>
+                  </div>
+
                   <div className="actions">
                     <button className="cancelar" onClick={() => {
                       setMostrarFormulario(false);
@@ -171,6 +214,9 @@ const Inventario = () => {
                         stock: '',
                         unidad: '',
                         estado: 'Normal',
+                        fecha_caducidad: '',
+                        proveedor: '',
+                        costo: ''
                       });
                     }}>
                       Cancelar
