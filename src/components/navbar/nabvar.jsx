@@ -9,9 +9,7 @@ function Navbar() {
                 <h2>Pizza Admin</h2>
             </div>
             <div className='buttons-container'>
-                <div className='notification-bell'>
-                    <NotificationBell count={3}/>
-                </div>
+
                 <div>
                     <button><CircleUserRound className='icon' size={36}/></button>
                 </div>

@@ -1,13 +1,11 @@
-import {Bell} from 'lucide-react';
 import './notificationBell.css';
 
 function NotificationBell({count}){
 return(
     <div className='notification-bell'>
-        <button className='notification-button'>
-            <Bell className='icon' size={36}/>
+        <span className='notification-button'>
             {count > 0 && <span className='notification-count'>{count}</span>}
-        </button>
+        </span>
     </div>
 );
 }

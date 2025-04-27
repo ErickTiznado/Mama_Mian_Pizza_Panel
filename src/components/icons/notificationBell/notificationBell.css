@@ -1,16 +1,15 @@
 .notification-bell {
   position: relative;
   display: inline-block;
+  background-color: transparent;
 }
 
 .notification-count{
-    position:absolute;
-    top: 0px;
-    right: 10px;
+
     background-color: red;
     color: white;
     border-radius: 50%;
-    padding: 2px 5px;
+    padding: 0px 7px;
     font-size: 0.8rem;
     font-weight: bold;
     -webkit-animation: bounce-in-fwd 1.1s both;
