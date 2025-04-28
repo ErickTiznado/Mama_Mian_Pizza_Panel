@@ -28,32 +28,32 @@ const GestionClientes = () => {
   };
 
   return (
-    <div className="layout">
+    <div className="gc-layout">
       <Sidebar />
 
-      <div className="main-panel">
+      <div className="gc-main-panel">
         <Navbar />
 
         <div className="content-scroll">
-          <div className="wrapper">
+          <div className="gc-wrapper">
 
             {/* 🔹 Encabezado */}
-            <div className="header-outside">
+            <div className="gc-header-outside">
               <h2 className="titulo-cliente">Gestión de Clientes</h2>
               <button
                 className="newClientBtn"
                 onClick={() => setMostrarFormulario(true)}
               >
-                <span className="icon">+</span> Nuevo cliente
+                <span className="gc-icon">+</span> Nuevo cliente
               </button>
             </div>
 
             {/* 🔹 Formulario (condicional) */}
             {mostrarFormulario && (
-              <div className="card">
-                <div className="form">
-                  <div className="inputsRow">
-                    <div className="inputGroup">
+              <div className="gc-card">
+                <div className="gc-form">
+                  <div className="gc-inputsRow">
+                    <div className="gc-inputGroup">
                       <label>Cliente</label>
                       <input
                         type="text"
@@ -62,7 +62,7 @@ const GestionClientes = () => {
                         placeholder="Nombre completo"
                       />
                     </div>
-                    <div className="inputGroup">
+                    <div className="gc-inputGroup">
                       <label>Email</label>
                       <input
                         type="email"
@@ -73,8 +73,8 @@ const GestionClientes = () => {
                     </div>
                   </div>
 
-                  <div className="inputsRow">
-                    <div className="inputGroup">
+                  <div className="gc-inputsRow">
+                    <div className="gc-inputGroup">
                       <label>Teléfono</label>
                       <input
                         type="text"
@@ -83,7 +83,7 @@ const GestionClientes = () => {
                         placeholder="12345678"
                       />
                     </div>
-                    <div className="inputGroup">
+                    <div className="gc-inputGroup">
                       <label>Pedidos</label>
                       <input
                         type="number"
@@ -92,7 +92,7 @@ const GestionClientes = () => {
                         placeholder="Cantidad de pedidos"
                       />
                     </div>
-                    <div className="inputGroup">
+                    <div className="gc-inputGroup">
                       <label>Último Pedido</label>
                       <input
                         type="date"
@@ -102,11 +102,11 @@ const GestionClientes = () => {
                     </div>
                   </div>
 
-                  <div className="actions">
-                    <button className="cancelar" onClick={() => setMostrarFormulario(false)}>
+                  <div className="gc-actions">
+                    <button className="gc-cancelar" onClick={() => setMostrarFormulario(false)}>
                       Cancelar
                     </button>
-                    <button className="guardar" onClick={handleGuardar}>
+                    <button className="gc-guardar" onClick={handleGuardar}>
                       Guardar
                     </button>
                   </div>

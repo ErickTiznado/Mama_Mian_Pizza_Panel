@@ -1,18 +1,10 @@
-:root {
-    --color-primary: #111828;
-    --color-secundary: #1E1E1E;
-    --color-tertiary: #242424;
-    --color-quaternary: #717d7e;
-    --color-quinary: #909497;
-    --color-senary: #b3b6b7;
-    --color-septenary: #ffffff;
-}
+@import '../../styles/variables.css';
 
 .brand{
     display: flex;
     align-items: center;
     font-size: 1.6rem;
-    color: var(--color-septenary);
+    color: var(--color-white);
 }
 
 .navbar{

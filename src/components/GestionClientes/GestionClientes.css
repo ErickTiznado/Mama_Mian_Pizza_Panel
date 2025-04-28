@@ -1,24 +1,26 @@
-.layout {
+@import '../../styles/variables.css';
+
+.gc-layout {
   display: flex;
   height: 100vh;
-  background-color: #1e1e1e;
+  background-color: var(--color-secondary);
 }
 
-.main-panel {
+.gc-main-panel {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
 
-.wrapper {
+.gc-wrapper {
   display: flex;
   justify-content: center;
   padding: 40px 0;
 }
 
-.card {
-  background-color:  rgba(31, 31, 31, 1);
+.gc-card {
+  background-color: rgba(31, 31, 31, 1);
   border-radius: 10px;
   padding: 30px;
   width: 100%;
@@ -29,7 +31,7 @@
   font-size: 22px;
 }
 
-.header {
+.gc-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -37,8 +39,8 @@
 }
 
 .newClientBtn {
-  background-color: rgba(254, 178, 72, 1);
-  color: rgba(153, 27, 27, 1);
+  background-color: var(--color-brand-yellow);
+  color: var(--color-brand-red);
   border: none;
   border-radius: 10px;
   padding: 10px 46px;
@@ -49,45 +51,44 @@
   font-weight: bold;
 }
 
-.icon {
-  font-size: 18px;
-  
+.gc-icon {
+  font-size: 18px;  
 }
 
-.form {
+.gc-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.inputsRow {
+.gc-inputsRow {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
 }
 
-.inputGroup {
+.gc-inputGroup {
   display: flex;
   flex-direction: column;
   flex: 1;
   min-width: 200px;
 }
 
-input {
+.gc-inputGroup input {
   padding: 10px;
   border-radius: 6px;
   border: none;
   font-size: 15px;
 }
 
-.actions {
+.gc-actions {
   display: flex;
   justify-content: space-between; 
   align-items: center;
   margin-top: 40px;
 }
 
-.cancelar {
+.gc-cancelar {
   background: transparent;
   border: none;
   color: white;
@@ -97,7 +98,7 @@ input {
   margin-left: 280px;
 }
 
-.guardar {
+.gc-guardar {
   background-color: rgba(32, 41, 56, 1);
   border: none;
   padding: 5px 60px;
@@ -106,92 +107,86 @@ input {
   font-weight: bold;
   cursor: pointer;
   margin-left: 515px;
-  
 }
-.guardar:hover {
-    background-color: #1b2435; 
-    transition: background-color 0.3s ease;
-  }
-  
-  .newClientBtn:hover {
-    background-color: #ffb066; 
-    transition: background-color 0.3s ease;
-  }
-  
-  .cancelar:hover {
-    text-decoration: underline;
-    opacity: 0.8;
-    transition: opacity 0.2s ease;
-  }
-  button:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-  }
-  
-.header-outside {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    width: 100%;
-    max-width: 1400px;
-    color: white;
-    
-  }
-  .titulo-cliente {
-    font-size: 28px;
-    font-weight: bold;
-  }
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 70px 0 40px 0; /* 👈 sin mucho top */
-  }
-      
 
+.gc-guardar:hover {
+  background-color: #1b2435; 
+  transition: background-color 0.3s ease;
+}
 
-  .espacio-formulario {
-    min-height: 100px; /* o lo que mida aprox el form */
-    width: 300%;
-  }
+.newClientBtn:hover {
+  background-color: #ffb066; 
+  transition: background-color 0.3s ease;
+}
+
+.gc-cancelar:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.gc-header-outside {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 1400px;
+  color: white;
+}
+
+.titulo-cliente {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.gc-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 70px 0 40px 0; /* 👈 sin mucho top */
+}
+
+.gc-espacio-formulario {
+  min-height: 100px; /* o lo que mida aprox el form */
+  width: 300%;
+}
   
-  .tabla-clientes {
-    margin-top: 100px;
-    width: 95%;
-    overflow-x: auto;
-    border-radius: 10px;
-  }
+.tabla-clientes {
+  margin-top: 100px;
+  width: 95%;
+  overflow-x: auto;
+  border-radius: 10px;
+}
   
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    color: white;
-    font-size: 16px;
-    background-color: rgba(31, 31, 31, 1); /* igual a tu card */
-    border: 1px solid white; /* borde general */    
-  }
+.tabla-clientes table {
+  width: 100%;
+  border-collapse: collapse;
+  color: white;
+  font-size: 16px;
+  background-color: rgba(31, 31, 31, 1); /* igual a tu card */
+  border: 1px solid white; /* borde general */    
+}
   
-  th, td {
-    border: 1px solid rgba(255, 255, 255, 0.3); /* bordes individuales */
-    padding: 12px;
-    text-align: center;
-    
-  }
+.tabla-clientes th, 
+.tabla-clientes td {
+  border: 1px solid rgba(255, 255, 255, 0.3); /* bordes individuales */
+  padding: 12px;
+  text-align: center;
+}
   
-  th {
-    background-color: #1f1f1f;
-    font-weight: bold;
-  }
+.tabla-clientes th {
+  background-color: #1f1f1f;
+  font-weight: bold;
+}
   
-  td button {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-  }
+.tabla-clientes td button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
   
-  td button:hover {
-    text-decoration: underline;
-  }
-  
+.tabla-clientes td button:hover {
+  text-decoration: underline;
+}

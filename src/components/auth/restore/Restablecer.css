@@ -1,3 +1,5 @@
+@import '../../../styles/variables.css';
+
 .restablecer-page {
     background-color: #fff7e6;
     min-height: 100vh;
@@ -9,7 +11,7 @@
   
   .restablecer-container {
     background-color: white;
-    border: 2px solid #8b0000;
+    border: 2px solid var(--color-danger);
     border-radius: 8px;
     padding: 30px 40px;
     text-align: center;
@@ -18,12 +20,12 @@
   }
   
   .restablecer-container h2 {
-    color: #8b0000;
+    color: var(--color-danger);
     margin-bottom: 10px;
   }
   
   .restablecer-container .descripcion {
-    color: rgba(130, 23, 23, 1);
+    color: var(--color-danger-text);
     font-size: 14px;
     margin-bottom: 20px;
   }
@@ -39,15 +41,15 @@
     margin-top: 25px;
   }
   
-  .restablecer-container .error-message {
+  .restablecer-error-message {
     color: red;
     font-size: 14px;
     margin-top: 5px;
   }
   
   .restablecer-container button {
-    background-color: rgba(254, 178, 72, 1);
-    color: rgba(130, 23, 23, 1); 
+    background-color: var(--color-brand-yellow);
+    color: var(--color-danger-text); 
     font-weight: bold;
     padding: 5px 20px;
     border: none;
@@ -67,4 +69,3 @@
   .restablecer-container button:hover:not(:disabled) {
     background-color: #e67e00;
   }
-  

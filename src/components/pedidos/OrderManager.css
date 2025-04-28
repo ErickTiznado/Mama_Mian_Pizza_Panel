@@ -146,13 +146,12 @@ body {
     width: 100%;
   }
 
-  .navbar {
+  .order-navbar {
     width: 100%;
-   
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
     box-sizing: border-box;
   }
-  
+

@@ -9,11 +9,7 @@ const OrderManager = () => {
 
   return (
     <div className="layout">
-      <Sidebar />
-
       <div className="main-panel">
-        <Navbar />
-
         <div className="content-scroll">
           <div className="wrapper">
             <div className="card">

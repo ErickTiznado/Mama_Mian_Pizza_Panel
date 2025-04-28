@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import Navbar from '../navbar/nabvar';
-import Sidebar from '../sidebar/sidebar';
+
 import './AgregarContenido.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpFromBracket, faImage, faChevronDown } from '@fortawesome/free-solid-svg-icons';
@@ -414,9 +413,8 @@ const AgregarContenido = () => {
 
   return (
     <div className="cont_agregar-contenido-wrapper">
-      <Navbar />
       <div className="cont_contenido-layout">
-        <Sidebar />
+
         <div className="cont_contenido-principal">
           {/* Vista Listado: se muestra cuando no se está agregando contenido nuevo */}
           {!mostrarFormulario ? (

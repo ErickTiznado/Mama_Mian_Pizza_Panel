@@ -1,0 +1,31 @@
+/* Global color variables for MamaMianPizza */
+:root {
+  /* Base colors */
+  --color-primary: #111828;           /* Negro ligeramente más suave */
+  --color-secondary: #1E1E1E;        /* Azul oscuro profesional */
+  --color-tertiary: #242424;         /* Azul-gris para profundidad */
+  --color-quaternary: #E5D79A;        /* Gris muy claro para fondos */
+  --color-quinary: #F5F5F5;           /* Blanco roto para contraste */
+  --color-accent: #3D84B8;           /* Azul corporativo para acentos */
+  
+  /* Status colors */
+  --color-success: #4CAF50;          /* Verde para acciones positivas */
+  --color-success-light: #B1F6BB;
+  --color-success-text: #007712;
+  --color-warning: #FFC107;          /* Amarillo para advertencias */
+  --color-warning-light: #ECFE48;
+  --color-warning-text: #776D00;
+  --color-danger: #E53935;           /* Rojo para acciones críticas */
+  --color-danger-light: #F6B1B1;
+  --color-danger-text: #821717;
+  
+  /* Text colors */
+  --color-text: #333333;             /* Texto principal más suave */
+  --color-text-light: #909497;
+  --color-text-lighter: #b3b6b7;
+  --color-white: #FFFFFF;
+  
+  /* Brand colors */
+  --color-brand-yellow: rgba(254, 178, 72, 1);
+  --color-brand-red: rgba(153, 27, 27, 1);
+}

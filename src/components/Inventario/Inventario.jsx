@@ -311,16 +311,15 @@ const Inventario = () => {
   const menuEnPagina = menuFiltrado.slice(indexInicio, indexFin);
 
   return (
-    <div className="layout">
-      <Sidebar />
-      <div className="main-panel">
-        <Navbar />
+    <div className="inv-layout">
+
+      <div className="inv-main-panel">
 
         {!mostrarFormulario ? (
           <div className="header-inventario">
             <h2 className="titulo-inventario">Control de Inventario</h2>
-            <button className="agregarBtn" onClick={() => setMostrarFormulario(true)}>
-              <span className="icon"></span> +Agregar Inventario
+            <button className="btn-agregar-producto" onClick={() => setMostrarFormulario(true)}>
+              <span className="icon">+</span> Agregar Inventario
             </button>
           </div>
         ) : (
@@ -331,12 +330,11 @@ const Inventario = () => {
           </div>
         )}
 
-        <div className="content-scroll">
-          <div className="wrapper">
+          <div className="inv-wrapper">
             {mostrarFormulario ? (
               <div className="card">
-                {error && <div className="error-message">{error}</div>}
-                {successMessage && <div className="success-message">{successMessage}</div>}
+                {error && <div className="inv-error-message">{error}</div>}
+                {successMessage && <div className="inv-success-message">{successMessage}</div>}
                 
                 <div className="form">
                   <div className="inputsRow">
@@ -460,10 +458,10 @@ const Inventario = () => {
                     </div>
                   </div>
 
-                  <div className="actions">
+                  <div className="form-actions">
                     <button 
                       type="button" 
-                      className="cancelar" 
+                      className="btn-cancelar" 
                       onClick={resetForm}
                       disabled={loading}
                     >
@@ -471,7 +469,7 @@ const Inventario = () => {
                     </button>
                     <button 
                       type="button" 
-                      className="guardar" 
+                      className="btn-guardar" 
                       onClick={handleGuardar}
                       disabled={loading}
                     >
@@ -549,7 +547,7 @@ const Inventario = () => {
               </>
             )}
           </div>
-        </div>
+        
         
         {/* Modal de confirmación de eliminación */}
         {modalConfirmacion.visible && (

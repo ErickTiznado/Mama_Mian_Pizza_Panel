@@ -1,12 +1,13 @@
+@import '../../../styles/variables.css';
+
 :root {
   --login-background: #1F1F1F;
-  --secondary-color: #FEB248;
 }
 
 .login-title{
   font-size: 1.8rem;
   font-weight: bold;
-  color: var(--secondary-color);
+  color: var(--color-brand-yellow);
 }
 
 .login-page {
@@ -19,8 +20,9 @@
 }
 
 .login-form-title {
-  color: #FFF; /* 👈 o el color que tú quieras */
+  color: var(--color-white);
 }
+
 .login-container {
   flex: 1;
   display: flex;
@@ -32,7 +34,7 @@
 
 .form-box {
   background: var(--login-background);
-  border: 2px solid #FFF;
+  border: 2px solid var(--color-white);
   border-radius: 6px;
   padding: 30px 40px;
   width: 100%;
@@ -59,10 +61,10 @@
   right: 10px;
   transform: translateY(-50%);
   cursor: pointer;
-  color: #FFF;
+  color: var(--color-white);
 }
 
-.error-message {
+.login-error-message {
   color: #c53030;
   font-size: 14px;
   margin: 10px 0;
@@ -76,10 +78,9 @@
   padding: 0 20px;
 }
 
-
 .login-form button {
-  background-color: rgba(254, 178, 72, 1);
-  color: rgba(130, 23, 23, 1);
+  background-color: var(--color-brand-yellow);
+  color: var(--color-brand-red);
   border: none;
   padding: 6px;
   width: 40%;
@@ -88,8 +89,9 @@
   cursor: pointer;
   font-weight: bold;
 }
+
 .forgot-link {
-  color: #FFF;
+  color: var(--color-white);
   text-decoration: none;
 }
 
@@ -97,22 +99,21 @@
   text-decoration: underline;
 }
 
-
 .register-text {
   margin-top: 15px;
   font-size: 14px;
-  color: #FFF;
-  border-left: rgba(254, 178, 72, 1) 3px solid;
+  color: var(--color-white);
+  border-left: var(--color-brand-yellow) 3px solid;
 }
 
 .forgot-text{
   margin-top: 15px;
   font-size: 14px;
-  color: #FFF;
+  color: var(--color-white);
 }
 
 .register-text a {
-  color:rgba(130, 23, 23, 1);
+  color: var(--color-brand-red);
   font-weight: bold;
   text-decoration: none;
 }

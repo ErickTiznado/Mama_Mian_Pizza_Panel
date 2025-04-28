@@ -1,3 +1,5 @@
+@import '../../../styles/variables.css';
+
 .recuperar-page {
     background-color: #fff7e6;
     min-height: 100vh;
@@ -9,15 +11,16 @@
   
   .recuperar-container {
     background-color: white;
-    border: 2px solid #8b0000;
+    border: 2px solid var(--color-danger);
     border-radius: 8px;
     padding: 30px 40px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 400px;
   }
   
   .recuperar-container h2 {
-    color: #8b0000;
+    color: var(--color-danger);
     margin-bottom: 10px;
   }
   
@@ -37,8 +40,8 @@
   }
   
   .recuperar-container button {
-    background-color: #f7941d;
-    color: rgba(130, 23, 23, 1);
+    background-color: var(--color-brand-yellow);
+    color: var(--color-danger-text);
     font-weight: bold;
     padding: 10px 20px;
     border: none;
@@ -57,21 +60,20 @@
   }
   
   .recuperar-container .volver a {
-    color: #8b0000;
+    color: var(--color-danger);
     text-decoration: none;
     font-weight: bold;
   }
   
-  .notificacion {
+  .recuperar-notificacion {
     position: absolute;
     top: 30px;
     right: 30px;
     background-color: white;
-    border: 2px solid #8b0000;
-    color: #8b0000;
+    border: 2px solid var(--color-danger);
+    color: var(--color-danger);
     padding: 10px 20px;
     border-radius: 8px;
     font-size: 14px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
   }
-  

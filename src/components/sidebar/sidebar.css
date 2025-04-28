@@ -1,16 +1,4 @@
-:root {
-    --color-primary: #111828;           /* Negro ligeramente más suave */
-    --color-secondary: #1E1E1E;        /* Azul oscuro profesional */
-    --color-tertiary: #242424;         /* Azul-gris para profundidad */
-    --color-quaternary: #E5D79A;        /* Gris muy claro para fondos */
-    --color-quinary: #F5F5F5;           /* Blanco roto para contraste */
-    --color-accent: #3D84B8;           /* Azul corporativo para acentos */
-    --color-success: #4CAF50;          /* Verde para acciones positivas */
-    --color-warning: #FFC107;          /* Amarillo para advertencias */
-    --color-danger: #E53935;           /* Rojo para acciones críticas */
-    --color-text: #333333;             /* Texto principal más suave */
-    --color-septenary: #FFFFFF;        /* Blanco puro */
-  }
+@import '../../styles/variables.css';
 
 .sidebar{
     background-color: var(--color-primary);
