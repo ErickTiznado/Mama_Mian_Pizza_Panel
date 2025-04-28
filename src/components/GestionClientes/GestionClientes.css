@@ -194,4 +194,59 @@ input {
   td button:hover {
     text-decoration: underline;
   }
+  .paginacion-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
   
+  .paginacion-boton {
+    background-color: rgba(254, 178, 72, 1);
+    border: none;
+    padding: 8px 20px;
+    border-radius: 8px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .paginacion-boton:hover {
+    background-color: #ffb066; /* un naranja un poquito más claro en hover */
+  }
+  
+  .paginacion-boton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .paginacion-texto {
+    align-self: center;
+    color: white;
+  }
+  .btn-eliminar {
+    background: none;
+    border: none;
+    color: red;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-editar {
+    background: none;
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+  }
+  
+  .btn-eliminar:hover, .btn-editar:hover {
+    text-decoration: underline;
+  }
+    
