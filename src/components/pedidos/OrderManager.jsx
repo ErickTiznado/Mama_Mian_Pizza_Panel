@@ -38,7 +38,6 @@ const OrderManager = () => {
                 <th>Notas</th>
                 <th>Metodo de Pago</th>
                 <th>Total</th>
-                <th>Estado</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -52,10 +51,9 @@ const OrderManager = () => {
                 <td>Ninguna</td>
                 <td>Tarjeta de Credito</td>
                 <td>$20.00</td>
-                <td>Pendiente</td>
                 <td>
-                  <button className="btn__action">Ver Detalles</button>
-                  <button className="btn__action">Cancelar</button>
+                  <button className="btn__action__details">Ver Detalles</button>
+                  <button className="btn__action__cancell">Cancelar</button>
                 </td>
               </tr>
               <tr>
@@ -67,10 +65,9 @@ const OrderManager = () => {
                 <td>Ninguna</td>
                 <td>Tarjeta de Credito</td>
                 <td>$20.00</td>
-                <td>Pendiente</td>
                 <td>
-                  <button className="btn__action">Ver Detalles</button>
-                  <button className="btn__action">Cancelar</button>
+                  <button className="btn__action__details">Ver Detalles</button>
+                  <button className="btn__action__cancell">Cancelar</button>
                 </td>
               </tr>
               <tr>
@@ -82,10 +79,9 @@ const OrderManager = () => {
                 <td>Ninguna</td>
                 <td>Tarjeta de Credito</td>
                 <td>$20.00</td>
-                <td>Pendiente</td>
                 <td>
-                  <button className="btn__action">Ver Detalles</button>
-                  <button className="btn__action">Cancelar</button>
+                  <button className="btn__action__details">Ver Detalles</button>
+                  <button className="btn__action__cancell">Cancelar</button>
                 </td>
               </tr>
               </tbody>

@@ -125,3 +125,13 @@ border-bottom: 1px solid #fff;
     padding: 10px;
 
 }
+
+.btn__action__details{
+    background-color: #FEB248;
+    color: #821717;
+}
+
+.btn__action__cancell{
+    background-color: #202938;
+    color: #fff;
+}
