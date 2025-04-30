@@ -764,3 +764,89 @@
         padding: 15px;
     }
 }
+
+/* Estilos para los botones de ubicación */
+.location-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.location-button {
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 150px;
+}
+
+.view-location {
+  background-color: rgba(108, 117, 125, 0.2);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.view-location:hover {
+  background-color: rgba(108, 117, 125, 0.4);
+  transform: translateY(-2px);
+}
+
+.show-route {
+  background-color: #FEB248;
+  color: #821717;
+  border: none;
+}
+
+.show-route:hover {
+  background-color: #fea030;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.button-icon {
+  font-size: 16px;
+}
+
+/* Estilos para la sección del mapa */
+.map-modal-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.map-header h3 {
+  margin: 0;
+  color: #FEB248;
+  font-size: 1.2rem;
+}
+
+.map-back-button {
+  padding: 8px 16px;
+  background-color: rgba(108, 117, 125, 0.2);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.map-back-button:hover {
+  background-color: rgba(108, 117, 125, 0.4);
+}

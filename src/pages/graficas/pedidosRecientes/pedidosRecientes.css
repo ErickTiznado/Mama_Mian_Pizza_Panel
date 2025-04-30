@@ -1,82 +1,164 @@
-.pedidos-container{
+@import '../../../styles/variables.css';
+
+.pedidos-container {
     display: flex;
     flex-direction: column;
     align-items: start;
-    justify-content: space-around;
+    justify-content: flex-start;
     height: 100%;
     width: 100%;
     overflow: auto;
+    padding: 20px;
+    background-color: #1e1e1e;
+    color: white;
+    border-radius: 8px;
 }
 
-.pedidos-header{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 5px;
-}
-
-.pedidos-header h3{
-    font-size: 1.6rem;
-    color: var(--color-quinary);
-}
-
-.pedidos-header p{
-    font-size: 0.9rem;
-    color: var(--color-quinary);
-}
-
-.pedido-item{
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.pedido-name{
-    font-size: 1.2rem;
-    color: var(--color-quinary);
-}
-.pedido-info{
+.pedidos-header {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    padding: 5px;
+    padding: 0 0 15px 0;
+    width: 100%;
 }
 
-.pedido-id{
+.pedidos-header h3 {
+    font-size: 1.6rem;
+    color: white;
+    margin: 0;
+    font-weight: 600;
+}
+
+.pedidos-header p {
     font-size: 0.9rem;
-    color: var(--color-quinary);
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
 }
 
-.pedidos-content{
-    width: 100%;
-    padding: 20px;
-}
-
-.pedidos-list{
-    width: 100%;
-}
-
-.pedido-details{
+.pedido-item {
+    list-style: none;
     display: flex;
     justify-content: space-between;
-    width: 40%;
-}
-
-.status{
+    align-items: center;
     width: 100%;
-    border-radius: 10px;
-    padding: 10px;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.entregado{
-    background-color: var(--color-success);
-    color: var(--color-txtwarning);
-    font-weight: bold;
+.pedido-item:last-child {
+    border-bottom: none;
 }
 
-.cancelado{
-    background-color: var(--color-danger);
-    color: var(--color-txtdanger);
+.pedido-name {
+    font-size: 1.2rem;
+    color: white;
+    font-weight: 500;
+}
+
+.pedido-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.pedido-id {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.pedidos-content {
+    width: 100%;
+    padding: 0;
+}
+
+.pedidos-list {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.pedido-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.pedido-total {
     font-weight: bold;
+    color: white;
+    font-size: 1.2rem;
+    min-width: 70px;
+    text-align: right;
+}
+
+.pedido-status {
+    min-width: 120px;
+}
+
+/* Estilo base para todos los estados */
+.status {
+    border-radius: 30px;
+    padding: 8px 15px;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+/* Estado "Entregado" */
+.entregado {
+    background-color: #B1F6BB !important;
+    color: #1e1e1e !important;
+}
+
+/* Estado "Cancelado" */
+.cancelado {
+    background-color: #F6B1B1 !important;
+    color: #1e1e1e !important;
+}
+
+/* Estado "En proceso" */
+.en-proceso {
+    background-color: #ECFE48 !important;
+    color: #1e1e1e !important;
+}
+
+/* Estado "Pendiente" */
+.pendiente {
+    background-color: #a8c3f7 !important;
+    color: #1e1e1e !important;
+}
+
+.loading, .error, .no-pedidos {
+    width: 100%;
+    padding: 30px 20px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+}
+
+.error {
+    color: #f5a9a9;
+}
+
+.loading {
+    position: relative;
+}
+
+.loading:after {
+    content: "...";
+    animation: dots 1.5s steps(5, end) infinite;
+}
+
+@keyframes dots {
+    0%, 20% {
+        content: ".";
+    }
+    40% {
+        content: "..";
+    }
+    60%, 100% {
+        content: "...";
+    }
 }
