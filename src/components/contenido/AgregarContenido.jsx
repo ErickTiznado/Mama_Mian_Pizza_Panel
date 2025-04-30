@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpFromBracket, faImage, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { faPen, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-const API_URL = 'http://bkcww48c8swokk0s4wo4gkk8.82.29.198.111.sslip.io';
+const API_URL = 'https://server.tiznadodev.com';
 
 const AgregarContenido = () => {
   // Estados generales
