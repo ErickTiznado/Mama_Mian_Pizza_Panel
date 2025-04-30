@@ -9,13 +9,19 @@ const OrderManager = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [activeFilter, setActiveFilter] = useState("pendiente");
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  // Base URL para la API
+  const API_BASE_URL = "https://server.tiznadodev.com/api/orders";
 
   // Función para obtener todos los pedidos
   const fetchAllOrders = async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get("https://server.tiznadodev.com/api/order/orders");
+      const response = await axios.get(`${API_BASE_URL}/orders`);
+      console.log("Respuesta de la API (todos los pedidos):", response.data);
       setOrders(response.data);
       setLoading(false);
     } catch (err) {
@@ -30,22 +36,39 @@ const OrderManager = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`https://server.tiznadodev.com/api/order/orders/status/${status}`);
+      const response = await axios.get(`${API_BASE_URL}/orders/status/${status}`);
+      console.log(`Respuesta de la API (pedidos con estado ${status}):`, response.data);
       setOrders(response.data);
       setLoading(false);
     } catch (err) {
       setError("Error al cargar los pedidos: " + err.message);
       setLoading(false);
       console.error(`Error fetching orders with status ${status}:`, err);
+      // Mostrar detalles del error
+      if (err.response) {
+        console.error("Detalles del error:", {
+          status: err.response.status,
+          statusText: err.response.statusText,
+          data: err.response.data
+        });
+      }
     }
   };
 
   // Función para actualizar el estado de un pedido
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      await axios.put(`https://server.tiznadodev.com/api/order/orders/${orderId}/status`, {
+      setError(null);
+      const response = await axios.put(`${API_BASE_URL}/orders/${orderId}/status`, {
         estado: newStatus
       });
+      console.log("Respuesta de actualización de estado:", response.data);
+      
+      // Si la orden seleccionada es la que se actualizó, actualizar su estado en el modal
+      if (selectedOrder && selectedOrder.id_pedido === orderId) {
+        setSelectedOrder({...selectedOrder, estado: newStatus});
+      }
+      
       // Refrescar los pedidos después de actualizar el estado
       fetchOrdersByStatus(activeFilter);
     } catch (err) {
@@ -78,22 +101,82 @@ const OrderManager = () => {
 
   // Función para ver detalles de un pedido
   const handleViewDetails = (order) => {
-    // Aquí podrías implementar la lógica para mostrar un modal con detalles
-    console.log("Ver detalles del pedido:", order);
-    alert(`Detalles del pedido ${order.id_pedido}\n${JSON.stringify(order, null, 2)}`);
+    setSelectedOrder(order);
+    setShowModal(true);
   };
   
-  // Función para formatear los productos de un pedido
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedOrder(null);
+  };
+  
   const formatProductList = (detalles) => {
     if (!detalles || detalles.length === 0) return "Sin productos";
     return detalles.map(item => item.nombre_producto_original).join(", ");
   };
 
-  // Función para obtener el nombre del cliente
   const getClientName = (order) => {
     if (order.nombre_usuario) return order.nombre_usuario;
     if (order.nombre_invitado) return `${order.nombre_invitado} ${order.apellido_invitado || ''}`;
     return "Cliente sin nombre";
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "Fecha no disponible";
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('es-MX', {
+      dateStyle: 'medium',
+      timeStyle: 'short'
+    }).format(date);
+  };
+
+  const changeOrderStatus = (orderId, newStatus) => {
+    if (window.confirm(`¿Cambiar estado del pedido a ${getStatusName(newStatus)}?`)) {
+      updateOrderStatus(orderId, newStatus);
+    }
+  };
+
+  const getStatusName = (status) => {
+    const statusMap = {
+      "pendiente": "Pendiente",
+      "en_proceso": "En Proceso",
+      "entregado": "Entregado",
+      "cancelado": "Cancelado"
+    };
+    return statusMap[status] || status;
+  };
+
+  // Función para obtener el color de fondo según el tiempo transcurrido
+  const getRowBackgroundClass = (fechaCreacion) => {
+    if (!fechaCreacion) return "";
+    
+    const fechaPedido = new Date(fechaCreacion);
+    const ahora = new Date();
+    const tiempoTranscurrido = ahora - fechaPedido; // milisegundos
+    const minutosTranscurridos = tiempoTranscurrido / (1000 * 60);
+
+    if (minutosTranscurridos > 30) return "pedido-urgente";
+    if (minutosTranscurridos > 15) return "pedido-alerta";
+    return "";
+  };
+
+  // Función para formatear tiempo transcurrido
+  const formatTiempoTranscurrido = (fechaCreacion) => {
+    if (!fechaCreacion) return "N/A";
+    
+    const fechaPedido = new Date(fechaCreacion);
+    const ahora = new Date();
+    const tiempoTranscurrido = ahora - fechaPedido; // milisegundos
+    
+    const minutos = Math.floor(tiempoTranscurrido / (1000 * 60));
+    
+    if (minutos < 60) {
+      return `${minutos} min`;
+    } else {
+      const horas = Math.floor(minutos / 60);
+      const minutosRestantes = minutos % 60;
+      return `${horas}h ${minutosRestantes}m`;
+    }
   };
 
   return (
@@ -144,12 +227,12 @@ const OrderManager = () => {
           <table>
             <thead>
               <tr>
-                <th>Pedido</th>
+                <th>ID</th>
+                <th>Tiempo</th>
                 <th>Productos</th>
-                <th>Descripción</th>
+                <th>Estado</th>
                 <th>Cliente</th>
                 <th>Dirección</th>
-                <th>Notas</th>
                 <th>Método de Pago</th>
                 <th>Total</th>
                 <th>Acciones</th>
@@ -158,15 +241,58 @@ const OrderManager = () => {
             <tbody>
               {orders.length > 0 ? (
                 orders.map((order) => (
-                  <tr key={order.id_pedido}>
+                  <tr 
+                    key={order.id_pedido} 
+                    className={activeFilter === "pendiente" ? getRowBackgroundClass(order.fecha_creacion) : ""}
+                  >
                     <td>{order.id_pedido}</td>
-                    <td>{formatProductList(order.detalles)}</td>
-                    <td>{order.instrucciones_especiales || "Sin especificaciones"}</td>
+                    <td>
+                      <div className="tiempo-cell">
+                        <div>{formatDate(order.fecha_creacion)}</div>
+                        {activeFilter === "pendiente" && (
+                          <div className="tiempo-transcurrido">
+                            {formatTiempoTranscurrido(order.fecha_creacion)}
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="productos-cell">
+                      {order.detalles && order.detalles.length > 0 ? (
+                        <ul className="productos-lista">
+                          {order.detalles.slice(0, 2).map((item, idx) => (
+                            <li key={idx}>
+                              <strong>{item.cantidad}x</strong> {item.nombre_producto_original}
+                            </li>
+                          ))}
+                          {order.detalles.length > 2 && (
+                            <li className="mas-productos">
+                              +{order.detalles.length - 2} productos más
+                            </li>
+                          )}
+                        </ul>
+                      ) : (
+                        "Sin productos"
+                      )}
+                    </td>
+                    <td>
+                      <span className={`pedido-estado estado-${order.estado}`}>
+                        {getStatusName(order.estado)}
+                      </span>
+                    </td>
                     <td>{getClientName(order)}</td>
-                    <td>{order.direccion_formateada || "Recogida en tienda"}</td>
-                    <td>{order.notas || "Ninguna"}</td>
+                    <td className="direccion-cell">
+                      {order.direccion_formateada ? (
+                        <div className="direccion-texto">
+                          {order.direccion_formateada.length > 30 
+                            ? `${order.direccion_formateada.substring(0, 30)}...` 
+                            : order.direccion_formateada}
+                        </div>
+                      ) : (
+                        "Recogida en tienda"
+                      )}
+                    </td>
                     <td>{order.metodo_pago}</td>
-                    <td>${parseFloat(order.total).toFixed(2)}</td>
+                    <td className="total-cell">${parseFloat(order.total).toFixed(2)}</td>
                     <td>
                       <button 
                         className="btn__action__details"
@@ -175,12 +301,40 @@ const OrderManager = () => {
                         Ver Detalles
                       </button>
                       {activeFilter !== "cancelado" && (
-                        <button 
-                          className="btn__action__cancell"
-                          onClick={() => handleCancelOrder(order.id_pedido)}
-                        >
-                          Cancelar
-                        </button>
+                        <div className="order-actions">
+                          {order.estado !== "pendiente" && (
+                            <button 
+                              className="btn-state btn-pendiente"
+                              onClick={() => changeOrderStatus(order.id_pedido, "pendiente")}
+                            >
+                              Pendiente
+                            </button>
+                          )}
+                          {order.estado !== "en_proceso" && (
+                            <button 
+                              className="btn-state btn-en_proceso"
+                              onClick={() => changeOrderStatus(order.id_pedido, "en_proceso")}
+                            >
+                              En Proceso
+                            </button>
+                          )}
+                          {order.estado !== "entregado" && (
+                            <button 
+                              className="btn-state btn-entregado"
+                              onClick={() => changeOrderStatus(order.id_pedido, "entregado")}
+                            >
+                              Entregado
+                            </button>
+                          )}
+                          {order.estado !== "cancelado" && (
+                            <button 
+                              className="btn__action__cancell"
+                              onClick={() => handleCancelOrder(order.id_pedido)}
+                            >
+                              Cancelar
+                            </button>
+                          )}
+                        </div>
                       )}
                     </td>
                   </tr>
@@ -196,6 +350,106 @@ const OrderManager = () => {
           </table>
         </div>
       </main>
+
+      {/* Modal de detalles del pedido */}
+      {showModal && selectedOrder && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Detalle del Pedido #{selectedOrder.id_pedido}</h2>
+              <button className="modal-close" onClick={closeModal}>×</button>
+            </div>
+
+            <div className="order-detail-section">
+              <h3>Estado del Pedido</h3>
+              <span className={`pedido-estado estado-${selectedOrder.estado}`}>
+                {getStatusName(selectedOrder.estado)}
+              </span>
+            </div>
+
+            <div className="order-detail-section">
+              <h3>Información del Cliente</h3>
+              <p><strong>Cliente:</strong> {getClientName(selectedOrder)}</p>
+              {selectedOrder.celular_invitado && (
+                <p><strong>Teléfono:</strong> {selectedOrder.celular_invitado}</p>
+              )}
+              <p><strong>Dirección:</strong> {selectedOrder.direccion_formateada || "Recogida en tienda"}</p>
+              {selectedOrder.latitud && selectedOrder.longitud && (
+                <p><strong>Ubicación:</strong> {selectedOrder.latitud}, {selectedOrder.longitud}</p>
+              )}
+            </div>
+
+            <div className="order-detail-section">
+              <h3>Información del Pedido</h3>
+              <p><strong>Fecha de creación:</strong> {formatDate(selectedOrder.fecha_creacion)}</p>
+              <p><strong>Método de pago:</strong> {selectedOrder.metodo_pago}</p>
+              <p><strong>Total:</strong> ${parseFloat(selectedOrder.total).toFixed(2)}</p>
+              <p><strong>Modo de entrega:</strong> {selectedOrder.modo_entrega || "No especificado"}</p>
+              {selectedOrder.instrucciones_especiales && (
+                <p><strong>Instrucciones especiales:</strong> {selectedOrder.instrucciones_especiales}</p>
+              )}
+              {selectedOrder.notas && (
+                <p><strong>Notas:</strong> {selectedOrder.notas}</p>
+              )}
+            </div>
+
+            <div className="order-detail-section">
+              <h3>Productos</h3>
+              <div className="product-list">
+                {selectedOrder.detalles && selectedOrder.detalles.length > 0 ? (
+                  selectedOrder.detalles.map((item, index) => (
+                    <div className="product-item" key={index}>
+                      <p><strong>Producto:</strong> {item.nombre_producto_original}</p>
+                      <p><strong>Cantidad:</strong> {item.cantidad}</p>
+                      <p><strong>Precio unitario:</strong> ${parseFloat(item.precio_unitario).toFixed(2)}</p>
+                      <p><strong>Subtotal:</strong> ${parseFloat(item.cantidad * item.precio_unitario).toFixed(2)}</p>
+                      {item.descripcion && (
+                        <p><strong>Descripción:</strong> {item.descripcion}</p>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <p>No hay productos en este pedido</p>
+                )}
+              </div>
+            </div>
+
+            <div className="order-detail-section">
+              <h3>Cambiar Estado</h3>
+              <div className="order-actions">
+                <button 
+                  className="btn-state btn-pendiente"
+                  onClick={() => changeOrderStatus(selectedOrder.id_pedido, "pendiente")}
+                  disabled={selectedOrder.estado === "pendiente"}
+                >
+                  Pendiente
+                </button>
+                <button 
+                  className="btn-state btn-en_proceso"
+                  onClick={() => changeOrderStatus(selectedOrder.id_pedido, "en_proceso")}
+                  disabled={selectedOrder.estado === "en_proceso"}
+                >
+                  En Proceso
+                </button>
+                <button 
+                  className="btn-state btn-entregado"
+                  onClick={() => changeOrderStatus(selectedOrder.id_pedido, "entregado")}
+                  disabled={selectedOrder.estado === "entregado"}
+                >
+                  Entregado
+                </button>
+                <button 
+                  className="btn__action__cancell"
+                  onClick={() => handleCancelOrder(selectedOrder.id_pedido)}
+                  disabled={selectedOrder.estado === "cancelado"}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
