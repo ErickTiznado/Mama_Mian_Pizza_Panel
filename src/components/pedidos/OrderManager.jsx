@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./OrderManager.css";
 import axios from "axios";
+import { FaEye, FaClock, FaRegCalendarAlt, FaMapMarkerAlt } from "react-icons/fa";
 
 const OrderManager = () => {
   const [modo, setModo] = useState("restaurante");
@@ -118,6 +119,7 @@ const OrderManager = () => {
   const getClientName = (order) => {
     if (order.nombre_usuario) return order.nombre_usuario;
     if (order.nombre_invitado) return `${order.nombre_invitado} ${order.apellido_invitado || ''}`;
+    if (order.nombre_cliente) return `${order.nombre_cliente} ${order.apellido_cliente || ''}`;
     return "Cliente sin nombre";
   };
 
@@ -179,6 +181,12 @@ const OrderManager = () => {
     }
   };
 
+  // Función para contar el total de productos en un pedido
+  const getTotalProductos = (detalles) => {
+    if (!detalles || detalles.length === 0) return 0;
+    return detalles.reduce((total, item) => total + parseInt(item.cantidad), 0);
+  };
+
   return (
     <div className="order__container">
       <header className="order__header">
@@ -227,13 +235,13 @@ const OrderManager = () => {
           <table>
             <thead>
               <tr>
-                <th>ID</th>
+                <th>Código</th>
                 <th>Tiempo</th>
                 <th>Productos</th>
                 <th>Estado</th>
                 <th>Cliente</th>
                 <th>Dirección</th>
-                <th>Método de Pago</th>
+                <th>Método</th>
                 <th>Total</th>
                 <th>Acciones</th>
               </tr>
@@ -243,99 +251,129 @@ const OrderManager = () => {
                 orders.map((order) => (
                   <tr 
                     key={order.id_pedido} 
-                    className={activeFilter === "pendiente" ? getRowBackgroundClass(order.fecha_creacion) : ""}
+                    className={activeFilter === "pendiente" ? getRowBackgroundClass(order.fecha_pedido) : ""}
                   >
-                    <td>{order.id_pedido}</td>
-                    <td>
-                      <div className="tiempo-cell">
-                        <div>{formatDate(order.fecha_creacion)}</div>
+                    <td className="codigo-cell">
+                      <div className="codigo-info">
+                        <span className="codigo-badge">{order.codigo_pedido}</span>
+                        <span className="id-pedido">#{order.id_pedido}</span>
+                      </div>
+                    </td>
+                    <td className="tiempo-cell">
+                      <div className="tiempo-info">
+                        <div className="tiempo-fecha">
+                          <FaRegCalendarAlt className="icon-small" /> {formatDate(order.fecha_pedido)}
+                        </div>
                         {activeFilter === "pendiente" && (
                           <div className="tiempo-transcurrido">
-                            {formatTiempoTranscurrido(order.fecha_creacion)}
+                            <FaClock className="icon-small" /> {formatTiempoTranscurrido(order.fecha_pedido)}
                           </div>
                         )}
                       </div>
                     </td>
                     <td className="productos-cell">
                       {order.detalles && order.detalles.length > 0 ? (
-                        <ul className="productos-lista">
-                          {order.detalles.slice(0, 2).map((item, idx) => (
-                            <li key={idx}>
-                              <strong>{item.cantidad}x</strong> {item.nombre_producto_original}
-                            </li>
-                          ))}
-                          {order.detalles.length > 2 && (
-                            <li className="mas-productos">
-                              +{order.detalles.length - 2} productos más
-                            </li>
-                          )}
-                        </ul>
+                        <div className="productos-info">
+                          <div className="productos-count">
+                            <strong>{getTotalProductos(order.detalles)}</strong> productos
+                          </div>
+                          <ul className="productos-lista">
+                            {order.detalles.slice(0, 2).map((item, idx) => (
+                              <li key={idx}>
+                                <strong>{item.cantidad}x</strong> {item.nombre_producto_original}
+                                {item.tamano && <span className="producto-tamano"> ({item.tamano})</span>}
+                              </li>
+                            ))}
+                            {order.detalles.length > 2 && (
+                              <li className="mas-productos">
+                                +{order.detalles.length - 2} más
+                              </li>
+                            )}
+                          </ul>
+                        </div>
                       ) : (
-                        "Sin productos"
+                        <span className="sin-productos">Sin productos</span>
                       )}
                     </td>
-                    <td>
+                    <td className="estado-cell">
                       <span className={`pedido-estado estado-${order.estado}`}>
                         {getStatusName(order.estado)}
                       </span>
                     </td>
-                    <td>{getClientName(order)}</td>
+                    <td className="cliente-cell">
+                      <div className="cliente-info">
+                        <div className="cliente-nombre">{getClientName(order)}</div>
+                        <div className="cliente-telefono">{order.celular_invitado || order.telefono}</div>
+                      </div>
+                    </td>
                     <td className="direccion-cell">
                       {order.direccion_formateada ? (
-                        <div className="direccion-texto">
-                          {order.direccion_formateada.length > 30 
-                            ? `${order.direccion_formateada.substring(0, 30)}...` 
-                            : order.direccion_formateada}
+                        <div className="direccion-info">
+                          <FaMapMarkerAlt className="icon-small" />
+                          <div className="direccion-texto" title={order.direccion_formateada}>
+                            {order.direccion_formateada.length > 30 
+                              ? `${order.direccion_formateada.substring(0, 30)}...` 
+                              : order.direccion_formateada}
+                          </div>
                         </div>
                       ) : (
-                        "Recogida en tienda"
+                        <span className="direccion-local">Recogida en tienda</span>
                       )}
                     </td>
-                    <td>{order.metodo_pago}</td>
-                    <td className="total-cell">${parseFloat(order.total).toFixed(2)}</td>
-                    <td>
-                      <button 
-                        className="btn__action__details"
-                        onClick={() => handleViewDetails(order)}
-                      >
-                        Ver Detalles
-                      </button>
-                      {activeFilter !== "cancelado" && (
-                        <div className="order-actions">
-                          {order.estado !== "pendiente" && (
-                            <button 
-                              className="btn-state btn-pendiente"
-                              onClick={() => changeOrderStatus(order.id_pedido, "pendiente")}
-                            >
-                              Pendiente
-                            </button>
-                          )}
-                          {order.estado !== "en_proceso" && (
-                            <button 
-                              className="btn-state btn-en_proceso"
-                              onClick={() => changeOrderStatus(order.id_pedido, "en_proceso")}
-                            >
-                              En Proceso
-                            </button>
-                          )}
-                          {order.estado !== "entregado" && (
-                            <button 
-                              className="btn-state btn-entregado"
-                              onClick={() => changeOrderStatus(order.id_pedido, "entregado")}
-                            >
-                              Entregado
-                            </button>
-                          )}
-                          {order.estado !== "cancelado" && (
-                            <button 
-                              className="btn__action__cancell"
-                              onClick={() => handleCancelOrder(order.id_pedido)}
-                            >
-                              Cancelar
-                            </button>
-                          )}
-                        </div>
-                      )}
+                    <td className="metodo-cell">
+                      <div className="metodo-pago-badge">
+                        {order.metodo_pago}
+                      </div>
+                    </td>
+                    <td className="total-cell">
+                      ${parseFloat(order.total).toFixed(2)}
+                    </td>
+                    <td className="acciones-cell">
+                      <div className="action-buttons-container">
+                        <button 
+                          className="action-primary-button btn__action__details"
+                          onClick={() => handleViewDetails(order)}
+                        >
+                          <FaEye className="icon-small" /> Ver Detalles
+                        </button>
+                        
+                        {activeFilter !== "cancelado" && (
+                          <div className="action-secondary-buttons">
+                            {order.estado !== "pendiente" && (
+                              <button 
+                                className="action-secondary-button btn-state btn-pendiente"
+                                onClick={() => changeOrderStatus(order.id_pedido, "pendiente")}
+                              >
+                                Pendiente
+                              </button>
+                            )}
+                            {order.estado !== "en_proceso" && (
+                              <button 
+                                className="action-secondary-button btn-state btn-en_proceso"
+                                onClick={() => changeOrderStatus(order.id_pedido, "en_proceso")}
+                              >
+                                En Proceso
+                              </button>
+                            )}
+                            {order.estado !== "entregado" && (
+                              <button 
+                                className="action-secondary-button btn-state btn-entregado"
+                                onClick={() => changeOrderStatus(order.id_pedido, "entregado")}
+                              >
+                                Entregado
+                              </button>
+                            )}
+                            {order.estado !== "cancelado" && (
+                              <button 
+                                className="action-secondary-button btn__action__cancell"
+                                onClick={() => handleCancelOrder(order.id_pedido)}
+                              >
+                                Cancelar
+                              </button>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -356,41 +394,108 @@ const OrderManager = () => {
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>Detalle del Pedido #{selectedOrder.id_pedido}</h2>
+              <h2>Pedido #{selectedOrder.id_pedido} - {selectedOrder.codigo_pedido}</h2>
               <button className="modal-close" onClick={closeModal}>×</button>
             </div>
 
-            <div className="order-detail-section">
-              <h3>Estado del Pedido</h3>
-              <span className={`pedido-estado estado-${selectedOrder.estado}`}>
-                {getStatusName(selectedOrder.estado)}
-              </span>
-            </div>
+            <div className="modal-columns">
+              <div className="modal-column">
+                <div className="order-detail-section">
+                  <h3>Estado del Pedido</h3>
+                  <div className="estado-container">
+                    <span className={`pedido-estado estado-${selectedOrder.estado}`}>
+                      {getStatusName(selectedOrder.estado)}
+                    </span>
+                    <span className="tiempo-estimado">
+                      Tiempo estimado: {selectedOrder.tiempo_estimado_entrega || "N/A"} min
+                    </span>
+                  </div>
+                </div>
 
-            <div className="order-detail-section">
-              <h3>Información del Cliente</h3>
-              <p><strong>Cliente:</strong> {getClientName(selectedOrder)}</p>
-              {selectedOrder.celular_invitado && (
-                <p><strong>Teléfono:</strong> {selectedOrder.celular_invitado}</p>
-              )}
-              <p><strong>Dirección:</strong> {selectedOrder.direccion_formateada || "Recogida en tienda"}</p>
-              {selectedOrder.latitud && selectedOrder.longitud && (
-                <p><strong>Ubicación:</strong> {selectedOrder.latitud}, {selectedOrder.longitud}</p>
-              )}
-            </div>
+                <div className="order-detail-section">
+                  <h3>Información del Cliente</h3>
+                  <div className="info-grid">
+                    <div className="info-row">
+                      <strong>Cliente:</strong>
+                      <span>{getClientName(selectedOrder)}</span>
+                    </div>
+                    {selectedOrder.celular_invitado && (
+                      <div className="info-row">
+                        <strong>Teléfono:</strong>
+                        <span>{selectedOrder.celular_invitado}</span>
+                      </div>
+                    )}
+                    {selectedOrder.telefono && !selectedOrder.celular_invitado && (
+                      <div className="info-row">
+                        <strong>Teléfono:</strong>
+                        <span>{selectedOrder.telefono}</span>
+                      </div>
+                    )}
+                    {selectedOrder.email && (
+                      <div className="info-row">
+                        <strong>Email:</strong>
+                        <span>{selectedOrder.email}</span>
+                      </div>
+                    )}
+                    <div className="info-row">
+                      <strong>Dirección:</strong>
+                      <span>{selectedOrder.direccion_formateada || selectedOrder.direccion || "Recogida en tienda"}</span>
+                    </div>
+                    {selectedOrder.latitud && selectedOrder.longitud && (
+                      <div className="info-row">
+                        <strong>Ubicación:</strong>
+                        <span>{selectedOrder.latitud}, {selectedOrder.longitud}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
 
-            <div className="order-detail-section">
-              <h3>Información del Pedido</h3>
-              <p><strong>Fecha de creación:</strong> {formatDate(selectedOrder.fecha_creacion)}</p>
-              <p><strong>Método de pago:</strong> {selectedOrder.metodo_pago}</p>
-              <p><strong>Total:</strong> ${parseFloat(selectedOrder.total).toFixed(2)}</p>
-              <p><strong>Modo de entrega:</strong> {selectedOrder.modo_entrega || "No especificado"}</p>
-              {selectedOrder.instrucciones_especiales && (
-                <p><strong>Instrucciones especiales:</strong> {selectedOrder.instrucciones_especiales}</p>
-              )}
-              {selectedOrder.notas && (
-                <p><strong>Notas:</strong> {selectedOrder.notas}</p>
-              )}
+              <div className="modal-column">
+                <div className="order-detail-section">
+                  <h3>Información del Pedido</h3>
+                  <div className="info-grid">
+                    <div className="info-row">
+                      <strong>Fecha:</strong>
+                      <span>{formatDate(selectedOrder.fecha_pedido || selectedOrder.fecha_creacion)}</span>
+                    </div>
+                    <div className="info-row">
+                      <strong>Tipo de cliente:</strong>
+                      <span>{selectedOrder.tipo_cliente || "No especificado"}</span>
+                    </div>
+                    <div className="info-row">
+                      <strong>Método de pago:</strong>
+                      <span>{selectedOrder.metodo_pago}</span>
+                    </div>
+                    <div className="info-row">
+                      <strong>Subtotal:</strong>
+                      <span>${parseFloat(selectedOrder.subtotal || 0).toFixed(2)}</span>
+                    </div>
+                    {selectedOrder.costo_envio && parseFloat(selectedOrder.costo_envio) > 0 && (
+                      <div className="info-row">
+                        <strong>Costo de envío:</strong>
+                        <span>${parseFloat(selectedOrder.costo_envio).toFixed(2)}</span>
+                      </div>
+                    )}
+                    {selectedOrder.impuestos && parseFloat(selectedOrder.impuestos) > 0 && (
+                      <div className="info-row">
+                        <strong>Impuestos:</strong>
+                        <span>${parseFloat(selectedOrder.impuestos).toFixed(2)}</span>
+                      </div>
+                    )}
+                    <div className="info-row total-row">
+                      <strong>Total:</strong>
+                      <span>${parseFloat(selectedOrder.total).toFixed(2)}</span>
+                    </div>
+                    {selectedOrder.notas_adicionales && (
+                      <div className="info-row full-width">
+                        <strong>Notas adicionales:</strong>
+                        <span>{selectedOrder.notas_adicionales}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="order-detail-section">
@@ -399,24 +504,39 @@ const OrderManager = () => {
                 {selectedOrder.detalles && selectedOrder.detalles.length > 0 ? (
                   selectedOrder.detalles.map((item, index) => (
                     <div className="product-item" key={index}>
-                      <p><strong>Producto:</strong> {item.nombre_producto_original}</p>
-                      <p><strong>Cantidad:</strong> {item.cantidad}</p>
-                      <p><strong>Precio unitario:</strong> ${parseFloat(item.precio_unitario).toFixed(2)}</p>
-                      <p><strong>Subtotal:</strong> ${parseFloat(item.cantidad * item.precio_unitario).toFixed(2)}</p>
-                      {item.descripcion && (
-                        <p><strong>Descripción:</strong> {item.descripcion}</p>
-                      )}
+                      <div className="product-header">
+                        <h4>{item.nombre_producto_original}</h4>
+                        <span className="product-price">${parseFloat(item.subtotal).toFixed(2)}</span>
+                      </div>
+                      <div className="product-details">
+                        <div className="product-specs">
+                          <span className="product-qty">Cantidad: <strong>{item.cantidad}</strong></span>
+                          <span className="product-unit-price">Precio unitario: <strong>${parseFloat(item.precio_unitario).toFixed(2)}</strong></span>
+                          {item.tamano && <span className="product-size">Tamaño: <strong>{item.tamano}</strong></span>}
+                          {item.masa && <span className="product-masa">Masa: <strong>{item.masa}</strong></span>}
+                        </div>
+                        {item.descripcion && (
+                          <div className="product-description">
+                            {item.descripcion}
+                          </div>
+                        )}
+                        {item.instrucciones_especiales && (
+                          <div className="product-instructions">
+                            <strong>Instrucciones especiales:</strong> {item.instrucciones_especiales}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   ))
                 ) : (
-                  <p>No hay productos en este pedido</p>
+                  <p className="sin-productos-mensaje">Este pedido no contiene productos registrados</p>
                 )}
               </div>
             </div>
 
             <div className="order-detail-section">
               <h3>Cambiar Estado</h3>
-              <div className="order-actions">
+              <div className="modal-actions-section">
                 <button 
                   className="btn-state btn-pendiente"
                   onClick={() => changeOrderStatus(selectedOrder.id_pedido, "pendiente")}
