@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "./OrderManager.css";
 import axios from "axios";
-import { FaEye, FaClock, FaRegCalendarAlt, FaMapMarkerAlt, FaMapMarked } from "react-icons/fa";
-import OrderLocationMap from "../map/OrderLocationMap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faListCheck } from '@fortawesome/free-solid-svg-icons';
+
+// Importación de componentes modulares
+import FilterBar from '../common/FilterBar'; // Reemplazamos OrderFilterRibbon por nuestro nuevo componente
+import OrderTable from './components/OrderTable';
+import OrderDetailModal from './components/OrderDetailModal';
+// Importar el nuevo componente OrderTabs en lugar de OrderFilters
+import OrderTabs from './components/OrderTabs';
 
 const OrderManager = () => {
-  const [modo, setModo] = useState("restaurante");
-  const [metodoPago, setMetodoPago] = useState("");
+  // Estados principales
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -15,9 +21,32 @@ const OrderManager = () => {
   const [showModal, setShowModal] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const [showRoute, setShowRoute] = useState(false);
+  
+  // Estado para controlar visibilidad de filtros y contador
+  const [showFilters, setShowFilters] = useState(true);
+  
+  // Estados para filtros y paginación
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filtroSemana, setFiltroSemana] = useState('todas');
+  const [filtrosAplicados, setFiltrosAplicados] = useState(false);
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [paginaActual, setPaginaActual] = useState(1);
+  const elementosPorPagina = 10;
 
   // Base URL para la API
   const API_BASE_URL = "https://server.tiznadodev.com/api/orders";
+
+  // Cargar pedidos por defecto (pendientes) al montar el componente
+  useEffect(() => {
+    fetchOrdersByStatus("pendiente");
+  }, []);
+
+  // Actualizar filtros cuando cambia el término de búsqueda o periodo
+  useEffect(() => {
+    if (filtrosAplicados) {
+      aplicarFiltros();
+    }
+  }, [searchTerm, filtroSemana, filtrosAplicados, orders]);
 
   // Función para obtener todos los pedidos
   const fetchAllOrders = async () => {
@@ -43,6 +72,7 @@ const OrderManager = () => {
       const response = await axios.get(`${API_BASE_URL}/orders/status/${status}`);
       console.log(`Respuesta de la API (pedidos con estado ${status}):`, response.data);
       setOrders(response.data);
+      setPaginaActual(1); // Reset de paginación al cambiar filtros
       setLoading(false);
     } catch (err) {
       setError("Error al cargar los pedidos: " + err.message);
@@ -81,15 +111,13 @@ const OrderManager = () => {
     }
   };
 
-  // Cargar pedidos por defecto (pendientes) al montar el componente
-  useEffect(() => {
-    fetchOrdersByStatus("pendiente");
-  }, []);
-
   // Función para manejar el cambio de filtro
   const handleFilterChange = (status) => {
     setActiveFilter(status);
     fetchOrdersByStatus(status);
+    setFiltrosAplicados(false);
+    setSearchTerm('');
+    setFiltroSemana('todas');
   };
 
   // Función para cancelar un pedido
@@ -109,9 +137,12 @@ const OrderManager = () => {
     setShowModal(true);
   };
   
+  // Funciones para el modal
   const closeModal = () => {
     setShowModal(false);
     setSelectedOrder(null);
+    setShowMap(false);
+    setShowRoute(false);
   };
   
   const formatProductList = (detalles) => {
@@ -119,13 +150,15 @@ const OrderManager = () => {
     return detalles.map(item => item.nombre_producto_original).join(", ");
   };
 
+  // Función para obtener el nombre del cliente
   const getClientName = (order) => {
     if (order.nombre_usuario) return order.nombre_usuario;
-    if (order.nombre_invitado) return `${order.nombre_invitado} ${order.apellido_invitado || ''}`;
-    if (order.nombre_cliente) return `${order.nombre_cliente} ${order.apellido_cliente || ''}`;
+    if (order.nombre_invitado) return `${order.nombre_invitado} ${order.apellido_invitado || ''}`.trim();
+    if (order.nombre_cliente) return `${order.nombre_cliente} ${order.apellido_cliente || ''}`.trim();
     return "Cliente sin nombre";
   };
 
+  // Función para formatear fechas
   const formatDate = (dateString) => {
     if (!dateString) return "Fecha no disponible";
     const date = new Date(dateString);
@@ -135,12 +168,14 @@ const OrderManager = () => {
     }).format(date);
   };
 
+  // Función para cambiar el estado de un pedido
   const changeOrderStatus = (orderId, newStatus) => {
     if (window.confirm(`¿Cambiar estado del pedido a ${getStatusName(newStatus)}?`)) {
       updateOrderStatus(orderId, newStatus);
     }
   };
 
+  // Función para obtener el nombre del estado
   const getStatusName = (status) => {
     const statusMap = {
       "pendiente": "Pendiente",
@@ -190,450 +225,228 @@ const OrderManager = () => {
     return detalles.reduce((total, item) => total + parseInt(item.cantidad), 0);
   };
 
-  // Función para manejar el clic en el botón de ubicación en tiempo real
+  // Funciones para el mapa
   const handleShowLocationMap = () => {
     setShowMap(true);
     setShowRoute(false);
-  }
+  };
 
-  // Función para mostrar la ruta hacia la ubicación
   const handleShowRoute = () => {
     setShowRoute(true);
     setShowMap(true);
-  }
+  };
 
-  // Función para cerrar el mapa
   const handleCloseMap = () => {
     setShowMap(false);
     setShowRoute(false);
-  }
+  };
+  
+  // Aplicar filtros avanzados (semana y búsqueda)
+  const aplicarFiltros = () => {
+    // Filtrar por término de búsqueda
+    let resultados = orders.filter(order => {
+      // Buscar en código de pedido
+      const codigoMatch = order.codigo_pedido?.toLowerCase().includes(searchTerm.toLowerCase());
+      // Buscar en nombre de cliente
+      const nombreMatch = getClientName(order).toLowerCase().includes(searchTerm.toLowerCase());
+      // Buscar en dirección
+      const direccionMatch = order.direccion_formateada?.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      return !searchTerm || codigoMatch || nombreMatch || direccionMatch;
+    });
+    
+    // Filtrar por semana
+    if (filtroSemana !== 'todas') {
+      const hoy = new Date();
+      let fechaInicio, fechaFin;
+      
+      switch (filtroSemana) {
+        case 'actual':
+          // Inicio de esta semana (lunes)
+          fechaInicio = new Date(hoy);
+          fechaInicio.setDate(hoy.getDate() - hoy.getDay() + (hoy.getDay() === 0 ? -6 : 1));
+          fechaInicio.setHours(0, 0, 0, 0);
+          
+          // Fin de esta semana (domingo)
+          fechaFin = new Date(fechaInicio);
+          fechaFin.setDate(fechaInicio.getDate() + 6);
+          fechaFin.setHours(23, 59, 59, 999);
+          break;
+          
+        case 'anterior':
+          // Inicio de la semana anterior (lunes)
+          fechaInicio = new Date(hoy);
+          fechaInicio.setDate(hoy.getDate() - hoy.getDay() - 6);
+          fechaInicio.setHours(0, 0, 0, 0);
+          
+          // Fin de la semana anterior (domingo)
+          fechaFin = new Date(fechaInicio);
+          fechaFin.setDate(fechaInicio.getDate() + 6);
+          fechaFin.setHours(23, 59, 59, 999);
+          break;
+          
+        case 'ultimoMes':
+          // Hace 30 días
+          fechaInicio = new Date(hoy);
+          fechaInicio.setDate(hoy.getDate() - 30);
+          fechaInicio.setHours(0, 0, 0, 0);
+          
+          fechaFin = new Date(hoy);
+          fechaFin.setHours(23, 59, 59, 999);
+          break;
+          
+        default:
+          break;
+      }
+      
+      if (fechaInicio && fechaFin) {
+        resultados = resultados.filter(order => {
+          const fechaPedido = order.fecha_pedido ? new Date(order.fecha_pedido) : null;
+          return fechaPedido && fechaPedido >= fechaInicio && fechaPedido <= fechaFin;
+        });
+      }
+    }
+    
+    setPaginaActual(1); // Reset de paginación al aplicar filtros
+    setFilteredOrders(resultados);
+  };
+
+  // Resetear filtros
+  const resetearFiltros = () => {
+    setSearchTerm('');
+    setFiltroSemana('todas');
+    setFiltrosAplicados(false);
+    setPaginaActual(1);
+    // Volver a mostrar todos los pedidos del filtro principal
+    fetchOrdersByStatus(activeFilter);
+  };
+  
+  // Calcular resultados totales para mostrar en contador
+  const totalPedidos = filtrosAplicados ? filteredOrders.length : orders.length;
 
   return (
-    <div className="order__container">
-      <header className="order__header">
-        <h1>Gestión de Pedidos</h1>
-      </header>
-      <main className="order__main">
-        <div className="order__filters">
-          <div className="filters">
-            <button 
-              className={activeFilter === "pendiente" ? "active" : ""}
-              onClick={() => handleFilterChange("pendiente")}
-            >
-              Pendientes
-            </button>
-          </div>
-          <div className="filters">
-            <button 
-              className={activeFilter === "en_proceso" ? "active" : ""}
-              onClick={() => handleFilterChange("en_proceso")}
-            >
-              En Proceso
-            </button>
-          </div>
-          <div className="filters">
-            <button 
-              className={activeFilter === "entregado" ? "active" : ""}
-              onClick={() => handleFilterChange("entregado")}
-            >
-              Entregados
-            </button>
-          </div>
-          <div className="filters">
-            <button 
-              className={activeFilter === "cancelado" ? "active" : ""}
-              onClick={() => handleFilterChange("cancelado")}
-            >
-              Cancelados
-            </button>
-          </div>
+    <div className="order_container">
+      {/* Panel principal con estilo similar a AgregarContenido */}
+      <div className="order_panel">
+        <div className="order_header">
+          <h1>Gestión de Pedidos</h1>
+          <button 
+            className="order_btn-agregar" 
+            onClick={() => fetchOrdersByStatus(activeFilter)}
+          >
+            <FontAwesomeIcon icon={faListCheck} style={{ marginRight: '10px' }} />
+            Actualizar Pedidos
+          </button>
         </div>
         
-        {loading && <div className="loading-indicator">Cargando pedidos...</div>}
-        {error && <div className="error-message">{error}</div>}
-        
-        <div className="order__content">
-          <table>
-            <thead>
-              <tr>
-                <th>Código</th>
-                <th>Tiempo</th>
-                <th>Productos</th>
-                <th>Estado</th>
-                <th>Cliente</th>
-                <th>Dirección</th>
-                <th>Método</th>
-                <th>Total</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.length > 0 ? (
-                orders.map((order) => (
-                  <tr 
-                    key={order.id_pedido} 
-                    className={activeFilter === "pendiente" ? getRowBackgroundClass(order.fecha_pedido) : ""}
-                  >
-                    <td className="codigo-cell">
-                      <div className="codigo-info">
-                        <span className="codigo-badge">{order.codigo_pedido}</span>
-                        <span className="id-pedido">#{order.id_pedido}</span>
-                      </div>
-                    </td>
-                    <td className="tiempo-cell">
-                      <div className="tiempo-info">
-                        <div className="tiempo-fecha">
-                          <FaRegCalendarAlt className="icon-small" /> {formatDate(order.fecha_pedido)}
-                        </div>
-                        {activeFilter === "pendiente" && (
-                          <div className="tiempo-transcurrido">
-                            <FaClock className="icon-small" /> {formatTiempoTranscurrido(order.fecha_pedido)}
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                    <td className="productos-cell">
-                      {order.detalles && order.detalles.length > 0 ? (
-                        <div className="productos-info">
-                          <div className="productos-count">
-                            <strong>{getTotalProductos(order.detalles)}</strong> productos
-                          </div>
-                          <ul className="productos-lista">
-                            {order.detalles.slice(0, 2).map((item, idx) => (
-                              <li key={idx}>
-                                <strong>{item.cantidad}x</strong> {item.nombre_producto_original}
-                                {item.tamano && <span className="producto-tamano"> ({item.tamano})</span>}
-                              </li>
-                            ))}
-                            {order.detalles.length > 2 && (
-                              <li className="mas-productos">
-                                +{order.detalles.length - 2} más
-                              </li>
-                            )}
-                          </ul>
-                        </div>
-                      ) : (
-                        <span className="sin-productos">Sin productos</span>
-                      )}
-                    </td>
-                    <td className="estado-cell">
-                      <span className={`pedido-estado estado-${order.estado}`}>
-                        {getStatusName(order.estado)}
-                      </span>
-                    </td>
-                    <td className="cliente-cell">
-                      <div className="cliente-info">
-                        <div className="cliente-nombre">{getClientName(order)}</div>
-                        <div className="cliente-telefono">{order.celular_invitado || order.telefono}</div>
-                      </div>
-                    </td>
-                    <td className="direccion-cell">
-                      {order.direccion_formateada ? (
-                        <div className="direccion-info">
-                          <FaMapMarkerAlt className="icon-small" />
-                          <div className="direccion-texto" title={order.direccion_formateada}>
-                            {order.direccion_formateada.length > 30 
-                              ? `${order.direccion_formateada.substring(0, 30)}...` 
-                              : order.direccion_formateada}
-                          </div>
-                        </div>
-                      ) : (
-                        <span className="direccion-local">Recogida en tienda</span>
-                      )}
-                    </td>
-                    <td className="metodo-cell">
-                      <div className="metodo-pago-badge">
-                        {order.metodo_pago}
-                      </div>
-                    </td>
-                    <td className="total-cell">
-                      ${parseFloat(order.total).toFixed(2)}
-                    </td>
-                    <td className="acciones-cell">
-                      <div className="action-buttons-container">
-                        <button 
-                          className="action-primary-button btn__action__details"
-                          onClick={() => handleViewDetails(order)}
-                        >
-                          <FaEye className="icon-small" /> Ver Detalles
-                        </button>
-                        
-                        {activeFilter !== "cancelado" && (
-                          <div className="action-secondary-buttons">
-                            {order.estado !== "pendiente" && (
-                              <button 
-                                className="action-secondary-button btn-state btn-pendiente"
-                                onClick={() => changeOrderStatus(order.id_pedido, "pendiente")}
-                              >
-                                Pendiente
-                              </button>
-                            )}
-                            {order.estado !== "en_proceso" && (
-                              <button 
-                                className="action-secondary-button btn-state btn-en_proceso"
-                                onClick={() => changeOrderStatus(order.id_pedido, "en_proceso")}
-                              >
-                                En Proceso
-                              </button>
-                            )}
-                            {order.estado !== "entregado" && (
-                              <button 
-                                className="action-secondary-button btn-state btn-entregado"
-                                onClick={() => changeOrderStatus(order.id_pedido, "entregado")}
-                              >
-                                Entregado
-                              </button>
-                            )}
-                            {order.estado !== "cancelado" && (
-                              <button 
-                                className="action-secondary-button btn__action__cancell"
-                                onClick={() => handleCancelOrder(order.id_pedido)}
-                              >
-                                Cancelar
-                              </button>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="9" style={{ textAlign: "center" }}>
-                    {loading ? "Cargando..." : "No hay pedidos para mostrar"}
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </main>
+        <main className="order_main">
+          {/* Botón para ocultar/mostrar filtros y contador */}
+          <div className="toggle-filters-container">
+            <button 
+              className="toggle-filters-btn" 
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              {showFilters ? "Ocultar filtros" : "Mostrar filtros"}
+            </button>
+          </div>
 
-      {/* Modal de detalles del pedido */}
-      {showModal && selectedOrder && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Pedido #{selectedOrder.id_pedido} - {selectedOrder.codigo_pedido}</h2>
-              <button className="modal-close" onClick={closeModal}>×</button>
-            </div>
-
-            {!showMap ? (
-              <>
-                <div className="modal-columns">
-                  <div className="modal-column">
-                    <div className="order-detail-section">
-                      <h3>Estado del Pedido</h3>
-                      <div className="estado-container">
-                        <span className={`pedido-estado estado-${selectedOrder.estado}`}>
-                          {getStatusName(selectedOrder.estado)}
-                        </span>
-                        <span className="tiempo-estimado">
-                          Tiempo estimado: {selectedOrder.tiempo_estimado_entrega || "N/A"} min
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="order-detail-section">
-                      <h3>Información del Cliente</h3>
-                      <div className="info-grid">
-                        <div className="info-row">
-                          <strong>Cliente:</strong>
-                          <span>{getClientName(selectedOrder)}</span>
-                        </div>
-                        {selectedOrder.celular_invitado && (
-                          <div className="info-row">
-                            <strong>Teléfono:</strong>
-                            <span>{selectedOrder.celular_invitado}</span>
-                          </div>
-                        )}
-                        {selectedOrder.telefono && !selectedOrder.celular_invitado && (
-                          <div className="info-row">
-                            <strong>Teléfono:</strong>
-                            <span>{selectedOrder.telefono}</span>
-                          </div>
-                        )}
-                        {selectedOrder.email && (
-                          <div className="info-row">
-                            <strong>Email:</strong>
-                            <span>{selectedOrder.email}</span>
-                          </div>
-                        )}
-                        <div className="info-row">
-                          <strong>Dirección:</strong>
-                          <span>{selectedOrder.direccion_formateada || selectedOrder.direccion || "Recogida en tienda"}</span>
-                        </div>
-                        {selectedOrder.latitud && selectedOrder.longitud && (
-                          <div className="info-row">
-                            <strong>Ubicación:</strong>
-                            <span>{selectedOrder.latitud}, {selectedOrder.longitud}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {selectedOrder.latitud && selectedOrder.longitud && (
-                      <div className="order-detail-section">
-                        <h3>Ubicación de Entrega</h3>
-                        <div className="location-buttons">
-                          <button 
-                            className="location-button view-location"
-                            onClick={handleShowLocationMap}
-                          >
-                            <FaMapMarkerAlt className="button-icon" /> Ver Ubicación
-                          </button>
-                          <button 
-                            className="location-button show-route"
-                            onClick={handleShowRoute}
-                          >
-                            <FaMapMarked className="button-icon" /> Ubicación en Tiempo Real
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="modal-column">
-                    <div className="order-detail-section">
-                      <h3>Información del Pedido</h3>
-                      <div className="info-grid">
-                        <div className="info-row">
-                          <strong>Fecha:</strong>
-                          <span>{formatDate(selectedOrder.fecha_pedido || selectedOrder.fecha_creacion)}</span>
-                        </div>
-                        <div className="info-row">
-                          <strong>Tipo de cliente:</strong>
-                          <span>{selectedOrder.tipo_cliente || "No especificado"}</span>
-                        </div>
-                        <div className="info-row">
-                          <strong>Método de pago:</strong>
-                          <span>{selectedOrder.metodo_pago}</span>
-                        </div>
-                        <div className="info-row">
-                          <strong>Subtotal:</strong>
-                          <span>${parseFloat(selectedOrder.subtotal || 0).toFixed(2)}</span>
-                        </div>
-                        {selectedOrder.costo_envio && parseFloat(selectedOrder.costo_envio) > 0 && (
-                          <div className="info-row">
-                            <strong>Costo de envío:</strong>
-                            <span>${parseFloat(selectedOrder.costo_envio).toFixed(2)}</span>
-                          </div>
-                        )}
-                        {selectedOrder.impuestos && parseFloat(selectedOrder.impuestos) > 0 && (
-                          <div className="info-row">
-                            <strong>Impuestos:</strong>
-                            <span>${parseFloat(selectedOrder.impuestos).toFixed(2)}</span>
-                          </div>
-                        )}
-                        <div className="info-row total-row">
-                          <strong>Total:</strong>
-                          <span>${parseFloat(selectedOrder.total).toFixed(2)}</span>
-                        </div>
-                        {selectedOrder.notas_adicionales && (
-                          <div className="info-row full-width">
-                            <strong>Notas adicionales:</strong>
-                            <span>{selectedOrder.notas_adicionales}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="order-detail-section">
-                  <h3>Productos</h3>
-                  <div className="product-list">
-                    {selectedOrder.detalles && selectedOrder.detalles.length > 0 ? (
-                      selectedOrder.detalles.map((item, index) => (
-                        <div className="product-item" key={index}>
-                          <div className="product-header">
-                            <h4>{item.nombre_producto_original}</h4>
-                            <span className="product-price">${parseFloat(item.subtotal).toFixed(2)}</span>
-                          </div>
-                          <div className="product-details">
-                            <div className="product-specs">
-                              <span className="product-qty">Cantidad: <strong>{item.cantidad}</strong></span>
-                              <span className="product-unit-price">Precio unitario: <strong>${parseFloat(item.precio_unitario).toFixed(2)}</strong></span>
-                              {item.tamano && <span className="product-size">Tamaño: <strong>{item.tamano}</strong></span>}
-                              {item.masa && <span className="product-masa">Masa: <strong>{item.masa}</strong></span>}
-                            </div>
-                            {item.descripcion && (
-                              <div className="product-description">
-                                {item.descripcion}
-                              </div>
-                            )}
-                            {item.instrucciones_especiales && (
-                              <div className="product-instructions">
-                                <strong>Instrucciones especiales:</strong> {item.instrucciones_especiales}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <p className="sin-productos-mensaje">Este pedido no contiene productos registrados</p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="order-detail-section">
-                  <h3>Cambiar Estado</h3>
-                  <div className="modal-actions-section">
-                    <button 
-                      className="btn-state btn-pendiente"
-                      onClick={() => changeOrderStatus(selectedOrder.id_pedido, "pendiente")}
-                      disabled={selectedOrder.estado === "pendiente"}
-                    >
-                      Pendiente
-                    </button>
-                    <button 
-                      className="btn-state btn-en_proceso"
-                      onClick={() => changeOrderStatus(selectedOrder.id_pedido, "en_proceso")}
-                      disabled={selectedOrder.estado === "en_proceso"}
-                    >
-                      En Proceso
-                    </button>
-                    <button 
-                      className="btn-state btn-entregado"
-                      onClick={() => changeOrderStatus(selectedOrder.id_pedido, "entregado")}
-                      disabled={selectedOrder.estado === "entregado"}
-                    >
-                      Entregado
-                    </button>
-                    <button 
-                      className="btn__action__cancell"
-                      onClick={() => handleCancelOrder(selectedOrder.id_pedido)}
-                      disabled={selectedOrder.estado === "cancelado"}
-                    >
-                      Cancelar
-                    </button>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <div className="map-modal-content">
-                <div className="map-header">
-                  <h3>
-                    {showRoute ? 'Ruta hacia la ubicación del cliente' : 'Ubicación del cliente'}
-                  </h3>
-                  <button 
-                    className="map-back-button"
-                    onClick={handleCloseMap}
-                  >
-                    Volver a detalles
-                  </button>
-                </div>
-                
-                <OrderLocationMap 
-                  order={selectedOrder} 
-                  showRoute={showRoute}
-                />
+          {/* Reemplazamos OrderFilterRibbon con nuestro nuevo componente FilterBar */}
+          {showFilters && (
+            <FilterBar 
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              searchPlaceholder="Buscar por código, cliente o dirección..."
+              filtroSemana={filtroSemana}
+              setFiltroSemana={setFiltroSemana}
+              filtrosAplicados={filtrosAplicados}
+              setFiltrosAplicados={setFiltrosAplicados}
+              setPaginaActual={setPaginaActual}
+              aplicarFiltros={aplicarFiltros}
+              resetearFiltros={resetearFiltros}
+              customClassName="order-filter-bar"
+            />
+          )}
+          
+          {/* Contador de resultados con el mismo estilo que AgregarContenido */}
+          {showFilters && (
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
+              <div className="cont_resultados-contador">
+                Mostrando <span className="cont_resaltado">{totalPedidos}</span> pedidos
               </div>
-            )}
-          </div>
-        </div>
-      )}
+            </div>
+          )}
+          
+          {/* Reemplazar OrderFilters con el nuevo componente OrderTabs */}
+          <OrderTabs 
+            activeFilter={activeFilter}
+            handleFilterChange={handleFilterChange}
+            setPaginaActual={setPaginaActual}
+          />
+          
+          {/* Mensajes de carga o error */}
+          {loading && <div className="loading-indicator">Cargando pedidos...</div>}
+          {error && <div className="order_error">{error}</div>}
+          
+          {/* Tabla de pedidos */}
+          <OrderTable 
+            orders={orders}
+            filteredOrders={filteredOrders}
+            filtrosAplicados={filtrosAplicados}
+            activeFilter={activeFilter}
+            loading={loading}
+            paginaActual={paginaActual}
+            elementosPorPagina={elementosPorPagina}
+            getRowBackgroundClass={getRowBackgroundClass}
+            formatDate={formatDate}
+            formatTiempoTranscurrido={formatTiempoTranscurrido}
+            getTotalProductos={getTotalProductos}
+            getClientName={getClientName}
+            getStatusName={getStatusName}
+            handleViewDetails={handleViewDetails}
+            changeOrderStatus={changeOrderStatus}
+            handleCancelOrder={handleCancelOrder}
+          />
+          
+          {/* Paginación con el mismo estilo que AgregarContenido */}
+          {!loading && totalPedidos > 0 && (
+            <div className="order_pagination">
+              <button
+                disabled={paginaActual === 1}
+                onClick={() => setPaginaActual(paginaActual - 1)}
+                className="order_pagination-btn"
+              >
+                ⬅ Anterior
+              </button>
+              <span className="order_pagination-info">
+                Página {paginaActual} de {Math.ceil(totalPedidos / elementosPorPagina) || 1}
+              </span>
+              <button
+                disabled={paginaActual >= Math.ceil(totalPedidos / elementosPorPagina)}
+                onClick={() => setPaginaActual(paginaActual + 1)}
+                className="order_pagination-btn"
+              >
+                Siguiente ➡
+              </button>
+            </div>
+          )}
+        </main>
+      </div>
+
+      {/* Componente modal para detalles */}
+      <OrderDetailModal 
+        showModal={showModal}
+        selectedOrder={selectedOrder}
+        showMap={showMap}
+        showRoute={showRoute}
+        closeModal={closeModal}
+        handleShowLocationMap={handleShowLocationMap}
+        handleShowRoute={handleShowRoute}
+        handleCloseMap={handleCloseMap}
+        formatDate={formatDate}
+        getClientName={getClientName}
+        changeOrderStatus={changeOrderStatus}
+        getStatusName={getStatusName}
+      />
     </div>
   );
 };

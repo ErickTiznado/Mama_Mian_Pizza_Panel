@@ -1,0 +1,44 @@
+/* Estilos para componente de paginación */
+.cont_paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.cont_btn-paginacion {
+  background-color: #202938;
+  color: white;
+  border: 1px solid #374151;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cont_btn-paginacion:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: rgba(32, 41, 56, 0.7);
+}
+
+.cont_btn-paginacion:hover:not(:disabled) {
+  background-color: #263247;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.cont_info-pagina {
+  font-size: 1rem;
+  color: #d1d5db;
+  background-color: rgba(31, 41, 55, 0.5);
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #374151;
+}

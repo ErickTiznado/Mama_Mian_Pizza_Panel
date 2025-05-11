@@ -1,0 +1,72 @@
+/* Estilos para pestañas de estados de pedidos */
+.order_tabs-pedidos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  justify-content: center;
+  background-color: #1a2332;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  border: 1px solid #374151;
+  position: relative;
+  overflow: hidden;
+}
+
+.order_tabs-pedidos::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #FEB248;
+  border-radius: 4px 0 0 4px;
+}
+
+.order_tab-btn {
+  background-color: transparent;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #d1d5db;
+  flex: 1;
+  max-width: 200px;
+  min-width: 150px;
+}
+
+.order_tab-btn:hover:not(.order_activo) {
+  background-color: rgba(31, 41, 55, 0.7);
+  transform: translateY(-2px);
+  border-color: #FEB248;
+}
+
+.order_tab-btn.order_activo {
+  background-color: #FEB248;
+  color: #821717;
+  font-weight: 600;
+  border-color: #FEB248;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 768px) {
+  .order_tabs-pedidos {
+    flex-direction: row;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 15px 10px;
+  }
+  
+  .order_tab-btn {
+    min-width: 120px;
+    font-size: 1.2rem;
+    padding: 8px 15px;
+    white-space: nowrap;
+  }
+}

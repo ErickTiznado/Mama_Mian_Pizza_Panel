@@ -5,6 +5,18 @@
     width: 100%;
     height: 100%;
     padding: 10px;
+    max-width: none !important;
+}
+
+.order__panel {
+    width: 100%;
+    max-width: none !important;
+    background-color: #141414;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .order__header{
@@ -12,8 +24,8 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    height: 10%;
     padding: 10px;
+    margin-bottom: 15px;
 }
 
 .order__header h1{
@@ -21,12 +33,31 @@
     color: #FEB248;
 }
 
+.order__btn-recargar {
+    background-color: #FEB248;
+    color: #821717;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.order__btn-recargar:hover {
+    background-color: #ffa726;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
 .order__main{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
     width: 100%;
-    height: 90%;
     padding: 10px;
 }
 
@@ -39,6 +70,163 @@
     border: 1px solid #fff;
     border-radius: 5px;
     margin-bottom: 20px;
+}
+
+/* Cinta de opciones para filtros avanzados */
+.order__filter-ribbon {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+  background-color: #1f2937;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: 1px solid #374151;
+  width: 100%;
+}
+
+.order__filter-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+}
+
+.order__filter-label {
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.order__filter-select {
+  background-color: #202938;
+  border: 1px solid #374151;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.order__filter-select:hover {
+  border-color: #FEB248;
+}
+
+.order__filter-select:focus {
+  border-color: #FEB248;
+  box-shadow: 0 0 0 2px rgba(254, 178, 72, 0.2);
+}
+
+.order__search-box {
+  flex: 1;
+  min-width: 200px;
+  position: relative;
+}
+
+.order__search-input {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  border-radius: 6px;
+  border: 1px solid #374151;
+  background-color: #202938;
+  color: white;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.order__search-input::placeholder {
+  color: #9ca3af;
+}
+
+.order__search-input:focus {
+  border-color: #FEB248;
+  box-shadow: 0 0 0 2px rgba(254, 178, 72, 0.2);
+}
+
+.order__search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.order__filter-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.order__btn-reset {
+  background-color: rgba(108, 117, 125, 0.2);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.order__btn-reset:hover {
+  background-color: rgba(108, 117, 125, 0.4);
+}
+
+.order__btn-apply {
+  background-color: #FEB248;
+  color: #821717;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.order__btn-apply:hover {
+  background-color: #ffa726;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Contador de resultados */
+.order__results-count {
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 10px;
+  display: inline-block; /* Cambiado de flex a inline-block para consistencia */
+  align-items: center;
+  gap: 5px;
+}
+
+.order__results-highlight {
+  font-weight: 600;
+  color: #FEB248;
+}
+
+/* Contador de resultados (estilo consistente con AgregarContenido) */
+.cont_resultados-contador {
+  font-size: 0.95rem;
+  color: #d1d5db;
+  margin-bottom: 15px;
+  background-color: rgba(31, 41, 55, 0.5);
+  display: inline-block; /* Mantener inline-block para alineación izquierda */
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #374151;
 }
 
 .filters{
@@ -72,19 +260,26 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: 80%;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    overflow-x: auto; /* Para tablas en pantallas pequeñas */
+    min-height: 500px; /* Garantiza una altura mínima para la tabla */
+    background-color: rgba(31, 41, 55, 0.3);
+    border-radius: 12px; /* Aumentado el radio del borde */
+    padding: 15px; /* Aumentado el padding */
+    border: 1px solid #374151;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
 }
 
 .order__content table{
     width: 100%;
-    height: 100%;
-    border-collapse: collapse;
-    border-radius: 10px;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px; /* Aumentado el radio del borde */
     overflow: hidden;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin: 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    background-color: #1f2937;
+    table-layout: auto; /* Garantizar que la tabla se ajuste según el contenido */
 }
 
 .order__container table th:first-child{
@@ -102,16 +297,40 @@
 /* Estilos mejorados para la tabla */
 .order__container table th {
     font-size: 16px;
-    background-color: #1f2937;
+    background-color: #1a2433; /* Color más oscuro para mejor contraste */
     color: #FEB248;
     border-left: 1px solid #374151;
     border-right: 1px solid #374151;
-    border-bottom: 1px solid #374151;
-    padding: 12px 10px;
-    white-space: nowrap;
+    border-bottom: 2px solid #FEB248; /* Borde inferior más grueso y del color principal */
+    padding: 16px 12px; /* Mayor padding vertical */
+    white-space: normal; /* Cambiado de nowrap a normal */
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-weight: 600;
+    text-align: center;
+    position: relative;
+    width: auto; /* Permitir que se ajuste según el contenido */
+    transition: background-color 0.2s ease;
+}
+
+.order__container table th:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: rgba(254, 178, 72, 0.3);
+    transform: scaleX(0.7);
+    transition: transform 0.2s ease;
+}
+
+.order__container table th:hover:after {
+    transform: scaleX(1);
+}
+
+.order__container table th:hover {
+    background-color: #243447; /* Color de fondo al pasar el cursor */
 }
 
 .order__container table td {
@@ -120,30 +339,32 @@
     border-right: 1px solid #374151;
     border-bottom: 1px solid #374151;
     text-align: center;
-    padding: 10px 5px;
+    padding: 14px 10px; /* Mayor padding para más espacio */
     vertical-align: middle;
+    transition: background-color 0.2s ease;
 }
 
 /* Nuevo diseño para celdas específicas */
 .codigo-cell {
-    min-width: 100px;
+    min-width: 120px;
 }
 
 .codigo-info {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
 }
 
 .codigo-badge {
-    background-color: rgba(254, 178, 72, 0.15);
+    background-color: rgba(254, 178, 72, 0.2);
     color: #FEB248;
     font-weight: 600;
-    padding: 3px 8px;
-    border-radius: 3px;
+    padding: 5px 10px;
+    border-radius: 20px; /* Forma de píldora */
     letter-spacing: 0.5px;
-    font-size: 14px;
+    font-size: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .id-pedido {
@@ -152,14 +373,14 @@
 }
 
 .tiempo-cell {
-    min-width: 140px;
+    min-width: 150px;
 }
 
 .tiempo-info {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
 }
 
 .tiempo-fecha {
@@ -167,6 +388,10 @@
     display: flex;
     align-items: center;
     gap: 5px;
+    background-color: rgba(31, 41, 55, 0.5);
+    padding: 4px 8px;
+    border-radius: 4px;
+    width: fit-content;
 }
 
 .tiempo-transcurrido {
@@ -175,204 +400,184 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    font-size: 13px;
+    font-size: 14px;
+    background-color: rgba(254, 178, 72, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    width: fit-content;
 }
 
-.icon-small {
-    margin-right: 2px;
-}
-
+/* Mejoras para la columna de productos */
 .productos-cell {
-    min-width: 200px;
-    max-width: 250px;
+  min-width: 220px;
+  max-width: 300px;
+  position: relative;
 }
 
 .productos-info {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: rgba(31, 41, 55, 0.5);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(55, 65, 81, 0.6);
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.productos-info:hover {
+  background-color: rgba(31, 41, 55, 0.7);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-color: #FEB248;
 }
 
 .productos-count {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    color: #9ca3af;
-    font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: #FEB248;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: rgba(254, 178, 72, 0.15);
+  padding: 5px 10px;
+  border-radius: 20px;
+  width: fit-content;
+  margin: 0 auto;
+  border: 1px solid rgba(254, 178, 72, 0.3);
 }
 
 .productos-lista {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    text-align: left;
+  list-style-type: none;
+  padding: 8px;
+  margin: 0;
+  text-align: left;
+  background-color: rgba(31, 41, 55, 0.6);
+  border-radius: 6px;
+  border-left: 3px solid #FEB248;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.productos-lista li {
-    margin-bottom: 3px;
-    font-size: 14px;
-    line-height: 1.3;
-    display: flex;
-    flex-wrap: wrap;
+.producto-item {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background-color: rgba(31, 41, 55, 0.4);
+  border: 1px solid rgba(55, 65, 81, 0.4);
+  transition: all 0.2s ease;
+}
+
+.producto-item:hover {
+  background-color: rgba(31, 41, 55, 0.6);
+  border-color: rgba(254, 178, 72, 0.4);
+}
+
+.producto-cantidad {
+  background-color: rgba(254, 178, 72, 0.2);
+  color: #FEB248;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 25px;
+}
+
+.producto-detalle {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.producto-nombre {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.producto-icon {
+  color: #FEB248;
+  font-size: 12px;
 }
 
 .producto-tamano {
-    font-size: 12px;
-    color: #9ca3af;
+  font-size: 12px;
+  color: #9ca3af;
+  background-color: rgba(156, 163, 175, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 2px;
 }
 
 .mas-productos {
-    font-style: italic;
-    color: #FEB248;
-    font-size: 13px;
-    text-align: center;
+  font-style: italic;
+  color: #FEB248;
+  font-size: 13px;
+  text-align: center;
+  background-color: rgba(254, 178, 72, 0.1);
+  padding: 6px;
+  border-radius: 4px;
+  width: 100%;
+  border: 1px dashed rgba(254, 178, 72, 0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mas-productos:hover {
+  background-color: rgba(254, 178, 72, 0.2);
 }
 
 .sin-productos {
-    font-size: 14px;
-    color: #9ca3af;
-    font-style: italic;
+  font-size: 14px;
+  color: #9ca3af;
+  font-style: italic;
+  background-color: rgba(31, 41, 55, 0.3);
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px dashed rgba(156, 163, 175, 0.3);
+  display: inline-block;
+  width: 100%;
+  text-align: center;
 }
 
-.estado-cell {
-    min-width: 100px;
+/* ÚNICO TOOLTIP HABILITADO - Todos los demás están deshabilitados */
+/* Eliminar todas las clases relacionadas con tooltips */
+.productos-tooltip,
+.tooltip-header,
+.tooltip-icon,
+.tooltip-product-content,
+.tooltip-item,
+.tooltip-producto-cantidad,
+.tooltip-producto-detalle,
+.tooltip-producto-nombre,
+.tooltip-producto-info,
+.tooltip-producto-tamano,
+.tooltip-producto-precio,
+.tooltip-producto-instrucciones,
+.productos-preview,
+.tooltip-productos,
+.tooltip {
+  display: none !important;
 }
 
-.cliente-cell {
-    min-width: 120px;
-}
-
-.cliente-info {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-
-.cliente-nombre {
-    font-weight: 500;
-    font-size: 15px;
-}
-
-.cliente-telefono {
-    font-size: 13px;
-    color: #9ca3af;
-}
-
-.direccion-cell {
-    min-width: 180px;
-    max-width: 200px;
-}
-
-.direccion-info {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.direccion-texto {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: left;
-    font-size: 14px;
-}
-
-.direccion-local {
-    font-size: 14px;
-    color: #9ca3af;
-    font-style: italic;
-}
-
-.metodo-cell {
-    min-width: 80px;
-}
-
-.metodo-pago-badge {
-    background-color: rgba(31, 41, 55, 0.5);
-    padding: 3px 8px;
-    border-radius: 3px;
-    font-size: 14px;
-    display: inline-block;
-    text-transform: capitalize;
-}
-
-.total-cell {
-    font-weight: bold;
-    color: #FEB248;
-    min-width: 80px;
-    font-size: 16px;
-}
-
-.acciones-cell {
-    min-width: 160px;
-    width: 180px;
-}
-
-/* Nuevos estilos para los botones de acción */
-.action-buttons-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 8px;
-}
-
-.action-primary-button {
-    width: 100%;
-    padding: 8px 0;
-    font-size: 15px;
-    font-weight: 600;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-
-.action-secondary-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    justify-content: center;
-}
-
-.action-secondary-button {
-    flex: 1 0 auto;
-    min-width: calc(50% - 5px);
-    padding: 6px 0;
-    font-size: 14px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: center;
-    white-space: nowrap;
-}
-
-.btn__action__details {
-    background-color: #FEB248;
-    color: #821717;
-    border: none;
-}
-
-.btn__action__details:hover {
-    background-color: #fea030;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.btn__action__cancell {
-    background-color: #202938;
-    color: #fff;
-    border: 1px solid #4b5563;
-}
-
-.btn__action__cancell:hover {
-    background-color: #dc3545;
-    color: white;
-    transform: translateY(-2px);
-    border-color: #dc3545;
+@keyframes fadeInTooltip {
+  /* Eliminar animación de tooltips */
 }
 
 /* Estilos para los estados de pedidos */
@@ -399,32 +604,39 @@
 }
 
 .pedido-estado {
-    padding: 5px 10px;
-    border-radius: 4px;
+    padding: 8px 12px; /* Mayor padding para mejor visibilidad */
+    border-radius: 20px; /* Bordes redondeados tipo badge */
     font-weight: bold;
     display: inline-block;
-    min-width: 80px;
-    font-size: 13px;
+    min-width: 100px; /* Ancho mínimo más grande */
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .estado-pendiente {
     background-color: #fff3cd;
     color: #856404;
+    border: 1px solid #ffeeba;
 }
 
 .estado-en_proceso {
     background-color: #cce5ff;
     color: #004085;
+    border: 1px solid #b8daff;
 }
 
 .estado-entregado {
     background-color: #d4edda;
     color: #155724;
+    border: 1px solid #c3e6cb;
 }
 
 .estado-cancelado {
     background-color: #f8d7da;
     color: #721c24;
+    border: 1px solid #f5c6cb;
 }
 
 /* Nuevo diseño para los botones de acción por estado */
@@ -716,6 +928,40 @@
     background-color: rgba(220, 53, 69, 0.15);
 }
 
+/* Estilos para la paginación */
+.order__pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.order__pagination-btn {
+    background-color: #202938;
+    color: white;
+    border: 1px solid #374151;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.order__pagination-btn:hover:not(:disabled) {
+    background-color: #374151;
+}
+
+.order__pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.order__pagination-info {
+    font-size: 14px;
+    color: #9ca3af;
+}
+
 /* Estilos responsivos */
 @media (max-width: 1200px) {
     .order__content table {
@@ -733,6 +979,11 @@
     
     .tiempo-fecha, .tiempo-transcurrido {
         font-size: 12px;
+    }
+
+    .pedido-estado {
+        font-size: 12px;
+        padding: 6px 10px;
     }
 }
 
@@ -849,4 +1100,478 @@
 
 .map-back-button:hover {
   background-color: rgba(108, 117, 125, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Clases con prefijo order_ para evitar conflictos */
+.order_container {
+  padding: 20px;
+  width: 100%;
+  margin: 0 auto;
+  color: #f5f5f5;
+  max-height: 100vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.order_panel {
+  width: 100%;
+  max-width: none !important;
+  background-color: #1f2937;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.order_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 10px;
+}
+
+.order_header h1 {
+  color: #FEB248;
+  font-size: 1.8rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.order_btn-agregar {
+  background-color: #FEB248;
+  color: #821717;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.order_btn-agregar:hover {
+  background-color: #ffa726;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.order_main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+}
+
+.order_resultados-contador {
+  font-size: 0.95rem;
+  color: #d1d5db;
+  margin-bottom: 15px;
+  background-color: rgba(31, 41, 55, 0.5);
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #374151;
+}
+
+.order_resaltado {
+  color: #FEB248;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.order_error {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  padding: 12px 16px;
+  border: 1px solid rgba(220, 53, 69, 0.3);
+  border-radius: 6px;
+  margin: 15px 0;
+  font-weight: 500;
+  width: 100%;
+  max-width: 800px;
+}
+
+/* Paginación con prefijo order_ */
+.order_pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.order_pagination-btn {
+  background-color: #202938;
+  color: white;
+  border: 1px solid #374151;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.order_pagination-btn:hover:not(:disabled) {
+  background-color: #374151;
+}
+
+.order_pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.order_pagination-info {
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+/* Mantener el resto del archivo igual pero con mejoras para OrderTable */
+/* ...existing code... */
+
+/* Aumentar el tamaño del contenedor de la tabla */
+.order__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 30px;
+  overflow-x: auto;
+  min-height: 500px; /* Garantiza una altura mínima para la tabla */
+  background-color: rgba(31, 41, 55, 0.3);
+  border-radius: 12px; /* Aumentado el radio del borde */
+  padding: 15px; /* Aumentado el padding */
+  border: 1px solid #374151;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
+}
+
+/* Mejorar estilos de la tabla */
+.order__content table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 10px; /* Aumentado el radio del borde */
+  overflow: hidden;
+  margin: 0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+  background-color: #1f2937;
+}
+
+/* Contador de resultados con estilo consistente */
+.cont_resultados-contador {
+  font-size: 0.95rem;
+  color: #d1d5db;
+  margin-bottom: 15px;
+  background-color: rgba(31, 41, 55, 0.5);
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #374151;
+}
+
+.cont_resaltado {
+  color: #FEB248;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* Estilos para el botón de ocultar/mostrar filtros */
+.toggle-filters-container {
+  display: flex;
+  justify-content: flex-start; /* Alineado al inicio (start) */
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.toggle-filters-btn {
+  background-color: #202938;
+  border: 1px solid #374151;
+  color: #FEB248;
+  border-radius: 6px;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.toggle-filters-btn:hover {
+  background-color: #374151;
+  transform: translateY(-1px);
+}
+
+.toggle-filters-btn svg {
+  font-size: 16px;
+}
+
+/* ...existing code... */
+
+/* Estilos para el botón de mostrar/ocultar filtros */
+.toggle-filters-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 0;
+  padding: 0 15px;
+}
+
+.toggle-filters-btn {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.toggle-filters-btn:hover {
+  background-color: #e0e0e0;
+}
+
+/* Contador de resultados */
+.cont_resultados-contador {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 10px 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.cont_resaltado {
+  font-weight: bold;
+  color: #c0392b;
+}
+
+/* ...existing code... */
+
+/* Estilos para el botón de mostrar/ocultar filtros */
+.toggle-filters-container {
+  display: flex;
+  justify-content: flex-start; /* Cambiado de flex-end a flex-start para alinear al inicio */
+  margin-bottom: 15px;
+}
+
+.toggle-filters-btn {
+  background-color: #202938;
+  border: 1px solid #374151;
+  color: #FEB248;
+  border-radius: 6px;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.toggle-filters-btn:hover {
+  background-color: #374151;
+  transform: translateY(-1px);
+}
+
+.toggle-filters-btn svg {
+  font-size: 16px;
+}
+
+/* ...existing code... */
+
+/* Efecto de resaltado al pasar el mouse sobre la fila */
+.order__container table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.order__container table tbody tr:hover {
+    background-color: rgba(254, 178, 72, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Filas alternadas para mejor legibilidad */
+.order__container table tbody tr:nth-child(even) {
+    background-color: rgba(31, 41, 55, 0.5);
+}
+
+/* Estilos para mensajes de aviso */
+tr.pedido-alerta {
+    background-color: rgba(255, 193, 7, 0.1) !important;
+    position: relative;
+    border-left: 4px solid #ffc107;
+}
+
+tr.pedido-urgente {
+    background-color: rgba(220, 53, 69, 0.1) !important;
+    position: relative;
+    border-left: 4px solid #dc3545;
+}
+
+/* Estilos para botones de estado */
+.btn-state {
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    min-width: 100px;
+}
+
+.btn-pendiente {
+    background-color: #fff3cd;
+    color: #856404;
+    border-color: #ffeeba;
+}
+
+.btn-pendiente:hover {
+    background-color: #ffecb5;
+    border-color: #ffc107;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(255, 193, 7, 0.3);
+}
+
+.btn-en_proceso {
+    background-color: #cce5ff;
+    color: #004085;
+    border-color: #b8daff;
+}
+
+.btn-en_proceso:hover {
+    background-color: #b8daff;
+    border-color: #0d6efd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(13, 110, 253, 0.3);
+}
+
+.btn-entregado {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+.btn-entregado:hover {
+    background-color: #c3e6cb;
+    border-color: #28a745;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(40, 167, 69, 0.3);
+}
+
+/* Estilos para estados de tabla vacía y carga */
+.loading-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-size: 18px;
+    color: #FEB248;
+    animation: pulse 1.5s infinite ease-in-out;
+    font-weight: 600;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 0;
+    gap: 15px;
+}
+
+.empty-icon {
+    font-size: 32px;
+    color: #FEB248;
+    opacity: 0.7;
+}
+
+.empty-message {
+    font-size: 18px;
+    font-weight: 500;
+    color: #9ca3af;
+}
+
+/* Estilos para los iconos dentro de la tabla */
+.icon-small {
+    margin-right: 5px;
+    font-size: 0.9em;
+    vertical-align: middle;
+}
+
+/* Estilos específicos para celda sin productos */
+.sin-productos {
+    color: #9ca3af;
+    font-style: italic;
+    padding: 8px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    background-color: rgba(31, 41, 55, 0.3);
+    border: 1px dashed rgba(156, 163, 175, 0.4);
+}
+
+/* Product Tooltip Styles */
+.productos-cell {
+  position: relative;
+}
+
+.tooltip {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 250px;
+  max-width: 320px;
+  max-height: 300px;
+  overflow-y: auto;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.tooltip ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tooltip li {
+  padding: 6px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+}
+
+.tooltip li:last-child {
+  border-bottom: none;
+}
+
+.tooltip .producto-tamano {
+  color: #666;
+  font-style: italic;
+}
+
+.tooltip .producto-opciones {
+  margin-left: 10px;
+  font-size: 12px;
+  color: #666;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

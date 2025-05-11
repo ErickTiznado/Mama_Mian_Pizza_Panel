@@ -1,0 +1,252 @@
+/* Estilos para el componente FilterBar */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+  background-color: #1a2332;
+  padding: 18px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  border: 1px solid #374151;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.filter-bar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #FEB248;
+  border-radius: 4px 0 0 4px;
+}
+
+/* Estilos específicos para la sección de pedidos */
+.order-filter-bar {
+  background-color: #1a2332;
+  border-color: #374151;
+}
+
+/* Estilos específicos para la sección de contenido */
+.content-filter-bar {
+  background-color: #1a2332;
+  border-color: #374151;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  position: relative;
+}
+
+.filter-label {
+  font-size: 14px;
+  color: #FEB248;
+  margin-bottom: 8px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.filter-icon {
+  margin-right: 5px;
+}
+
+.filter-select-container {
+  position: relative;
+  width: 100%;
+}
+
+.filter-select {
+  width: 100%;
+  background-color: #202938;
+  border: 1px solid #374151;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 35px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) inset;
+}
+
+.filter-select-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #9ca3af;
+  transition: transform 0.2s ease;
+}
+
+.filter-select:hover {
+  border-color: #FEB248;
+  background-color: #263247;
+}
+
+.filter-select:hover + .filter-select-icon {
+  color: #FEB248;
+}
+
+.filter-select:focus {
+  border-color: #FEB248;
+  box-shadow: 0 0 0 2px rgba(254, 178, 72, 0.2);
+  background-color: #263247;
+}
+
+.filter-select option {
+  background-color: #202938;
+  color: white;
+  padding: 10px;
+}
+
+.search-box {
+  flex: 1;
+  min-width: 250px;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 15px 12px 42px;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  background-color: #202938;
+  color: white;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) inset;
+}
+
+.search-input::placeholder {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.search-input:focus {
+  border-color: #FEB248;
+  box-shadow: 0 0 0 2px rgba(254, 178, 72, 0.2), 0 2px 4px rgba(0,0,0,0.1) inset;
+}
+
+.search-input:hover {
+  border-color: #FEB248;
+  background-color: #263247;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.search-box:focus-within .search-icon {
+  color: #FEB248;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-left: auto;
+}
+
+.btn-reset, .btn-apply {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  height: 42px;
+  cursor: pointer;
+}
+
+.btn-icon {
+  margin-right: 5px;
+}
+
+.btn-reset {
+  background-color: rgba(108, 117, 125, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-reset:hover {
+  background-color: rgba(108, 117, 125, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+}
+
+.btn-apply {
+  background-color: #FEB248;
+  color: #821717;
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-apply:hover {
+  background-color: #ffa726;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Contador de resultados consistente entre secciones */
+.resultados-contador {
+  font-size: 0.95rem;
+  color: #d1d5db;
+  margin-bottom: 15px;
+  background-color: rgba(31, 41, 55, 0.5);
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #374151;
+  width: max-content;
+}
+
+.resaltado {
+  color: #FEB248;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-group, .search-box {
+    width: 100%;
+  }
+  
+  .filter-actions {
+    width: 100%;
+    margin-left: 0;
+    justify-content: space-between;
+  }
+  
+  .btn-reset, .btn-apply {
+    flex: 1;
+    justify-content: center;
+  }
+}
