@@ -1,0 +1,59 @@
+.clientes-graficas-container {
+  width: 100%;
+  padding: 1rem;
+}
+
+.clientes-graficas-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.clientes-chart {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+}
+
+.clientes-top {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+}
+
+.top-clientes-list {
+  margin-top: 1rem;
+}
+
+.top-cliente-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.top-cliente-item:last-child {
+  border-bottom: none;
+}
+
+.cliente-nombre {
+  font-weight: 500;
+}
+
+.cliente-pedidos {
+  color: #555;
+}
+
+.cliente-gasto {
+  color: #1976d2;
+  font-weight: 500;
+}
+
+@media (min-width: 768px) {
+  .clientes-graficas-content {
+    grid-template-columns: 2fr 1fr;
+  }
+}

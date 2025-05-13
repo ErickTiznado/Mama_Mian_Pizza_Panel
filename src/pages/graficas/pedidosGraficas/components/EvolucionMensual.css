@@ -1,0 +1,64 @@
+.evolucion-mensual-container {
+  background-color: var(--color-secondary);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 1rem; /* Reducido de 1.2rem */
+  margin-bottom: 0;
+  border: 1px solid #374151;
+  min-width: 250px; /* Ancho mínimo más compacto */
+  max-width: 100%; /* Asegurar que sea responsive */
+  overflow: hidden; /* Evitar desbordamiento */
+}
+
+.evolucion-mensual-container h3 {
+  margin-top: 0;
+  margin-bottom: 0.8rem; /* Reducido de 1rem */
+  color: var(--color-white);
+  font-size: 1.1rem; /* Reducido de 1.3rem */
+  font-weight: 600;
+}
+
+.chart-container {
+  width: 100%;
+  height: 260px; /* Reducido de 300px */
+  overflow: hidden; /* Evitar desbordamiento */
+}
+
+/* Estilos para mejorar legibilidad del gráfico */
+.chart-container .recharts-text {
+  font-size: 11px; /* Reducido de 12px */
+}
+
+.chart-container .recharts-legend-item-text {
+  font-size: 12px; /* Reducido de 13px */
+}
+
+.chart-container .recharts-tooltip-item-name,
+.chart-container .recharts-tooltip-item-value,
+.chart-container .recharts-tooltip-label {
+  font-size: 12px; /* Reducido de 13px */
+}
+
+.loading-indicator, .error-message {
+  height: 260px; /* Reducido de 300px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-light);
+  font-size: 0.9rem; /* Reducido de 1rem */
+}
+
+.error-message {
+  color: var(--color-danger-light);
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .chart-container {
+    height: 230px; /* Aún más compacto en dispositivos pequeños */
+  }
+  
+  .loading-indicator, .error-message {
+    height: 230px;
+  }
+}

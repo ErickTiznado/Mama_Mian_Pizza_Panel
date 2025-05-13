@@ -11,6 +11,10 @@ import OrderDetailModal from './components/OrderDetailModal';
 // Importar el nuevo componente OrderTabs en lugar de OrderFilters
 import OrderTabs from './components/OrderTabs';
 
+// Importar el contexto de notificaciones y servicios
+import { useNotifications } from "../../context/NotificationContext";
+import { createOrderStatusNotification, createOrderNotification } from "../../services/NotificationService";
+
 const OrderManager = () => {
   // Estados principales
   const [orders, setOrders] = useState([]);
@@ -35,6 +39,9 @@ const OrderManager = () => {
 
   // Base URL para la API
   const API_BASE_URL = "https://server.tiznadodev.com/api/orders";
+
+  // Hook de notificaciones
+  const notificationContext = useNotifications();
 
   // Cargar pedidos por defecto (pendientes) al montar el componente
   useEffect(() => {
@@ -74,6 +81,20 @@ const OrderManager = () => {
       setOrders(response.data);
       setPaginaActual(1); // Reset de paginación al cambiar filtros
       setLoading(false);
+
+      // Notificar sobre nuevos pedidos pendientes 
+      if (status === "pendiente") {
+        const nuevosOrdenes = response.data.filter(order => 
+          // Consideramos nuevos pedidos aquellos que llegaron en la última hora
+          new Date(order.fecha_pedido) > new Date(Date.now() - 60 * 60 * 1000)
+        );
+        
+        if (nuevosOrdenes.length > 0) {
+          nuevosOrdenes.forEach(orden => {
+            createOrderNotification(notificationContext, orden);
+          });
+        }
+      }
     } catch (err) {
       setError("Error al cargar los pedidos: " + err.message);
       setLoading(false);
@@ -105,6 +126,12 @@ const OrderManager = () => {
       
       // Refrescar los pedidos después de actualizar el estado
       fetchOrdersByStatus(activeFilter);
+
+      // Crear notificación de cambio de estado
+      const currentOrder = orders.find(order => order.id_pedido === orderId);
+      if (currentOrder) {
+        createOrderStatusNotification(notificationContext, currentOrder, newStatus);
+      }
     } catch (err) {
       setError("Error al actualizar el estado del pedido: " + err.message);
       console.error("Error updating order status:", err);

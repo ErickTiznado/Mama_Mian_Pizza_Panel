@@ -1,0 +1,118 @@
+.productos-kpi-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 1.5rem;
+}
+
+.productos-kpi-item {
+  background: var(--color-secondary);
+  border-radius: 8px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  flex: 1;
+  min-width: 200px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  cursor: default;
+  border: 1px solid #374151;
+}
+
+.productos-kpi-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transform: translateY(-2px);
+}
+
+.productos-kpi-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+  font-size: 20px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.margin-kpi .productos-kpi-icon {
+  color: #991B1B; /* Rojo de marca */
+}
+
+.active-products-kpi .productos-kpi-icon {
+  color: #3D84B8; /* Azul corporativo */
+}
+
+.inventory-turnover-kpi .productos-kpi-icon {
+  color: var(--color-success); /* Verde */
+}
+
+.rating-kpi .productos-kpi-icon {
+  color: #FEB248; /* Amarillo de marca */
+}
+
+.rentable-products-kpi .productos-kpi-icon {
+  color: #9b59b6; /* Morado para variedad */
+}
+
+.productos-kpi-info {
+  flex: 1;
+}
+
+.productos-kpi-info h4 {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-light);
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.productos-kpi-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-white);
+  display: flex;
+  align-items: baseline;
+}
+
+.productos-kpi-value small {
+  font-size: 14px;
+  color: var(--color-text-light);
+  margin-left: 5px;
+  font-weight: 500;
+}
+
+.kpi-loading {
+  font-size: 16px;
+  color: var(--color-text-light);
+  font-style: italic;
+}
+
+.rentable-products-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.rentable-products-list li {
+  padding: 3px 0;
+  color: var(--color-white);
+}
+
+.rentable-products-list li:before {
+  content: "•";
+  color: #9b59b6;
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-right: 0.5em;
+}
+
+@media (max-width: 768px) {
+  .productos-kpi-item {
+    min-width: 100%;
+  }
+}

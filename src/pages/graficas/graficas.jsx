@@ -1,54 +1,45 @@
-import './graficas.css';
-import Kpicards from './kpicards/kpicards';
-import LineGraf from './graficodeLineas/lineGraf';
-import PedidosRecientes from './pedidosRecientes/pedidosRecientes';
-const kpiinfor = [{
-  title: 'Ingresos Totales',
-  value: '15,231.89',
-  description: '+20% desde el mes pasado',
-}, {
-    title: 'Pedidos',
-    value: '15,231.89',
-    description: '+20% desde el mes pasado',
-  },
-    {
-        title: 'Clientes',
-        value: '789',
-        description: '+20% desde el mes pasado',
-    },
-    {
-        title: 'Pizzas Vendidas',
-        value: '1,231',
-        description: '+20% desde el mes pasado',
-    }
-];
-
-
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
-
+import { useState } from "react";
+import "./graficas.css";
+import PedidosGraficas from "./pedidosGraficas/pedidosGraficas";
+import ProductosGraficas from "./productosGraficas/productosGraficas";
+import ClientesGraficas from "./clientesGraficas/clientesGraficas";
 
 function Graficas() {
+  const [activeTab, setActiveTab] = useState("pedidos");
+
   return (
     <div className="graficas-container">
-      <div className="kpi-content">
-        {kpiinfor.map((kpiinfor, index) => (
-            <Kpicards key={index} kpinfo={kpiinfor}/>
-        ))}
+      <div className="Categori__tabs__container">
+        <div>
+          <button 
+            className={`category_tab-btn ${activeTab === "pedidos" ? "active" : ""}`}
+            onClick={() => setActiveTab("pedidos")}
+          >
+            Pedidos
+          </button>
+        </div>
+        <div>
+          <button 
+            className={`category_tab-btn ${activeTab === "productos" ? "active" : ""}`}
+            onClick={() => setActiveTab("productos")}
+          >
+            Productos
+          </button>
+        </div>
+        <div>
+          <button 
+            className={`category_tab-btn ${activeTab === "clientes" ? "active" : ""}`}
+            onClick={() => setActiveTab("clientes")}
+          >
+            Clientes
+          </button>
+        </div>
       </div>
-      <div className='graficas-content'>
-        <div className='graficas-content-1'>
-        <LineGraf data={chartData}/>
-        </div>
-        <div className='graficas-content-2'> 
-        <PedidosRecientes />
-        </div>
+      
+      <div className="graficas-content">
+        {activeTab === "pedidos" && <PedidosGraficas />}
+        {activeTab === "productos" && <ProductosGraficas />}
+        {activeTab === "clientes" && <ClientesGraficas />}
       </div>
     </div>
   );

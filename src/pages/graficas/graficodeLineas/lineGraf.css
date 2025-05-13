@@ -3,3 +3,108 @@
     width: 100%;
     height: 100%;
 }
+
+.custom-tooltip {
+  background-color: var(--color-primary);
+  border-radius: 8px;
+  padding: 10px 14px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid #374151;
+  font-family: 'Poppins', sans-serif;
+  color: var(--color-white);
+}
+
+.tooltip-label {
+  margin: 0;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-white);
+  margin-bottom: 5px;
+  border-bottom: 1px solid #374151;
+  padding-bottom: 5px;
+}
+
+.tooltip-content {
+  margin: 0;
+}
+
+.tooltip-content p {
+  margin: 4px 0;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+
+.custom-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0;
+  margin: 15px 0 0 0;
+  list-style: none;
+}
+
+.custom-legend li {
+  display: flex;
+  align-items: center;
+  margin: 0 15px;
+  font-size: 13px;
+  color: #E5E7EB;
+}
+
+.legend-icon {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  margin-right: 6px;
+}
+
+.legend-text {
+  font-weight: 500;
+}
+
+/* Estilos específicos para cada línea por categoría */
+.recharts-line-pizzas .recharts-line-curve {
+  stroke-width: 3px;
+}
+
+.recharts-line-bebidas .recharts-line-curve {
+  stroke-width: 2.5px;
+}
+
+.recharts-line-complementos .recharts-line-curve {
+  stroke-width: 2.5px;
+}
+
+/* Estilos generales para el gráfico */
+.recharts-wrapper {
+  font-family: 'Poppins', sans-serif;
+}
+
+.recharts-cartesian-axis-line {
+  stroke: #4B5563;
+  opacity: 0.5;
+}
+
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #4B5563;
+  opacity: 0.3;
+}
+
+.recharts-legend-item {
+  margin-right: 12px;
+}
+
+.recharts-tooltip-cursor {
+  stroke: #6B7280;
+  opacity: 0.3;
+}
+
+.recharts-default-tooltip {
+  background-color: var(--color-primary) !important;
+  border: 1px solid #374151 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  color: var(--color-white) !important;
+}

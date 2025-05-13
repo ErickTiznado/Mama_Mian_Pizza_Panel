@@ -1,0 +1,77 @@
+.metodo-entrega-container {
+  background-color: var(--color-secondary);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #374151;
+}
+
+.metodo-entrega-container h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: var(--color-white);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.chart-subtitle {
+  color: var(--color-text-light);
+  font-size: 0.85rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.loading-indicator, .error-message {
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+}
+
+.error-message {
+  color: var(--color-danger-light);
+}
+
+.chart-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.metodo-entrega-stats {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stat-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.stat-name {
+  font-weight: 500;
+  color: var(--color-white);
+}
+
+.stat-value {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  margin: 0 0.25rem;
+}
+
+.stat-percentage {
+  font-weight: 600;
+  color: var(--color-brand-yellow);
+}

@@ -1,0 +1,95 @@
+.pedidos-graficas-container {
+  width: 100%;
+  padding: 0.8rem; /* Reducido el padding general */
+}
+
+.pedidos-graficas-container h2 {
+  margin-bottom: 1rem; /* Reducido el margen inferior */
+  font-size: 1.6rem; /* Aumentado ligeramente el tamaño del título principal */
+  font-weight: 700;
+  color: var(--color-white);
+}
+
+.pedidos-main-content {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1rem; /* Reducido el gap entre columnas */
+}
+
+.pedidos-charts-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Añadido gap entre elementos hijos */
+}
+
+.pedidos-chart-box {
+  background-color: var(--color-secondary);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 1.2rem; /* Reducido el padding */
+  margin-bottom: 0; /* Eliminado el margen inferior, usamos gap */
+  border: 1px solid #374151;
+}
+
+.pedidos-chart-box h3 {
+  margin-top: 0;
+  margin-bottom: 1rem; /* Reducido el margen inferior */
+  color: var(--color-white);
+  font-size: 1.3rem; /* Aumentado el tamaño del título de cada gráfica */
+  font-weight: 600;
+}
+
+.pedidos-recientes-box {
+  height: 100%;
+  background-color: var(--color-secondary);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid #374151;
+  display: flex;
+  flex-direction: column; /* Asegurar que el contenido se extienda correctamente */
+}
+
+/* Mantener estilos legacy para compatibilidad */
+.pedidos-graficas-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem; /* Reducido el gap */
+  margin-top: 1rem; /* Reducido el margen superior */
+}
+
+.pedidos-chart {
+  background-color: var(--color-secondary);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border: 1px solid #374151;
+}
+
+.pedidos-recientes {
+  background-color: var(--color-secondary);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 1px solid #374151;
+}
+
+@media (min-width: 768px) {
+  .pedidos-graficas-content {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .pedidos-main-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .pedidos-side-column {
+    order: -1;
+  }
+  
+  .pedidos-recientes-box {
+    margin-bottom: 1rem; /* Reducido el margen */
+    height: auto;
+  }
+}

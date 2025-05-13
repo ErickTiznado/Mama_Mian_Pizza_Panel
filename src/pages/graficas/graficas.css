@@ -22,6 +22,10 @@
   align-items: center;
   justify-content: space-between;
   height: 100%;
+  padding: 20px 10px;
+  width: 100%;
+  overflow-y: auto;
+  padding: 1.5rem;
 }
 
 .kpi-content {
@@ -40,6 +44,9 @@
   width: 100%;
   padding: 20px;
   height: 76%;
+  width: 100%;
+  height: calc(100% - 60px);
+  overflow-y: auto;
 }
 
 .graficas-content-1 {
@@ -64,4 +71,78 @@
   padding: 10px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para el contenedor de tabs, igual que en OrderTabs.css */
+.Categori__tabs__container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  justify-content: center;
+  background-color: #1a2332;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  border: 1px solid #374151;
+  position: relative;
+  overflow: hidden;
+}
+
+.Categori__tabs__container::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #FEB248;
+  border-radius: 4px 0 0 4px;
+}
+
+/* Estilos para los botones de tabs, iguales que en OrderTabs.css */
+.category_tab-btn {
+  background-color: transparent;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #d1d5db;
+  flex: 1;
+  max-width: 200px;
+  min-width: 150px;
+}
+
+.category_tab-btn:hover:not(.active) {
+  background-color: rgba(31, 41, 55, 0.7);
+  transform: translateY(-2px);
+  border-color: #FEB248;
+}
+
+.category_tab-btn.active {
+  background-color: #FEB248;
+  color: #821717;
+  font-weight: 600;
+  border-color: #FEB248;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 768px) {
+  .Categori__tabs__container {
+    flex-direction: row;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 15px 10px;
+  }
+  
+  .category_tab-btn {
+    min-width: 120px;
+    font-size: 1.2rem;
+    padding: 8px 15px;
+    white-space: nowrap;
+  }
 }

@@ -1,0 +1,176 @@
+.tendencias-productos-container {
+  background-color: var(--color-secondary);
+  border-radius: 8px;
+  padding: 1rem; /* Reducido de 1.5rem */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #374151;
+  min-width: 250px; /* Ancho mínimo más compacto */
+  max-width: 100%; /* Asegurar que sea responsive */
+  overflow: hidden; /* Evitar desbordamiento */
+}
+
+.tendencias-header {
+  margin-bottom: 1rem; /* Reducido de 1.5rem */
+}
+
+.tendencias-header h3 {
+  margin: 0;
+  font-size: 1.1rem; /* Reducido de 1.2rem */
+  font-weight: 600;
+  color: var(--color-white);
+}
+
+.tendencias-header p {
+  margin: 3px 0 12px; /* Reducido de 5px 0 15px */
+  font-size: 12px; /* Reducido de 14px */
+  color: var(--color-text-light);
+}
+
+.tendencias-tabs {
+  display: flex;
+  border-bottom: 1px solid #374151;
+  margin-bottom: 12px; /* Reducido de 15px */
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 8px 12px; /* Reducido de 10px 15px */
+  font-size: 13px; /* Reducido de 14px */
+  font-weight: 500;
+  color: var(--color-text-light);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.tab-btn:hover {
+  color: var(--color-white);
+}
+
+.tab-btn.active {
+  color: var(--color-accent);
+}
+
+.tab-btn.active:after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-accent);
+}
+
+.tendencias-content {
+  flex: 1;
+  position: relative;
+}
+
+.tendencias-loading,
+.tendencias-error,
+.tendencias-empty {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--color-text-light);
+  font-size: 15px;
+}
+
+.tendencias-error {
+  color: var(--color-danger);
+}
+
+.tendencias-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tendencia-item {
+  padding: 10px 0; /* Reducido de 12px */
+  border-bottom: 1px solid #374151;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tendencia-item:last-child {
+  border-bottom: none;
+}
+
+.tendencia-item.destacado .tendencia-nombre {
+  font-weight: 600;
+}
+
+.tendencia-nombre {
+  font-size: 13px; /* Reducido de 14px */
+  color: var(--color-white);
+  flex: 1;
+  margin-right: 8px; /* Reducido de 10px */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Añadido para evitar desbordamiento de texto */
+}
+
+.tendencia-stats {
+  display: flex;
+  align-items: center;
+}
+
+.tendencia-periodo {
+  font-size: 11px; /* Reducido de 12px */
+  color: var(--color-text-light);
+  margin-right: 12px; /* Reducido de 15px */
+}
+
+.tendencia-porcentaje {
+  display: flex;
+  align-items: center;
+  font-size: 13px; /* Reducido de 14px */
+  font-weight: 600;
+  white-space: nowrap; /* Evitar que se rompa el porcentaje */
+}
+
+.tendencia-porcentaje.positivo {
+  color: var(--color-success);
+}
+
+.tendencia-porcentaje.negativo {
+  color: var(--color-danger);
+}
+
+.trend-icon {
+  margin-right: 4px; /* Reducido de 5px */
+  font-size: 14px; /* Reducido de 16px */
+}
+
+.trend-icon.up {
+  color: var(--color-success);
+}
+
+.trend-icon.down {
+  color: var(--color-danger);
+}
+
+.trend-icon.neutral {
+  color: var(--color-text-light);
+}
+
+/* Nuevas reglas para pantallas pequeñas */
+@media (max-width: 360px) {
+  .tendencia-stats {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
+  .tendencia-periodo {
+    margin-right: 0;
+    margin-bottom: 2px;
+  }
+}
