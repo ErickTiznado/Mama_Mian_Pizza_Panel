@@ -1,6 +1,9 @@
 .pedidos-graficas-container {
   width: 100%;
   padding: 0.8rem; /* Reducido el padding general */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .pedidos-graficas-container h2 {
@@ -10,16 +13,39 @@
   color: var(--color-white);
 }
 
+/* Indicador de periodo */
+.periodo-indicador {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.periodo-texto {
+  font-weight: 600;
+  color: #FEB248;
+}
+
+/* Layout principal de contenido */
 .pedidos-main-content {
   display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 1rem; /* Reducido el gap entre columnas */
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  width: 100%;
 }
 
 .pedidos-charts-column {
   display: flex;
   flex-direction: column;
-  gap: 1rem; /* Añadido gap entre elementos hijos */
+  gap: 20px;
+}
+
+.pedidos-side-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .pedidos-chart-box {
@@ -47,49 +73,268 @@
   border: 1px solid #374151;
   display: flex;
   flex-direction: column; /* Asegurar que el contenido se extienda correctamente */
+  flex: 1;
+  overflow-y: auto;
+  max-height: 620px;
 }
 
-/* Mantener estilos legacy para compatibilidad */
-.pedidos-graficas-content {
+/* Contenedores de gráficos */
+.chart-container {
+  background-color: #1a2332;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  border: 1px solid #374151;
+  margin-bottom: 0;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-header {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #374151;
+}
+
+.chart-header h3 {
+  color: #FEB248;
+  font-size: 1.2rem;
+  margin: 0 0 8px 0;
+}
+
+.chart-description {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* Estilos para pedidos recientes */
+.pedido-reciente-item {
+  padding: 12px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  background-color: rgba(31, 41, 55, 0.4);
+  transition: all 0.2s ease;
+  border: 1px solid rgba(55, 65, 81, 0.5);
+}
+
+.pedido-reciente-item:hover {
+  background-color: rgba(31, 41, 55, 0.6);
+  transform: translateY(-2px);
+  border-color: rgba(254, 178, 72, 0.4);
+}
+
+.pedido-reciente-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.pedido-codigo {
+  font-weight: 600;
+  color: #FEB248;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pedido-fecha {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.pedido-reciente-cliente {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.pedido-reciente-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.pedido-estado {
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.pedido-estado-pendiente {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.pedido-estado-en_proceso {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.pedido-estado-entregado {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.pedido-estado-cancelado {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.pedido-total {
+  font-weight: 600;
+  color: #FEB248;
+}
+
+/* Estilos para gráfico de métodos de entrega */
+.metodo-entrega-chart {
+  width: 100%;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Estilos para tarjetas KPI */
+.kpi-content {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem; /* Reducido el gap */
-  margin-top: 1rem; /* Reducido el margen superior */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+  margin-bottom: 20px;
 }
 
-.pedidos-chart {
-  background-color: var(--color-secondary);
+.kpi-card {
+  background-color: #1a2332;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  padding: 1rem;
+  padding: 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
   border: 1px solid #374151;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.pedidos-recientes {
-  background-color: var(--color-secondary);
+.kpi-title {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+.kpi-value {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #FEB248;
+  margin: 0;
+}
+
+.kpi-trend {
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.kpi-trend-up {
+  color: #10b981;
+}
+
+.kpi-trend-down {
+  color: #ef4444;
+}
+
+/* Estilos para el contenedor de mapa */
+.mapa-container {
+  width: 100%;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+/* Indicadores de carga y error */
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-size: 18px;
+  color: #FEB248;
+  animation: pulse 1.5s infinite ease-in-out;
+  font-weight: 600;
+}
+
+.error-message {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #ef4444;
+  padding: 15px;
+  border: 1px solid rgba(220, 53, 69, 0.3);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  border: 1px solid #374151;
+  margin: 15px 0;
+  font-weight: 500;
 }
 
-@media (min-width: 768px) {
-  .pedidos-graficas-content {
-    grid-template-columns: 2fr 1fr;
+.no-data-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  gap: 15px;
+  color: #9ca3af;
+  text-align: center;
+}
+
+.reload-button {
+  background-color: #FEB248;
+  color: #821717;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reload-button:hover {
+  background-color: #ffa726;
+  transform: translateY(-2px);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Media queries para responsive */
+@media (max-width: 1200px) {
+  .pedidos-main-content {
+    grid-template-columns: 3fr 2fr;
   }
 }
 
-/* Responsive adjustments */
-@media (max-width: 1024px) {
+@media (max-width: 992px) {
   .pedidos-main-content {
     grid-template-columns: 1fr;
   }
   
-  .pedidos-side-column {
-    order: -1;
+  .chart-container {
+    min-height: 250px;
   }
-  
-  .pedidos-recientes-box {
-    margin-bottom: 1rem; /* Reducido el margen */
-    height: auto;
+}
+
+@media (max-width: 768px) {
+  .kpi-content {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+@media (max-width: 576px) {
+  .kpi-content {
+    grid-template-columns: 1fr;
   }
 }

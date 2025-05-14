@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import LineGraf from "../graficodeLineas/lineGraf";
 import "./productosGraficas.css";
 import axios from "axios";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChartPie, faCalendarAlt, faBoxOpen, faChartLine, faTrophy, faArrowAltCircleUp } from '@fortawesome/free-solid-svg-icons';
 
 // Importar componentes
 import TopProductosVendidos from "./components/TopProductosVendidos";
@@ -12,30 +14,23 @@ import TendenciasProductos from "./components/TendenciasProductos";
 // API Base URL
 const API_BASE_URL = "https://server.tiznadodev.com/api";
 
-function ProductosGraficas() {
-  const [periodoSeleccionado, setPeriodoSeleccionado] = useState('ultimo-mes');
+function ProductosGraficas({ fechasFiltradas }) {
   const [evolutionData, setEvolutionData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Función para cambiar el periodo seleccionado
-  const handlePeriodoChange = (event) => {
-    setPeriodoSeleccionado(event.target.value);
-  };
-
-  // Obtener datos de evolución por categoría
+  // Obtener datos de evolución por categoría cuando cambien las fechas filtradas
   useEffect(() => {
-    fetchEvolutionData(periodoSeleccionado);
-  }, [periodoSeleccionado]);
+    if (fechasFiltradas && fechasFiltradas.inicio && fechasFiltradas.fin) {
+      fetchEvolutionData(fechasFiltradas.inicio, fechasFiltradas.fin);
+    }
+  }, [fechasFiltradas]);
 
   // Función para obtener los datos de evolución de ventas por categoría
-  const fetchEvolutionData = async (periodo) => {
+  const fetchEvolutionData = async (fechaInicio, fechaFin) => {
     try {
       setLoading(true);
       setError(null);
-      
-      // Obtener fechas para el periodo seleccionado
-      const { fechaInicio, fechaFin } = getFechasParaPeriodo(periodo);
       
       // Obtener todos los pedidos
       const response = await axios.get(`${API_BASE_URL}/orders/orders`);
@@ -137,32 +132,6 @@ function ProductosGraficas() {
     }
   };
 
-  // Función auxiliar para obtener fechas de inicio y fin según periodo
-  const getFechasParaPeriodo = (periodo) => {
-    const hoy = new Date();
-    let fechaInicio = new Date(hoy);
-    const fechaFin = new Date(hoy);
-    
-    switch (periodo) {
-      case 'hoy':
-        fechaInicio.setHours(0, 0, 0, 0); // Inicio del día
-        break;
-      case 'ultima-semana':
-        fechaInicio.setDate(hoy.getDate() - 7);
-        break;
-      case 'ultimo-mes':
-        fechaInicio.setMonth(hoy.getMonth() - 1);
-        break;
-      case 'ultimo-anio':
-        fechaInicio.setFullYear(hoy.getFullYear() - 1);
-        break;
-      default:
-        fechaInicio.setMonth(hoy.getMonth() - 1); // Por defecto último mes
-    }
-    
-    return { fechaInicio, fechaFin };
-  };
-
   // Función para obtener los meses en un rango de fechas
   const obtenerMesesEnRango = (fechaInicio, fechaFin) => {
     const nombresMeses = [
@@ -232,43 +201,68 @@ function ProductosGraficas() {
       return (
         <div className="no-data-message">
           <p>No hay datos suficientes para este periodo.</p>
-          <button onClick={() => fetchEvolutionData(periodoSeleccionado)} className="reload-button">
+          <button 
+            onClick={() => fechasFiltradas && fetchEvolutionData(fechasFiltradas.inicio, fechasFiltradas.fin)} 
+            className="reload-button"
+          >
             Intentar nuevamente
           </button>
         </div>
       );
     }
     
-    return <LineGraf data={evolutionData} />;
+    return <LineGraf data={evolutionData} colors={['#FEB248', '#3D84B8', '#1f2937']} />;
+  };
+
+  // Formatear el texto del período para mostrarlo en la UI
+  const obtenerTextoPeriodo = () => {
+    if (!fechasFiltradas) return "Último mes";
+    
+    switch (fechasFiltradas.periodo) {
+      case 'hoy':
+        return "Hoy";
+      case 'ultima-semana':
+        return "Última semana";
+      case 'ultimo-mes':
+        return "Último mes";
+      case 'ultimo-anio':
+        return "Último año";
+      case 'personalizado':
+        return `Desde ${formatoFecha(fechasFiltradas.inicio)} hasta ${formatoFecha(fechasFiltradas.fin)}`;
+      default:
+        return "Último mes";
+    }
+  };
+
+  // Función auxiliar para formatear fechas
+  const formatoFecha = (fecha) => {
+    if (!fecha) return "";
+    const f = new Date(fecha);
+    return `${f.getDate()}/${f.getMonth() + 1}/${f.getFullYear()}`;
   };
 
   return (
     <div className="productos-graficas-container">
       <h2 className="dashboard-title">Análisis de Productos</h2>
 
-      {/* Sección de filtros de tiempo global */}
-      <div className="filtros-dashboard">
-        <select 
-          value={periodoSeleccionado} 
-          onChange={handlePeriodoChange}
-          className="select-periodo"
-        >
-          <option value="hoy">Hoy</option>
-          <option value="ultima-semana">Última Semana</option>
-          <option value="ultimo-mes">Último Mes</option>
-          <option value="ultimo-anio">Último Año</option>
-        </select>
+      {/* Indicador de período seleccionado */}
+      <div className="periodo-indicador">
+        <FontAwesomeIcon icon={faCalendarAlt} style={{ color: '#FEB248', marginRight: '8px' }} />
+        Periodo: <span className="periodo-texto">{fechasFiltradas ? `${formatoFecha(fechasFiltradas.inicio)} - ${formatoFecha(fechasFiltradas.fin)}` : "Último mes"}</span>
       </div>
       
       {/* Sección de KPIs de productos */}
-      <ProductosKPI periodoSeleccionado={periodoSeleccionado} />
+      <ProductosKPI fechasFiltradas={fechasFiltradas} colorPrimario="#FEB248" />
       
       <div className="productos-graficas-content">
         <div className="productos-charts-column">
           {/* Gráfica de evolución de ventas por categoría */}
           <div className="productos-chart">
             <div className="chart-header">
-              <h3>Evolución de Ventas por Categoría</h3>
+              <h3>
+                <FontAwesomeIcon icon={faChartLine} style={{ marginRight: '10px', color: '#FEB248' }} />
+                Evolución de Ventas por Categoría
+              </h3>
               <p className="chart-description">
                 Visualización de la tendencia de ventas por categoría de productos en el tiempo
               </p>
@@ -281,17 +275,59 @@ function ProductosGraficas() {
           {/* Distribución de categorías y Tendencias */}
           <div className="productos-charts-row">
             <div className="chart-col-50">
-              <DistribucionCategorias />
+              <div className="chart-container">
+                <div className="chart-header">
+                  <h3>
+                    <FontAwesomeIcon icon={faChartPie} style={{ marginRight: '10px', color: '#FEB248' }} />
+                    Distribución por Categorías
+                  </h3>
+                  <p className="chart-description">
+                    Porcentaje de ventas por cada categoría de productos
+                  </p>
+                </div>
+                <DistribucionCategorias 
+                  fechasFiltradas={fechasFiltradas} 
+                  colores={['#FEB248', '#3D84B8', '#821717', '#202938']} 
+                />
+              </div>
             </div>
             <div className="chart-col-50">
-              <TendenciasProductos />
+              <div className="chart-container">
+                <div className="chart-header">
+                  <h3>
+                    <FontAwesomeIcon icon={faArrowAltCircleUp} style={{ marginRight: '10px', color: '#FEB248' }} />
+                    Tendencias de Productos
+                  </h3>
+                  <p className="chart-description">
+                    Productos con mayor crecimiento en ventas
+                  </p>
+                </div>
+                <TendenciasProductos 
+                  fechasFiltradas={fechasFiltradas} 
+                  colorPrimario="#FEB248" 
+                />
+              </div>
             </div>
           </div>
         </div>
         
         {/* Ranking de productos más vendidos */}
         <div className="productos-side-column">
-          <TopProductosVendidos periodoSeleccionado={periodoSeleccionado} />
+          <div className="chart-container">
+            <div className="chart-header">
+              <h3>
+                <FontAwesomeIcon icon={faTrophy} style={{ marginRight: '10px', color: '#FEB248' }} />
+                Top Productos Vendidos
+              </h3>
+              <p className="chart-description">
+                Los productos más populares durante el período seleccionado
+              </p>
+            </div>
+            <TopProductosVendidos 
+              fechasFiltradas={fechasFiltradas} 
+              colorAccent="#FEB248" 
+            />
+          </div>
         </div>
       </div>
     </div>

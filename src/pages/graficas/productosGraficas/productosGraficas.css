@@ -172,3 +172,20 @@
     padding: 1rem;
   }
 }
+
+.periodo-indicador {
+  background-color: rgba(31, 41, 55, 0.7);
+  border: 1px solid #374151;
+  border-radius: 8px;
+  padding: 8px 16px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #d1d5db;
+  font-size: 1rem;
+}
+
+.periodo-texto {
+  color: #FEB248;
+  font-weight: 600;
+  margin-left: 5px;
+}

@@ -13,68 +13,127 @@
   --color-text: #333333;             /* Texto principal más suave */
   --color-septenary: #FFFFFF;        /* Blanco puro */
   --color-txtdanger: #821717;
-
 }
 
-.graficas-container {
+/* Estilos para el contenedor principal que ocupa toda la vista */
+.graficas-outer-container {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  overflow-y: auto; /* Scroll en todo el componente */
+  color: #f5f5f5;
+}
+
+/* Panel principal similar a OrderManager y AgregarContenido */
+.graficas-panel {
+  width: 100%;
+  max-width: none !important;
+  background-color: #1f2937;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  min-height: calc(100vh - 140px);
+}
+
+/* Header del panel con título y botón */
+.graficas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 10px;
+}
+
+.graficas-header h1 {
+  color: #FEB248;
+  font-size: 1.8rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.graficas-btn-refrescar {
+  background-color: #FEB248;
+  color: #821717;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.graficas-btn-refrescar:hover {
+  background-color: #ffa726;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Contenido principal */
+.graficas-main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  height: 100%;
-  padding: 20px 10px;
   width: 100%;
-  overflow-y: auto;
-  padding: 1.5rem;
-}
-
-.kpi-content {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  width: 100%;
-  padding: 20px;
-  height: 24%;
-}
-
-.graficas-content {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  width: 100%;
-  padding: 20px;
-  height: 76%;
-  width: 100%;
-  height: calc(100% - 60px);
-  overflow-y: auto;
-}
-
-.graficas-content-1 {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  width: 50%;
-  height: 80%;
-  background-color: var(--color-secondary);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.graficas-content-2 {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  width: 45%;
-  height: 80%;
-  background-color: var(--color-secondary);
   padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  flex-grow: 1;
 }
 
-/* Estilos para el contenedor de tabs, igual que en OrderTabs.css */
-.Categori__tabs__container {
+/* Botón para mostrar/ocultar filtros */
+.toggle-filters-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.toggle-filters-btn {
+  background-color: #202938;
+  border: 1px solid #374151;
+  color: #FEB248;
+  border-radius: 6px;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.toggle-filters-btn:hover {
+  background-color: #374151;
+  transform: translateY(-1px);
+}
+
+/* Contador de resultados con estilo consistente */
+.graficas-resultados-contador {
+  font-size: 0.95rem;
+  color: #d1d5db;
+  margin-bottom: 15px;
+  background-color: rgba(31, 41, 55, 0.5);
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #374151;
+}
+
+.graficas-resaltado {
+  color: #FEB248;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* Contenedor y botones de tabs */
+.graficas-tabs-container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -90,7 +149,7 @@
   overflow: hidden;
 }
 
-.Categori__tabs__container::before {
+.graficas-tabs-container::before {
   content: '';
   position: absolute;
   left: 0;
@@ -101,8 +160,7 @@
   border-radius: 4px 0 0 4px;
 }
 
-/* Estilos para los botones de tabs, iguales que en OrderTabs.css */
-.category_tab-btn {
+.graficas-tab-btn {
   background-color: transparent;
   border: 1px solid #374151;
   border-radius: 6px;
@@ -117,13 +175,13 @@
   min-width: 150px;
 }
 
-.category_tab-btn:hover:not(.active) {
+.graficas-tab-btn:hover:not(.active) {
   background-color: rgba(31, 41, 55, 0.7);
   transform: translateY(-2px);
   border-color: #FEB248;
 }
 
-.category_tab-btn.active {
+.graficas-tab-btn.active {
   background-color: #FEB248;
   color: #821717;
   font-weight: 600;
@@ -131,18 +189,275 @@
   box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 }
 
+/* Contenedor para el contenido de gráficas */
+.graficas-content-wrapper {
+  width: 100%;
+  border-radius: 10px;
+  background-color: rgba(31, 41, 55, 0.3);
+  border: 1px solid #374151;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.graficas-content {
+  flex: 1;
+  overflow: auto; /* Scroll dentro del contenido si es necesario */
+  width: 100%;
+  height: 100%;
+  padding-right: 5px;
+}
+
+/* Estilos para KPI cards */
+.kpi-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.kpi-card {
+  background-color: #1a2332;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  border: 1px solid #374151;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.kpi-title {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+.kpi-value {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #FEB248;
+  margin: 0;
+}
+
+.kpi-trend {
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.kpi-trend-up {
+  color: #10b981;
+}
+
+.kpi-trend-down {
+  color: #ef4444;
+}
+
+/* Estilos para los contenidos de gráficos */
+.graficas-charts-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 20px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.chart-container {
+  background-color: #1a2332;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  border: 1px solid #374151;
+  margin-bottom: 20px;
+  min-height: 300px;
+}
+
+.chart-header {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #374151;
+}
+
+.chart-header h3 {
+  color: #FEB248;
+  font-size: 1.2rem;
+  margin: 0 0 8px 0;
+}
+
+.chart-description {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* Indicador de periodo */
+.periodo-indicador {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.periodo-texto {
+  font-weight: 600;
+  color: #FEB248;
+}
+
+/* Estilos para el contenedor de mapa */
+.mapa-container {
+  background-color: #1a2332;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  border: 1px solid #374151;
+  margin-bottom: 20px;
+  height: 300px;
+}
+
+/* Estilos para tablas */
+.tabla-container {
+  background-color: #1a2332;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  border: 1px solid #374151;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.tabla-pedidos {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.tabla-pedidos th {
+  background-color: rgba(31, 41, 55, 0.5);
+  color: #FEB248;
+  font-weight: 600;
+  text-align: left;
+  padding: 12px;
+  border-bottom: 2px solid #FEB248;
+}
+
+.tabla-pedidos td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #374151;
+}
+
+.tabla-pedidos tbody tr:hover {
+  background-color: rgba(254, 178, 72, 0.1);
+}
+
+/* Indicadores de carga y error */
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-size: 18px;
+  color: #FEB248;
+  animation: pulse 1.5s infinite ease-in-out;
+  font-weight: 600;
+}
+
+.error-message {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #ef4444;
+  padding: 15px;
+  border: 1px solid rgba(220, 53, 69, 0.3);
+  border-radius: 8px;
+  margin: 15px 0;
+  font-weight: 500;
+}
+
+.no-data-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  gap: 15px;
+  color: #9ca3af;
+  text-align: center;
+}
+
+.reload-button {
+  background-color: #FEB248;
+  color: #821717;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reload-button:hover {
+  background-color: #ffa726;
+  transform: translateY(-2px);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Estilos responsivos */
+@media (max-width: 1200px) {
+  .graficas-charts-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
-  .Categori__tabs__container {
+  .graficas-outer-container {
+    padding: 10px;
+  }
+
+  .graficas-panel {
+    padding: 15px;
+  }
+
+  .graficas-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .graficas-tab-btn {
+    min-width: 120px;
+    font-size: 1.2rem;
+    padding: 8px 15px;
+    white-space: nowrap;
+  }
+
+  .graficas-tabs-container {
     flex-direction: row;
     overflow-x: auto;
     justify-content: flex-start;
     padding: 15px 10px;
   }
+
+  .kpi-content {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .kpi-content {
+    grid-template-columns: 1fr;
+  }
   
-  .category_tab-btn {
-    min-width: 120px;
-    font-size: 1.2rem;
-    padding: 8px 15px;
-    white-space: nowrap;
+  .graficas-btn-refrescar {
+    font-size: 0.9rem;
+    padding: 10px 15px;
   }
 }

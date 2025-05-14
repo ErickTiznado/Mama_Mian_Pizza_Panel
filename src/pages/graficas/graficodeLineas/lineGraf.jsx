@@ -6,11 +6,11 @@ const lineGraf = ({ data, xKey = "month" }) => {
   // Se extraen las claves del primer objeto, excepto la clave que usaremos en el eje X
   const lineKeys = data && data.length > 0 ? Object.keys(data[0]).filter(key => key !== xKey) : [];
   
-  // Colores adaptados a la paleta oscura
+  // Colores adaptados a la paleta de la aplicación MamaMianPizza
   const colors = {
-    pizzas: '#991B1B', // Rojo de marca
-    bebidas: '#3D84B8', // Azul corporativo
-    complementos: '#FEB248', // Amarillo de marca
+    pizzas: '#991B1B', // Rojo de marca para pizzas
+    bebidas: '#3D84B8', // Azul corporativo para bebidas
+    complementos: '#FEB248', // Amarillo de marca para complementos
     // Colores adicionales si se necesitan
     default: ['#991B1B', '#3D84B8', '#FEB248', '#4CAF50', '#E53935']
   };
@@ -80,23 +80,19 @@ const lineGraf = ({ data, xKey = "month" }) => {
           left: 10,
           bottom: 10,
         }}
-        style={{
-          backgroundColor: 'transparent',
-          borderRadius: '8px',
-        }}
       >
-        <CartesianGrid strokeDasharray="3 3" stroke="#4B5563" opacity={0.3} vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke="#333333" opacity={0.1} vertical={false} />
         <XAxis 
           dataKey={xKey}
-          tick={{ fill: '#E5E7EB', fontSize: 12 }}
+          tick={{ fill: '#909497', fontSize: 12 }}
           tickFormatter={formatMonth}
-          axisLine={{ stroke: '#4B5563', opacity: 0.5 }}
-          tickLine={{ stroke: '#4B5563', opacity: 0.5 }}
+          axisLine={{ stroke: '#333333', opacity: 0.2 }}
+          tickLine={{ stroke: '#333333', opacity: 0.2 }}
         />
         <YAxis 
-          tick={{ fill: '#E5E7EB', fontSize: 12 }}
-          axisLine={{ stroke: '#4B5563', opacity: 0.5 }}
-          tickLine={{ stroke: '#4B5563', opacity: 0.5 }}
+          tick={{ fill: '#909497', fontSize: 12 }}
+          axisLine={{ stroke: '#333333', opacity: 0.2 }}
+          tickLine={{ stroke: '#333333', opacity: 0.2 }}
         />
         <Tooltip content={<CustomTooltip />} />
         <Legend content={renderLegend} />
