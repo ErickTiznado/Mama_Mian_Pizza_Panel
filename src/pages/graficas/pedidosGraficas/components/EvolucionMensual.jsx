@@ -60,7 +60,7 @@ const EvolucionMensual = ({ colorPrimario, colorSecundario, fechasFiltradas }) =
       setNoData(false);
       setDataMensual([]); // Resetear datos para evitar visualización de datos anteriores
       
-      // Obtener todos los pedidos utilizando la API real
+      // Obtener todos los pedidos utilizando la API de tu backend
       const response = await axios.get(`${API_BASE_URL}/orders/orders`);
       
       if (!response.data || response.data.length === 0) {

@@ -4,7 +4,11 @@ import EvolucionMensual from "./components/EvolucionMensual";
 import MetodoEntregaChart from "./components/MetodoEntregaChart";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartLine, faTruck, faUsers } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 import "./pedidosGraficas.css";
+
+// URL base para la API de pedidos
+const API_BASE_URL = "https://server.tiznadodev.com/api";
 
 function PedidosGraficas({ fechasFiltradas }) {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
@@ -54,6 +58,7 @@ function PedidosGraficas({ fechasFiltradas }) {
               colorPrimario="#FEB248" 
               colorSecundario="#3D84B8" 
               fechasFiltradas={fechasFiltradas} 
+              API_BASE_URL={API_BASE_URL}
             />
           </div>
           
@@ -69,6 +74,7 @@ function PedidosGraficas({ fechasFiltradas }) {
             <MetodoEntregaChart 
               colores={['#FEB248', '#3D84B8', '#821717', '#1f2937']} 
               fechasFiltradas={fechasFiltradas} 
+              API_BASE_URL={API_BASE_URL}
             />
           </div>
         </div>
@@ -84,7 +90,11 @@ function PedidosGraficas({ fechasFiltradas }) {
               <p className="chart-description">Últimos pedidos registrados en el sistema</p>
             </div>
             <div className="pedidos-recientes-box">
-              <PedidosRecientes colorAccent="#FEB248" fechasFiltradas={fechasFiltradas} />
+              <PedidosRecientes 
+                colorAccent="#FEB248" 
+                fechasFiltradas={fechasFiltradas} 
+                API_BASE_URL={API_BASE_URL}
+              />
             </div>
           </div>
         </div>

@@ -67,11 +67,9 @@ const AgregarContenido = () => {
   
   // Opciones para secciones
   const sesionesOptions = [
-    'Menu Principal',
-    'Ofertas',
-    'Especiales',
-    'Temporada',
-    'Promociones',
+    'Recomendación de la casa',
+    'Las más populares',
+    'Menu',
   ];
 
   // Efecto para cerrar dropdowns cuando se hace clic fuera de ellos

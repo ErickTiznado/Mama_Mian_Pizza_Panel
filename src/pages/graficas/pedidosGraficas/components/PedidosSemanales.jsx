@@ -9,7 +9,7 @@ const PedidosSemanales = () => {
   const [error, setError] = useState(null);
 
   // URL base para la API de pedidos
-  const API_BASE_URL = "https://server.tiznadodev.com/api/orders";
+  const API_BASE_URL = "https://server.tiznadodev.com/api";
 
   // Colores corporativos para las gráficas
   const BRAND_COLORS = {
@@ -51,7 +51,7 @@ const PedidosSemanales = () => {
       setLoading(true);
       
       // Obtener todos los pedidos
-      const response = await axios.get(`${API_BASE_URL}/orders`);
+      const response = await axios.get(`${API_BASE_URL}/orders/orders`);
       const pedidos = response.data;
       
       // Preparar datos por semana
