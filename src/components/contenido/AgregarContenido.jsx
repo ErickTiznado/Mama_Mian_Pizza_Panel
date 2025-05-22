@@ -162,7 +162,7 @@ const AgregarContenido = () => {
     
     try {
       const response = await axios.delete(
-        `${API_URL}/api/productos/${modalConfirmacion.idProducto}`
+        `${API_URL}/api/content/deleteContent/${modalConfirmacion.idProducto}`
       );
       
       if (response.status === 200) {
@@ -203,24 +203,29 @@ const AgregarContenido = () => {
     setProductoEditarId(id);
     
     try {
-      const response = await axios.get(`${API_URL}/api/productos/${id}`);
+      const response = await axios.get(`${API_URL}/api/content/getMenu`);
       
-      const producto = response.data.producto;
+      // Buscar el producto por ID en la respuesta
+      const producto = response.data.productos.find(prod => prod.id_producto === id);
       
-      setFormData({
-        titulo: producto.titulo || '',
-        descripcion: producto.descripcion || '',
-        porciones: producto.porciones || '',
-        categoria: producto.categoria || '',
-        nuevaCategoria: '',
-        sesion: producto.sesion || '',
-        imagen: null,
-        activo: producto.activo || false,
-        precio: producto.precio || '',
-      });
-      
-      setPreviewUrl(producto.imagen || null);
-      setMostrarFormulario(true);
+      if (producto) {
+        setFormData({
+          titulo: producto.titulo || '',
+          descripcion: producto.descripcion || '',
+          porciones: producto.porciones || '',
+          categoria: producto.categoria || '',
+          nuevaCategoria: '',
+          sesion: producto.seccion || '', // Nota: cambiado a seccion según la estructura del controlador
+          imagen: null,
+          activo: producto.activo || false,
+          precio: producto.precio || '',
+        });
+        
+        setPreviewUrl(producto.imagen || null);
+        setMostrarFormulario(true);
+      } else {
+        throw new Error('Producto no encontrado');
+      }
     } catch (err) {
       console.error('Error obteniendo producto para editar:', err);
       setError('Error al obtener los detalles del producto.');
@@ -242,7 +247,12 @@ const AgregarContenido = () => {
         if (key === 'imagen' && value !== null) {
           formDataToSend.append('imagen', value);
         } else if (key !== 'nuevaCategoria' && key !== 'imagen') {
-          formDataToSend.append(key, value);
+          if (key === 'sesion') {
+            // Mapear 'sesion' a 'seccion' como espera el controlador
+            formDataToSend.append('sesion', value);
+          } else {
+            formDataToSend.append(key, value);
+          }
         }
       });
       
@@ -251,7 +261,7 @@ const AgregarContenido = () => {
       if (modoEdicion) {
         // Actualizar producto existente
         response = await axios.put(
-          `${API_URL}/api/productos/${productoEditarId}`,
+          `${API_URL}/api/content/updateContent/${productoEditarId}`,
           formDataToSend,
           { 
             headers: { 
@@ -269,7 +279,7 @@ const AgregarContenido = () => {
       } else {
         // Crear nuevo producto
         response = await axios.post(
-          `${API_URL}/api/productos`,
+          `${API_URL}/api/content/submit`,
           formDataToSend,
           { 
             headers: { 

@@ -1,7 +1,6 @@
 .notification-bell {
   position: relative;
   display: inline-block;
-  background-color: transparent;
 }
 
 .notification-button {
@@ -12,40 +11,51 @@
   position: relative;
   background-color: transparent;
   border: none;
-  padding: 5px;
+  padding: 8px;
+  margin: 0;
   outline: none;
-  color: #333;
   transition: all 0.3s ease;
 }
 
 .notification-button:hover {
-  color: #0066ff;
+  transform: scale(1.1);
 }
 
-.notification-button.has-notifications {
-  animation: subtle-shake 2.5s infinite;
-}
-
-.notification-count {
+/* Estilos mejorados para el badge de notificaciones */
+.notification-badge {
   position: absolute;
-  top: -8px;
-  right: -8px;
-  background-color: #ff3b30;
+  top: -5px;
+  right: -5px;
+  background-color: #ff3b30; /* Rojo brillante */
   color: white;
-  border-radius: 50%;
-  padding: 0px 7px;
-  font-size: 0.7rem;
+  font-size: 12px;
   font-weight: bold;
-  min-width: 18px;
-  min-height: 18px;
+  height: 20px;
+  min-width: 20px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  -webkit-animation: bounce-in-fwd 1.1s both;
-  animation: bounce-in-fwd 1.1s both;
-  box-shadow: 0 2px 5px rgba(255, 59, 48, 0.5);
-  border: 1.5px solid white;
-  z-index: 2;
+  border: 2px solid white;
+  padding: 2px;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  animation: pulse 1.5s infinite;
+}
+
+/* Animación de pulso para el badge */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 5px rgba(255, 59, 48, 0);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .notification-dropdown {
@@ -61,6 +71,7 @@
   margin-top: 10px;
   animation: fade-in 0.2s ease-in-out;
   overflow: hidden;
+  border: 1px solid #eaeaea;
 }
 
 .notification-header {
@@ -69,12 +80,14 @@
   align-items: center;
   padding: 15px;
   border-bottom: 1px solid #eaeaea;
+  background-color: #f9f9f9;
 }
 
 .notification-header h3 {
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
+  color: #333;
 }
 
 .mark-all-read {
@@ -89,6 +102,7 @@
 
 .mark-all-read:hover {
   background-color: #f0f7ff;
+  text-decoration: underline;
 }
 
 .notification-list {
@@ -103,6 +117,7 @@
   padding: 12px 15px;
   border-bottom: 1px solid #eaeaea;
   transition: background-color 0.2s;
+  cursor: pointer;
 }
 
 .notification-item:hover {
@@ -111,6 +126,17 @@
 
 .notification-item.unread {
   background-color: #f0f7ff;
+  position: relative;
+}
+
+.notification-item.unread:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #0066ff;
 }
 
 .notification-item.unread:hover {
@@ -136,6 +162,7 @@
 .notification-time {
   font-size: 0.75rem;
   color: #888;
+  display: block;
 }
 
 .delete-notification {
@@ -146,10 +173,13 @@
   cursor: pointer;
   padding: 0 5px;
   margin-left: 10px;
+  opacity: 0.6;
+  transition: opacity 0.2s, color 0.2s;
 }
 
 .delete-notification:hover {
   color: #ff3b30;
+  opacity: 1;
 }
 
 .no-notifications {
@@ -161,29 +191,15 @@
 
 .notification-permission {
   padding: 15px;
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #eaeaea;
+  background-color: #fff9e6;
+  border-bottom: 1px solid #ffe7a0;
   text-align: center;
 }
 
 .notification-permission p {
-  margin: 0 0 10px 0;
+  margin: 0;
   font-size: 0.85rem;
-  color: #555;
-}
-
-.notification-permission button {
-  background-color: #0066ff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 15px;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-
-.notification-permission button:hover {
-  background-color: #0052cc;
+  color: #8a6d3b;
 }
 
 @keyframes fade-in {
@@ -195,18 +211,6 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-@keyframes subtle-shake {
-  0% { transform: rotate(0); }
-  1% { transform: rotate(3deg); }
-  2% { transform: rotate(-3deg); }
-  3% { transform: rotate(0); }
-  80% { transform: rotate(0); }
-  83% { transform: rotate(5deg); }
-  86% { transform: rotate(-5deg); }
-  89% { transform: rotate(0); }
-  100% { transform: rotate(0); }
 }
 
 /* ----------------------------------------------

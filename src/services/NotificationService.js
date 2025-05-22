@@ -1,6 +1,6 @@
 // Servicio para manejar notificaciones en toda la aplicación
-// Este servicio permite crear y gestionar notificaciones desde cualquier parte de la aplicación
 
+// URL base para la API de notificaciones
 const API_URL = 'https://server.tiznadodev.com/api/notifications';
 
 // Categorías de notificaciones disponibles
@@ -19,7 +19,9 @@ export const NotificationType = {
   ERROR: 'error'
 };
 
-// Mapeo entre campos locales y del servidor
+/**
+ * Convierte una notificación del formato local al formato del servidor
+ */
 const mapLocalToServer = (notification) => {
   return {
     titulo: notification.title,
@@ -31,9 +33,18 @@ const mapLocalToServer = (notification) => {
   };
 };
 
+/**
+ * Convierte una notificación del formato del servidor al formato local
+ */
 const mapServerToLocal = (serverNotification) => {
+  // Generamos un ID determinista basado en la ID del servidor
+  // Esto evitará duplicados cuando se sincronice con el servidor
+  const idLocal = serverNotification.id_notificacion 
+    ? `server-${serverNotification.id_notificacion}` 
+    : `local-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    
   return {
-    id: Date.now() + Math.random(),
+    id: idLocal,
     serverId: serverNotification.id_notificacion,
     title: serverNotification.titulo,
     message: serverNotification.mensaje,
@@ -45,7 +56,9 @@ const mapServerToLocal = (serverNotification) => {
   };
 };
 
-// Funciones para comunicarse con el API remoto de notificaciones
+/**
+ * Obtiene todas las notificaciones desde el servidor
+ */
 export const fetchNotifications = async () => {
   try {
     const response = await fetch(API_URL);
@@ -59,6 +72,9 @@ export const fetchNotifications = async () => {
   }
 };
 
+/**
+ * Obtiene sólo las notificaciones no leídas desde el servidor
+ */
 export const fetchUnreadNotifications = async () => {
   try {
     const response = await fetch(`${API_URL}/unread`);
@@ -72,6 +88,9 @@ export const fetchUnreadNotifications = async () => {
   }
 };
 
+/**
+ * Guarda una notificación en el servidor
+ */
 export const saveNotificationToServer = async (notification) => {
   try {
     const serverNotification = mapLocalToServer(notification);
@@ -102,6 +121,9 @@ export const saveNotificationToServer = async (notification) => {
   }
 };
 
+/**
+ * Marca una notificación como leída en el servidor
+ */
 export const markNotificationReadOnServer = async (notificationId) => {
   try {
     console.log('Marcando como leída en servidor la notificación con ID:', notificationId);
@@ -127,6 +149,9 @@ export const markNotificationReadOnServer = async (notificationId) => {
   }
 };
 
+/**
+ * Marca todas las notificaciones como leídas en el servidor
+ */
 export const markAllNotificationsReadOnServer = async () => {
   try {
     const response = await fetch(`${API_URL}/mark-all-read`, {
@@ -141,6 +166,9 @@ export const markAllNotificationsReadOnServer = async () => {
   }
 };
 
+/**
+ * Elimina una notificación del servidor
+ */
 export const deleteNotificationFromServer = async (notificationId) => {
   try {
     const response = await fetch(`${API_URL}/${notificationId}`, {
@@ -155,7 +183,9 @@ export const deleteNotificationFromServer = async (notificationId) => {
   }
 };
 
-// Función para crear una notificación de pedido nuevo
+/**
+ * Crea una notificación de pedido nuevo
+ */
 export const createOrderNotification = (notificationContext, pedido) => {
   if (!notificationContext) return null;
   
@@ -165,13 +195,13 @@ export const createOrderNotification = (notificationContext, pedido) => {
     category: NotificationCategories.PEDIDOS,
     type: NotificationType.INFO,
     showPush: true,
-    urgente: true, // Marcar como urgente para destacarlo en notificaciones push
-    read: false, // Asegurarse de que sea no leída
+    urgente: true,
+    read: false,
     data: { 
       pedidoId: pedido.id_pedido,
       url: '/pedidos',
-      timeToShow: 10000, // Tiempo que la notificación permanece visible (10 segundos)
-      sound: true // Reproducir sonido de alerta
+      timeToShow: 10000,
+      sound: true
     }
   };
   
@@ -187,7 +217,9 @@ export const createOrderNotification = (notificationContext, pedido) => {
     });
 };
 
-// Función para crear una notificación de cambio de estado de pedido
+/**
+ * Crea una notificación de cambio de estado de pedido
+ */
 export const createOrderStatusNotification = (notificationContext, pedido, nuevoEstado) => {
   if (!notificationContext) return null;
   
@@ -209,32 +241,28 @@ export const createOrderStatusNotification = (notificationContext, pedido, nuevo
     message: `Pedido #${pedido.codigo_pedido || pedido.id_pedido} ahora está: ${getStatusName(nuevoEstado)}`,
     category: NotificationCategories.PEDIDOS,
     type: NotificationType.SUCCESS,
-    showPush: isImportantStatus, // Solo enviar push para estados importantes
+    showPush: isImportantStatus,
     data: { 
       pedidoId: pedido.id_pedido, 
       estado: nuevoEstado,
-      url: '/pedidos'
+      url: '/pedidos',
+      sound: isImportantStatus
     }
   };
 
   // Intentar guardar en el servidor y luego en local
-  saveNotificationToServer(notification)
+  return saveNotificationToServer(notification)
     .then(serverNotification => {
-      if (serverNotification && serverNotification.id) {
-        return notificationContext.addNotification({
-          ...notification,
-          serverId: serverNotification.id
-        });
-      } else {
-        return notificationContext.addNotification(notification);
-      }
+      return notificationContext.addNotification(serverNotification);
     })
     .catch(() => {
       return notificationContext.addNotification(notification);
     });
 };
 
-// Función para crear una notificación de inventario bajo
+/**
+ * Crea una notificación de inventario bajo
+ */
 export const createLowInventoryNotification = (notificationContext, producto) => {
   if (!notificationContext) return null;
   
@@ -244,32 +272,28 @@ export const createLowInventoryNotification = (notificationContext, producto) =>
     category: NotificationCategories.INVENTARIO,
     type: NotificationType.WARNING,
     showPush: true,
-    urgente: true, // Marcar como urgente para destacarlo en notificaciones push
+    urgente: true,
     data: { 
       productoId: producto.id_ingrediente,
       url: '/inventario',
-      timeToShow: 15000 // Tiempo que la notificación permanece visible (15 segundos)
+      timeToShow: 15000,
+      sound: true
     }
   };
 
   // Intentar guardar en el servidor y luego en local
-  saveNotificationToServer(notification)
+  return saveNotificationToServer(notification)
     .then(serverNotification => {
-      if (serverNotification && serverNotification.id) {
-        return notificationContext.addNotification({
-          ...notification,
-          serverId: serverNotification.id
-        });
-      } else {
-        return notificationContext.addNotification(notification);
-      }
+      return notificationContext.addNotification(serverNotification);
     })
     .catch(() => {
       return notificationContext.addNotification(notification);
     });
 };
 
-// Función para crear una notificación de nuevo cliente
+/**
+ * Crea una notificación de nuevo cliente
+ */
 export const createNewClientNotification = (notificationContext, cliente) => {
   if (!notificationContext) return null;
   
@@ -286,23 +310,18 @@ export const createNewClientNotification = (notificationContext, cliente) => {
   };
 
   // Intentar guardar en el servidor y luego en local
-  saveNotificationToServer(notification)
+  return saveNotificationToServer(notification)
     .then(serverNotification => {
-      if (serverNotification && serverNotification.id) {
-        return notificationContext.addNotification({
-          ...notification,
-          serverId: serverNotification.id
-        });
-      } else {
-        return notificationContext.addNotification(notification);
-      }
+      return notificationContext.addNotification(serverNotification);
     })
     .catch(() => {
       return notificationContext.addNotification(notification);
     });
 };
 
-// Función para crear una notificación genérica del sistema
+/**
+ * Crea una notificación genérica del sistema
+ */
 export const createSystemNotification = (notificationContext, { title, message, type = NotificationType.INFO, urgente = false }) => {
   if (!notificationContext) return null;
   
@@ -311,42 +330,39 @@ export const createSystemNotification = (notificationContext, { title, message, 
     message,
     category: NotificationCategories.SISTEMA,
     type,
-    showPush: urgente, // Solo enviar push si es urgente
+    showPush: urgente,
     urgente,
     data: { 
-      timeToShow: urgente ? 20000 : 5000 // Más tiempo visible si es urgente
+      timeToShow: urgente ? 20000 : 5000
     }
   };
 
   // Intentar guardar en el servidor y luego en local
-  saveNotificationToServer(notification)
+  return saveNotificationToServer(notification)
     .then(serverNotification => {
-      if (serverNotification && serverNotification.id) {
-        return notificationContext.addNotification({
-          ...notification,
-          serverId: serverNotification.id
-        });
-      } else {
-        return notificationContext.addNotification(notification);
-      }
+      return notificationContext.addNotification(serverNotification);
     })
     .catch(() => {
       return notificationContext.addNotification(notification);
     });
 };
 
-// Función para reproducir un sonido de alerta para notificaciones
+/**
+ * Reproduce un sonido de alerta para notificaciones
+ */
 export const playNotificationSound = () => {
   try {
     const audio = new Audio('/notification-sound.mp3');
-    audio.volume = 0.5; // Volumen al 50%
+    audio.volume = 0.5;
     audio.play().catch(e => console.log('Error reproduciendo sonido:', e));
   } catch (error) {
     console.log('No se pudo reproducir el sonido de notificación');
   }
 };
 
-// Función para mostrar una notificación de prueba (útil para desarrollo)
+/**
+ * Muestra una notificación de prueba (útil para desarrollo)
+ */
 export const testNotification = (notificationContext, category = NotificationCategories.SISTEMA) => {
   if (!notificationContext) return null;
   
@@ -359,21 +375,15 @@ export const testNotification = (notificationContext, category = NotificationCat
     showPush: true,
     data: { 
       test: true,
-      timestamp: now.getTime()
+      timestamp: now.getTime(),
+      sound: true
     }
   };
-
+  
   // Para pruebas, intentamos guardar en servidor también
-  saveNotificationToServer(notification)
+  return saveNotificationToServer(notification)
     .then(serverNotification => {
-      if (serverNotification && serverNotification.id) {
-        return notificationContext.addNotification({
-          ...notification,
-          serverId: serverNotification.id
-        });
-      } else {
-        return notificationContext.addNotification(notification);
-      }
+      return notificationContext.addNotification(serverNotification);
     })
     .catch(() => {
       return notificationContext.addNotification(notification);

@@ -4,20 +4,29 @@ import {
   fetchUnreadNotifications, 
   markNotificationReadOnServer, 
   markAllNotificationsReadOnServer, 
-  deleteNotificationFromServer 
+  deleteNotificationFromServer,
+  playNotificationSound
 } from '../services/NotificationService';
 
+// Crear el contexto
 export const NotificationContext = createContext();
 
+// Proveedor del contexto de notificaciones
 export const NotificationProvider = ({ children }) => {
+  // Estado para almacenar las notificaciones
   const [notifications, setNotifications] = useState([]);
+  // Estado para el permiso de notificaciones
   const [permission, setPermission] = useState('default');
+  // Estado para el registro del Service Worker
   const [swRegistration, setSwRegistration] = useState(null);
+  // Estado para errores en el registro del Service Worker
   const [swRegistrationError, setSwRegistrationError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // Estado para indicar si se están cargando notificaciones
+  const [isLoading, setIsLoading] = useState(false);
+  // Estado para errores de sincronización
   const [syncError, setSyncError] = useState(null);
 
-  // Función para convertir la clave VAPID al formato requerido
+  // Función para convertir la clave VAPID al formato requerido para notificaciones push
   const urlBase64ToUint8Array = (base64String) => {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
     const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
@@ -29,18 +38,6 @@ export const NotificationProvider = ({ children }) => {
     }
     
     return outputArray;
-  };
-
-  // Función para reproducir sonido de notificación
-  const playNotificationSound = async () => {
-    try {
-      console.log('Reproduciendo sonido de notificación...');
-      const audio = new Audio('/notification-sound.mp3');
-      audio.volume = 0.5;
-      await audio.play();
-    } catch (audioError) {
-      console.warn('No se pudo reproducir el sonido de notificación:', audioError);
-    }
   };
 
   // Función auxiliar para mostrar notificación nativa como fallback
@@ -68,7 +65,6 @@ export const NotificationProvider = ({ children }) => {
           playNotificationSound();
         }
         
-        console.log('Notificación nativa mostrada correctamente');
         return true;
       } else {
         console.error('No hay permisos para mostrar notificaciones nativas');
@@ -114,32 +110,26 @@ export const NotificationProvider = ({ children }) => {
 
   // Registrar el Service Worker y comprobar permisos al cargar
   useEffect(() => {
-    // Comprobar soporte para notificaciones
     const checkPermissionAndRegisterSW = async () => {
       if ('Notification' in window) {
         setPermission(Notification.permission);
         
-        // Registrar el Service Worker para notificaciones
         if ('serviceWorker' in navigator) {
           try {
-            console.log('Intentando registrar el Service Worker...');
+            console.log('Verificando Service Worker existente...');
             
-            // En lugar de desregistrar los SW existentes, verificar si ya está registrado
-            let registration = null;
+            // Verificar si ya existe un Service Worker registrado
             const registrations = await navigator.serviceWorker.getRegistrations();
-            
-            // Buscar si ya existe el service worker de notificaciones
             const existingSW = registrations.find(reg => 
-              reg.scope === window.location.origin + '/' && 
-              reg.active && 
-              reg.active.scriptURL.includes('notification-sw.js')
+              reg.active && reg.active.scriptURL.includes('notification-sw.js')
             );
             
+            let registration;
             if (existingSW) {
-              console.log('Service Worker de notificaciones ya registrado, usándolo:', existingSW);
+              console.log('Service Worker ya registrado:', existingSW);
               registration = existingSW;
             } else {
-              // Registrar nuevo service worker
+              // Registrar un nuevo Service Worker
               console.log('Registrando nuevo Service Worker...');
               registration = await navigator.serviceWorker.register('/notification-sw.js', {
                 scope: '/'
@@ -150,11 +140,11 @@ export const NotificationProvider = ({ children }) => {
             setSwRegistration(registration);
             setSwRegistrationError(null);
             
-            // Si ya tenemos permisos, suscribirse
+            // Si ya tenemos permisos, configurar suscripción
             if (Notification.permission === 'granted') {
               await setupPushSubscription(registration);
               
-              // Asegurarse de que el service worker esté activado
+              // Iniciar sincronización de notificaciones si el Service Worker está activo
               if (registration.active) {
                 registration.active.postMessage({
                   type: 'INIT_NOTIFICATION_SYNC'
@@ -181,11 +171,6 @@ export const NotificationProvider = ({ children }) => {
     };
     
     checkPermissionAndRegisterSW();
-    
-    // Limpiar al desmontar
-    return () => {
-      // Nada que limpiar aquí, ya que no queremos desregistrar el SW al navegar
-    };
   }, []);
 
   // Cargar notificaciones del servidor al iniciar
@@ -195,15 +180,12 @@ export const NotificationProvider = ({ children }) => {
         setIsLoading(true);
         setSyncError(null);
         
-        // Obtener todas las notificaciones y convertirlas al formato local
         const serverNotifications = await fetchNotifications();
-        console.log('Notificaciones cargadas del servidor:', serverNotifications);
+        console.log('Notificaciones cargadas del servidor:', serverNotifications.length);
         
-        // No necesitamos más formato ya que la función fetchNotifications
-        // ya las convierte al formato local
         setNotifications(serverNotifications);
       } catch (error) {
-        console.error('Error al sincronizar notificaciones con el servidor:', error);
+        console.error('Error al cargar notificaciones:', error);
         setSyncError(error.message);
       } finally {
         setIsLoading(false);
@@ -212,7 +194,7 @@ export const NotificationProvider = ({ children }) => {
     
     loadNotificationsFromServer();
     
-    // Configurar un intervalo para sincronizar periódicamente (cada 2 minutos)
+    // Configurar un intervalo para sincronizar periódicamente
     const syncInterval = setInterval(() => {
       loadNotificationsFromServer();
     }, 120000); // 2 minutos
@@ -222,7 +204,7 @@ export const NotificationProvider = ({ children }) => {
     };
   }, []);
 
-  // Solicitar permisos para notificaciones push
+  // Solicitar permisos para notificaciones
   const requestPermission = async () => {
     console.log('Solicitando permisos de notificación...');
     
@@ -233,35 +215,35 @@ export const NotificationProvider = ({ children }) => {
         setPermission(result);
         
         if (result === 'granted') {
-          // Si no tenemos un Service Worker registrado, intentar registrarlo
+          // Registrar Service Worker si aún no tenemos uno
           if (!swRegistration) {
             if ('serviceWorker' in navigator) {
               try {
-                console.log('Registrando Service Worker durante solicitud de permiso...');
+                console.log('Registrando Service Worker tras permiso...');
                 const registration = await navigator.serviceWorker.register('/notification-sw.js', {
                   scope: '/'
                 });
-                console.log('Service Worker registrado con éxito durante solicitud de permiso:', registration);
+                console.log('Service Worker registrado exitosamente:', registration);
                 setSwRegistration(registration);
                 await setupPushSubscription(registration);
                 
-                // Iniciar sincronización de notificaciones
+                // Iniciar sincronización con el Service Worker
                 if (registration.active) {
                   registration.active.postMessage({
                     type: 'INIT_NOTIFICATION_SYNC'
                   });
                 }
               } catch (error) {
-                console.error('Error al registrar el Service Worker durante solicitud de permiso:', error);
+                console.error('Error al registrar el Service Worker:', error);
                 setSwRegistrationError(error.message);
               }
             }
           } else {
-            // Si ya tenemos el SW registrado, configurar suscripción
+            // Si ya tenemos un SW registrado, configurar suscripción
             console.log('Usando Service Worker ya registrado');
             await setupPushSubscription(swRegistration);
             
-            // Iniciar sincronización de notificaciones
+            // Iniciar sincronización con el Service Worker
             if (swRegistration.active) {
               swRegistration.active.postMessage({
                 type: 'INIT_NOTIFICATION_SYNC'
@@ -272,43 +254,42 @@ export const NotificationProvider = ({ children }) => {
         
         return result;
       } catch (error) {
-        console.error('Error al solicitar permiso de notificaciones:', error);
+        console.error('Error al solicitar permiso:', error);
         return 'error';
       }
     }
     return 'denied';
   };
 
-  // Enviar notificación push directamente (no requiere servidor)
+  // Enviar notificación push
   const sendPushNotification = async (notification) => {
-    console.log('Intentando enviar notificación push...', notification);
+    console.log('Enviando notificación push:', notification);
     
-    // Asegurarnos de que tenemos permisos
+    // Comprobar permisos
     if (Notification.permission !== 'granted') {
       console.error('No hay permiso para notificaciones push');
       return false;
     }
     
-    // Solo mostrar notificaciones no leídas
+    // No mostrar notificaciones leídas
     if (notification.read) {
-      console.log('No se muestra notificación push porque ya ha sido leída');
+      console.log('No se muestra la notificación porque ya está leída');
       return false;
     }
     
-    // Primera opción: usar showNotification del Service Worker si está disponible
     try {
-      // Verificar si el Service Worker está listo
+      // Verificar si el Service Worker está disponible
       if (swRegistration && swRegistration.active) {
-        console.log('Enviando notificación push vía Service Worker activo');
+        console.log('Enviando notificación vía Service Worker activo');
         
-        // Enviar la notificación usando el Service Worker
+        // Enviar notificación usando el Service Worker
         await swRegistration.showNotification(notification.title, {
           body: notification.message,
           icon: '/vite.svg',
           badge: '/vite.svg',
           vibrate: [100, 50, 100],
           requireInteraction: notification.data?.timeToShow ? true : false,
-          tag: `notification-${notification.id || Date.now()}`, // Identificador único
+          tag: `notification-${notification.id || Date.now()}`,
           data: {
             category: notification.category,
             url: notification.data?.url || '/',
@@ -324,18 +305,18 @@ export const NotificationProvider = ({ children }) => {
           ]
         });
         
-        console.log('Notificación push enviada correctamente vía Service Worker');
+        console.log('Notificación push enviada correctamente');
         
-        // Si la notificación incluye sonido, reproducirlo
+        // Reproducir sonido si está configurado
         if (notification.data?.sound) {
           playNotificationSound();
         }
         
         return true;
       } else {
-        console.log('Service Worker no está activo, intentando registrar uno nuevo');
+        console.log('Service Worker no disponible, intentando registrar uno nuevo');
         
-        // Intentar registrar el SW si no está disponible
+        // Intentar registrar el Service Worker
         if ('serviceWorker' in navigator) {
           try {
             const registration = await navigator.serviceWorker.register('/notification-sw.js', {
@@ -345,11 +326,9 @@ export const NotificationProvider = ({ children }) => {
             console.log('Service Worker registrado exitosamente:', registration);
             setSwRegistration(registration);
             
-            // Si el SW se acaba de registrar, esperar a que se active
             if (registration.installing || registration.waiting) {
-              console.log('Service Worker se está instalando, usando notificación nativa mientras tanto');
-              showNativeNotification(notification);
-              return true;
+              console.log('Service Worker instalándose, usando notificación nativa mientras tanto');
+              return showNativeNotification(notification);
             }
             
             if (registration.active) {
@@ -358,16 +337,16 @@ export const NotificationProvider = ({ children }) => {
               return sendPushNotification(notification);
             }
           } catch (error) {
-            console.error('Error registrando Service Worker para notificaciones:', error);
+            console.error('Error registrando Service Worker:', error);
             setSwRegistrationError(error.message);
-            // Fallar a notificación nativa
+            // Usar notificación nativa como fallback
             return showNativeNotification(notification);
           }
         }
       }
     } catch (error) {
-      console.error('Error al mostrar notificación push vía Service Worker:', error);
-      // Intentar notificación nativa como fallback
+      console.error('Error al mostrar notificación push:', error);
+      // Usar notificación nativa como fallback
       return showNativeNotification(notification);
     }
     
@@ -375,7 +354,7 @@ export const NotificationProvider = ({ children }) => {
     return showNativeNotification(notification);
   };
 
-  // Añadir una nueva notificación (ahora ya se gestiona en los servicios la sincronización con el servidor)
+  // Añadir una nueva notificación
   const addNotification = (notification) => {
     // Verificar si la notificación es válida
     if (!notification || !notification.title || !notification.message) {
@@ -390,15 +369,15 @@ export const NotificationProvider = ({ children }) => {
       ...notification
     };
     
-    // Verificación mejorada de duplicados
+    // Verificación de duplicados
     setNotifications((prev) => {
-      // Verificar si ya existe una notificación con el mismo ID de servidor
+      // Verificar duplicados por ID de servidor
       if (newNotification.serverId && prev.some(n => n.serverId === newNotification.serverId)) {
         console.log('Notificación duplicada por serverId, ignorando:', newNotification.serverId);
         return prev;
       }
       
-      // Verificar si ya existe una notificación con el mismo ID local
+      // Verificar duplicados por ID local
       if (prev.some(n => n.id === newNotification.id)) {
         console.log('Notificación duplicada por id local, ignorando:', newNotification.id);
         return prev;
@@ -416,7 +395,7 @@ export const NotificationProvider = ({ children }) => {
       );
       
       if (similarNotification) {
-        console.log('Notificación similar reciente encontrada, ignorando duplicado:', newNotification);
+        console.log('Notificación similar reciente encontrada, ignorando duplicado');
         return prev;
       }
       
@@ -424,13 +403,10 @@ export const NotificationProvider = ({ children }) => {
       return [newNotification, ...prev];
     });
     
-    // Enviar notificación push si hay permisos, se solicitó y no está leída
+    // Enviar notificación push si es necesario
     if (Notification.permission === 'granted' && 
         notification.showPush && 
         !notification.read) {
-      console.log('Enviando notificación push desde addNotification...');
-      
-      // Usar un pequeño delay para asegurar que el UI se actualice primero
       setTimeout(() => {
         sendPushNotification(newNotification);
       }, 300);
@@ -439,9 +415,9 @@ export const NotificationProvider = ({ children }) => {
     return newNotification.id;
   };
 
-  // Marcar una notificación como leída (sincronizando con el servidor)
+  // Marcar una notificación como leída
   const markAsRead = async (notificationId) => {
-    // Encontrar la notificación
+    // Buscar la notificación en el estado
     const notification = notifications.find(n => n.id === notificationId);
     
     if (!notification) {
@@ -451,7 +427,7 @@ export const NotificationProvider = ({ children }) => {
     
     console.log('Marcando como leída notificación:', notification);
     
-    // Actualizar el estado local primero para una UI responsiva
+    // Actualizar el estado local primero
     setNotifications((prev) => 
       prev.map((n) => 
         n.id === notificationId 
@@ -460,58 +436,58 @@ export const NotificationProvider = ({ children }) => {
       )
     );
     
-    // Si existe un ID de servidor, sincronizar con el backend
+    // Sincronizar con el servidor si tiene ID de servidor
     if (notification.serverId) {
       try {
         const result = await markNotificationReadOnServer(notification.serverId);
         if (result) {
-          console.log('Notificación marcada como leída exitosamente en el servidor:', notification.serverId);
+          console.log('Notificación marcada como leída en el servidor:', notification.serverId);
         } else {
-          console.error('Falló al marcar como leída en el servidor, pero la UI está actualizada');
+          console.error('Falló al marcar como leída en el servidor');
         }
       } catch (error) {
-        console.error('Error al marcar notificación como leída en el servidor:', error);
+        console.error('Error al marcar como leída en el servidor:', error);
       }
     } else {
-      console.log('La notificación no tiene ID de servidor, solo se marcó como leída localmente');
+      console.log('La notificación no tiene ID de servidor, solo se marcó localmente');
     }
   };
 
-  // Marcar todas las notificaciones como leídas (sincronizando con el servidor)
+  // Marcar todas las notificaciones como leídas
   const markAllAsRead = async () => {
     console.log('Marcando todas las notificaciones como leídas');
     
-    // Actualizar el estado local primero para una UI responsiva
+    // Actualizar el estado local primero
     setNotifications((prev) => 
       prev.map((notification) => ({ ...notification, read: true }))
     );
     
-    // Sincronizar con el backend
+    // Sincronizar con el servidor
     try {
       const result = await markAllNotificationsReadOnServer();
       if (result) {
-        console.log('Todas las notificaciones marcadas como leídas en el servidor exitosamente');
+        console.log('Todas las notificaciones marcadas como leídas en el servidor');
       } else {
-        console.error('Falló al marcar todas como leídas en el servidor, pero la UI está actualizada');
+        console.error('Falló al marcar todas como leídas en el servidor');
       }
     } catch (error) {
-      console.error('Error al marcar todas las notificaciones como leídas en el servidor:', error);
+      console.error('Error al marcar todas como leídas en el servidor:', error);
     }
   };
 
-  // Eliminar una notificación (sincronizando con el servidor)
+  // Eliminar una notificación
   const removeNotification = async (notificationId) => {
-    // Encontrar la notificación
+    // Buscar la notificación en el estado
     const notification = notifications.find(n => n.id === notificationId);
     
     if (!notification) return;
     
-    // Actualizar el estado local primero para una UI responsiva
+    // Actualizar el estado local primero
     setNotifications((prev) => 
       prev.filter((n) => n.id !== notificationId)
     );
     
-    // Si existe un ID de servidor, sincronizar con el backend
+    // Sincronizar con el servidor si tiene ID de servidor
     if (notification.serverId) {
       try {
         await deleteNotificationFromServer(notification.serverId);
@@ -537,9 +513,46 @@ export const NotificationProvider = ({ children }) => {
       setSyncError(null);
       
       const serverNotifications = await fetchNotifications();
-      console.log('Sincronización manual: Notificaciones cargadas del servidor:', serverNotifications);
+      console.log('Sincronización manual: Notificaciones del servidor:', serverNotifications.length);
       
-      setNotifications(serverNotifications);
+      // Fusionar notificaciones conservando las existentes para evitar duplicados
+      setNotifications(prevNotifications => {
+        // Crear un mapa de notificaciones existentes por serverId
+        const existingNotificationsMap = new Map();
+        prevNotifications.forEach(notification => {
+          if (notification.serverId) {
+            existingNotificationsMap.set(notification.serverId, notification);
+          }
+        });
+        
+        // Procesar las notificaciones del servidor
+        const mergedNotifications = serverNotifications.map(notification => {
+          // Si ya existe una notificación con este serverId, conservar su estado local
+          if (notification.serverId && existingNotificationsMap.has(notification.serverId)) {
+            const existingNotification = existingNotificationsMap.get(notification.serverId);
+            // Actualizar solo si hay cambios relevantes
+            if (existingNotification.read !== notification.read) {
+              return {
+                ...existingNotification,
+                read: notification.read // Mantener el estado de lectura actualizado
+              };
+            }
+            return existingNotification; // Conservar la notificación existente
+          }
+          // Es una notificación nueva del servidor
+          return notification;
+        });
+        
+        // Agregar notificaciones locales que no existen en el servidor
+        const localOnlyNotifications = prevNotifications.filter(notification => 
+          !notification.serverId || !serverNotifications.some(sn => sn.serverId === notification.serverId)
+        );
+        
+        // Combinar y ordenar por fecha descendente
+        return [...mergedNotifications, ...localOnlyNotifications]
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      });
+      
       return true;
     } catch (error) {
       console.error('Error en sincronización manual:', error);
@@ -560,23 +573,21 @@ export const NotificationProvider = ({ children }) => {
       
       if (unreadNotifications.length > 0) {
         // Detectar notificaciones nuevas (no presentes en el estado actual)
-        const newNotifications = unreadNotifications.filter(newNotif => {
-          return !notifications.some(existingNotif => 
+        const newNotifications = unreadNotifications.filter(newNotif => 
+          !notifications.some(existingNotif => 
             (newNotif.serverId && existingNotif.serverId === newNotif.serverId) ||
             (newNotif.id && existingNotif.id === newNotif.id)
-          );
-        });
+          )
+        );
         
         console.log('Nuevas notificaciones detectadas:', newNotifications.length);
         
         // Añadir solo las notificaciones nuevas al estado
-        // y mostrar push notifications
         newNotifications.forEach(notification => {
-          const added = addNotification({
+          addNotification({
             ...notification,
             showPush: true // Asegurar que se muestre como push notification
           });
-          console.log('Notificación añadida con ID:', added);
         });
       }
       
@@ -621,7 +632,8 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  const value = {
+  // Valores expuestos por el contexto
+  const contextValue = {
     notifications,
     isLoading,
     syncError,
@@ -641,10 +653,11 @@ export const NotificationProvider = ({ children }) => {
   };
 
   return (
-    <NotificationContext.Provider value={value}>
+    <NotificationContext.Provider value={contextValue}>
       {children}
     </NotificationContext.Provider>
   );
 };
 
+// Hook personalizado para usar el contexto de notificaciones
 export const useNotifications = () => useContext(NotificationContext);

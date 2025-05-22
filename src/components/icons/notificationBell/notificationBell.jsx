@@ -16,48 +16,37 @@ function NotificationBell({ category }) {
     syncWithServer
   } = useNotifications();
 
-  // Estado local para el conteo
-  const [count, setCount] = useState(0);
+  // Contador de notificaciones no leídas para esta categoría
+  const count = getUnreadCount(category);
 
   // Filtrar las notificaciones por categoría y ordenarlas por fecha
   const categoryNotifications = notifications
     .filter(notification => notification.category === category)
     .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-  // Actualizar el conteo cuando cambien las notificaciones
+  // Debugging: Imprimimos información relevante para diagnóstico
   useEffect(() => {
-    const unreadCount = getUnreadCount(category);
-    setCount(unreadCount);
-    
-    // Actualizar el favicon con un indicador visual si hay notificaciones no leídas
-    updateFaviconBadge(unreadCount > 0);
-    
-    console.log(`NotificationBell: Categoría ${category}, notificaciones no leídas: ${unreadCount}`);
-  }, [notifications, category, getUnreadCount]);
+    console.log(`NotificationBell (${category}): Contador actual: ${count}`);
+    console.log(`NotificationBell: Total notificaciones: ${notifications.length}`);
+    console.log(`NotificationBell: Notificaciones de categoría ${category}: ${categoryNotifications.length}`);
+  }, [count, notifications, category, categoryNotifications.length]);
 
-  // Función para actualizar el favicon con un indicador visual
-  const updateFaviconBadge = (hasUnread) => {
-    const favicon = document.querySelector('link[rel="icon"]');
-    if (!favicon) return;
-    
-    if (hasUnread) {
-      if (!favicon.href.includes('notification')) {
-        // Aquí podrías cambiar a un favicon con un indicador de notificación
-        // Por ahora solo cambiamos la clase del favicon
-        favicon.dataset.hasNotification = 'true';
-      }
-    } else {
-      favicon.dataset.hasNotification = 'false';
+  // Para evitar perder notificaciones importantes, sincronizar cuando se abre el menú
+  useEffect(() => {
+    if (isOpen) {
+      syncWithServer().then(() => {
+        console.log('Sincronización forzada completada');
+      });
     }
-  };
+  }, [isOpen, syncWithServer]);
 
   // Cerrar el dropdown al hacer clic fuera
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
       }
-    };
+    }
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -65,43 +54,20 @@ function NotificationBell({ category }) {
     };
   }, []);
 
-  // Forzar sincronización al abrir el dropdown
-  useEffect(() => {
-    if (isOpen) {
-      // Sincronizar con el servidor cuando se abre el dropdown
-      syncWithServer().then(() => {
-        console.log('NotificationBell: Sincronización forzada completada');
-      });
-    }
-  }, [isOpen, syncWithServer]);
-
   // Manejar clic en la campana
   const handleBellClick = () => {
     setIsOpen(!isOpen);
-    
-    // Si se está abriendo, marcar todas como leídas con un pequeño retraso
-    if (!isOpen && categoryNotifications.length > 0) {
-      setTimeout(() => {
-        categoryNotifications.forEach(notification => {
-          if (!notification.read) {
-            markAsRead(notification.id);
-          }
-        });
-      }, 2000); // Esperar 2 segundos antes de marcar como leídas
-    }
   };
 
-  // Manejar clic en notificación individual
+  // Marcar una notificación como leída al hacer clic en ella
   const handleNotificationClick = (notification) => {
-    console.log('Clic en notificación:', notification);
-    
     // Solo marcar como leída si no lo está ya
     if (!notification.read) {
       console.log('Marcando notificación como leída:', notification.id);
       markAsRead(notification.id);
     }
     
-    // Si hay URL en los datos de la notificación, navegar a ella
+    // Navegar a la URL si está definida
     if (notification.data?.url) {
       window.location.href = notification.data.url;
     }
@@ -110,7 +76,6 @@ function NotificationBell({ category }) {
   // Marcar todas las notificaciones como leídas
   const handleMarkAllAsRead = (e) => {
     e.stopPropagation();
-    console.log('Marcando todas las notificaciones como leídas para la categoría:', category);
     
     // Solo si hay notificaciones no leídas
     const unreadNotifications = categoryNotifications.filter(n => !n.read);
@@ -119,7 +84,7 @@ function NotificationBell({ category }) {
     }
   };
 
-  // Eliminar una notificación específica
+  // Eliminar una notificación
   const handleRemoveNotification = (e, id) => {
     e.stopPropagation();
     removeNotification(id);
@@ -140,7 +105,7 @@ function NotificationBell({ category }) {
     return date.toLocaleDateString();
   };
 
-  // Formatear el título de categoría
+  // Obtener el título según la categoría
   const getCategoryTitle = () => {
     switch (category) {
       case 'pedidos':
@@ -157,16 +122,14 @@ function NotificationBell({ category }) {
   return (
     <div className="notification-bell" ref={dropdownRef}>
       <button 
-        className={`notification-button ${count > 0 ? 'has-notifications' : ''}`}
-        onClick={handleBellClick} 
-        aria-label={`${getCategoryTitle()} (${count} no leídas)`}
-        data-count={count}
+        className="notification-button"
+        onClick={handleBellClick}
+        aria-label="Notificaciones"
       >
-        <Bell size={24} />
+        <Bell size={24} color={count > 0 ? "#ff6600" : "#333333"} />
+        
         {count > 0 && (
-          <div className="notification-count" aria-label={`${count} notificaciones no leídas`}>
-            {count > 99 ? '99+' : count}
-          </div>
+          <span className="notification-badge">{count > 99 ? '99+' : count}</span>
         )}
       </button>
 
@@ -181,7 +144,6 @@ function NotificationBell({ category }) {
             )}
           </div>
 
-          {/* Sección de permisos si no están concedidos */}
           {permissionStatus !== 'granted' && (
             <div className="notification-permission">
               <p>Activa las notificaciones para recibir alertas importantes</p>
