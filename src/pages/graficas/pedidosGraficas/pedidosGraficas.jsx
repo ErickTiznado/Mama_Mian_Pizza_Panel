@@ -45,28 +45,9 @@ function PedidosGraficas({ fechasFiltradas }) {
           </div>
           
           {/* Gráfica de pedidos semanales */}
-          <div className="chart-container">
-            <div className="chart-header">
-              <h3>
-                <FontAwesomeIcon icon={faCalendarAlt} style={{ marginRight: '10px', color: '#FEB248' }} />
-                Pedidos por Día de Semana
-              </h3>
-              <p className="chart-description">Distribución de pedidos por día de la semana</p>
-            </div>
-            <PedidosSemanales colorPrimario="#FEB248" fechasFiltradas={fechasFiltradas} />
-          </div>
           
           {/* Nueva sección: Mapa de pedidos */}
-          <div className="chart-container">
-            <div className="chart-header">
-              <h3>
-                <FontAwesomeIcon icon={faMapMarkedAlt} style={{ marginRight: '10px', color: '#FEB248' }} />
-                Mapa de Pedidos
-              </h3>
-              <p className="chart-description">Distribución geográfica de los pedidos recientes</p>
-            </div>
-            <MapaPedidos colorMarcador="#FEB248" fechasFiltradas={fechasFiltradas} />
-          </div>
+
           
           {/* Gráfica de métodos de entrega */}
           <div className="chart-container">
