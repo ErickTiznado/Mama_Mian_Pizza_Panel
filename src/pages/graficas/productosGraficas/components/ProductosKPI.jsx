@@ -4,7 +4,7 @@ import './ProductosKPI.css';
 import axios from 'axios';
 
 // API Base URL
-const API_BASE_URL = "https://server.tiznadodev.com/api/orders";
+const API_BASE_URL = "https://server.tiznadodev.com/api";
 
 // Colores de la marca MamaMianPizza
 const brandColors = {
@@ -13,49 +13,48 @@ const brandColors = {
   complementos: '#FEB248'  // Amarillo de marca
 };
 
-const ProductosKPI = () => {
+const ProductosKPI = ({ fechasFiltradas }) => {
   const [kpiData, setKpiData] = useState({
-    margenPromedio: 42.5, // Porcentaje de margen promedio de todos los productos
-    productosActivos: 28, // Número de productos disponibles actualmente
-    rotacionInventario: 3.2, // Rotación de inventario mensual
+    margenPromedio: 42.5, 
+    productosActivos: 0, // Inicializado a 0 para mostrar que no hay datos hasta que se carguen
+    rotacionInventario: 3.2,
     productosMasRentables: ['Pizza de Camarón', 'Pizza de Curiles', 'Cheese Sticks'],
-    calificacionPromedio: 4.7 // Calificación promedio de los productos (de 1 a 5)
+    calificacionPromedio: 4.7
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Esta función podría obtener datos reales de la API
-    const fetchKPIData = async () => {
+    const fetchProductosActivos = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
+        console.log("Obteniendo total de productos desde:", `${API_BASE_URL}/content/totalProducts/totalProducts`);
         
-        // Simulamos obtención de datos (esto se puede reemplazar con llamadas reales a la API)
-        // En un caso real, aquí haríamos llamadas a API para obtener los diferentes KPIs
-        // const response = await axios.get(`${API_BASE_URL}/productos/kpi`);
-        // setKpiData(response.data);
+        // Llamada a la API para obtener el total de productos
+        const response = await axios.get(`${API_BASE_URL}/totalProducts`);
+        console.log("Respuesta de la API totalProducts:", response.data);
         
-        // Simulamos éxito de carga después de 1 segundo
-        setTimeout(() => {
-          // Agregamos un poco de variación aleatoria para simular datos en vivo
-          setKpiData({
-            margenPromedio: (40 + Math.random() * 5).toFixed(1),
-            productosActivos: Math.floor(25 + Math.random() * 8),
-            rotacionInventario: (2.8 + Math.random() * 0.8).toFixed(1),
-            productosMasRentables: ['Pizza de Camarón', 'Pizza de Curiles', 'Cheese Sticks'],
-            calificacionPromedio: (4.5 + Math.random() * 0.5).toFixed(1)
-          });
-          setLoading(false);
-        }, 1000);
-        
+        if (response.data && response.data.total !== undefined) {
+          // Actualizar solo el conteo de productos activos
+          setKpiData(prevState => ({
+            ...prevState,
+            productosActivos: response.data.total
+          }));
+          console.log("Total de productos activos actualizado:", response.data.total);
+        } else {
+          console.error("La API no devolvió un objeto con la propiedad 'total'", response.data);
+          setError("Formato de respuesta inválido");
+        }
       } catch (err) {
-        setError("Error al cargar KPIs de productos: " + err.message);
+        console.error("Error al obtener productos activos:", err);
+        setError("Error al cargar productos activos");
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchKPIData();
-  }, []);
+    fetchProductosActivos();
+  }, [fechasFiltradas]);
 
   const renderKPIItem = (icon, title, value, suffix = '', className = '') => {
     return (
@@ -66,6 +65,8 @@ const ProductosKPI = () => {
           <div className="productos-kpi-value">
             {loading ? (
               <div className="kpi-loading">Cargando...</div>
+            ) : error && title === "Productos Activos" ? (
+              <div className="kpi-error">Error</div>
             ) : (
               <>
                 <span>{value}</span>

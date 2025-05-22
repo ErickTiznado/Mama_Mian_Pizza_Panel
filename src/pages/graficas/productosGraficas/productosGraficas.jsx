@@ -189,13 +189,6 @@ function ProductosGraficas({ fechasFiltradas }) {
 
   // Determinar qué datos mostrar en el gráfico
   const renderLineGraph = () => {
-    if (loading) {
-      return <div className="loading-indicator">Cargando datos...</div>;
-    }
-    
-    if (error) {
-      return <div className="error-message">{error}</div>;
-    }
     
     if (!evolutionData.length) {
       return (
@@ -243,13 +236,7 @@ function ProductosGraficas({ fechasFiltradas }) {
 
   return (
     <div className="productos-graficas-container">
-      <h2 className="dashboard-title">Análisis de Productos</h2>
 
-      {/* Indicador de período seleccionado */}
-      <div className="periodo-indicador">
-        <FontAwesomeIcon icon={faCalendarAlt} style={{ color: '#FEB248', marginRight: '8px' }} />
-        Periodo: <span className="periodo-texto">{fechasFiltradas ? `${formatoFecha(fechasFiltradas.inicio)} - ${formatoFecha(fechasFiltradas.fin)}` : "Último mes"}</span>
-      </div>
       
       {/* Sección de KPIs de productos */}
       <ProductosKPI fechasFiltradas={fechasFiltradas} colorPrimario="#FEB248" />
@@ -274,23 +261,7 @@ function ProductosGraficas({ fechasFiltradas }) {
           
           {/* Distribución de categorías y Tendencias */}
           <div className="productos-charts-row">
-            <div className="chart-col-50">
-              <div className="chart-container">
-                <div className="chart-header">
-                  <h3>
-                    <FontAwesomeIcon icon={faChartPie} style={{ marginRight: '10px', color: '#FEB248' }} />
-                    Distribución por Categorías
-                  </h3>
-                  <p className="chart-description">
-                    Porcentaje de ventas por cada categoría de productos
-                  </p>
-                </div>
-                <DistribucionCategorias 
-                  fechasFiltradas={fechasFiltradas} 
-                  colores={['#FEB248', '#3D84B8', '#821717', '#202938']} 
-                />
-              </div>
-            </div>
+
             <div className="chart-col-50">
               <div className="chart-container">
                 <div className="chart-header">
