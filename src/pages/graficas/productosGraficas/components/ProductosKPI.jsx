@@ -31,7 +31,7 @@ const ProductosKPI = ({ fechasFiltradas }) => {
         console.log("Obteniendo total de productos desde:", `${API_BASE_URL}/content/totalProducts/totalProducts`);
         
         // Llamada a la API para obtener el total de productos
-        const response = await axios.get(`${API_BASE_URL}/totalProducts`);
+        const response = await axios.get(`${API_BASE_URL}/content/totalProducts`);
         console.log("Respuesta de la API totalProducts:", response.data);
         
         if (response.data && response.data.total !== undefined) {
