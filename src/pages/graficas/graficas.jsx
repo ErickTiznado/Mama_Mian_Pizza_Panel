@@ -129,13 +129,7 @@ function Graficas() {
         {/* Cabecera del panel */}
         <div className="graficas-header">
           <h1>Análisis y Estadísticas</h1>
-          <button
-            className="graficas-btn-refrescar"
-            onClick={aplicarFiltros}
-          >
-            <FontAwesomeIcon icon={faChartLine} style={{ marginRight: '10px' }} />
-            Actualizar Datos
-          </button>
+
         </div>
 
         {/* Contenido principal */}
@@ -168,9 +162,7 @@ function Graficas() {
           {/* Contador de resultados */}
           {showFilters && (
             <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
-              <div className="graficas-resultados-contador">
-                Periodo: <span className="graficas-resaltado">{obtenerTextoPeriodo()}</span>
-              </div>
+
             </div>
           )}
 

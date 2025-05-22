@@ -24,10 +24,7 @@ function PedidosGraficas({ fechasFiltradas }) {
 
   return (
     <div className="pedidos-graficas-container">
-      <div className="periodo-indicador">
-        <FontAwesomeIcon icon={faCalendarAlt} style={{ color: '#FEB248' }} />
-        Periodo: <span className="periodo-texto">{textoPeriodo}</span>
-      </div>
+
       
       {/* Sección de KPIs */}
       <PedidosKPI fechasFiltradas={fechasFiltradas} />
