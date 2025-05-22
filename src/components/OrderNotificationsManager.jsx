@@ -1,22 +1,28 @@
 import { useEffect } from 'react';
 import { useNotifications } from '../context/NotificationContext';
-import { startOrderPolling, stopOrderPolling } from '../services/PedidosService';
 
 // Este componente no renderiza nada, solo gestiona las notificaciones en segundo plano
-const OrderNotificationsManager = () => {
+const NotificationsPollingManager = () => {
   const notificationContext = useNotifications();
 
   useEffect(() => {
-    console.log('Iniciando gestor de notificaciones de pedidos...');
+    console.log('Iniciando gestor de notificaciones...');
     
     // Solo iniciar el polling si tenemos permisos de notificación
     if (notificationContext.permissionStatus === 'granted') {
-      // Iniciar el servicio de polling (verificar cada 5 segundos)
-      const stopPolling = startOrderPolling(notificationContext, 5000);
+      // Verificar notificaciones no leídas inmediatamente al iniciar
+      notificationContext.loadUnreadNotifications();
+      
+      // Configurar polling para verificar notificaciones no leídas cada 15 segundos
+      const pollingInterval = setInterval(() => {
+        console.log('Ejecutando polling de notificaciones...');
+        notificationContext.loadUnreadNotifications();
+      }, 15000);
       
       // Detener el polling cuando el componente se desmonte
       return () => {
-        stopPolling();
+        clearInterval(pollingInterval);
+        console.log('Polling de notificaciones detenido');
       };
     } else {
       console.log('Las notificaciones no están habilitadas. El polling no se iniciará.');
@@ -27,4 +33,4 @@ const OrderNotificationsManager = () => {
   return null;
 };
 
-export default OrderNotificationsManager;
+export default NotificationsPollingManager;

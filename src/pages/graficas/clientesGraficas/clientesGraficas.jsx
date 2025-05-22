@@ -9,37 +9,21 @@ import { faUsers, faTrophy, faArrowUp, faCalendarAlt, faChartLine, faUserTag } f
 const API_BASE_URL = "https://server.tiznadodev.com/api";
 
 // Datos de muestra para cuando la API no retorna datos
-const sampleClientesChartData = [
-  { month: "January", nuevos: 42, recurrentes: 138 },
-  { month: "February", nuevos: 58, recurrentes: 147 },
-  { month: "March", nuevos: 65, recurrentes: 172 },
-  { month: "April", nuevos: 47, recurrentes: 143 },
-  { month: "May", nuevos: 73, recurrentes: 157 },
-  { month: "June", nuevos: 61, recurrentes: 165 },
-];
 
-// Top customers sample data
-const sampleTopClientes = [
-  { nombre: "Carlos Méndez", pedidos: 24, gasto: "$352.80" },
-  { nombre: "María López", pedidos: 18, gasto: "$287.50" },
-  { nombre: "Juan Rodríguez", pedidos: 15, gasto: "$231.40" },
-  { nombre: "Ana García", pedidos: 12, gasto: "$198.75" },
-  { nombre: "Pedro Sánchez", pedidos: 10, gasto: "$167.90" },
-];
 
 function ClientesGraficas({ fechasFiltradas }) {
   // Estados para manejar los datos
   const [clientesChartData, setClientesChartData] = useState([]);
   const [topClientes, setTopClientes] = useState([]);
   const [kpiData, setKpiData] = useState({
-    totalClientes: 1258,
-    clientesNuevos: 186,
-    tasaRetencion: 78,
-    ticketPromedio: 24.50,
-    tendenciaTotal: 12,
-    tendenciaNuevos: 8,
-    tendenciaRetencion: 5,
-    tendenciaTicket: 3
+    totalClientes: 0,
+    clientesNuevos: 0,
+    tasaRetencion: 0,
+    ticketPromedio: 0,
+    tendenciaTotal: 0,
+    tendenciaNuevos: 0,
+    tendenciaRetencion: 0,
+    tendenciaTicket: 0
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -348,10 +332,7 @@ function ClientesGraficas({ fechasFiltradas }) {
 
   return (
     <div className="clientes-graficas-container">
-      <div className="periodo-indicador">
-        <FontAwesomeIcon icon={faCalendarAlt} style={{ color: '#FEB248', marginRight: '8px' }} />
-        Periodo: <span className="periodo-texto">{textoPeriodo}</span>
-      </div>
+
       
       {/* Selector de segmento de clientes */}
       <div className="segmento-selector">

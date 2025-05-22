@@ -1,15 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PedidosRecientes from "../pedidosRecientes/pedidosRecientes";
-import PedidosKPI from "./components/PedidosKPI";
-import PedidosSemanales from "./components/PedidosSemanales";
-import MetodoEntregaChart from "./components/MetodoEntregaChart";
 import EvolucionMensual from "./components/EvolucionMensual";
-import MapaPedidos from "./components/MapaPedidos";
+import MetodoEntregaChart from "./components/MetodoEntregaChart";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartLine, faMapMarkedAlt, faTruck, faUsers, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import { faChartLine, faTruck, faUsers } from '@fortawesome/free-solid-svg-icons';
 import "./pedidosGraficas.css";
 
 function PedidosGraficas({ fechasFiltradas }) {
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  
+  // Efecto para indicar que los datos se han cargado
+  useEffect(() => {
+    // Simulamos un tiempo de carga para mejorar la experiencia visual
+    const timer = setTimeout(() => {
+      setIsDataLoaded(true);
+    }, 800);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
   // Formatea la fecha para mostrarla en la UI
   const formatearFecha = (fecha) => {
     if (!fecha) return "";
@@ -24,30 +33,29 @@ function PedidosGraficas({ fechasFiltradas }) {
 
   return (
     <div className="pedidos-graficas-container">
-
-      
-      {/* Sección de KPIs */}
-      <PedidosKPI fechasFiltradas={fechasFiltradas} />
+      <div className="periodo-filtrado">
+        <span>Período: </span>
+        <strong>{textoPeriodo}</strong>
+      </div>
       
       {/* Gráficas y tablas principales */}
       <div className="pedidos-main-content">
         <div className="pedidos-charts-column">
-          {/* Gráfica de evolución mensual con altura fija */}
+          {/* Gráfica de evolución mensual */}
           <div className="chart-container">
             <div className="chart-header">
               <h3>
                 <FontAwesomeIcon icon={faChartLine} style={{ marginRight: '10px', color: '#FEB248' }} />
                 Evolución Mensual
               </h3>
-              <p className="chart-description">Tendencia de pedidos y ventas durante los últimos meses</p>
+              <p className="chart-description">Tendencia de pedidos por tipo de entrega durante los últimos meses</p>
             </div>
-            <EvolucionMensual colorPrimario="#FEB248" colorSecundario="#3D84B8" fechasFiltradas={fechasFiltradas} />
+            <EvolucionMensual 
+              colorPrimario="#FEB248" 
+              colorSecundario="#3D84B8" 
+              fechasFiltradas={fechasFiltradas} 
+            />
           </div>
-          
-          {/* Gráfica de pedidos semanales */}
-          
-          {/* Nueva sección: Mapa de pedidos */}
-
           
           {/* Gráfica de métodos de entrega */}
           <div className="chart-container">

@@ -81,32 +81,12 @@ const OrderManager = () => {
       setOrders(response.data);
       setPaginaActual(1); // Reset de paginación al cambiar filtros
       setLoading(false);
-
-      // Notificar sobre nuevos pedidos pendientes 
-      if (status === "pendiente") {
-        const nuevosOrdenes = response.data.filter(order => 
-          // Consideramos nuevos pedidos aquellos que llegaron en la última hora
-          new Date(order.fecha_pedido) > new Date(Date.now() - 60 * 60 * 1000)
-        );
-        
-        if (nuevosOrdenes.length > 0) {
-          nuevosOrdenes.forEach(orden => {
-            createOrderNotification(notificationContext, orden);
-          });
-        }
-      }
+      
+      // Eliminamos la creación automática de notificaciones para evitar duplicados
     } catch (err) {
-      setError("Error al cargar los pedidos: " + err.message);
       setLoading(false);
-      console.error(`Error fetching orders with status ${status}:`, err);
-      // Mostrar detalles del error
-      if (err.response) {
-        console.error("Detalles del error:", {
-          status: err.response.status,
-          statusText: err.response.statusText,
-          data: err.response.data
-        });
-      }
+      setError("Error al cargar los pedidos: " + err.message);
+      console.error("Error fetching orders:", err);
     }
   };
 
@@ -308,7 +288,7 @@ const OrderManager = () => {
           
           // Fin de la semana anterior (domingo)
           fechaFin = new Date(fechaInicio);
-          fechaFin.setDate(fechaInicio.getDate() + 6);
+          fechaFin.setDate(fechaFin.getDate() + 6);
           fechaFin.setHours(23, 59, 59, 999);
           break;
           

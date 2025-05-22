@@ -3,7 +3,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import axios from 'axios';
 import './EvolucionMensual.css';
 
-const EvolucionMensual = () => {
+const EvolucionMensual = ({ colorPrimario, colorSecundario, fechasFiltradas }) => {
   const [dataMensual, setDataMensual] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,8 +14,8 @@ const EvolucionMensual = () => {
 
   // Colores corporativos para las gráficas
   const BRAND_COLORS = {
-    delivery: 'rgba(254, 178, 72, 1)', // color-brand-yellow
-    recogida: 'rgba(153, 27, 27, 1)',  // color-brand-red
+    delivery: colorPrimario || 'rgba(254, 178, 72, 1)', // color-brand-yellow
+    recogida: colorSecundario || 'rgba(153, 27, 27, 1)', // color-brand-red
     cartesianGrid: '#374151',
     tooltip: '#242424',
     text: '#FFFFFF'

@@ -1,9 +1,9 @@
 .pedidos-graficas-container {
-  width: 100%;
-  padding: 0.8rem; /* Reducido el padding general */
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding: 20px;
+  width: 100%;
 }
 
 .pedidos-graficas-container h2 {
@@ -28,12 +28,28 @@
   color: #FEB248;
 }
 
+/* Estilos para el filtrado por periodo */
+.periodo-filtrado {
+  background-color: rgba(254, 178, 72, 0.1);
+  padding: 8px 15px;
+  border-radius: 6px;
+  border-left: 4px solid #FEB248;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
 /* Layout principal de contenido */
 .pedidos-main-content {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 20px;
   width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .pedidos-main-content {
+    grid-template-columns: 1fr;
+  }
 }
 
 .pedidos-charts-column {
@@ -65,25 +81,13 @@
   font-weight: 600;
 }
 
-.pedidos-recientes-box {
-  height: 100%;
-  background-color: var(--color-secondary);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  border: 1px solid #374151;
-  display: flex;
-  flex-direction: column; /* Asegurar que el contenido se extienda correctamente */
-  flex: 1;
-  overflow-y: auto;
-  max-height: 620px;
-}
-
 /* Contenedores de gráficos */
 .chart-container {
-  background-color: #1a2332;
+  background-color: #1a1a1a;
   border-radius: 8px;
-  padding: 15px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  height: fit-content;
   border: 1px solid #374151;
   margin-bottom: 0;
   min-height: 300px;
@@ -93,19 +97,19 @@
 
 .chart-header {
   margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #374151;
 }
 
 .chart-header h3 {
-  color: #FEB248;
   font-size: 1.2rem;
-  margin: 0 0 8px 0;
+  margin-bottom: 5px;
+  color: #e5e7eb;
+  display: flex;
+  align-items: center;
 }
 
 .chart-description {
-  font-size: 0.85rem;
   color: #9ca3af;
+  font-size: 0.9rem;
   margin: 0;
 }
 
@@ -288,21 +292,37 @@
   text-align: center;
 }
 
+/* Estilos para el botón de actualización manual */
+.update-data-button {
+  background-color: #374151;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.update-data-button:hover {
+  background-color: #4b5563;
+}
+
 .reload-button {
   background-color: #FEB248;
-  color: #821717;
+  color: #1a1a1a;
   border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  font-weight: 600;
+  padding: 8px 15px;
+  border-radius: 4px;
+  font-weight: 500;
+  margin-top: 10px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s;
 }
 
 .reload-button:hover {
-  background-color: #ffa726;
-  transform: translateY(-2px);
+  background-color: #ffc678;
 }
 
 @keyframes pulse {

@@ -14,7 +14,7 @@ import OrderManager from './components/pedidos/OrderManager';
 import GestionClientes from './components/GestionClientes/GestionClientes';
 import Inventario from './components/Inventario/Inventario';
 import Graficas from './pages/graficas/graficas';
-import OrderNotificationsManager from './components/OrderNotificationsManager';
+import NotificationsPollingManager from './components/OrderNotificationsManager';
 
 // Importamos el contexto de notificaciones
 import { NotificationProvider } from './context/NotificationContext';
@@ -23,7 +23,7 @@ function App() {
   return (
     <NotificationProvider>
       {/* Gestor de notificaciones en tiempo real */}
-      <OrderNotificationsManager />
+      <NotificationsPollingManager />
       
       <BrowserRouter>
         <main className='container'>

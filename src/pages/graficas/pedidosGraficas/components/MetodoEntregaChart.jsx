@@ -3,48 +3,84 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recha
 import axios from 'axios';
 import './MetodoEntregaChart.css';
 
-// Colores corporativos para las gráficas
-const BRAND_COLORS = [
-  'rgba(254, 178, 72, 1)', // color-brand-yellow para delivery
-  'rgba(153, 27, 27, 1)'   // color-brand-red para recogida
-];
-
-const MetodoEntregaChart = () => {
+const MetodoEntregaChart = ({ colores, fechasFiltradas }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [noData, setNoData] = useState(false);
 
   // URL base para la API de pedidos
-  const API_BASE_URL = "https://server.tiznadodev.com/api/orders";
+  const API_BASE_URL = "https://server.tiznadodev.com/api";
 
-  // Obtener los últimos 30 días
+  // Colores corporativos para las gráficas
+  const BRAND_COLORS = colores || [
+    'rgba(254, 178, 72, 1)', // color-brand-yellow para delivery
+    'rgba(153, 27, 27, 1)'   // color-brand-red para recogida
+  ];
+
+  // Obtener los últimos 30 días si no hay filtros
   const obtenerUltimos30Dias = () => {
     const hoy = new Date();
     const hace30Dias = new Date(hoy);
     hace30Dias.setDate(hoy.getDate() - 30);
     hace30Dias.setHours(0, 0, 0, 0);
     
-    return hace30Dias;
+    return {
+      inicio: hace30Dias,
+      fin: new Date(hoy.setHours(23, 59, 59, 999))
+    };
   };
 
   const fetchMetodosEntrega = async () => {
     try {
       setLoading(true);
+      setError(null);
+      setNoData(false);
+      
+      // Determinar el rango de fechas a utilizar
+      const rangoFechas = fechasFiltradas || obtenerUltimos30Dias();
+      const fechaInicio = new Date(rangoFechas.inicio);
+      const fechaFin = new Date(rangoFechas.fin);
+      
+      console.log(`Obteniendo datos de métodos de entrega desde ${fechaInicio.toLocaleDateString()} hasta ${fechaFin.toLocaleDateString()}`);
       
       // Obtener todos los pedidos
-      const response = await axios.get(`${API_BASE_URL}/orders`);
-      const pedidos = response.data;
+      const response = await axios.get(`${API_BASE_URL}/orders/orders`);
       
-      // Filtrar pedidos de los últimos 30 días
-      const hace30Dias = obtenerUltimos30Dias();
-      const pedidosRecientes = pedidos.filter(pedido => {
-        const fechaPedido = new Date(pedido.fecha_pedido);
-        return fechaPedido >= hace30Dias;
+      if (!response.data || response.data.length === 0) {
+        console.log("No se encontraron pedidos en la respuesta");
+        setNoData(true);
+        setLoading(false);
+        return;
+      }
+      
+      const pedidos = response.data;
+      console.log("Total de pedidos obtenidos:", pedidos.length);
+      
+      // Filtrar pedidos por rango de fechas
+      const pedidosFiltrados = pedidos.filter(pedido => {
+        const fechaPedido = new Date(pedido.fecha_pedido || pedido.fecha_creacion);
+        return fechaPedido >= fechaInicio && 
+               fechaPedido <= fechaFin && 
+               pedido.estado !== 'cancelado';
       });
       
-      // Contar pedidos por método de entrega
-      const countDelivery = pedidosRecientes.filter(p => p.metodo_entrega === 'delivery').length;
-      const countRecogida = pedidosRecientes.filter(p => p.metodo_entrega === 'recogida').length;
+      console.log("Pedidos filtrados por fecha:", pedidosFiltrados.length);
+      
+      // Contar pedidos por método de entrega (considerando posibles variaciones en los nombres)
+      const countDelivery = pedidosFiltrados.filter(p => 
+        p.metodo_entrega === 'delivery' || 
+        p.metodo_entrega === 'domicilio' || 
+        p.tipo_entrega === 'delivery' || 
+        p.tipo_entrega === 'domicilio'
+      ).length;
+      
+      const countRecogida = pedidosFiltrados.filter(p => 
+        p.metodo_entrega === 'recogida' || 
+        p.metodo_entrega === 'local' || 
+        p.tipo_entrega === 'recogida' || 
+        p.tipo_entrega === 'local'
+      ).length;
       
       // Formatear datos para el gráfico
       const chartData = [
@@ -52,62 +88,92 @@ const MetodoEntregaChart = () => {
         { name: 'Recogida', value: countRecogida }
       ];
       
+      console.log("Datos procesados para el gráfico:", chartData);
+      
+      // Verificar si hay datos reales para mostrar
+      const hayDatosReales = chartData.some(item => item.value > 0);
+      if (!hayDatosReales) {
+        console.log("No hay datos de métodos de entrega para mostrar");
+        setNoData(true);
+        setLoading(false);
+        return;
+      }
+      
       setData(chartData);
       setLoading(false);
     } catch (err) {
       console.error("Error al cargar los datos de métodos de entrega:", err);
-      setError("No se pudieron cargar los datos");
+      setError("No se pudieron cargar los datos: " + err.message);
       setLoading(false);
     }
   };
 
-  // Cargar datos cuando el componente se monte
+  // Cargar datos cuando el componente se monte o cuando cambien los filtros
   useEffect(() => {
+    console.log("Cargando datos de métodos de entrega con filtros:", fechasFiltradas);
     fetchMetodosEntrega();
-  }, []);
+    
+    // Configurar un intervalo para actualizar los datos cada 5 minutos
+    const interval = setInterval(() => {
+      console.log("Actualizando datos de métodos de entrega...");
+      fetchMetodosEntrega();
+    }, 300000); // 5 minutos
+    
+    // Limpiar el intervalo cuando el componente se desmonte
+    return () => clearInterval(interval);
+  }, [fechasFiltradas]);
 
-  // Si no hay datos reales, usar datos de muestra
-  const sampleData = [
-    { name: 'Delivery', value: 68 },
-    { name: 'Recogida', value: 32 }
-  ];
-
-  const dataToDisplay = data.length > 0 ? data : sampleData;
-  
   // Calcular porcentajes
-  const total = dataToDisplay.reduce((acc, item) => acc + item.value, 0);
-  const porcentajes = dataToDisplay.map(item => ({
-    ...item,
-    porcentaje: total > 0 ? Math.round((item.value / total) * 100) : 0
-  }));
+  const calcularPorcentajes = (dataArr) => {
+    const total = dataArr.reduce((acc, item) => acc + item.value, 0);
+    return dataArr.map(item => ({
+      ...item,
+      porcentaje: total > 0 ? Math.round((item.value / total) * 100) : 0
+    }));
+  };
+
+  // Data a mostrar
+  const dataToDisplay = data.length > 0 ? data : [];
+  const porcentajes = calcularPorcentajes(dataToDisplay);
 
   const customTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       return (
         <div className="custom-tooltip" style={{ backgroundColor: '#242424', padding: '10px', border: '1px solid #374151', borderRadius: '5px' }}>
-          <p style={{ color: '#FFFFFF', margin: '0 0 5px' }}>{`${payload[0].name}: ${payload[0].value}`}</p>
-          <p style={{ color: '#FFFFFF', margin: '0' }}>{`${porcentajes.find(item => item.name === payload[0].name).porcentaje}% del total`}</p>
+          <p style={{ color: '#FFFFFF', margin: '0 0 5px' }}>{`${payload[0].name}: ${payload[0].value} pedidos`}</p>
+          <p style={{ color: '#FFFFFF', margin: '0' }}>{`${payload[0].payload.porcentaje}% del total`}</p>
         </div>
       );
     }
     return null;
   };
 
+  const renderNoDataMessage = () => (
+    <div className="no-data-message">
+      <p>No hay datos de pedidos suficientes para mostrar los métodos de entrega.</p>
+      <button 
+        onClick={fetchMetodosEntrega}
+        className="reload-button"
+      >
+        Actualizar datos
+      </button>
+    </div>
+  );
+
   return (
     <div className="metodo-entrega-container">
-      <h3>Distribución de Métodos de Entrega</h3>
-      <p className="chart-subtitle">Últimos 30 días</p>
-      
       {loading ? (
         <div className="loading-indicator">Cargando datos...</div>
       ) : error ? (
         <div className="error-message">{error}</div>
+      ) : noData ? (
+        renderNoDataMessage()
       ) : (
-        <div className="chart-container">
+        <div className="chart-content">
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie
-                data={dataToDisplay}
+                data={porcentajes}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
@@ -116,7 +182,7 @@ const MetodoEntregaChart = () => {
                 dataKey="value"
                 label={({ name, porcentaje }) => `${name}: ${porcentaje}%`}
               >
-                {dataToDisplay.map((entry, index) => (
+                {porcentajes.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={BRAND_COLORS[index % BRAND_COLORS.length]} />
                 ))}
               </Pie>
@@ -140,6 +206,14 @@ const MetodoEntregaChart = () => {
               </div>
             ))}
           </div>
+          
+          {/* Botón para actualizar datos manualmente */}
+          <button 
+            className="update-data-button"
+            onClick={fetchMetodosEntrega}
+          >
+            Actualizar datos
+          </button>
         </div>
       )}
     </div>

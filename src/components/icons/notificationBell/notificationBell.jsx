@@ -12,13 +12,14 @@ function NotificationBell({ category }) {
     markAsRead, 
     markAllAsRead, 
     removeNotification,
-    permissionStatus
+    permissionStatus,
+    syncWithServer
   } = useNotifications();
 
   // Estado local para el conteo
   const [count, setCount] = useState(0);
 
-  // Filtrar las notificaciones por categoría
+  // Filtrar las notificaciones por categoría y ordenarlas por fecha
   const categoryNotifications = notifications
     .filter(notification => notification.category === category)
     .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
@@ -27,7 +28,28 @@ function NotificationBell({ category }) {
   useEffect(() => {
     const unreadCount = getUnreadCount(category);
     setCount(unreadCount);
+    
+    // Actualizar el favicon con un indicador visual si hay notificaciones no leídas
+    updateFaviconBadge(unreadCount > 0);
+    
+    console.log(`NotificationBell: Categoría ${category}, notificaciones no leídas: ${unreadCount}`);
   }, [notifications, category, getUnreadCount]);
+
+  // Función para actualizar el favicon con un indicador visual
+  const updateFaviconBadge = (hasUnread) => {
+    const favicon = document.querySelector('link[rel="icon"]');
+    if (!favicon) return;
+    
+    if (hasUnread) {
+      if (!favicon.href.includes('notification')) {
+        // Aquí podrías cambiar a un favicon con un indicador de notificación
+        // Por ahora solo cambiamos la clase del favicon
+        favicon.dataset.hasNotification = 'true';
+      }
+    } else {
+      favicon.dataset.hasNotification = 'false';
+    }
+  };
 
   // Cerrar el dropdown al hacer clic fuera
   useEffect(() => {
@@ -42,6 +64,16 @@ function NotificationBell({ category }) {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  // Forzar sincronización al abrir el dropdown
+  useEffect(() => {
+    if (isOpen) {
+      // Sincronizar con el servidor cuando se abre el dropdown
+      syncWithServer().then(() => {
+        console.log('NotificationBell: Sincronización forzada completada');
+      });
+    }
+  }, [isOpen, syncWithServer]);
 
   // Manejar clic en la campana
   const handleBellClick = () => {
@@ -59,12 +91,32 @@ function NotificationBell({ category }) {
     }
   };
 
+  // Manejar clic en notificación individual
+  const handleNotificationClick = (notification) => {
+    console.log('Clic en notificación:', notification);
+    
+    // Solo marcar como leída si no lo está ya
+    if (!notification.read) {
+      console.log('Marcando notificación como leída:', notification.id);
+      markAsRead(notification.id);
+    }
+    
+    // Si hay URL en los datos de la notificación, navegar a ella
+    if (notification.data?.url) {
+      window.location.href = notification.data.url;
+    }
+  };
+
   // Marcar todas las notificaciones como leídas
   const handleMarkAllAsRead = (e) => {
     e.stopPropagation();
-    categoryNotifications.forEach(notification => {
-      markAsRead(notification.id);
-    });
+    console.log('Marcando todas las notificaciones como leídas para la categoría:', category);
+    
+    // Solo si hay notificaciones no leídas
+    const unreadNotifications = categoryNotifications.filter(n => !n.read);
+    if (unreadNotifications.length > 0) {
+      markAllAsRead();
+    }
   };
 
   // Eliminar una notificación específica
@@ -104,9 +156,18 @@ function NotificationBell({ category }) {
 
   return (
     <div className="notification-bell" ref={dropdownRef}>
-      <button className="notification-button" onClick={handleBellClick}>
+      <button 
+        className={`notification-button ${count > 0 ? 'has-notifications' : ''}`}
+        onClick={handleBellClick} 
+        aria-label={`${getCategoryTitle()} (${count} no leídas)`}
+        data-count={count}
+      >
         <Bell size={24} />
-        {count > 0 && <div className="notification-count">{count}</div>}
+        {count > 0 && (
+          <div className="notification-count" aria-label={`${count} notificaciones no leídas`}>
+            {count > 99 ? '99+' : count}
+          </div>
+        )}
       </button>
 
       {isOpen && (
@@ -137,6 +198,7 @@ function NotificationBell({ category }) {
                 <div 
                   key={notification.id} 
                   className={`notification-item ${notification.read ? '' : 'unread'}`}
+                  onClick={() => handleNotificationClick(notification)}
                 >
                   <div className="notification-content">
                     <h4>{notification.title}</h4>
@@ -148,6 +210,7 @@ function NotificationBell({ category }) {
                   <button 
                     className="delete-notification"
                     onClick={(e) => handleRemoveNotification(e, notification.id)}
+                    aria-label="Eliminar notificación"
                   >
                     ×
                   </button>
