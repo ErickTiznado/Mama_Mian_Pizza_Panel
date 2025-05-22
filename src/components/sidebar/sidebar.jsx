@@ -122,7 +122,7 @@ function Sidebar() {
         </span>
         <NotificationBell category="clientes" />
       </button>
-      <button className="items" onClick={() => window.open("/", "_blank")}>
+      <button className="items" onClick={() => window.open("https://contmigo.tiznadodev.com/", "_blank")}>
         <span>
         <Store size={38} />
         Visualizar Tienda 
