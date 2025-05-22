@@ -192,11 +192,11 @@ function ProductosGraficas({ fechasFiltradas }) {
     
     if (!evolutionData.length) {
       return (
-        <div className="no-data-message">
+        <div className="gprod-no-data-message">
           <p>No hay datos suficientes para este periodo.</p>
           <button 
             onClick={() => fechasFiltradas && fetchEvolutionData(fechasFiltradas.inicio, fechasFiltradas.fin)} 
-            className="reload-button"
+            className="gprod-reload-button"
           >
             Intentar nuevamente
           </button>
@@ -235,41 +235,41 @@ function ProductosGraficas({ fechasFiltradas }) {
   };
 
   return (
-    <div className="productos-graficas-container">
+    <div className="gprod-productos-graficas-container">
 
       
       {/* Sección de KPIs de productos */}
       <ProductosKPI fechasFiltradas={fechasFiltradas} colorPrimario="#FEB248" />
       
-      <div className="productos-graficas-content">
-        <div className="productos-charts-column">
+      <div className="gprod-productos-graficas-content">
+        <div className="gprod-productos-charts-column">
           {/* Gráfica de evolución de ventas por categoría */}
-          <div className="productos-chart">
-            <div className="chart-header">
+          <div className="gprod-productos-chart">
+            <div className="gprod-chart-header">
               <h3>
                 <FontAwesomeIcon icon={faChartLine} style={{ marginRight: '10px', color: '#FEB248' }} />
                 Evolución de Ventas por Categoría
               </h3>
-              <p className="chart-description">
+              <p className="gprod-chart-description">
                 Visualización de la tendencia de ventas por categoría de productos en el tiempo
               </p>
             </div>
-            <div className="chart-container">
+            <div className="gprod-chart-container">
               {renderLineGraph()}
             </div>
           </div>
           
           {/* Distribución de categorías y Tendencias */}
-          <div className="productos-charts-row">
+          <div className="gprod-productos-charts-row">
 
-            <div className="chart-col-50">
-              <div className="chart-container">
-                <div className="chart-header">
+            <div className="gprod-chart-col-50">
+              <div className="gprod-chart-container">
+                <div className="gprod-chart-header">
                   <h3>
                     <FontAwesomeIcon icon={faArrowAltCircleUp} style={{ marginRight: '10px', color: '#FEB248' }} />
                     Tendencias de Productos
                   </h3>
-                  <p className="chart-description">
+                  <p className="gprod-chart-description">
                     Productos con mayor crecimiento en ventas
                   </p>
                 </div>
@@ -283,14 +283,14 @@ function ProductosGraficas({ fechasFiltradas }) {
         </div>
         
         {/* Ranking de productos más vendidos */}
-        <div className="productos-side-column">
-          <div className="chart-container">
-            <div className="chart-header">
+        <div className="gprod-productos-side-column">
+          <div className="gprod-chart-container">
+            <div className="gprod-chart-header">
               <h3>
                 <FontAwesomeIcon icon={faTrophy} style={{ marginRight: '10px', color: '#FEB248' }} />
                 Top Productos Vendidos
               </h3>
-              <p className="chart-description">
+              <p className="gprod-chart-description">
                 Los productos más populares durante el período seleccionado
               </p>
             </div>

@@ -58,15 +58,15 @@ const ProductosKPI = ({ fechasFiltradas }) => {
 
   const renderKPIItem = (icon, title, value, suffix = '', className = '') => {
     return (
-      <div className={`productos-kpi-item ${className}`}>
-        <div className="productos-kpi-icon">{icon}</div>
-        <div className="productos-kpi-info">
+      <div className={`gprod-productos-kpi-item ${className}`}>
+        <div className="gprod-productos-kpi-icon">{icon}</div>
+        <div className="gprod-productos-kpi-info">
           <h4>{title}</h4>
-          <div className="productos-kpi-value">
+          <div className="gprod-productos-kpi-value">
             {loading ? (
-              <div className="kpi-loading">Cargando...</div>
+              <div className="gprod-kpi-loading">Cargando...</div>
             ) : error && title === "Productos Activos" ? (
-              <div className="kpi-error">Error</div>
+              <div className="gprod-kpi-error">Error</div>
             ) : (
               <>
                 <span>{value}</span>
@@ -80,13 +80,13 @@ const ProductosKPI = ({ fechasFiltradas }) => {
   };
 
   return (
-    <div className="productos-kpi-container">
+    <div className="gprod-productos-kpi-container">
       {renderKPIItem(
         <FaPercentage />,
         "Margen Promedio",
         kpiData.margenPromedio,
         '%',
-        'margin-kpi'
+        'gprod-margin-kpi'
       )}
       
       {renderKPIItem(
@@ -94,15 +94,7 @@ const ProductosKPI = ({ fechasFiltradas }) => {
         "Productos Activos",
         kpiData.productosActivos,
         '',
-        'active-products-kpi'
-      )}
-      
-      {renderKPIItem(
-        <FaExchangeAlt />,
-        "Rotación de Inventario",
-        kpiData.rotacionInventario,
-        'x/mes',
-        'inventory-turnover-kpi'
+        'gprod-active-products-kpi'
       )}
       
       {renderKPIItem(
@@ -110,26 +102,8 @@ const ProductosKPI = ({ fechasFiltradas }) => {
         "Calificación Promedio",
         kpiData.calificacionPromedio,
         '/5',
-        'rating-kpi'
+        'gprod-rating-kpi'
       )}
-      
-      <div className="productos-kpi-item rentable-products-kpi">
-        <div className="productos-kpi-icon">
-          <FaClipboardCheck />
-        </div>
-        <div className="productos-kpi-info">
-          <h4>Productos Más Rentables</h4>
-          {loading ? (
-            <div className="kpi-loading">Cargando...</div>
-          ) : (
-            <ul className="rentable-products-list">
-              {kpiData.productosMasRentables.map((producto, index) => (
-                <li key={index}>{producto}</li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
     </div>
   );
 };

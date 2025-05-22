@@ -304,16 +304,16 @@ const DistribucionCategorias = () => {
   };
 
   return (
-    <div className="distribucion-categorias-container">
-      <div className="distribucion-categorias-header">
+    <div className="gprod-distribucion-categorias-container">
+      <div className="gprod-distribucion-categorias-header">
         <h3>Distribución de Ventas por Categoría</h3>
         <p>Porcentaje de ventas para {getNombrePeriodo().toLowerCase()}</p>
         
-        <div className="distribucion-filtros">
+        <div className="gprod-distribucion-filtros">
           <select 
             value={periodoSeleccionado} 
             onChange={handleChangePeriodo}
-            className="periodo-select"
+            className="gprod-periodo-select"
             aria-label="Seleccionar período"
           >
             <option value="hoy">Hoy</option>
@@ -324,45 +324,45 @@ const DistribucionCategorias = () => {
         </div>
       </div>
       
-      <div className="distribucion-chart-container">
+      <div className="gprod-distribucion-chart-container">
         {loading ? (
-          <div className="loading-indicator">Cargando...</div>
+          <div className="gprod-loading-indicator">Cargando...</div>
         ) : error ? (
-          <div className="error-message">{error}</div>
+          <div className="gprod-error-message">{error}</div>
         ) : (
           <>
-            <div className="chart-wrapper">
+            <div className="gprod-chart-wrapper">
               <Doughnut data={chartData} options={options} />
               
-              <div className="total-ventas">
-                <span className="total-number">{totalVentas}</span>
-                <span className="total-label">ventas</span>
+              <div className="gprod-total-ventas">
+                <span className="gprod-total-number">{totalVentas}</span>
+                <span className="gprod-total-label">ventas</span>
               </div>
             </div>
             
             {/* Eliminamos la leyenda redundante y dejamos solo las estadísticas */}
-            <div className="categoria-stats">
-              <div className="stat-item pizzas">
-                <div className="stat-color"></div>
-                <div className="stat-info">
-                  <span className="stat-label">Pizzas</span>
-                  <span className="stat-value">{porcentajes[0]}%</span>
+            <div className="gprod-categoria-stats">
+              <div className="gprod-stat-item gprod-pizzas">
+                <div className="gprod-stat-color"></div>
+                <div className="gprod-stat-info">
+                  <span className="gprod-stat-label">Pizzas</span>
+                  <span className="gprod-stat-value">{porcentajes[0]}%</span>
                 </div>
               </div>
               
-              <div className="stat-item bebidas">
-                <div className="stat-color"></div>
-                <div className="stat-info">
-                  <span className="stat-label">Bebidas</span>
-                  <span className="stat-value">{porcentajes[1]}%</span>
+              <div className="gprod-stat-item gprod-bebidas">
+                <div className="gprod-stat-color"></div>
+                <div className="gprod-stat-info">
+                  <span className="gprod-stat-label">Bebidas</span>
+                  <span className="gprod-stat-value">{porcentajes[1]}%</span>
                 </div>
               </div>
               
-              <div className="stat-item complementos">
-                <div className="stat-color"></div>
-                <div className="stat-info">
-                  <span className="stat-label">Complementos</span>
-                  <span className="stat-value">{porcentajes[2]}%</span>
+              <div className="gprod-stat-item gprod-complementos">
+                <div className="gprod-stat-color"></div>
+                <div className="gprod-stat-info">
+                  <span className="gprod-stat-label">Complementos</span>
+                  <span className="gprod-stat-value">{porcentajes[2]}%</span>
                 </div>
               </div>
             </div>

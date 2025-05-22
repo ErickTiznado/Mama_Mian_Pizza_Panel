@@ -1,4 +1,4 @@
-.distribucion-categorias-container {
+.gprod-distribucion-categorias-container {
   background-color: var(--color-secondary);
   border-radius: 8px;
   padding: 1rem; /* Reducido de 1.5rem */
@@ -14,30 +14,30 @@
   max-width: 100%; /* Asegurar que sea responsive */
 }
 
-.distribucion-categorias-header {
+.gprod-distribucion-categorias-header {
   margin-bottom: 0.8rem; /* Reducido de 1rem */
 }
 
-.distribucion-categorias-header h3 {
+.gprod-distribucion-categorias-header h3 {
   margin: 0;
   font-size: 1.1rem; /* Reducido de 1.2rem */
   font-weight: 600;
   color: var(--color-white);
 }
 
-.distribucion-categorias-header p {
+.gprod-distribucion-categorias-header p {
   margin: 3px 0 0; /* Reducido de 5px */
   font-size: 12px; /* Reducido de 14px */
   color: var(--color-text-light);
 }
 
-.distribucion-filtros {
+.gprod-distribucion-filtros {
   margin-top: 10px; /* Reducido de 15px */
   display: flex;
   justify-content: flex-end;
 }
 
-.periodo-select {
+.gprod-periodo-select {
   padding: 0.5rem 0.8rem;
   border-radius: 6px;
   border: 1px solid #374151;
@@ -48,19 +48,19 @@
   transition: all 0.2s;
 }
 
-.periodo-select:hover, .periodo-select:focus {
+.gprod-periodo-select:hover, .gprod-periodo-select:focus {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 2px rgba(61, 132, 184, 0.1);
 }
 
-.distribucion-chart-container {
+.gprod-distribucion-chart-container {
   position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.loading-indicator, .error-message {
+.gprod-loading-indicator, .gprod-error-message {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -70,11 +70,11 @@
   text-align: center;
 }
 
-.error-message {
+.gprod-error-message {
   color: var(--color-danger);
 }
 
-.chart-wrapper {
+.gprod-chart-wrapper {
   position: relative;
   flex: 1;
   display: flex;
@@ -85,7 +85,7 @@
   margin-bottom: 5px;
 }
 
-.total-ventas {
+.gprod-total-ventas {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -97,45 +97,45 @@
   justify-content: center;
 }
 
-.total-number {
+.gprod-total-number {
   font-size: 28px;
   font-weight: 700;
   color: var(--color-white);
 }
 
-.total-label {
+.gprod-total-label {
   font-size: 14px;
   color: var(--color-text-light);
   margin-top: 5px;
 }
 
 /* Nueva leyenda simplificada al estilo de la imagen */
-.categoria-legend {
+.gprod-categoria-legend {
   display: flex;
   justify-content: center;
   margin: 10px 0;
 }
 
-.legend-item {
+.gprod-legend-item {
   display: flex;
   align-items: center;
   margin: 0 8px;
 }
 
-.legend-color {
+.gprod-legend-color {
   width: 10px;
   height: 10px;
   border-radius: 50%;
   margin-right: 6px;
 }
 
-.legend-label {
+.gprod-legend-label {
   font-size: 12px;
   color: var(--color-white);
 }
 
 /* Estadísticas detalladas por categoría */
-.categoria-stats {
+.gprod-categoria-stats {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
@@ -143,43 +143,43 @@
   padding-top: 10px;
 }
 
-.stat-item {
+.gprod-stat-item {
   text-align: center;
   flex: 1;
   padding: 0.5rem 0;
 }
 
-.stat-color {
+.gprod-stat-color {
   width: 14px;
   height: 14px;
   border-radius: 3px;
   margin: 0 auto 5px;
 }
 
-.pizzas .stat-color {
+.gprod-pizzas .gprod-stat-color {
   background-color: #991B1B; /* Rojo de marca */
 }
 
-.bebidas .stat-color {
+.gprod-bebidas .gprod-stat-color {
   background-color: #3D84B8; /* Azul corporativo */
 }
 
-.complementos .stat-color {
+.gprod-complementos .gprod-stat-color {
   background-color: #FEB248; /* Amarillo de marca */
 }
 
-.stat-info {
+.gprod-stat-info {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.stat-label {
+.gprod-stat-label {
   font-size: 12px;
   color: var(--color-text-light);
 }
 
-.stat-value {
+.gprod-stat-value {
   font-size: 16px;
   font-weight: 600;
   color: var(--color-white);
@@ -187,11 +187,11 @@
 
 /* Para pantallas más pequeñas */
 @media (max-width: 576px) {
-  .categoria-stats {
+  .gprod-categoria-stats {
     flex-direction: column;
   }
   
-  .stat-item {
+  .gprod-stat-item {
     padding: 5px 0;
     flex-direction: row;
     display: flex;
@@ -199,11 +199,11 @@
     justify-content: space-between;
   }
   
-  .stat-color {
+  .gprod-stat-color {
     margin: 0 10px 0 0;
   }
   
-  .stat-info {
+  .gprod-stat-info {
     flex-direction: row;
     justify-content: space-between;
     width: 100%;

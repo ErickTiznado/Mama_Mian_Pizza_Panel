@@ -1,5 +1,4 @@
-.tendencias-productos-container {
-  background-color: var(--color-secondary);
+.gprod-tendencias-productos-container {
   border-radius: 8px;
   padding: 1rem; /* Reducido de 1.5rem */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -12,30 +11,30 @@
   overflow: hidden; /* Evitar desbordamiento */
 }
 
-.tendencias-header {
+.gprod-tendencias-header {
   margin-bottom: 1rem; /* Reducido de 1.5rem */
 }
 
-.tendencias-header h3 {
+.gprod-tendencias-header h3 {
   margin: 0;
   font-size: 1.1rem; /* Reducido de 1.2rem */
   font-weight: 600;
   color: var(--color-white);
 }
 
-.tendencias-header p {
+.gprod-tendencias-header p {
   margin: 3px 0 12px; /* Reducido de 5px 0 15px */
   font-size: 12px; /* Reducido de 14px */
   color: var(--color-text-light);
 }
 
-.tendencias-tabs {
+.gprod-tendencias-tabs {
   display: flex;
   border-bottom: 1px solid #374151;
   margin-bottom: 12px; /* Reducido de 15px */
 }
 
-.tab-btn {
+.gprod-tab-btn {
   background: none;
   border: none;
   padding: 8px 12px; /* Reducido de 10px 15px */
@@ -47,15 +46,15 @@
   transition: color 0.3s;
 }
 
-.tab-btn:hover {
+.gprod-tab-btn:hover {
   color: var(--color-white);
 }
 
-.tab-btn.active {
+.gprod-tab-btn.gprod-active {
   color: var(--color-accent);
 }
 
-.tab-btn.active:after {
+.gprod-tab-btn.gprod-active:after {
   content: '';
   position: absolute;
   bottom: -1px;
@@ -65,14 +64,14 @@
   background-color: var(--color-accent);
 }
 
-.tendencias-content {
+.gprod-tendencias-content {
   flex: 1;
   position: relative;
 }
 
-.tendencias-loading,
-.tendencias-error,
-.tendencias-empty {
+.gprod-tendencias-loading,
+.gprod-tendencias-error,
+.gprod-tendencias-empty {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -82,17 +81,17 @@
   font-size: 15px;
 }
 
-.tendencias-error {
+.gprod-tendencias-error {
   color: var(--color-danger);
 }
 
-.tendencias-lista {
+.gprod-tendencias-lista {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.tendencia-item {
+.gprod-tendencia-item {
   padding: 10px 0; /* Reducido de 12px */
   border-bottom: 1px solid #374151;
   display: flex;
@@ -100,15 +99,15 @@
   align-items: center;
 }
 
-.tendencia-item:last-child {
+.gprod-tendencia-item:last-child {
   border-bottom: none;
 }
 
-.tendencia-item.destacado .tendencia-nombre {
+.gprod-tendencia-item.gprod-destacado .gprod-tendencia-nombre {
   font-weight: 600;
 }
 
-.tendencia-nombre {
+.gprod-tendencia-nombre {
   font-size: 13px; /* Reducido de 14px */
   color: var(--color-white);
   flex: 1;
@@ -118,18 +117,18 @@
   text-overflow: ellipsis; /* Añadido para evitar desbordamiento de texto */
 }
 
-.tendencia-stats {
+.gprod-tendencia-stats {
   display: flex;
   align-items: center;
 }
 
-.tendencia-periodo {
+.gprod-tendencia-periodo {
   font-size: 11px; /* Reducido de 12px */
   color: var(--color-text-light);
   margin-right: 12px; /* Reducido de 15px */
 }
 
-.tendencia-porcentaje {
+.gprod-tendencia-porcentaje {
   display: flex;
   align-items: center;
   font-size: 13px; /* Reducido de 14px */
@@ -137,39 +136,39 @@
   white-space: nowrap; /* Evitar que se rompa el porcentaje */
 }
 
-.tendencia-porcentaje.positivo {
+.gprod-tendencia-porcentaje.gprod-positivo {
   color: var(--color-success);
 }
 
-.tendencia-porcentaje.negativo {
+.gprod-tendencia-porcentaje.gprod-negativo {
   color: var(--color-danger);
 }
 
-.trend-icon {
+.gprod-trend-icon {
   margin-right: 4px; /* Reducido de 5px */
   font-size: 14px; /* Reducido de 16px */
 }
 
-.trend-icon.up {
+.gprod-trend-icon.gprod-up {
   color: var(--color-success);
 }
 
-.trend-icon.down {
+.gprod-trend-icon.gprod-down {
   color: var(--color-danger);
 }
 
-.trend-icon.neutral {
+.gprod-trend-icon.gprod-neutral {
   color: var(--color-text-light);
 }
 
 /* Nuevas reglas para pantallas pequeñas */
 @media (max-width: 360px) {
-  .tendencia-stats {
+  .gprod-tendencia-stats {
     flex-direction: column;
     align-items: flex-end;
   }
   
-  .tendencia-periodo {
+  .gprod-tendencia-periodo {
     margin-right: 0;
     margin-bottom: 2px;
   }

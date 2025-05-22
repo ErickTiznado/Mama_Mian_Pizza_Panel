@@ -1,7 +1,6 @@
 @import '../../../../styles/variables.css';
 
-.top-productos-vendidos {
-  background-color: var(--color-dark);
+.gprod-top-productos-vendidos {
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -12,31 +11,31 @@
   overflow: hidden; /* Evitar desbordamiento */
 }
 
-.top-productos-header {
+.gprod-top-productos-header {
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
 }
 
-.top-productos-title {
+.gprod-top-productos-title {
   font-size: 1.6rem; /* Aumentado el tamaño del título */
   margin: 0 0 10px 0;
   color: white;
   white-space: nowrap;
 }
 
-.top-productos-controles {
+.gprod-top-productos-controles {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.top-productos-filtros {
+.gprod-top-productos-filtros {
   display: flex;
   gap: 8px;
 }
 
-.filtro-select {
+.gprod-filtro-select {
   background-color: #2c2c2c;
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
@@ -46,12 +45,12 @@
   cursor: pointer;
 }
 
-.filtro-select:focus {
+.gprod-filtro-select:focus {
   outline: none;
   border-color: var(--color-brand-red);
 }
 
-.top-productos-content {
+.gprod-top-productos-content {
   flex: 1;
   overflow-y: auto; /* Permitir scroll vertical si es necesario */
   scrollbar-width: thin;
@@ -59,39 +58,39 @@
 }
 
 /* Personalizar scrollbar para navegadores webkit */
-.top-productos-content::-webkit-scrollbar {
+.gprod-top-productos-content::-webkit-scrollbar {
   width: 6px;
 }
 
-.top-productos-content::-webkit-scrollbar-track {
+.gprod-top-productos-content::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.top-productos-content::-webkit-scrollbar-thumb {
+.gprod-top-productos-content::-webkit-scrollbar-thumb {
   background-color: #444;
   border-radius: 10px;
 }
 
-.top-productos-loading,
-.top-productos-error,
-.top-productos-empty {
+.gprod-top-productos-loading,
+.gprod-top-productos-error,
+.gprod-top-productos-empty {
   text-align: center;
   padding: 15px 0;
   color: rgba(255, 255, 255, 0.7);
   font-size: 1.1rem; /* Aumentado el tamaño */
 }
 
-.top-productos-error {
+.gprod-top-productos-error {
   color: var(--color-danger);
 }
 
-.top-productos-lista {
+.gprod-top-productos-lista {
   display: flex;
   flex-direction: column;
   gap: 8px; /* Aumentado el espacio entre items */
 }
 
-.top-producto-item {
+.gprod-top-producto-item {
   display: flex;
   align-items: center;
   padding: 10px 12px; /* Aumentado el padding */
@@ -100,17 +99,17 @@
   transition: all 0.2s ease;
 }
 
-.top-producto-item:hover {
+.gprod-top-producto-item:hover {
   background-color: rgba(255, 255, 255, 0.1);
   transform: translateX(3px);
 }
 
-.top-producto-item.top-tres {
+.gprod-top-producto-item.gprod-top-tres {
   background-color: rgba(153, 27, 27, 0.15);
   border-left: 3px solid var(--color-brand-red);
 }
 
-.top-producto-ranking {
+.gprod-top-producto-ranking {
   min-width: 32px;
   height: 32px;
   display: flex;
@@ -118,7 +117,7 @@
   justify-content: center;
 }
 
-.ranking-number {
+.gprod-ranking-number {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -131,56 +130,56 @@
   font-size: 1.05rem; /* Aumentado el tamaño */
 }
 
-.rank-1 {
+.gprod-rank-1 {
   background-color: var(--color-brand-red);
   color: white;
 }
 
-.rank-2 {
+.gprod-rank-2 {
   background-color: var(--color-brand-yellow);
   color: #333;
 }
 
-.rank-3 {
+.gprod-rank-3 {
   background-color: var(--color-brand-green);
   color: #333;
 }
 
-.top-producto-info {
+.gprod-top-producto-info {
   flex: 1;
   margin-left: 10px;
   min-width: 0; /* Permite truncamiento del texto */
 }
 
-.producto-nombre-container {
+.gprod-producto-nombre-container {
   display: flex;
   align-items: center;
   gap: 8px;
   overflow: hidden;
 }
 
-.producto-icon {
+.gprod-producto-icon {
   font-size: 1.5rem; /* Aumentado el tamaño */
   flex-shrink: 0;
 }
 
-.pizza-icon {
+.gprod-pizza-icon {
   color: var(--color-brand-red);
 }
 
-.bebida-icon {
+.gprod-bebida-icon {
   color: var(--color-info);
 }
 
-.complemento-icon {
+.gprod-complemento-icon {
   color: var(--color-warning);
 }
 
-.ensalada-icon {
+.gprod-ensalada-icon {
   color: var(--color-success);
 }
 
-.producto-nombre {
+.gprod-producto-nombre {
   font-weight: 500;
   color: white;
   font-size: 1.15rem; /* Aumentado el tamaño */
@@ -189,13 +188,13 @@
   text-overflow: ellipsis;
 }
 
-.producto-categoria {
+.gprod-producto-categoria {
   color: rgba(255, 255, 255, 0.5);
   font-size: 1rem; /* Aumentado el tamaño */
   text-transform: capitalize;
 }
 
-.top-producto-stats {
+.gprod-top-producto-stats {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -203,26 +202,26 @@
   flex-shrink: 0; /* Evitar que se compriman los stats */
 }
 
-.producto-cantidad {
+.gprod-producto-cantidad {
   display: flex;
   align-items: baseline;
   min-width: 45px;
   justify-content: flex-end;
 }
 
-.cantidad-valor {
+.gprod-cantidad-valor {
   font-weight: 600;
   font-size: 1.2rem; /* Aumentado el tamaño */
   color: white;
 }
 
-.cantidad-label {
+.gprod-cantidad-label {
   font-size: 0.9rem; /* Aumentado el tamaño */
   color: rgba(255, 255, 255, 0.5);
   margin-left: 3px;
 }
 
-.producto-precio {
+.gprod-producto-precio {
   min-width: 55px;
   text-align: right;
   font-weight: 500;
@@ -230,7 +229,7 @@
   font-size: 1.05rem; /* Aumentado el tamaño */
 }
 
-.producto-porcentaje {
+.gprod-producto-porcentaje {
   min-width: 45px;
   text-align: center;
   font-weight: 500;
@@ -239,18 +238,18 @@
   font-size: 1rem; /* Aumentado el tamaño */
 }
 
-.producto-porcentaje.positivo {
+.gprod-producto-porcentaje.gprod-positivo {
   background-color: rgba(40, 167, 69, 0.2);
   color: #28a745;
 }
 
-.producto-porcentaje.negativo {
+.gprod-producto-porcentaje.gprod-negativo {
   background-color: rgba(220, 53, 69, 0.2);
   color: #dc3545;
 }
 
 /* Botón Ver más/menos */
-.ver-mas-btn {
+.gprod-ver-mas-btn {
   margin-top: 10px;
   background-color: transparent;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -263,26 +262,26 @@
   text-align: center;
 }
 
-.ver-mas-btn:hover {
+.gprod-ver-mas-btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
   color: white;
 }
 
 /* Responsive styles */
 @media (max-width: 768px) {
-  .top-productos-filtros {
+  .gprod-top-productos-filtros {
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
   }
   
-  .top-producto-stats {
+  .gprod-top-producto-stats {
     flex-direction: column;
     align-items: flex-end;
     gap: 2px;
   }
   
-  .producto-cantidad, .producto-precio, .producto-porcentaje {
+  .gprod-producto-cantidad, .gprod-producto-precio, .gprod-producto-porcentaje {
     min-width: auto;
   }
 }

@@ -186,7 +186,7 @@ const TopProductosVendidos = () => {
     const categoriaLower = categoria?.toLowerCase() || '';
     
     if (nombreLower.includes('pizza') || categoriaLower.includes('pizza')) {
-      return <FaPizzaSlice className="producto-icon pizza-icon" />;
+      return <FaPizzaSlice className="gprod-producto-icon gprod-pizza-icon" />;
     } else if (
       nombreLower.includes('bebida') || 
       nombreLower.includes('refresco') || 
@@ -197,15 +197,15 @@ const TopProductosVendidos = () => {
       nombreLower.includes('ml') ||
       categoriaLower.includes('bebida')
     ) {
-      return <FaGlassWhiskey className="producto-icon bebida-icon" />;
+      return <FaGlassWhiskey className="gprod-producto-icon gprod-bebida-icon" />;
     } else if (
       nombreLower.includes('ensalada') || 
       nombreLower.includes('vegetal') ||
       categoriaLower.includes('vegetal')
     ) {
-      return <FaCarrot className="producto-icon ensalada-icon" />;
+      return <FaCarrot className="gprod-producto-icon gprod-ensalada-icon" />;
     } else {
-      return <FaHamburger className="producto-icon complemento-icon" />;
+      return <FaHamburger className="gprod-producto-icon gprod-complemento-icon" />;
     }
   };
 
@@ -248,17 +248,16 @@ const TopProductosVendidos = () => {
     : topProductos.slice(0, 5);
 
   return (
-    <div className="top-productos-vendidos">
-      <div className="top-productos-header">
-        <h3 className="top-productos-title">Top Productos Más Vendidos</h3>
+    <div className="gprod-top-productos-vendidos">
+      <div className="gprod-top-productos-header">
         
-        <div className="top-productos-controles">
-          <div className="top-productos-filtros">
+        <div className="gprod-top-productos-controles">
+          <div className="gprod-top-productos-filtros">
             <select 
               id="periodo" 
               value={periodoSeleccionado} 
               onChange={handleChangePeriodo}
-              className="filtro-select"
+              className="gprod-filtro-select"
             >
               <option value="hoy">Hoy</option>
               <option value="ultima-semana">Última Semana</option>
@@ -270,7 +269,7 @@ const TopProductosVendidos = () => {
               id="categoria" 
               value={categoria} 
               onChange={handleChangeCategoria}
-              className="filtro-select"
+              className="gprod-filtro-select"
             >
               <option value="todos">Todas</option>
               <option value="pizza">Pizzas</option>
@@ -281,32 +280,32 @@ const TopProductosVendidos = () => {
         </div>
       </div>
 
-      <div className="top-productos-content">
+      <div className="gprod-top-productos-content">
         {loading ? (
-          <div className="top-productos-loading">Cargando productos...</div>
+          <div className="gprod-top-productos-loading">Cargando productos...</div>
         ) : error ? (
-          <div className="top-productos-error">{error}</div>
+          <div className="gprod-top-productos-error">{error}</div>
         ) : topProductos.length === 0 ? (
-          <div className="top-productos-empty">No hay datos disponibles para este periodo</div>
+          <div className="gprod-top-productos-empty">No hay datos disponibles para este periodo</div>
         ) : (
-          <div className="top-productos-lista">
+          <div className="gprod-top-productos-lista">
             {productosAMostrar.map((producto, index) => (
-              <div key={index} className={`top-producto-item ${index < 3 ? 'top-tres' : ''}`}>
-                <div className="top-producto-ranking">
-                  <span className={`ranking-number rank-${index + 1}`}>{index + 1}</span>
+              <div key={index} className={`gprod-top-producto-item ${index < 3 ? 'gprod-top-tres' : ''}`}>
+                <div className="gprod-top-producto-ranking">
+                  <span className={`gprod-ranking-number gprod-rank-${index + 1}`}>{index + 1}</span>
                 </div>
-                <div className="top-producto-info">
-                  <div className="producto-nombre-container">
+                <div className="gprod-top-producto-info">
+                  <div className="gprod-producto-nombre-container">
                     {getProductIcon(producto.nombre, producto.categoria)}
-                    <span className="producto-nombre">{producto.nombre}</span>
+                    <span className="gprod-producto-nombre">{producto.nombre}</span>
                   </div>
                 </div>
-                <div className="top-producto-stats">
-                  <div className="producto-cantidad">
-                    <span className="cantidad-valor">{producto.cantidad}</span>
-                    <span className="cantidad-label">uds</span>
+                <div className="gprod-top-producto-stats">
+                  <div className="gprod-producto-cantidad">
+                    <span className="gprod-cantidad-valor">{producto.cantidad}</span>
+                    <span className="gprod-cantidad-label">uds</span>
                   </div>
-                  <div className={`producto-porcentaje ${obtenerPorcentaje(index).includes('-') ? 'negativo' : 'positivo'}`}>
+                  <div className={`gprod-producto-porcentaje ${obtenerPorcentaje(index).includes('-') ? 'gprod-negativo' : 'gprod-positivo'}`}>
                     {obtenerPorcentaje(index)}
                   </div>
                 </div>
@@ -316,7 +315,7 @@ const TopProductosVendidos = () => {
             {topProductos.length > 5 && (
               <button 
                 onClick={toggleMostrarTodos} 
-                className="ver-mas-btn"
+                className="gprod-ver-mas-btn"
               >
                 {mostrarTodos ? 'Ver menos' : `Ver ${topProductos.length - 5} más`}
               </button>

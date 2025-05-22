@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaLongArrowAltUp, FaLongArrowAltDown, FaMinus } from 'react-icons/fa';
+import { FaArrowUp, FaArrowDown, FaMinus } from 'react-icons/fa';
 import './TendenciasProductos.css';
 import axios from 'axios';
 
@@ -205,11 +205,11 @@ const TendenciasProductos = () => {
   
   const getTendenciaIcon = (porcentaje) => {
     if (porcentaje > 0) {
-      return <FaLongArrowAltUp className="trend-icon up" />;
+      return <FaArrowUp className="gprod-trend-icon gprod-up" />;
     } else if (porcentaje < 0) {
-      return <FaLongArrowAltDown className="trend-icon down" />;
+      return <FaArrowDown className="gprod-trend-icon gprod-down" />;
     } else {
-      return <FaMinus className="trend-icon neutral" />;
+      return <FaMinus className="gprod-trend-icon gprod-neutral" />;
     }
   };
   
@@ -219,20 +219,19 @@ const TendenciasProductos = () => {
   };
 
   return (
-    <div className="tendencias-productos-container">
-      <div className="tendencias-header">
-        <h3>Tendencias de Productos</h3>
-        <p>Productos ganando o perdiendo popularidad</p>
+    <div className="gprod-tendencias-productos-container">
+      <div className="gprod-tendencias-header">
+
         
-        <div className="tendencias-tabs">
+        <div className="gprod-tendencias-tabs">
           <button 
-            className={`tab-btn ${tipoTendencia === 'ganando' ? 'active' : ''}`}
+            className={`gprod-tab-btn ${tipoTendencia === 'ganando' ? 'gprod-active' : ''}`}
             onClick={() => setTipoTendencia('ganando')}
           >
             En Aumento
           </button>
           <button 
-            className={`tab-btn ${tipoTendencia === 'perdiendo' ? 'active' : ''}`}
+            className={`gprod-tab-btn ${tipoTendencia === 'perdiendo' ? 'gprod-active' : ''}`}
             onClick={() => setTipoTendencia('perdiendo')}
           >
             En Descenso
@@ -240,21 +239,21 @@ const TendenciasProductos = () => {
         </div>
       </div>
       
-      <div className="tendencias-content">
+      <div className="gprod-tendencias-content">
         {loading ? (
-          <div className="tendencias-loading">Cargando...</div>
+          <div className="gprod-tendencias-loading">Cargando...</div>
         ) : error ? (
-          <div className="tendencias-error">{error}</div>
+          <div className="gprod-tendencias-error">{error}</div>
         ) : tendencias.length === 0 ? (
-          <div className="tendencias-empty">No hay datos disponibles</div>
+          <div className="gprod-tendencias-empty">No hay datos disponibles</div>
         ) : (
-          <ul className="tendencias-lista">
+          <ul className="gprod-tendencias-lista">
             {tendencias.map((item, index) => (
-              <li key={item.id || index} className={`tendencia-item ${index < 3 ? 'destacado' : ''}`}>
-                <span className="tendencia-nombre">{item.nombre}</span>
-                <div className="tendencia-stats">
-                  <span className="tendencia-periodo">{item.periodo}</span>
-                  <div className={`tendencia-porcentaje ${item.porcentaje > 0 ? 'positivo' : 'negativo'}`}>
+              <li key={item.id || index} className={`gprod-tendencia-item ${index < 3 ? 'gprod-destacado' : ''}`}>
+                <span className="gprod-tendencia-nombre">{item.nombre}</span>
+                <div className="gprod-tendencia-stats">
+                  <span className="gprod-tendencia-periodo">{item.periodo}</span>
+                  <div className={`gprod-tendencia-porcentaje ${item.porcentaje > 0 ? 'gprod-positivo' : 'gprod-negativo'}`}>
                     {getTendenciaIcon(item.porcentaje)}
                     {formatPorcentaje(item.porcentaje)}
                   </div>
