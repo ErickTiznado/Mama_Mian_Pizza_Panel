@@ -25,8 +25,8 @@
   
   .container {
     display: grid;
-    grid-template-columns: repeat(10,1fr);
-    grid-template-rows: repeat(10,1fr);
+    grid-template-columns: repeat(13,1fr);
+    grid-template-rows: repeat(4,1fr);
     gap: 0px;
     height: 100vh;
     width: 100vw;
@@ -35,24 +35,17 @@
     overflow: hidden;
   }
   
-  .navbar-container {
-    display: grid;
-    grid-column: span 10 / span 10;
-    grid-row: span 1 / span 1;
-    background-color: var(--color-primary);
-  }
-  
   .sidebar-container {
     display: grid;
-    grid-column: span 2 / span 2;
-    grid-row: span 10 / span 10;
+    grid-column: span 1 / span 1;
+    grid-row: span 4 / span 4;
     background-color: var(--color-secundary);
   }
   
   .content-container {
     display: grid;
-    grid-column: span 8 / span 8;
-    grid-row: span 10 / span 10;
+    grid-column: span 12 / span 12;
+    grid-row: span 4 / span 4;
     background-color: var(--color-tertiary);
   }
   
