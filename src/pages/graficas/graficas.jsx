@@ -21,15 +21,17 @@ function Graficas() {
           </button>
         </div>
         <div>
-
-        </div>
-        <div>
           <select name="" id="">
             <option value="">Hoy</option>
             <option value="">Semanal</option>
             <option value="">Mes</option>
           </select>
         </div>
+        <div>
+          <div >
+            <span>Exportar</span>
+          </div>
+</div>
       </div>
     </div>
 
