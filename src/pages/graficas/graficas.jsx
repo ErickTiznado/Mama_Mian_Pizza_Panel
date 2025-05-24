@@ -9,8 +9,10 @@ function Graficas() {
   return (
     <div className="dashboard__container">
       <div className="dash__action-bar__container">
-        <div >
-          <button>
+       <div className="dash__action-bar">
+       <div  className="dash__act__col-4">
+        <div className="dash__act__flex-container">
+        <button>
             Pedidos
           </button>
           <button>
@@ -19,19 +21,24 @@ function Graficas() {
           <button>
             Clientes
           </button>
+          
+        </div>
         </div>
         <div>
+        <div className="dash__act__col-4">
           <select name="" id="">
             <option value="">Hoy</option>
             <option value="">Semanal</option>
             <option value="">Mes</option>
           </select>
+          </div>
         </div>
-        <div>
+        <div className="dash__act__col-4">
           <div >
             <span>Exportar</span>
           </div>
 </div>
+       </div>
       </div>
     </div>
 
