@@ -8,5 +8,8 @@
   display: grid;
   grid-column: span 12 / span 12;
   grid-row: span 1 / span 1;
-  background-color: var(--color-quaternary);
+  background-color: var(--color-accent);
+  padding: 10px;
 }
+
+.dash__act__

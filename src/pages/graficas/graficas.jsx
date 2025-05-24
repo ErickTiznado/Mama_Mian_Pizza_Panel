@@ -9,7 +9,7 @@ function Graficas() {
   return (
     <div className="dashboard__container">
       <div className="dash__action-bar__container">
-        <div>
+        <div >
           <button>
             Pedidos
           </button>
