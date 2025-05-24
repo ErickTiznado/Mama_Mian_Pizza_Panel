@@ -41,7 +41,7 @@ const mapOptions = {
 // Lista exacta de bibliotecas requeridas
 const libraries = ["places"];
 
-const MapaPedidos = () => {
+const MapaPedidos = ({ API_BASE_URL }) => {
   const [pedidosPorZona, setPedidosPorZona] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -54,8 +54,8 @@ const MapaPedidos = () => {
   // Centro inicial en El Salvador
   const [center, setCenter] = useState({ lat: 13.7, lng: -88.9 });
 
-  // URL base para la API de pedidos
-  const API_BASE_URL = "https://server.tiznadodev.com/api";
+  // Usar el API_BASE_URL proporcionado como prop o el valor por defecto si no está definido
+  const apiUrl = API_BASE_URL || "https://server.tiznadodev.com/api";
 
   // Cargar la API de Google Maps
   const { isLoaded, loadError } = useJsApiLoader({
@@ -82,7 +82,7 @@ const MapaPedidos = () => {
       setApiStatus('Conectando con el servidor...');
       
       // Obtener todos los pedidos
-      const response = await axios.get(`${API_BASE_URL}/orders/orders`);
+      const response = await axios.get(`${apiUrl}/orders/orders`);
       setApiStatus(`Respuesta recibida: ${response.data.length} pedidos encontrados`);
       console.log("Respuesta de la API:", response.data);
       const pedidos = response.data;

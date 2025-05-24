@@ -3,13 +3,13 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import axios from 'axios';
 import './PedidosSemanales.css';
 
-const PedidosSemanales = () => {
+const PedidosSemanales = ({ API_BASE_URL }) => {
   const [dataSemanal, setDataSemanal] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // URL base para la API de pedidos
-  const API_BASE_URL = "https://server.tiznadodev.com/api";
+  // Usar el API_BASE_URL proporcionado como prop o el valor por defecto si no está definido
+  const apiUrl = API_BASE_URL || "https://server.tiznadodev.com/api";
 
   // Colores corporativos para las gráficas
   const BRAND_COLORS = {
@@ -51,7 +51,7 @@ const PedidosSemanales = () => {
       setLoading(true);
       
       // Obtener todos los pedidos
-      const response = await axios.get(`${API_BASE_URL}/orders/orders`);
+      const response = await axios.get(`${apiUrl}/orders/orders`);
       const pedidos = response.data;
       
       // Preparar datos por semana

@@ -12,7 +12,7 @@ const TrendIcon = ({ value }) => {
   return <span className="trend-icon neutral">0%</span>;
 };
 
-const PedidosKPI = () => {
+const PedidosKPI = ({ API_BASE_URL }) => {
   const [kpiData, setKpiData] = useState({
     totalHoy: 0,
     totalSemana: 0,
@@ -26,15 +26,15 @@ const PedidosKPI = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // URL base para la API de pedidos
-  const API_BASE_URL = "https://server.tiznadodev.com/api";
+  // Usar el API_BASE_URL proporcionado como prop o el valor por defecto si no está definido
+  const apiUrl = API_BASE_URL || "https://server.tiznadodev.com/api";
 
   const fetchKPIData = async () => {
     try {
       setLoading(true);
       
       // Obtener todos los pedidos
-      const response = await axios.get(`${API_BASE_URL}/orders/orders`);
+      const response = await axios.get(`${apiUrl}/orders/orders`);
       const pedidos = response.data;
       
       // Fecha actual

@@ -3,14 +3,14 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recha
 import axios from 'axios';
 import './MetodoEntregaChart.css';
 
-const MetodoEntregaChart = ({ colores, fechasFiltradas }) => {
+const MetodoEntregaChart = ({ colores, fechasFiltradas, API_BASE_URL }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [noData, setNoData] = useState(false);
 
-  // URL base para la API de pedidos
-  const API_BASE_URL = "https://server.tiznadodev.com/api";
+  // Usar el API_BASE_URL proporcionado como prop o el valor por defecto si no está definido
+  const apiUrl = API_BASE_URL || "https://server.tiznadodev.com/api";
 
   // Colores corporativos para las gráficas
   const BRAND_COLORS = colores || [
@@ -45,7 +45,7 @@ const MetodoEntregaChart = ({ colores, fechasFiltradas }) => {
       console.log(`Obteniendo datos de métodos de entrega desde ${fechaInicio.toLocaleDateString()} hasta ${fechaFin.toLocaleDateString()}`);
       
       // Obtener todos los pedidos
-      const response = await axios.get(`${API_BASE_URL}/orders/orders`);
+      const response = await axios.get(`${apiUrl}/orders/orders`);
       
       if (!response.data || response.data.length === 0) {
         console.log("No se encontraron pedidos en la respuesta");

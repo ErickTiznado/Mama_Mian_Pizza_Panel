@@ -27,9 +27,7 @@ function App() {
       
       <BrowserRouter>
         <main className='container'>
-          <nav className='navbar-container'>
-            <Navbar/>    
-          </nav>
+
           <aside className='sidebar-container'>
             <Sidebar/>
           </aside>

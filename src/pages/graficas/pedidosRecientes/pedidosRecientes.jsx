@@ -1,19 +1,21 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import "./pedidosRecientes.css";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './pedidosRecientes.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalendarCheck, faClock } from '@fortawesome/free-solid-svg-icons';
 
-const PedidosRecientes = () => {
+const PedidosRecientes = ({ colorAccent, fechasFiltradas, API_BASE_URL }) => {
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // URL base para la API de pedidos
-  const API_BASE_URL = "https://server.tiznadodev.com/api/orders";
+  // Usar el API_BASE_URL proporcionado como prop o el valor por defecto si no está definido
+  const apiUrl = API_BASE_URL || "https://server.tiznadodev.com/api";
 
   // Función para obtener la fecha actual en formato YYYY-MM-DD
   const getFechaActual = () => {
-    const fecha = new Date();
-    return fecha.toISOString().split('T')[0];
+    const hoy = new Date();
+    return hoy.toISOString().split('T')[0];
   };
   
   // Función para obtener pedidos del día actual
@@ -23,7 +25,7 @@ const PedidosRecientes = () => {
       setError(null);
       
       // Obtener todos los pedidos
-      const response = await axios.get(`${API_BASE_URL}/orders`);
+      const response = await axios.get(`${apiUrl}/orders/orders`);
       console.log("Respuesta completa de la API:", response.data);
       
       // Filtrar los pedidos de hoy

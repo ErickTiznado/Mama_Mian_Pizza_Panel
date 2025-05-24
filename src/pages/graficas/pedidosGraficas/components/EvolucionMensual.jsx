@@ -3,14 +3,14 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import axios from 'axios';
 import './EvolucionMensual.css';
 
-const EvolucionMensual = ({ colorPrimario, colorSecundario, fechasFiltradas }) => {
+const EvolucionMensual = ({ colorPrimario, colorSecundario, fechasFiltradas, API_BASE_URL }) => {
   const [dataMensual, setDataMensual] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [noData, setNoData] = useState(false);
 
-  // URL base para la API de pedidos
-  const API_BASE_URL = "https://server.tiznadodev.com/api";
+  // Usar el API_BASE_URL proporcionado como prop o el valor por defecto si no está definido
+  const apiUrl = API_BASE_URL || "https://server.tiznadodev.com/api";
 
   // Colores corporativos para las gráficas
   const BRAND_COLORS = {
@@ -61,7 +61,7 @@ const EvolucionMensual = ({ colorPrimario, colorSecundario, fechasFiltradas }) =
       setDataMensual([]); // Resetear datos para evitar visualización de datos anteriores
       
       // Obtener todos los pedidos utilizando la API de tu backend
-      const response = await axios.get(`${API_BASE_URL}/orders/orders`);
+      const response = await axios.get(`${apiUrl}/orders/orders`);
       
       if (!response.data || response.data.length === 0) {
         console.log("No se encontraron pedidos en la respuesta");

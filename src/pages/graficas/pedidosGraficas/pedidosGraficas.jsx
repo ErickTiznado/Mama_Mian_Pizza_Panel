@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import PedidosRecientes from "../pedidosRecientes/pedidosRecientes";
 import EvolucionMensual from "./components/EvolucionMensual";
 import MetodoEntregaChart from "./components/MetodoEntregaChart";
+import PedidosKPI from "./components/PedidosKPI";
+import PedidosSemanales from "./components/PedidosSemanales";
+import MapaPedidos from "./components/MapaPedidos";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartLine, faTruck, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faChartLine, faTruck, faUsers, faChartBar, faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import "./pedidosGraficas.css";
 
@@ -42,6 +45,9 @@ function PedidosGraficas({ fechasFiltradas }) {
         <strong>{textoPeriodo}</strong>
       </div>
       
+      {/* KPIs principales */}
+      <PedidosKPI API_BASE_URL={API_BASE_URL} />
+      
       {/* Gráficas y tablas principales */}
       <div className="pedidos-main-content">
         <div className="pedidos-charts-column">
@@ -62,6 +68,18 @@ function PedidosGraficas({ fechasFiltradas }) {
             />
           </div>
           
+          {/* Gráfica de pedidos semanales */}
+          <div className="chart-container">
+            <div className="chart-header">
+              <h3>
+                <FontAwesomeIcon icon={faChartBar} style={{ marginRight: '10px', color: '#FEB248' }} />
+                Pedidos Semanales
+              </h3>
+              <p className="chart-description">Distribución de pedidos por semana</p>
+            </div>
+            <PedidosSemanales API_BASE_URL={API_BASE_URL} />
+          </div>
+          
           {/* Gráfica de métodos de entrega */}
           <div className="chart-container">
             <div className="chart-header">
@@ -76,6 +94,18 @@ function PedidosGraficas({ fechasFiltradas }) {
               fechasFiltradas={fechasFiltradas} 
               API_BASE_URL={API_BASE_URL}
             />
+          </div>
+          
+          {/* Mapa de pedidos */}
+          <div className="chart-container">
+            <div className="chart-header">
+              <h3>
+                <FontAwesomeIcon icon={faMapMarkedAlt} style={{ marginRight: '10px', color: '#FEB248' }} />
+                Mapa de Pedidos
+              </h3>
+              <p className="chart-description">Visualización geográfica de los pedidos</p>
+            </div>
+            <MapaPedidos API_BASE_URL={API_BASE_URL} />
           </div>
         </div>
         
