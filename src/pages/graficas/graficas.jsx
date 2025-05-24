@@ -24,7 +24,11 @@ function Graficas() {
 
         </div>
         <div>
-
+          <select name="" id="">
+            <option value="">Hoy</option>
+            <option value="">Semanal</option>
+            <option value="">Mes</option>
+          </select>
         </div>
       </div>
     </div>
