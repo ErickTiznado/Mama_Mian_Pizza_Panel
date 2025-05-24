@@ -1,51 +1,54 @@
 import { useState, useEffect } from "react";
 import "./graficas.css";
 import PedidosGraficas from "./pedidosGraficas/pedidosGraficas";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartLine, faFilter, faFilterCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { Download, Funnel, ChevronDown } from "lucide-react";
 
 function Graficas() {
-
   return (
     <div className="dashboard__container">
       <div className="dash__action-bar__container">
-       <div className="dash__action-bar">
-       <div  className="dash__act__col-4">
-        <div className="dash__act__flex-container">
-          <div className="dash__act__btn-container">
-                    <button className="dash__act__btn">	
-            Pedidos
-          </button>
-          <button className="dash__act__btn">
-            Productos
-          </button>
-          <button className="dash__act__btn">
-            Clientes
-          </button>
-          
+        <div className="dash__action-bar gap--4">
+          <div className="dash__act__col-3">
+            <div className="dash__act__flex-container">
+              <div className="dash__act__btn-container">
+                <button className="dash__act__btn">Pedidos</button>
+                <button className="dash__act__btn">Productos</button>
+                <button className="dash__act__btn">Clientes</button>
+              </div>
+            </div>
+          </div>
+          <div className="dash__act__col-6">
+            <div className=" gap--4 dash__act__flex-container dash__act__flex-container__center">
+              <select name="" id="" className="dash__act__select">
+                <option value="">Hoy</option>
+                <option value="">Semanal</option>
+                <option value="">Mes</option>
+              </select>
+              <select name="" id="" className="dash__act__select">
+                <option value="">Todos los Pedidos</option>
+                <option value="">Eccomerce</option>
+                <option value="">En local</option>
+              </select>
+              <div className="dash__act__advFilter gap--3">
+                <Funnel className="" size={16} />
+                <span>Filtros Avanzados</span>
+              </div>
+            </div>
+          </div>
+          <div className="dash__act__col-3">
+            <div className="gap--3 dash__act__flex-container dash__act__flex-container__end">
+              <div className="gap--3 dash__act__btn__export">
+                <Download size={20}/>
+                <span>Exportar</span>
+                <ChevronDown size={20} />
+              </div>
+            </div>
           </div>
         </div>
-        </div>
-        <div>
-        <div className="dash__act__col-4">
-          <select name="" id="">
-            <option value="">Hoy</option>
-            <option value="">Semanal</option>
-            <option value="">Mes</option>
-          </select>
-          </div>
-        </div>
-        <div className="dash__act__col-4">
-          <div >
-            <span>Exportar</span>
-          </div>
-</div>
-       </div>
       </div>
     </div>
 
-//    <PedidosGraficas />
-
+    //    <PedidosGraficas />
   );
 }
 
