@@ -12,16 +12,18 @@ function Graficas() {
        <div className="dash__action-bar">
        <div  className="dash__act__col-4">
         <div className="dash__act__flex-container">
-        <button>
+          <div className="dash__act__btn-container">
+                    <button className="dash__act__btn">	
             Pedidos
           </button>
-          <button>
+          <button className="dash__act__btn">
             Productos
           </button>
-          <button>
+          <button className="dash__act__btn">
             Clientes
           </button>
           
+          </div>
         </div>
         </div>
         <div>
