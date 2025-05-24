@@ -5,7 +5,11 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    align-items: center;
+     width: 340px;
+  transition: width 0.3s ease-in-out;
+  align-items: flex-start; /* Alineación horizontal a la izquierda */
+
+    
 }
 
 .items{
@@ -157,3 +161,52 @@
 .notification-toggle:active {
   background-color: #dee2e6;
 }
+/* Asegurar tamaño y alineación del sidebar colapsado */
+.sidebar.collapsed {
+  width: 340px;
+  padding-left: 0;
+  padding-right: 270px;
+  align-items: center; /* Centrado horizontal */
+  
+}
+
+/* Centrar íconos dentro de cada botón */
+.sidebar.collapsed .items {
+  justify-content: center;
+  padding: 12px 0;
+  width: 100%;
+}
+
+/* Ocultar texto, mantener ícono centrado */
+.sidebar.collapsed .items span {
+  font-size: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Alinear correctamente el ícono */
+.sidebar.collapsed .items span svg {
+  margin: 0 auto;
+}
+
+/* Centrar el botón de colapsar */
+.sidebar.collapsed .collapse-btn {
+  align-self: center;
+  margin: 10px auto;
+}
+
+/* Ocultar las campanas en colapsado */
+.sidebar.collapsed .items > span + * {
+  display: none;
+}
+.collapse-btn {
+  background: none;
+  border: none;
+  color: var(--color-septenary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin: 10px;
+  align-self: flex-end;
+}
+

@@ -1,4 +1,7 @@
 import "./sidebar.css";
+import { ArrowLeftToLine, ArrowRightToLine } from "lucide-react";
+
+
 import {
   House,
   ShoppingCart,
@@ -19,27 +22,30 @@ function Sidebar() {
   const navigate = useNavigate();
   const { requestPermission, permissionStatus, sendTestNotification } = useNotifications();
   const [showPermissionBanner, setShowPermissionBanner] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    return localStorage.getItem("sidebar-collapsed") === "true";
+  });
 
-  // Verificar el estado de los permisos al cargar
   useEffect(() => {
     if ('Notification' in window) {
-      // Mostrar banner solo si el permiso no está concedido ni denegado
       setShowPermissionBanner(Notification.permission === 'default');
     }
   }, [permissionStatus]);
+
+  useEffect(() => {
+    localStorage.setItem("sidebar-collapsed", isCollapsed);
+  }, [isCollapsed]);
 
   const handleRequestPermission = async () => {
     try {
       const result = await requestPermission();
       if (result === 'granted') {
         setShowPermissionBanner(false);
-        
-        // Enviar una notificación de prueba inmediatamente para confirmar que funciona
         setTimeout(async () => {
           await sendTestNotification();
         }, 1000);
       } else if (result === 'denied') {
-        alert("Has denegado los permisos de notificación. Para recibir alertas importantes, debes activarlas en la configuración del navegador.");
+        alert("Has denegado los permisos de notificación.");
       }
     } catch (error) {
       console.error("Error al solicitar permisos:", error);
@@ -54,9 +60,16 @@ function Sidebar() {
     navigate(path);
   };
 
+  const toggleSidebar = () => {
+    setIsCollapsed(prev => !prev);
+  };
+
   return (
-    <div className="sidebar">
-      {/* Banner de solicitud de permisos */}
+     <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
+      <button className="collapse-btn" onClick={toggleSidebar}>
+        {isCollapsed ? "⮞" : "⮜"}
+      </button>
+
       {showPermissionBanner && (
         <div className="notification-permission-banner">
           <div className="permission-banner-content">
@@ -64,80 +77,51 @@ function Sidebar() {
             <p>Activa las notificaciones para estar al día con pedidos y alertas</p>
           </div>
           <div className="permission-banner-actions">
-            <button 
-              className="permission-accept-btn" 
-              onClick={handleRequestPermission}
-            >
-              Activar
-            </button>
-            <button 
-              className="permission-dismiss-btn" 
-              onClick={handleDismissBanner}
-            >
-              Ahora no
-            </button>
+            <button className="permission-accept-btn" onClick={handleRequestPermission}>Activar</button>
+            <button className="permission-dismiss-btn" onClick={handleDismissBanner}>Ahora no</button>
           </div>
         </div>
       )}
-      
+
       <button className="items" onClick={() => handleNavigation("/home")}>
-        <span>
-        <House size={38} />
-        Inicio 
-        </span>
+        <span><House size={38} /> {!isCollapsed && "Inicio"}</span>
       </button>
+
       <button className="items" onClick={() => handleNavigation("/pedidos")}>
-        <span>
-        <ShoppingCart size={38} />
-        Pedidos
-        </span>
-        <NotificationBell category="pedidos" />
+        <span><ShoppingCart size={38} /> {!isCollapsed && "Pedidos"}</span>
+        {!isCollapsed && <NotificationBell category="pedidos" />}
       </button>
-      <button
-        className="items"
-        onClick={() => handleNavigation("/AgregarContenido")}
-      >
-        <span>
-        <ClipboardList size={38} />
-        Contenido 
-        </span>
+
+      <button className="items" onClick={() => handleNavigation("/AgregarContenido")}>
+        <span><ClipboardList size={38} /> {!isCollapsed && "Contenido"}</span>
       </button>
+
       <button className="items" onClick={() => handleNavigation("/inventario")}>
-        <span>
-        <Package size={38} />
-        Inventario 
-        </span>
-        <NotificationBell category="inventario" />
+        <span><Package size={38} /> {!isCollapsed && "Inventario"}</span>
+        {!isCollapsed && <NotificationBell category="inventario" />}
       </button>
+
       <button className="items" onClick={() => handleNavigation("/graficas")}>
-        <span>
-        <ChartLine size={38} />
-        Informes y Estadisticas 
-        </span>
+        <span><ChartLine size={38} /> {!isCollapsed && "Informes y Estadisticas"}</span>
       </button>
+
       <button className="items" onClick={() => handleNavigation("/clientes")}>
-        <span>
-        <Users size={38} />
-        Clientes 
-        </span>
-        <NotificationBell category="clientes" />
+        <span><Users size={38} /> {!isCollapsed && "Clientes"}</span>
+        {!isCollapsed && <NotificationBell category="clientes" />}
       </button>
+
       <button className="items" onClick={() => window.open("https://contmigo.tiznadodev.com/", "_blank")}>
-        <span>
-        <Store size={38} />
-        Visualizar Tienda 
-        </span>
+        <span><Store size={38} /> {!isCollapsed && "Visualizar Tienda"}</span>
       </button>
-      
-      {/* Botón para activar notificaciones (si están desactivadas) */}
+
       {permissionStatus !== 'granted' && !showPermissionBanner && (
         <button className="notification-toggle" onClick={handleRequestPermission} title="Activar notificaciones">
           <BellOff size={24} />
-          <span>Activar notificaciones</span>
+          {!isCollapsed && <span>Activar notificaciones</span>}
         </button>
       )}
     </div>
   );
 }
 
-export default Sidebar;
+export default Sidebar;  

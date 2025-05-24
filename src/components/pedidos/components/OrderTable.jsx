@@ -20,15 +20,11 @@ const OrderTable = ({
   changeOrderStatus,
   handleCancelOrder
 }) => {
-  // Determinar qué conjunto de órdenes mostrar
   const displayOrders = filtrosAplicados ? filteredOrders : orders;
-
-  // Cálculos para la paginación
   const indexInicio = (paginaActual - 1) * elementosPorPagina;
   const indexFin = indexInicio + elementosPorPagina;
   const ordersEnPagina = displayOrders.slice(indexInicio, indexFin);
-  
-  // Función para obtener el color según el método de pago
+
   const getPaymentMethodStyle = (method) => {
     switch(method?.toLowerCase()) {
       case 'efectivo':
@@ -42,7 +38,6 @@ const OrderTable = ({
     }
   };
 
-  // Función para obtener el ícono según el tipo de producto
   const getProductIcon = (productName) => {
     const nameLower = productName.toLowerCase();
     if (nameLower.includes('pizza')) return <FaPizzaSlice className="producto-icon" />;
@@ -99,10 +94,7 @@ const OrderTable = ({
                         </div>
                         <ul className="productos-lista">
                           {order.detalles.slice(0, 3).map((item, idx) => (
-                            <li 
-                              key={idx} 
-                              className="producto-item"
-                            >
+                            <li key={idx} className="producto-item">
                               <div className="producto-cantidad">{item.cantidad}x</div>
                               <div className="producto-detalle">
                                 <span className="producto-nombre">
@@ -167,40 +159,13 @@ const OrderTable = ({
                       >
                         <FaEye className="icon-small" /> Ver Detalles
                       </button>
-                      
                       {activeFilter !== "cancelado" && order.estado !== "cancelado" && (
-                        <div className="action-secondary-buttons">
-                          {order.estado !== "pendiente" && (
-                            <button 
-                              className="action-secondary-button btn-state btn-pendiente"
-                              onClick={() => changeOrderStatus(order.id_pedido, "pendiente")}
-                            >
-                              Pendiente
-                            </button>
-                          )}
-                          {order.estado !== "en_proceso" && (
-                            <button 
-                              className="action-secondary-button btn-state btn-en_proceso"
-                              onClick={() => changeOrderStatus(order.id_pedido, "en_proceso")}
-                            >
-                              En Proceso
-                            </button>
-                          )}
-                          {order.estado !== "entregado" && (
-                            <button 
-                              className="action-secondary-button btn-state btn-entregado"
-                              onClick={() => changeOrderStatus(order.id_pedido, "entregado")}
-                            >
-                              Entregado
-                            </button>
-                          )}
-                          <button 
-                            className="action-secondary-button btn__action__cancell"
-                            onClick={() => handleCancelOrder(order.id_pedido)}
-                          >
-                            Cancelar
-                          </button>
-                        </div>
+                        <button 
+                          className="action-primary-button btn__action__cancell"
+                          onClick={() => handleCancelOrder(order.id_pedido)}
+                        >
+                          Cancelar
+                        </button>
                       )}
                     </div>
                   </td>
