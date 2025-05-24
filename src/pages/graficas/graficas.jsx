@@ -4,6 +4,13 @@ import PedidosGraficas from "./pedidosGraficas/pedidosGraficas";
 import { Download, Funnel, ChevronDown } from "lucide-react";
 
 function Graficas() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleToggle = () => {
+    setIsOpen(prev => !prev);
+  }
+
+  
   return (
     <div className="dashboard__container">
       <div className="dash__action-bar__container">
@@ -37,11 +44,20 @@ function Graficas() {
           </div>
           <div className="dash__act__col-3">
             <div className="gap--3 dash__act__flex-container dash__act__flex-container__end">
-              <div className="gap--3 dash__act__btn__export">
+              <button onClick={handleToggle} className="gap--3 dash__act__btn__export">
                 <Download size={20}/>
                 <span>Exportar</span>
                 <ChevronDown size={20} />
-              </div>
+              </button>
+              {isOpen && (
+                <div className="dash__act__export__options__container">
+                  <div className="dash__act__export__options">
+                  <button className="dash__act__export__option">Exportar como Excel</button>
+                  <button className="dash__act__export__option">Exportar como PDF</button>
+                  <button className="dash__act__export__option">Exportar como CSV</button>
+                </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
