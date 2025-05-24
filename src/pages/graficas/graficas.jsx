@@ -10,7 +10,21 @@ function Graficas() {
     <div className="dashboard__container">
       <div className="dash__action-bar__container">
         <div>
-          
+          <button>
+            Pedidos
+          </button>
+          <button>
+            Productos
+          </button>
+          <button>
+            Clientes
+          </button>
+        </div>
+        <div>
+
+        </div>
+        <div>
+
         </div>
       </div>
     </div>

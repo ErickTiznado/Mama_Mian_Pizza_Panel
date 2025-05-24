@@ -1,7 +1,7 @@
 .dashboard__container {
   display: grid;
   grid-template-columns: repeat(12 , 1fr);
-  grid-template-rows: repeat(10 , 1fr);
+  grid-template-rows: repeat(14 , 1fr);
 }
 
 .dash__action-bar__container {
