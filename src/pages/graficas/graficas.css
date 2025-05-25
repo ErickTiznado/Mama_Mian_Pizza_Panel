@@ -14,6 +14,13 @@
   border-bottom: #2c3548 solid 1px;
 }
 
+.dash__content-container {
+  grid-column: span 12 / span 12;
+  grid-row: span 13 / span 13;
+  background-color: #1e293b;
+  padding: 10px;
+}
+
 .dash__action-bar{
   display: grid;
   grid-template-columns: repeat(12 , 1fr);
@@ -81,6 +88,7 @@
   border-radius: 5px;
   padding: 0 3px;
 }
+
 .dash__act__btn {
   display: flex;
   align-items: center;
@@ -165,4 +173,11 @@
   background-color: #0f172a;
   outline: none;
   border: none;
+}
+
+.content__container {
+  display: grid;
+  grid-template-columns: repeat(12 , 1fr);
+  grid-template-rows: repeat(5 , 1fr);
+  gap: 10px;
 }

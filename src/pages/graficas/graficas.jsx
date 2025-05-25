@@ -62,6 +62,12 @@ function Graficas() {
           </div>
         </div>
       </div>
+      <div className="dash__content-container">
+        <div className="content__container">
+                <PedidosGraficas />
+      
+        </div>
+      </div>
     </div>
 
     //    <PedidosGraficas />

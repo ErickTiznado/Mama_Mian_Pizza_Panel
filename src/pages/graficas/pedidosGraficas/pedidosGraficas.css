@@ -1,360 +1,41 @@
-.pedidos-graficas-container {
+.pedidos-graficas__container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  align-items: center;
   padding: 20px;
   width: 100%;
+  height: 100%;
 }
 
-.pedidos-graficas-container h2 {
-  margin-bottom: 1rem; /* Reducido el margen inferior */
-  font-size: 1.6rem; /* Aumentado ligeramente el tamaño del título principal */
-  font-weight: 700;
-  color: var(--color-white);
-}
-
-/* Indicador de periodo */
-.periodo-indicador {
-  font-size: 0.9rem;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  border: none;
-}
-
-.periodo-texto {
-  font-weight: 600;
-  color: #FEB248;
-}
-
-/* Estilos para el filtrado por periodo */
-.periodo-filtrado {
-  background-color: rgba(254, 178, 72, 0.1);
-  padding: 8px 15px;
-  border-radius: 6px;
-  border-left: 4px solid #FEB248;
-  margin-bottom: 10px;
-  font-size: 0.9rem;
-}
-
-/* Layout principal de contenido */
-.pedidos-main-content {
+.ped__col-12 {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 20px;
+grid-column: span 12 / span 12;
+  grid-row: span 1 / span 1;
+}
+
+.KPI__container {
+display: grid;
+grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+  gap: 0px 10px;
   width: 100%;
+  height: 100%;
 }
 
-@media (max-width: 1024px) {
-  .pedidos-main-content {
-    grid-template-columns: 1fr;
-  }
-}
-
-.pedidos-charts-column {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.pedidos-side-column {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.pedidos-chart-box {
-  background-color: var(--color-secondary);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  padding: 1.2rem; /* Reducido el padding */
-  margin-bottom: 0; /* Eliminado el margen inferior, usamos gap */
-  border: 1px solid #374151;
-}
-
-.pedidos-chart-box h3 {
-  margin-top: 0;
-  margin-bottom: 1rem; /* Reducido el margen inferior */
-  color: var(--color-white);
-  font-size: 1.3rem; /* Aumentado el tamaño del título de cada gráfica */
-  font-weight: 600;
-}
-
-/* Contenedores de gráficos */
-.chart-container {
-  background-color: #1a1a1a;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  height: fit-content;
-  border: 1px solid #374151;
-  margin-bottom: 0;
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-}
-
-.chart-header {
-  margin-bottom: 15px;
-}
-
-.chart-header h3 {
-  font-size: 1.2rem;
-  margin-bottom: 5px;
-  color: #e5e7eb;
-  display: flex;
-  align-items: center;
-}
-
-.chart-description {
-  color: #9ca3af;
-  font-size: 0.9rem;
-  margin: 0;
-}
-
-/* Estilos para pedidos recientes */
-.pedido-reciente-item {
-  padding: 12px 10px;
-  border-radius: 6px;
-  margin-bottom: 10px;
-  background-color: rgba(31, 41, 55, 0.4);
-  transition: all 0.2s ease;
-  border: 1px solid rgba(55, 65, 81, 0.5);
-}
-
-.pedido-reciente-item:hover {
-  background-color: rgba(31, 41, 55, 0.6);
-  transform: translateY(-2px);
-  border-color: rgba(254, 178, 72, 0.4);
-}
-
-.pedido-reciente-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.pedido-codigo {
-  font-weight: 600;
-  color: #FEB248;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.pedido-fecha {
-  font-size: 0.8rem;
-  color: #9ca3af;
-}
-
-.pedido-reciente-cliente {
-  margin-bottom: 8px;
-  font-size: 0.95rem;
-}
-
-.pedido-reciente-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.85rem;
-}
-
-.pedido-estado {
-  padding: 4px 8px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.pedido-estado-pendiente {
-  background-color: #fff3cd;
-  color: #856404;
-}
-
-.pedido-estado-en_proceso {
-  background-color: #cce5ff;
-  color: #004085;
-}
-
-.pedido-estado-entregado {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.pedido-estado-cancelado {
-  background-color: #f8d7da;
-  color: #721c24;
-}
-
-.pedido-total {
-  font-weight: 600;
-  color: #FEB248;
-}
-
-/* Estilos para gráfico de métodos de entrega */
-.metodo-entrega-chart {
-  width: 100%;
-  height: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Estilos para tarjetas KPI */
-.kpi-content {
+.KPI__col-4 {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+  grid-column: span 4 / span 4;
+  grid-row: span 1 / span 1;
   width: 100%;
-  margin-bottom: 20px;
+  height: 100%;
 }
 
-.kpi-card {
-  background-color: #1a2332;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-  border: 1px solid #374151;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
 
-.kpi-title {
-  font-size: 0.9rem;
-  color: #9ca3af;
-  margin: 0;
-}
-
-.kpi-value {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: #FEB248;
-  margin: 0;
-}
-
-.kpi-trend {
-  font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.kpi-trend-up {
-  color: #10b981;
-}
-
-.kpi-trend-down {
-  color: #ef4444;
-}
-
-/* Estilos para el contenedor de mapa */
-.mapa-container {
-  width: 100%;
-  height: 300px;
-  position: relative;
-  overflow: hidden;
-  border-radius: 6px;
-}
-
-/* Indicadores de carga y error */
-.loading-indicator {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  font-size: 18px;
-  color: #FEB248;
-  animation: pulse 1.5s infinite ease-in-out;
-  font-weight: 600;
-}
-
-.error-message {
-  background-color: rgba(220, 53, 69, 0.1);
-  color: #ef4444;
-  padding: 15px;
-  border: 1px solid rgba(220, 53, 69, 0.3);
-  border-radius: 8px;
-  margin: 15px 0;
-  font-weight: 500;
-}
-
-.no-data-message {
+.KPI__col__container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 0;
-  gap: 15px;
-  color: #9ca3af;
-  text-align: center;
-}
-
-/* Estilos para el botón de actualización manual */
-.update-data-button {
-  background-color: #374151;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  margin-top: 10px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.update-data-button:hover {
-  background-color: #4b5563;
-}
-
-.reload-button {
-  background-color: #FEB248;
-  color: #1a1a1a;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 4px;
-  font-weight: 500;
-  margin-top: 10px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.reload-button:hover {
-  background-color: #ffc678;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-/* Media queries para responsive */
-@media (max-width: 1200px) {
-  .pedidos-main-content {
-    grid-template-columns: 3fr 2fr;
-  }
-}
-
-@media (max-width: 992px) {
-  .pedidos-main-content {
-    grid-template-columns: 1fr;
-  }
-  
-  .chart-container {
-    min-height: 250px;
-  }
-}
-
-@media (max-width: 768px) {
-  .kpi-content {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
-}
-
-@media (max-width: 576px) {
-  .kpi-content {
-    grid-template-columns: 1fr;
-  }
+  width: 100%;
+  height: 100%;
 }
