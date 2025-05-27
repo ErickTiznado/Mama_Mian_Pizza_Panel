@@ -5,11 +5,22 @@ import { Download, Funnel, ChevronDown } from "lucide-react";
 
 function Graficas() {
   const [isOpen, setIsOpen] = useState(false);
+  // Agregar estados para los filtros
+  const [timePeriod, setTimePeriod] = useState("today");  // today, week, month
+  const [orderType, setOrderType] = useState("all");      // all, ecommerce, local
 
   const handleToggle = () => {
     setIsOpen(prev => !prev);
-  }
+  };
 
+  // Manejadores para los cambios de filtro
+  const handleTimePeriodChange = (e) => {
+    setTimePeriod(e.target.value);
+  };
+
+  const handleOrderTypeChange = (e) => {
+    setOrderType(e.target.value);
+  };
   
   return (
     <div className="dashboard__container">
@@ -26,15 +37,23 @@ function Graficas() {
           </div>
           <div className="dash__act__col-6">
             <div className=" gap--4 dash__act__flex-container dash__act__flex-container__center">
-              <select name="" id="" className="dash__act__select">
-                <option value="">Hoy</option>
-                <option value="">Semanal</option>
-                <option value="">Mes</option>
+              <select 
+                value={timePeriod} 
+                onChange={handleTimePeriodChange} 
+                className="dash__act__select"
+              >
+                <option value="today">Hoy</option>
+                <option value="week">Semanal</option>
+                <option value="month">Mes</option>
               </select>
-              <select name="" id="" className="dash__act__select">
-                <option value="">Todos los Pedidos</option>
-                <option value="">Eccomerce</option>
-                <option value="">En local</option>
+              <select 
+                value={orderType} 
+                onChange={handleOrderTypeChange} 
+                className="dash__act__select"
+              >
+                <option value="all">Todos los Pedidos</option>
+                <option value="ecommerce">Eccomerce</option>
+                <option value="local">En local</option>
               </select>
               <div className="dash__act__advFilter gap--3">
                 <Funnel className="" size={16} />
@@ -64,7 +83,7 @@ function Graficas() {
       </div>
       <div className="dash__content-container">
         <div className="content__container">
-                <PedidosGraficas />
+                <PedidosGraficas timePeriod={timePeriod} orderType={orderType} />
       
         </div>
       </div>

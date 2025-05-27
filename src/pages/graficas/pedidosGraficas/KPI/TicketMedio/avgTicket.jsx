@@ -1,57 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { ShoppingBag, TrendingUp, TrendingDown } from "lucide-react";
-import './ContPedidos.css';
+import { DollarSign, TrendingUp, TrendingDown } from "lucide-react";
+import './avgTicket.css';
 
 const API_URL = 'https://server.tiznadodev.com';
 
-const ContPedidos = ({ timePeriod = 'today', orderType = 'all' }) => {
-    const [countPed, setCountPed] = useState(0);
+const AvgTicket = ({ timePeriod = 'today', orderType = 'all' }) => {
+    const [ticketMedio, setTicketMedio] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [comparison, setComparison] = useState({ percentage: 0, isIncrease: true, comparisonText: '' });
 
-    const fetchCountPedidos = async () => {
+    const fetchTicketMedio = async () => {
         try {
             setLoading(true);
             setError(null);
             
-            const response = await fetch(`${API_URL}/api/orders/statistics`);
+            const response = await fetch(`${API_URL}/api/orders/statistics/tickets`);
             if (!response.ok) {
                 throw new Error('Error al obtener la información');
             }
             
             const data = await response.json();
-            
+            console.log('Datos obtenidos:', data);
             // Seleccionar los datos según el filtro de tiempo
-            let count, percentage, isIncrease, comparisonText;
+            let ticketValue, percentage, isIncrease, comparisonText;
             
             switch (timePeriod) {
                 case 'today':
-                    count = data.daily.today;
-                    percentage = data.daily.growthFromYesterday;
+                    ticketValue = parseFloat(data.daily.today);
+                    percentage = data.daily.growthVsYesterday;
                     isIncrease = percentage >= 0;
                     comparisonText = 'desde ayer';
                     break;
                 case 'week':
-                    count = data.weekly.currentWeek;
-                    percentage = data.weekly.growthFromLastWeek;
+                    ticketValue = parseFloat(data.weekly.currentWeek);
+                    percentage = data.weekly.growthVsLastWeek;
                     isIncrease = percentage >= 0;
                     comparisonText = 'desde la semana pasada';
                     break;
                 case 'month':
-                    count = data.monthly.currentMonth;
-                    percentage = data.monthly.growthFromLastMonth;
+                    ticketValue = parseFloat(data.monthly.currentMonth);
+                    percentage = data.monthly.growthVsLastMonth;
                     isIncrease = percentage >= 0;
                     comparisonText = 'desde el mes pasado';
                     break;
                 default:
-                    count = data.daily.today;
-                    percentage = data.daily.growthFromYesterday;
+                    ticketValue = parseFloat(data.daily.today);
+                    percentage = data.daily.growthVsYesterday;
                     isIncrease = percentage >= 0;
                     comparisonText = 'desde ayer';
             }
             
-            setCountPed(count);
+            setTicketMedio(ticketValue);
             setComparison({
                 percentage: Math.abs(percentage), // Guardamos el valor absoluto para la visualización
                 isIncrease: isIncrease,
@@ -64,10 +64,8 @@ const ContPedidos = ({ timePeriod = 'today', orderType = 'all' }) => {
             setError('No se pudo cargar la información');
             setLoading(false);
         }
-    };
-
-    useEffect(() => {
-        fetchCountPedidos();
+    };    useEffect(() => {
+        fetchTicketMedio();
     }, [timePeriod, orderType]); // Re-fetch cuando los filtros cambien
     
     // Obtener el texto adecuado según el período seleccionado
@@ -76,7 +74,7 @@ const ContPedidos = ({ timePeriod = 'today', orderType = 'all' }) => {
             case 'today':
                 return 'de Hoy';
             case 'week':
-                return 'Semanales';
+                return 'Semanal';
             case 'month':
                 return 'Este Mes';
             default:
@@ -84,18 +82,25 @@ const ContPedidos = ({ timePeriod = 'today', orderType = 'all' }) => {
         }
     };
 
+    // Formatear el valor del ticket medio como moneda
+    const formatCurrency = (value) => {
+        return `$${parseFloat(value).toFixed(2)}`;
+    };
+
     return (
-        <div className="count__kpi__container">
-            <div className="count__kpi__header">
+        <div className="avgt__count__kpi__container">
+            <div className="avgt__count__kpi__header">
                 <h5>
-                    Pedidos Totales {getPeriodText()}
+                    Ticket Medio {getPeriodText()}
                 </h5>
                 <span>
-                    <ShoppingBag size={16}/>
-                </span>            </div>            <div className="count__kpi__body">
-                <div className="count-value">{countPed || 0}</div>
+                    <DollarSign size={16}/>
+                </span>
+            </div>
+            <div className="avgt__count__kpi__body">
+                <div className="avgt__count-value">{formatCurrency(ticketMedio)}</div>
                 {!loading && !error && (
-                    <div className={`count-comparison ${comparison.isIncrease ? 'increase' : 'decrease'}`}>
+                    <div className={`avgt__count-comparison ${comparison.isIncrease ? 'increase' : 'decrease'}`}>
                         {comparison.percentage === 0 ? null : comparison.isIncrease ? (
                             <TrendingUp size={16} />
                         ) : (
@@ -114,4 +119,4 @@ const ContPedidos = ({ timePeriod = 'today', orderType = 'all' }) => {
     );
 };
 
-export default ContPedidos;
+export default AvgTicket;

@@ -1,4 +1,4 @@
-.count__kpi__container {
+.avgt__count__kpi__container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,7 +11,7 @@
 ;
 }
 
-.count__kpi__header {
+.avgt__count__kpi__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -20,13 +20,13 @@
     height: 50%;
 }
 
-.count__kpi__header h5 {
+.avgt__count__kpi__header h5 {
     color: #fff;
     font-size: 1rem;
     font-weight: 400;
 }
 
-.count__kpi__body {
+.avgt__count__kpi__body {
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -36,13 +36,13 @@
     padding: 0 20px;
 }
 
-.count__kpi__body .count-value {
+.avgt__count__kpi__body .avgt__count-value {
     font-size: 2rem;
     font-weight: 600;
     color: #FFFFFF;
 }
 
-.count__kpi__body .count-comparison {
+.avgt__count__kpi__body .avgt__count-comparison {
     display: flex;
     align-items: center;
     gap: 4px;
@@ -50,25 +50,25 @@
     font-weight: 500;
 }
 
-.count__kpi__body .count-comparison.increase {
+.avgt__count__kpi__body .avgt__count-comparison.increase {
     color: #10b981; /* Verde para aumento */
 }
 
-.count__kpi__body .count-comparison.decrease {
+.avgt__count__kpi__body .avgt__count-comparison.decrease {
     color: #ef4444; /* Rojo para disminución */
 }
 
-.count__kpi__body .count-comparison span:only-child {
+.avgt__count__kpi__body .avgt__count-comparison span:only-child {
     color: #94a3b8; /* Gris para sin cambios */
 }
 
-.count__kpi__body .error-text {
+.avgt__count__kpi__body .error-text {
     color: #ef4444;
     font-size: 0.9rem;
 }
 
 /* Estilo para mensaje de cargando */
-.count__kpi__body p {
+.avgt__count__kpi__body p {
     color: #94a3b8;
     font-size: 1rem;
 }
