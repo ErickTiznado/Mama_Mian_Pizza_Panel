@@ -1,41 +1,53 @@
 .pedidos-graficas__container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 20px;
   width: 100%;
+  gap: 20px;
+  padding: 20px;
   height: 100%;
-}
-
-.ped__col-12 {
-  display: grid;
-grid-column: span 12 / span 12;
-  grid-row: span 1 / span 1;
 }
 
 .KPI__container {
-display: grid;
-grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(1, 1fr);
-  gap: 0px 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
   width: 100%;
-  height: 100%;
 }
 
 .KPI__col-4 {
-  display: grid;
-  grid-column: span 3 / span 3;
-  grid-row: span 1 / span 1;
   width: 100%;
-  height: 100%;
 }
-
 
 .KPI__col__container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
   width: 100%;
+}
+
+.pedidos-graficas__body {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  margin-top: 20px;
+  height: 55%;
+}
+
+.metrics__containers {
+  align-items: center;
+  background-color: #0f172a;
+  border-radius: 10px;
+  border: rgb(71 85 105) solid 1px;
+  padding: 20px;
+  min-height: 300px;
+}
+
+.histogram__container {
+  width: 70%;
+  height: 100%;
+}
+
+.heatmap__container {
+
+  width: 50%;
   height: 100%;
 }

@@ -1,0 +1,82 @@
+/* Estilos para el componente de Evolución Mensual de Pedidos */
+
+.evolucion-pedidos-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    height: 100%;
+}
+
+.evolucion-pedidos-title {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.evolucion-pedidos-chart {
+    flex: 1;
+    min-height: 300px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 5px;
+    margin-top: 10px;
+}
+
+.loading-message,
+.error-message,
+.no-data-message {
+    color: #565d6c;
+    font-size: 1.1rem;
+    text-align: center;
+    width: 100%;
+}
+
+.error-message {
+    color: #ef4444;
+}
+
+/* Tooltip customization */
+.evolucion-tooltip {
+    background-color: #1e1e1e;
+    border: 1px solid #565d6c;
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.tooltip-label {
+    color: #ffffff;
+    font-weight: 600;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #565d6c;
+    padding-bottom: 5px;
+}
+
+.tooltip-value {
+    color: #d1d5db;
+    display: flex;
+    justify-content: space-between;
+}
+
+.tooltip-value span {
+    margin-right: 10px;
+    color: #9ca3af;
+}
+
+/* Make sure the chart is responsive */
+@media (max-width: 768px) {
+    .evolucion-pedidos-container {
+        padding: 15px;
+    }
+    
+    .evolucion-pedidos-title {
+        font-size: 1.2rem;
+    }
+}
