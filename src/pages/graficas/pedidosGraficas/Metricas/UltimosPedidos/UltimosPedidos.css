@@ -33,3 +33,21 @@
     font-weight: 300;
     font-size: 14px;
 }
+
+
+.order-id {
+    font-weight: 600;
+    color: #60a5ed;
+}
+
+.ped_estado {
+width: 40%;
+height: 100%;
+padding: 2px;
+border-radius: 5px;
+text-align: center;
+}
+
+.pendiente{
+    background-color: #ea580c;
+}

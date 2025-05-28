@@ -14,7 +14,7 @@ const cargarPedidos = async () => {
         const today = new Date().toISOString().slice(0, 10);   
     const filtered = data 
         .filter(o => o.fecha_pedido.startsWith(today) &&
-        o.estado !== "cancelado" && o.estado !== "entregado")
+        o.estado === "pendiente")
         .sort((a,b) => 
         new Date(b.fecha_pedido) - new Date(a.fecha_pedido))
         .slice(0, 10);
@@ -50,11 +50,15 @@ useEffect(() => {
                     </thead>
                     <tbody>
                         {pedidos.map( o =>(
-                            <tr key={o._id}>
-                                <td>{o._id}</td>
+                            <tr key={o.id_pedido}>
+                                <td className="order-id">#{o.codigo_pedido}</td>
                                 <td>{o.nombre_cliente + " " + o.apellido_cliente}</td>
                                 <td>${o.total}</td>
-                                <td>{o.estado}</td>
+                                <td>
+                                    <div className={`ped_estado ${o.estado}`}>
+                                        {o.estado}
+                                    </div>
+                                </td>
                                 <td>{new Date(o.fecha_pedido).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
                             </tr>
                         ))
