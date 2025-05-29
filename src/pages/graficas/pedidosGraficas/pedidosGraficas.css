@@ -29,7 +29,7 @@
   gap: 20px;
   width: 100%;
   margin-top: 20px;
-  height: 55%;
+  height: 54%;
 }
 
 .metrics__containers {
@@ -42,12 +42,29 @@
 }
 
 .histogram__container {
-  width: 70%;
+  width: 65%;
   height: 100%;
 }
 
 .heatmap__container {
-
-  width: 50%;
+  width: 35%;
   height: 100%;
+  height: 100%;
+}
+
+.ultimos-pedidos__container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #0f172a;
+  border-radius: 10px;
+  border: rgb(71 85 105) solid 1px;
+}
+
+.ultimos-pedidos {
+  width: 100%;
+  height: 100%;
+  gap: 10px;
 }

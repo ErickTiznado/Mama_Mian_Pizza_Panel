@@ -86,13 +86,14 @@ function Sidebar() {
         Inicio 
         </span>
       </button>
-      <button className="items" onClick={() => handleNavigation("/pedidos")}>
+      {/* Changed button to div to prevent nesting errors with NotificationBell */}
+      <div className="items" onClick={() => handleNavigation("/pedidos")} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleNavigation("/pedidos")}>
         <span>
         <ShoppingCart size={38} />
         Pedidos
         </span>
         <NotificationBell category="pedidos" />
-      </button>
+      </div>
       <button
         className="items"
         onClick={() => handleNavigation("/AgregarContenido")}

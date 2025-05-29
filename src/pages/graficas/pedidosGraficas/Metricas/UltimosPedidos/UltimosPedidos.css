@@ -1,0 +1,53 @@
+.ultimos_pedidos__cont {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 20px;
+  justify-content: start;
+}
+
+
+.ultimos_tabla__cont{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: start;
+    margin-top: 10px;
+}
+
+.ultimos_tabla__cont table {
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+}
+
+.ultimos_tabla__cont table th,
+.ultimos_tabla__cont table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+    font-weight: 300;
+    font-size: 14px;
+}
+
+
+.order-id {
+    font-weight: 600;
+    color: #60a5ed;
+}
+
+.ped_estado {
+width: 40%;
+height: 100%;
+padding: 2px;
+border-radius: 5px;
+text-align: center;
+}
+
+.pendiente{
+    background-color: #ea580c;
+}
