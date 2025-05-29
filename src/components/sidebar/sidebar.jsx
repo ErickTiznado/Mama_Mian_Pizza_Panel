@@ -1,7 +1,6 @@
 import "./sidebar.css";
 import { ArrowLeftToLine, ArrowRightToLine } from "lucide-react";
 
-
 import {
   House,
   ShoppingCart,
@@ -65,7 +64,7 @@ function Sidebar() {
   };
 
   return (
-     <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
+    <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
       <button className="collapse-btn" onClick={toggleSidebar}>
         {isCollapsed ? "⮞" : "⮜"}
       </button>
@@ -92,13 +91,13 @@ function Sidebar() {
         {!isCollapsed && <NotificationBell category="pedidos" />}
       </button>
 
-      <button className="items" onClick={() => handleNavigation("/AgregarContenido")}>
-        <span><ClipboardList size={38} /> {!isCollapsed && "Contenido"}</span>
-      </button>
-
       <button className="items" onClick={() => handleNavigation("/inventario")}>
         <span><Package size={38} /> {!isCollapsed && "Inventario"}</span>
         {!isCollapsed && <NotificationBell category="inventario" />}
+      </button>
+
+      <button className="items" onClick={() => handleNavigation("/AgregarContenido")}>
+        <span><ClipboardList size={38} /> {!isCollapsed && "Contenido"}</span>
       </button>
 
       <button className="items" onClick={() => handleNavigation("/graficas")}>
@@ -124,4 +123,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;  
+export default Sidebar;

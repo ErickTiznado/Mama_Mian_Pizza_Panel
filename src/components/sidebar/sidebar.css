@@ -5,7 +5,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-     width: 340px;
+     width: 370px;
   transition: width 0.3s ease-in-out;
   align-items: flex-start; /* Alineación horizontal a la izquierda */
 
@@ -163,9 +163,9 @@
 }
 /* Asegurar tamaño y alineación del sidebar colapsado */
 .sidebar.collapsed {
-  width: 340px;
+  width: 370px;
   padding-left: 0;
-  padding-right: 270px;
+  padding-right: 280px;
   align-items: center; /* Centrado horizontal */
   
 }
