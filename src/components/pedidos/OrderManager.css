@@ -97,11 +97,9 @@
 
 
 .order__filter-label {
-  font-size: 14px;
-  color: #d97706;  /* ← nuevo color anaranjado oscuro */
-  margin-bottom: 5px;
-  font-weight: 500;
+  color: red;
 }
+
 
 
 .order__filter-select {

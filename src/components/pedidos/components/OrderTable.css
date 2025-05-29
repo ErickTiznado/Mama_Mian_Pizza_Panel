@@ -241,3 +241,12 @@
   color: #dc3545;
   border-color: #dc3545;
 }
+.estado-pill.estado-entregado {
+  background-color: #3dfa69;
+}
+.estado-pill.estado-en_proceso {
+  background-color: rgb(0, 123, 255);
+}
+.estado-pill.estado-pendiente {
+  background-color: #ff8b07;
+}

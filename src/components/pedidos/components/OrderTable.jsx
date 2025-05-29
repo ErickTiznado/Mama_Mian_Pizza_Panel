@@ -53,12 +53,48 @@ const OrderTable = ({
             {!loading && ordersEnPagina.length > 0 ? (
               ordersEnPagina.map((order) => (
                 <tr key={order.id_pedido} className="styled-row">
-                  <td className="estado-cell">
-                    <div className={`estado-pill estado-${order.estado.toLowerCase()}`}>
-                      <span className="estado-dot"></span>
-                      <span className="estado-text">{getStatusName(order.estado)}</span>
-                    </div>
-                  </td>
+                 <td className="estado-cell">
+  <div
+    className="estado-pill"
+    style={{
+      backgroundColor:
+        order.estado === 'entregado'
+          ? '#3dfa69'
+          : order.estado === 'en_proceso'
+          ? 'rgb(0, 123, 255)'
+          : order.estado === 'cancelado'
+          ? 'rgb(255, 47, 0)'
+          : order.estado === 'pendiente'
+          ? '#ff8b07'
+          : '#ff8b07',
+      color:
+        order.estado === 'entregado'
+          ? ''
+          : order.estado === 'en_proceso'
+          ? '#856404'
+          : order.estado === 'pendiente'
+          ? '#721c24'
+          : '#383d41'
+    }}
+  >
+    <span
+      className="estado-dot"
+      style={{
+        backgroundColor:
+          order.estado === 'entregado'
+            ? '#28a745'
+            : order.estado === 'en_proceso'
+            ? '#rgb(3, 113, 231)'
+            : order.estado === 'pendiente'
+            ? '#dc3545'
+            : 'gray'
+      }}
+    ></span>
+    <span className="estado-text">{getStatusName(order.estado)}</span>
+  </div>
+</td>
+
+
                   <td>
                     <div className="code-time">
                       <div className="code">{order.codigo_pedido}</div>

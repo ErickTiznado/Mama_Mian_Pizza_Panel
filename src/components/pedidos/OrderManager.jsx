@@ -180,10 +180,10 @@ const OrderManager = () => {
 
   // Función para cambiar el estado de un pedido
   const changeOrderStatus = (orderId, newStatus) => {
-    if (window.confirm(`¿Cambiar estado del pedido a ${getStatusName(newStatus)}?`)) {
-      updateOrderStatus(orderId, newStatus);
-    }
-  };
+  if (window.confirm(`¿Cambiar estado del pedido a ${getStatusName(newStatus)}?`)) {
+    updateOrderStatus(orderId, newStatus);
+  }
+};
 
   // Función para obtener el nombre del estado
   const getStatusName = (status) => {
