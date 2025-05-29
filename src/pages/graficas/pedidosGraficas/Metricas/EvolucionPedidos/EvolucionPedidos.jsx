@@ -187,6 +187,7 @@ const EvolucionPedidos = ({ timePeriod = 'month' }) => {
             }
             
             const pedidos = await response.json();
+            console.log("Pedidos cargados:", pedidos);
             
             // Filtrar los pedidos por fecha según el periodo seleccionado
             const { inicio, fin } = obtenerFechasSegunPeriodo();
@@ -261,11 +262,10 @@ const EvolucionPedidos = ({ timePeriod = 'month' }) => {
                 {loading ? (
                     <div className="loading-message">Cargando datos...</div>
                 ) : error ? (
-                    <div className="error-message">{error}</div>
-                ) : data.length === 0 ? (
-                    <div className="no-data-message">No hay datos disponibles para el período seleccionado</div>
-                ) : (
-                    <ResponsiveContainer width="100%" height="100%">                        <LineChart
+                    <div className="error-message">{error}</div>                ) : data.length === 0 ? (
+                    <div className="no-data-message">No hay datos disponibles para el período seleccionado</div>                ) : (
+                    <ResponsiveContainer width="100%" height={350}>
+                        <LineChart
                             data={data}
                             margin={{
                                 top: 30,    // Aumentado de 20 a 30
@@ -274,7 +274,7 @@ const EvolucionPedidos = ({ timePeriod = 'month' }) => {
                                 bottom: 50, // Aumentado de 30 a 50
                             }}
                         >
-                            <CartesianGrid strokeDasharray="3 3" stroke="#FFF" opacity={1} vertical={false} />
+                            <CartesianGrid strokeDasharray="3 3" stroke="#FFF" opacity={0.2} vertical={false} />
                             <XAxis 
                                 dataKey="mes" 
                                 tickFormatter={formatXAxis}
@@ -288,7 +288,8 @@ const EvolucionPedidos = ({ timePeriod = 'month' }) => {
                                 axisLine={{ stroke: '#FFF', opacity: 0 }}
                                 tickLine={{ stroke: '#FFF', opacity: 0 }}
                                 dx={-10} // Añade espacio a la izquierda del eje Y
-                            />                            <Tooltip content={<CustomTooltip />} />
+                            />
+                            <Tooltip content={<CustomTooltip />} />
                             <Legend 
                                 verticalAlign="top"
                                 height={36}

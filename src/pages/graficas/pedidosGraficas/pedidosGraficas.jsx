@@ -36,12 +36,13 @@ const pedidosGraficas = ({ timePeriod, orderType }) => {
             />
           </div>
         </div>
-      </div>
-      <div className='pedidos-graficas__body'>        <div className="metrics__containers histogram__container">
+      </div>      <div className='pedidos-graficas__body'>
+        <div className="metrics__containers histogram__container">
           <EvolucionPedidos 
             timePeriod={timePeriod} 
           />
-        </div>        <div className="metrics__containers heatmap__container">
+        </div>
+        <div className="metrics__containers heatmap__container">
           <Heatmap />
         </div>
       </div>

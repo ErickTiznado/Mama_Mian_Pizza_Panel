@@ -3,7 +3,6 @@
 .evolucion-pedidos-container {
     display: flex;
     flex-direction: column;
-    background-color: #1e1e1e;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 15px;
@@ -27,6 +26,8 @@
     align-items: center;
     padding: 10px 5px;
     margin-top: 10px;
+    width: 100%;
+    height: 400px; /* Altura explícita para asegurar que la gráfica tenga espacio suficiente */
 }
 
 .loading-message,
