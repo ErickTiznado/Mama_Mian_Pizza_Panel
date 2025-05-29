@@ -3,6 +3,9 @@ import "./OrderManager.css";
 import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListCheck } from '@fortawesome/free-solid-svg-icons';
+import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
+
+
 
 // Importación de componentes modulares
 import FilterBar from '../common/FilterBar'; // Reemplazamos OrderFilterRibbon por nuestro nuevo componente
@@ -330,19 +333,27 @@ const OrderManager = () => {
   
   // Calcular resultados totales para mostrar en contador
   const totalPedidos = filtrosAplicados ? filteredOrders.length : orders.length;
+  const counts = {
+  pendiente: orders.filter(p => p.estado === "pendiente").length,
+  en_proceso: orders.filter(p => p.estado === "en_proceso").length,
+  entregado: orders.filter(p => p.estado === "entregado").length,
+  cancelado: orders.filter(p => p.estado === "cancelado").length
+};
+
 
   return (
     <div className="order_container">
       {/* Panel principal con estilo similar a AgregarContenido */}
       <div className="order_panel">
         <div className="order_header">
-          <h1>Gestión de Pedidos</h1>
+          <h1 className="titulo-pedidos">Gestión de Pedidos</h1>
           <button 
             className="order_btn-agregar" 
             onClick={() => fetchOrdersByStatus(activeFilter)}
           >
-            <FontAwesomeIcon icon={faListCheck} style={{ marginRight: '10px' }} />
-            Actualizar Pedidos
+            <FontAwesomeIcon icon={faSyncAlt} style={{ marginRight: '10px' }} />
+         Actualizar Pedidos
+
           </button>
         </div>
         
@@ -384,11 +395,13 @@ const OrderManager = () => {
           )}
           
           {/* Reemplazar OrderFilters con el nuevo componente OrderTabs */}
-          <OrderTabs 
-            activeFilter={activeFilter}
-            handleFilterChange={handleFilterChange}
-            setPaginaActual={setPaginaActual}
-          />
+        <OrderTabs 
+  activeFilter={activeFilter}
+  handleFilterChange={handleFilterChange}
+  setPaginaActual={setPaginaActual}
+  counts={counts}
+/>
+
           
           {/* Mensajes de carga o error */}
           {loading && <div className="loading-indicator">Cargando pedidos...</div>}

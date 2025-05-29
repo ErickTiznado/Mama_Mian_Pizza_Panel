@@ -1,462 +1,243 @@
-/* Estilos para la tabla de pedidos */
 .order__container {
-  width: 100%;
-  overflow-x: auto;
+  background-color: #1f2a38;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  background-color: white;
-  margin-bottom: 20px;
+  overflow-x: auto;
+  padding: 12px;
 }
 
-.order__content {
-  min-width: 100%;
-}
-
-/* Estilos generales de la tabla */
-.order__content table {
+.styled-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: 14px;
+  border-collapse: collapse;
+  color: #ffffff;
 }
 
-/* Estilos para el encabezado */
-.order__content thead {
-  background-color: #f8f9fa;
+.styled-table thead {
+  background-color: #2a3b4f;
+  color: #ff8c00;
 }
 
-.order__content th {
-  padding: 16px 12px;
+.styled-table th {
+  padding: 12px;
   text-align: left;
   font-weight: 600;
-  color: #495057;
-  border-bottom: 2px solid #dee2e6;
-  white-space: nowrap;
-  position: sticky;
-  top: 0;
-  background-color: #f8f9fa;
-  z-index: 10;
-}
-
-/* Estilos para las filas */
-.order__content tbody tr {
-  transition: all 0.2s ease;
-  border-bottom: 1px solid #e9ecef;
-}
-
-.order__content tbody tr:hover {
-  background-color: #f8f9fa;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-}
-
-.order__content tbody tr:nth-child(even) {
-  background-color: #f9fafb;
-}
-
-/* Estilos para celdas */
-.order__content td {
-  padding: 14px 12px;
-  vertical-align: middle;
-  border-bottom: 1px solid #e9ecef;
-}
-
-/* Estilos específicos para diferentes tipos de celdas */
-.codigo-cell {
-  width: 100px;
-}
-
-.codigo-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.codigo-badge {
-  font-weight: 700;
   font-size: 14px;
-  color: #212529;
 }
 
-.id-pedido {
-  font-size: 12px;
-  color: #6c757d;
+.styled-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #324357;
+  vertical-align: middle;
+  font-size: 14px;
 }
 
-.tiempo-info {
+.styled-row {
+  background-color: #1f2a38;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: bold;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-pendiente .status-dot {
+  background-color: #ffc107;
+}
+
+.status-en_proceso .status-dot {
+  background-color: #0d6efd;
+}
+
+.status-entregado .status-dot {
+  background-color: #198754;
+}
+
+.status-cancelado .status-dot {
+  background-color: #dc3545;
+}
+
+.code-time .code {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.code-time .time {
+  color: #adb5bd;
+  font-size: 13px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 4px;
 }
 
-.tiempo-fecha {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-}
-
-.tiempo-transcurrido {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: #dc3545;
-  font-weight: 500;
-}
-
-/* Estilos para productos */
-.productos-cell {
-  min-width: 220px;
-  max-width: 280px;
-  position: relative;
-}
-
-.productos-info {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.productos-count {
-  display: flex;
-  align-items: center;
-  color: #495057;
-  font-size: 13px;
-  background-color: #f8f9fa;
-  padding: 4px 8px;
-  border-radius: 4px;
-  width: fit-content;
-}
-
-.productos-count .icon-small {
-  margin-right: 5px;
-  color: #6c757d;
-}
-
-.productos-count strong {
-  margin-right: 2px;
-  color: #212529;
-}
-
-.productos-lista {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.productos-lista li {
-  display: flex;
-  align-items: flex-start;
-  font-size: 13px;
-  line-height: 1.3;
-  position: relative;
-  padding-left: 20px;
-}
-
-.productos-lista li .producto-icon {
-  position: absolute;
-  left: 0;
-  top: 2px;
-  color: #6c757d;
-}
-
-.productos-lista li strong {
-  margin-right: 4px;
-  color: #212529;
+.client-pay .client {
   font-weight: 600;
+  font-size: 14px;
 }
 
-.productos-lista .producto-tamano {
-  color: #6c757d;
-  font-style: italic;
-  font-size: 12px;
+.client-pay .pay {
+  color: #adb5bd;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.productos-lista .producto-extras {
-  margin-left: 4px;
-  color: #6c757d;
-  font-size: 12px;
+.address {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
 }
 
-.productos-lista .mas-productos {
-  cursor: pointer;
-  color: #0d6efd;
-  font-weight: 500;
-  font-size: 12px;
-  margin-top: 2px;
-  transition: all 0.2s ease;
+.products .product-item {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #dee2e6;
 }
 
-.productos-lista .mas-productos:hover {
-  color: #0a58ca;
-  text-decoration: underline;
+.total-cell {
+  font-weight: bold;
+  font-size: 16px;
+  color: #ffffff;
 }
 
-/* INICIO - ELIMINACIÓN DE TOOLTIPS NATIVOS CSS */
-/* Se eliminan todos los estilos de tooltips nativos para evitar duplicación */
-.productos-preview,
-.tooltip-productos,
-.productos-tooltip {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-/* FIN - ELIMINACIÓN DE TOOLTIPS NATIVOS CSS */
-
-.sin-productos {
-  font-style: italic;
-  color: #6c757d;
-}
-
-/* Estilos para estado */
-.pedido-estado {
-  display: inline-block;
+.btn-details {
+  background: none;
+  color: #ff8c00;
+  border: 1px solid #ff8c00;
   padding: 6px 10px;
-  border-radius: 50px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
+.btn-start {
+  background-color: #418bff;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.estado-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+  width: fit-content;
+  border: 1px solid transparent;
+}
+
+/* El círculo a la izquierda */
+.estado-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+/* ESTADOS */
 .estado-pendiente {
   background-color: #fff3cd;
-  color: #856404;
-  border: 1px solid #ffeeba;
+  color: #ffc107;
+  border: 1px solid #ffc107;
 }
 
 .estado-en_proceso {
   background-color: #cfe2ff;
-  color: #084298;
-  border: 1px solid #b6d4fe;
+  color: #0d6efd;
+  border: 1px solid #0d6efd;
 }
 
 .estado-entregado {
   background-color: #d1e7dd;
-  color: #0f5132;
-  border: 1px solid #badbcc;
+  color: #198754;
+  border: 1px solid #198754;
 }
 
 .estado-cancelado {
   background-color: #f8d7da;
-  color: #842029;
-  border: 1px solid #f5c2c7;
+  color: #dc3545;
+  border: 1px solid #dc3545;
+}
+/* Para que la celda no colapse */
+.estado-cell {
+  min-width: 140px;
 }
 
-/* Estilos para cliente */
-.cliente-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.cliente-nombre {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 500;
-  font-size: 13px;
-}
-
-.cliente-telefono {
-  font-size: 12px;
-  color: #6c757d;
-}
-
-/* Estilos para dirección */
-.direccion-cell {
-  min-width: 180px;
-  max-width: 250px;
-}
-
-.direccion-info {
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-}
-
-.direccion-texto {
-  font-size: 13px;
-  line-height: 1.4;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.direccion-local {
-  font-size: 13px;
-  color: #0d6efd;
-  font-weight: 500;
-}
-
-/* Estilos para método de pago */
-.metodo-pago-badge {
+/* El contenedor de estado */
+.estado-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border-radius: 4px;
-  font-size: 13px;
-  font-weight: 500;
-  border: 1px solid;
-}
-
-/* Estilos para botones de acción */
-.action-buttons-container {
-  display: flex;
-  flex-direction: column;
   gap: 8px;
-}
-
-.action-primary-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: 100%;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 4px;
+  padding: 6px 12px;
+  border-radius: 20px;
   font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
+  font-weight: 600;
+  border: 1px solid transparent;
+  text-transform: capitalize;
+  white-space: nowrap;
 }
 
-.btn__action__details {
-  background-color: #0d6efd;
-  color: white;
+/* El circulito a la izquierda */
+.estado-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  min-width: 10px;
+  min-height: 10px;
+  border-radius: 50%;
+  background-color: currentColor;
 }
 
-.btn__action__details:hover {
-  background-color: #0b5ed7;
+/* Texto */
+.estado-text {
+  display: inline-block;
+  line-height: 1;
 }
 
-.action-secondary-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.action-secondary-button {
-  padding: 6px 10px;
-  border: none;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-state {
-  background-color: #f8f9fa;
-  color: #212529;
-  border: 1px solid #dee2e6;
-}
-
-.btn-state:hover {
-  background-color: #e9ecef;
-}
-
-.btn-pendiente:hover {
+/* Colores por estado */
+.estado-pendiente {
   background-color: #fff3cd;
-  color: #856404;
+  color: #ffc107;
+  border-color: #ffc107;
 }
 
-.btn-en_proceso:hover {
+.estado-en_proceso {
   background-color: #cfe2ff;
-  color: #084298;
+  color: #0d6efd;
+  border-color: #0d6efd;
 }
 
-.btn-entregado:hover {
+.estado-entregado {
   background-color: #d1e7dd;
-  color: #0f5132;
+  color: #198754;
+  border-color: #198754;
 }
 
-.btn__action__cancell {
+.estado-cancelado {
   background-color: #f8d7da;
-  color: #842029;
-  border: 1px solid #f5c2c7;
-}
-
-.btn__action__cancell:hover {
-  background-color: #e35d6a;
-  color: white;
-}
-
-/* Estilos para estados vacíos y carga */
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  padding: 40px 0;
-}
-
-.empty-icon {
-  font-size: 24px;
-  color: #6c757d;
-}
-
-.empty-message {
-  font-size: 16px;
-  color: #6c757d;
-}
-
-.loading-indicator {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 30px 0;
-  color: #6c757d;
-}
-
-/* Estilos para íconos pequeños */
-.icon-small {
-  margin-right: 2px;
-}
-
-/* Mejoras para visualización en móvil */
-@media (max-width: 768px) {
-  .order__content {
-    font-size: 12px;
-  }
-  
-  .order__content td, .order__content th {
-    padding: 10px 8px;
-  }
-  
-  .action-primary-button, .action-secondary-button {
-    font-size: 12px;
-    padding: 6px 8px;
-  }
-  
-  .pedido-estado {
-    font-size: 10px;
-    padding: 4px 8px;
-  }
-  
-  .productos-lista, .cliente-info, .productos-count, .tiempo-fecha {
-    font-size: 11px;
-  }
-}
-
-/* Estilos para filas según tiempo transcurrido */
-.row-normal {
-  background-color: white;
-}
-
-.row-warning {
-  background-color: rgba(255, 243, 205, 0.3);
-}
-
-.row-urgent {
-  background-color: rgba(248, 215, 218, 0.3);
-}
-
-.row-critical {
-  background-color: rgba(220, 53, 69, 0.15);
+  color: #dc3545;
+  border-color: #dc3545;
 }
