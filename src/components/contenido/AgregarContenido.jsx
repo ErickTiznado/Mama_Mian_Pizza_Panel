@@ -22,6 +22,7 @@ const AgregarContenido = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('todos');
+  const [tiposDisponibles, setTiposDisponibles] = useState([]);
   
   // Estados para búsqueda y filtros
   const [searchTerm, setSearchTerm] = useState('');
@@ -30,93 +31,46 @@ const AgregarContenido = () => {
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-
-  // Datos de muestra para desarrollo (en producción se reemplazará con llamada a la API)
-  const mockData = [
-    {
-      id: 1,
-      imagen: '/path/to/image1.jpg',
-      titulo: 'Banner Principal - Bienvenidos',
-      descripcion: 'Bienvenidos a Pizzeria Bella - Las mejores pizzas...',
-      tipo: 'Banner',
-      estado: true,
-      fecha: '2025-01-15'
-    },
-    {
-      id: 2,
-      imagen: '/path/to/image2.jpg',
-      titulo: 'Pizza Margherita',
-      descripcion: 'Deliciosa pizza con tomate, mozzarella fresca...',
-      tipo: 'Pizzas',
-      precio: '$12.50',
-      tamanos: 'Personal, Mediana, Familiar',
-      estado: true,
-      fecha: '2025-01-20'
-    },
-    {
-      id: 3,
-      imagen: '/path/to/image3.jpg',
-      titulo: 'Pizza Pepperoni',
-      descripcion: 'Pizza clásica con pepperoni y queso mozzarella',
-      tipo: 'Pizzas',
-      precio: '$14.90',
-      tamanos: 'Personal, Mediana, Familiar',
-      estado: true,
-      fecha: '2025-01-18'
-    },
-    {
-      id: 4,
-      imagen: '/path/to/image4.jpg',
-      titulo: 'Coca Cola 500ml',
-      descripcion: 'Refrescante Coca Cola de 500ml',
-      tipo: 'Bebidas',
-      precio: '$2.50',
-      estado: true,
-      fecha: '2025-01-10'
-    },
-    {
-      id: 5,
-      imagen: '/path/to/image5.jpg',
-      titulo: 'Papas Fritas',
-      descripcion: 'Crujientes papas fritas',
-      tipo: 'Complementos',
-      precio: '$4.50',
-      tamanos: 'Porción grande',
-      estado: true,
-      fecha: '2025-01-12'
-    },
-    {
-      id: 6,
-      imagen: '/path/to/image6.jpg',
-      titulo: 'Pizza Hawaiana',
-      descripcion: 'Pizza con jamón, piña y queso - ¡Nuestra recomendación!',
-      tipo: 'Recomendaciones',
-      precio: '$16.50',
-      estado: true,
-      fecha: '2025-01-14'
-    },
-    {
-      id: 7,
-      imagen: '/path/to/image7.jpg',
-      titulo: 'Pizza 4 Quesos',
-      descripcion: 'La favorita de nuestros clientes - 4 tipos de quesos italianos',
-      tipo: 'Populares',
-      precio: '$16.90',
-      estado: true,
-      fecha: '2025-01-16'
-    }
-  ];
-
-  // Cargar datos iniciales
+  // Cargar datos iniciales desde la API real
   useEffect(() => {
-    // Simular carga de datos desde la API
-    setIsLoading(true);
-    setTimeout(() => {
-      setContenidos(mockData);
-      setFilteredItems(mockData);
-      setIsLoading(false);
-    }, 800);
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get('https://server.tiznadodev.com/api/content/getMenu');
+        const productosData = response.data.productos || [];
+        
+      const formattedData = productosData.map(item => ({
+          id: item.id_producto,
+          imagen: item.imagen,
+          titulo: item.titulo,
+          descripcion: item.descripcion,
+          tipo: item.seccion || 'Otros',
+          precio: `$${item.precio}`,
+          tamanos: item.porciones ? `${item.porciones} porciones` : null,
+          estado: item.activo === 1,
+          fecha: new Date(item.fecha_actualizacion || item.fecha_creacion).toISOString().split('T')[0]
+        }));
+        
+        console.log('Datos cargados:', formattedData);
+        setContenidos(formattedData);
+        setFilteredItems(formattedData);
+        
+        // Extraer tipos únicos de los datos para las pestañas
+        const tipos = ['todos', ...new Set(formattedData.map(item => item.tipo))];
+        setTiposDisponibles(tipos);
+        setError(null);
+      } catch (err) {
+        console.error('Error al cargar los datos:', err);
+        setError('Error al cargar los datos. Por favor, inténtalo de nuevo más tarde.');
+        // Usar datos de muestra como respaldo en caso de error
+        setContenidos(mockData);
+        setFilteredItems(mockData);
+      } finally {
+        setIsLoading(false);
+      }
+    };
     
+    fetchData();
   }, []);
 
   // Filtrar contenidos cuando cambia la pestaña activa o el término de búsqueda
@@ -147,26 +101,86 @@ const AgregarContenido = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+  // Estados para el diálogo de confirmación y elementos seleccionados
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   // Manejadores de eventos
   const handleEdit = (id) => {
     console.log(`Editando contenido con ID: ${id}`);
-    // Implementar lógica para editar contenido
+    // Aquí se podría implementar la redirección a la página de edición
+    // o abrir un modal para editar el contenido
+    const itemToEdit = contenidos.find(item => item.id === id);
+    if (itemToEdit) {
+      // Implementación futura: Redireccionar a una página de edición o abrir modal
+      alert(`Editando: ${itemToEdit.titulo}`);
+    }
   };
 
   const handleDelete = (id) => {
-    console.log(`Eliminando contenido con ID: ${id}`);
-    // Implementar lógica para eliminar contenido
+    // Guardar el ID seleccionado y mostrar diálogo de confirmación
+    setSelectedItemId(id);
+    setShowConfirmDialog(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!selectedItemId) return;
+    
+    try {
+      setIsLoading(true);
+      // Llamar a la API para eliminar el contenido
+      await axios.delete(`https://server.tiznadodev.com/api/content/${selectedItemId}`);
+      
+      // Actualizar el estado eliminando el elemento
+      const updatedContent = contenidos.filter(item => item.id !== selectedItemId);
+      setContenidos(updatedContent);
+      setFilteredItems(updatedContent.filter(item => {
+        // Mantener los filtros actuales
+        if (activeTab !== 'todos' && item.tipo !== activeTab) return false;
+        if (searchTerm) {
+          const searchLower = searchTerm.toLowerCase();
+          return item.titulo.toLowerCase().includes(searchLower) || 
+                 item.descripcion.toLowerCase().includes(searchLower);
+        }
+        return true;
+      }));
+      
+      // Cerrar el diálogo de confirmación
+      setShowConfirmDialog(false);
+      setSelectedItemId(null);
+      
+      // Mostrar mensaje de éxito
+      alert('Contenido eliminado correctamente');
+    } catch (error) {
+      console.error('Error al eliminar contenido:', error);
+      alert('Error al eliminar el contenido. Por favor, inténtalo de nuevo.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const cancelDelete = () => {
+    // Cerrar el diálogo de confirmación sin hacer nada
+    setShowConfirmDialog(false);
+    setSelectedItemId(null);
   };
 
   const handlePreview = (id) => {
-    console.log(`Previsualizando contenido con ID: ${id}`);
-    // Implementar lógica para previsualizar contenido
+    // Buscar el elemento para mostrar en la vista previa
+    const item = contenidos.find(item => item.id === id);
+    if (item) {
+      setSelectedItem(item);
+      setShowPreviewModal(true);
+    }
   };
 
   const handleAddNew = () => {
     console.log('Agregando nuevo contenido');
-    // Implementar lógica para agregar nuevo contenido
+    // Redirigir a la página de agregar nuevo contenido o abrir un modal
+    alert('Función para agregar nuevo contenido (proximamente)');
+    // Implementación futura: Redirigir o abrir modal para agregar contenido
   };
 
   const handleSearch = (e) => {
@@ -216,58 +230,56 @@ const AgregarContenido = () => {
             value={searchTerm}
             onChange={handleSearch}
           />
-            </div>
-
-          <div className="content-tabs-wrapper">
+            </div>          <div className="content-tabs-wrapper">
             <div className="content-tabs">
-          <button 
-            className={`tab-button ${activeTab === 'todos' ? 'cont_active' : ''}`}
-            onClick={() => handleTabChange('todos')}
-          >
-            Todos
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'Pizzas' ? 'cont_active' : ''}`}
-            onClick={() => handleTabChange('Pizzas')}
-          >
-            Pizzas
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'Complementos' ? 'cont_active' : ''}`}
-            onClick={() => handleTabChange('Complementos')}
-          >
-            Complementos
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'Bebidas' ? 'cont_active' : ''}`}
-            onClick={() => handleTabChange('Bebidas')}
-          >
-            Bebidas
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'Banner' ? 'cont_active' : ''}`}
-            onClick={() => handleTabChange('Banner')}
-          >
-            Banner
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'Recomendaciones' ? 'cont_active' : ''}`}
-            onClick={() => handleTabChange('Recomendaciones')}
-          >
-            Recomendaciones
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'Populares' ? 'cont_active' : ''}`}
-            onClick={() => handleTabChange('Populares')}
-          >
-            Populares
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'Banner Final' ? 'cont_active' : ''}`}
-            onClick={() => handleTabChange('Banner Final')}
-          >
-            Banner Final
-          </button>
+              <button 
+                className={`tab-button ${activeTab === 'todos' ? 'cont_active' : ''}`}
+                onClick={() => handleTabChange('todos')}
+              >
+                Todos
+              </button>
+              <button 
+                className={`tab-button ${activeTab === 'Pizzas' ? 'cont_active' : ''}`}
+                onClick={() => handleTabChange('Pizzas')}
+              >
+                Pizzas
+              </button>
+              <button 
+                className={`tab-button ${activeTab === 'Complementos' ? 'cont_active' : ''}`}
+                onClick={() => handleTabChange('Complementos')}
+              >
+                Complementos
+              </button>
+              <button 
+                className={`tab-button ${activeTab === 'Bebidas' ? 'cont_active' : ''}`}
+                onClick={() => handleTabChange('Bebidas')}
+              >
+                Bebidas
+              </button>
+              <button 
+                className={`tab-button ${activeTab === 'Banner' ? 'cont_active' : ''}`}
+                onClick={() => handleTabChange('Banner')}
+              >
+                Banner
+              </button>
+              <button 
+                className={`tab-button ${activeTab === 'Recomendaciones' ? 'cont_active' : ''}`}
+                onClick={() => handleTabChange('Recomendaciones')}
+              >
+                Recomendaciones
+              </button>
+              <button 
+                className={`tab-button ${activeTab === 'Populares' ? 'cont_active' : ''}`}
+                onClick={() => handleTabChange('Populares')}
+              >
+                Populares
+              </button>
+              <button 
+                className={`tab-button ${activeTab === 'Banner Final' ? 'cont_active' : ''}`}
+                onClick={() => handleTabChange('Banner Final')}
+              >
+                Banner Final
+              </button>
             </div>
           </div>
 
@@ -279,8 +291,7 @@ const AgregarContenido = () => {
           <div className="error-message">{error}</div>
         ) : (
           <>
-            {/* Tabla de contenido */}
-            <div className="content-table-container">
+            {/* Tabla de contenido */}            <div className="content-table-container">
               <table className="content-table">
                 <thead>
                   <tr>
@@ -294,11 +305,21 @@ const AgregarContenido = () => {
                 </thead>
                 <tbody>
                   {currentItems.map(item => (
-                    <tr key={item.id}>
-                      <td className="preview-cell">
+                    <tr key={item.id}>                      <td className="preview-cell">
                         <div className="preview-image-container">
-                          {/* Usamos un div en lugar de imagen real para el ejemplo */}
-                          <div className="preview-image-placeholder"></div>
+                          {item.imagen && item.imagen !== '/path/to/image' ? (
+                            <img 
+                              src={item.imagen} 
+                              alt={item.titulo} 
+                              className="preview-image" 
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = 'https://via.placeholder.com/150?text=Sin+imagen';
+                              }}
+                            />
+                          ) : (
+                            <div className="preview-image-placeholder">Sin imagen</div>
+                          )}
                         </div>
                       </td>
                       <td className="content-cell">
@@ -379,9 +400,98 @@ const AgregarContenido = () => {
         )}
       </div>
       </div>
-    
-      {/* Pestañas de categorías */}
-
+      {/* Modal de Vista Previa */}
+      {showPreviewModal && selectedItem && (        <div className="modal-overlay">
+          <div className="preview-modal">
+            <div className="cont_modal-header">
+              <h2>Vista Previa</h2>
+              <button 
+                className="close-modal-btn"
+                onClick={() => setShowPreviewModal(false)}
+              >
+                &times;
+              </button>
+            </div>            <div className="cont-modal-content">              
+              <div className="preview-modal-image">
+                <img 
+                  src={selectedItem.imagen || 'https://via.placeholder.com/300?text=Sin+imagen'} 
+                  alt={selectedItem.titulo} 
+                  onError={(e) => {
+                    e.target.onerror = null; 
+                    e.target.src = 'https://via.placeholder.com/300?text=Sin+imagen';
+                  }}
+                  className="cont_preview-modal-image-container"
+                />
+              </div>
+              
+              <div className="cont_preview-modal-info">
+                <h3 className="cont_preview-modal-title">{selectedItem.titulo}</h3>
+                
+                <p className="cont_preview-modal-description">{selectedItem.descripcion}</p>
+                
+                <div className="cont_preview-details">
+                  <div className="cont_preview-detail-item">
+                    <span className="cont_detail-label">Tipo:</span>
+                    <span className="cont_detail-value cont_detail-value-type">{selectedItem.tipo}</span>
+                  </div>
+                  
+                  {selectedItem.precio && (
+                    <div className="cont_preview-detail-item">
+                      <span className="cont_detail-label">Precio:</span>
+                      <span className="cont_detail-value cont_detail-value-price">{selectedItem.precio}</span>
+                    </div>
+                  )}
+                  
+                  {selectedItem.tamanos && (
+                    <div className="cont_preview-detail-item">
+                      <span className="cont_detail-label">Tamaños:</span>
+                      <span className="cont_detail-value cont_detail-value-size">{selectedItem.tamanos}</span>
+                    </div>
+                  )}
+                  
+                  <div className="cont_preview-detail-item">
+                    <span className="cont_detail-label">Estado:</span>
+                    <span className={`cont_detail-value cont_detail-value-status ${selectedItem.estado ? 'active' : 'inactive'}`}>
+                      {selectedItem.estado ? 'Activo' : 'Inactivo'}
+                    </span>
+                  </div>
+                  
+                  <div className="cont_preview-detail-item">
+                    <span className="cont_detail-label">Fecha:</span>
+                    <span className="cont_detail-value cont_detail-value-date">
+                      <FontAwesomeIcon icon={faCalendar} style={{opacity: 0.7}} /> {selectedItem.fecha}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}      {/* Diálogo de confirmación para eliminar */}
+      {showConfirmDialog && (
+        <div className="modal-overlay">
+          <div className="cont_confirm-dialog">
+            <div className="cont_confirm-dialog-content">
+              <h3>Confirmar Eliminación</h3>
+              <p>¿Estás seguro de que deseas eliminar este contenido? Esta acción no se puede deshacer.</p>
+              <div className="cont_confirm-dialog-buttons">
+                <button 
+                  className="cont_cancel-btn"
+                  onClick={cancelDelete}
+                >
+                  Cancelar
+                </button>
+                <button 
+                  className="cont_confirm-delete-btn"
+                  onClick={confirmDelete}
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
