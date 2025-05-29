@@ -1,245 +1,199 @@
-import React from 'react';
-import { FaMapMarkerAlt, FaMapMarked } from 'react-icons/fa';
-import OrderLocationMap from '../../map/OrderLocationMap';
-import '../OrderManager.css';
+import React, { useState, useEffect } from 'react';
+import './OrderDetailModal.css';
+import {
+  FaTruck,
+  FaWhatsapp,
+  FaMobileAlt,
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaUserAlt,
+  FaLocationArrow 
+} from 'react-icons/fa';
 
 const OrderDetailModal = ({
   showModal,
   selectedOrder,
-  showMap,
-  showRoute,
   closeModal,
-  handleShowLocationMap,
-  handleShowRoute,
-  handleCloseMap,
   formatDate,
   getClientName,
-  getStatusName,
-  changeOrderStatus,
-  handleCancelOrder
+  getStatusName
 }) => {
+  const [selectedDeliveryValue, setSelectedDeliveryValue] = useState('');
+  const [liveAddress, setLiveAddress] = useState('');
+
+  useEffect(() => {
+    const getReverseAddress = async () => {
+      const lat = selectedOrder?.lat || '13.6988';
+      const lng = selectedOrder?.lng || '-89.2407';
+
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
+        );
+        const data = await res.json();
+        setLiveAddress(data.display_name || 'Dirección no disponible');
+      } catch (error) {
+        console.error('Error obteniendo dirección:', error);
+        setLiveAddress('Dirección no disponible');
+      }
+    };
+
+    if (showModal && selectedOrder?.lat && selectedOrder?.lng) {
+      getReverseAddress();
+    }
+  }, [selectedOrder, showModal]);
+
+  const handleAssignDelivery = () => {
+    if (!selectedDeliveryValue) return;
+    const [name, phone] = selectedDeliveryValue.split('|');
+    console.log(`Repartidor asignado: ${name} - ${phone}`);
+    // Aquí podrías guardar en backend si hace falta
+  };
+
   if (!showModal || !selectedOrder) return null;
 
   return (
-    <div className="modal-overlay" onClick={closeModal}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2>Pedido #{selectedOrder.id_pedido} - {selectedOrder.codigo_pedido}</h2>
-          <button className="modal-close" onClick={closeModal}>×</button>
-        </div>
+    <div className="detalle-pedido-overlay">
+      <div className="detalle-pedido-panel">
+        <button className="close-button" onClick={closeModal}>×</button>
 
-        {!showMap ? (
-          <>
-            <div className="modal-columns">
-              <div className="modal-column">
-                <div className="order-detail-section">
-                  <h3>Estado del Pedido</h3>
-                  <div className="estado-container">
-                    <span className={`pedido-estado estado-${selectedOrder.estado}`}>
-                      {getStatusName(selectedOrder.estado)}
-                    </span>
-                    <span className="tiempo-estimado">
-                      Tiempo estimado: {selectedOrder.tiempo_estimado_entrega || "N/A"} min
-                    </span>
-                  </div>
-                </div>
+        <h2 className="detalle-title">
+          Detalles del Pedido <span>{selectedOrder.codigo_pedido}</span>
+        </h2>
 
-                <div className="order-detail-section">
-                  <h3>Información del Cliente</h3>
-                  <div className="info-grid">
-                    <div className="info-row">
-                      <strong>Cliente:</strong>
-                      <span>{getClientName(selectedOrder)}</span>
-                    </div>
-                    {selectedOrder.celular_invitado && (
-                      <div className="info-row">
-                        <strong>Teléfono:</strong>
-                        <span>{selectedOrder.celular_invitado}</span>
-                      </div>
-                    )}
-                    {selectedOrder.telefono && !selectedOrder.celular_invitado && (
-                      <div className="info-row">
-                        <strong>Teléfono:</strong>
-                        <span>{selectedOrder.telefono}</span>
-                      </div>
-                    )}
-                    {selectedOrder.email && (
-                      <div className="info-row">
-                        <strong>Email:</strong>
-                        <span>{selectedOrder.email}</span>
-                      </div>
-                    )}
-                    <div className="info-row">
-                      <strong>Dirección:</strong>
-                      <span>{selectedOrder.direccion_formateada || selectedOrder.direccion || "Recogida en tienda"}</span>
-                    </div>
-                    {selectedOrder.latitud && selectedOrder.longitud && (
-                      <div className="info-row">
-                        <strong>Ubicación:</strong>
-                        <span>{selectedOrder.latitud}, {selectedOrder.longitud}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {selectedOrder.latitud && selectedOrder.longitud && (
-                  <div className="order-detail-section">
-                    <h3>Ubicación de Entrega</h3>
-                    <div className="location-buttons">
-                      <button 
-                        className="location-button view-location"
-                        onClick={handleShowLocationMap}
-                      >
-                        <FaMapMarkerAlt className="button-icon" /> Ver Ubicación
-                      </button>
-                      <button 
-                        className="location-button show-route"
-                        onClick={handleShowRoute}
-                      >
-                        <FaMapMarked className="button-icon" /> Ubicación en Tiempo Real
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="modal-column">
-                <div className="order-detail-section">
-                  <h3>Información del Pedido</h3>
-                  <div className="info-grid">
-                    <div className="info-row">
-                      <strong>Fecha:</strong>
-                      <span>{formatDate(selectedOrder.fecha_pedido || selectedOrder.fecha_creacion)}</span>
-                    </div>
-                    <div className="info-row">
-                      <strong>Tipo de cliente:</strong>
-                      <span>{selectedOrder.tipo_cliente || "No especificado"}</span>
-                    </div>
-                    <div className="info-row">
-                      <strong>Método de pago:</strong>
-                      <span>{selectedOrder.metodo_pago}</span>
-                    </div>
-                    <div className="info-row">
-                      <strong>Subtotal:</strong>
-                      <span>${parseFloat(selectedOrder.subtotal || 0).toFixed(2)}</span>
-                    </div>
-                    {selectedOrder.costo_envio && parseFloat(selectedOrder.costo_envio) > 0 && (
-                      <div className="info-row">
-                        <strong>Costo de envío:</strong>
-                        <span>${parseFloat(selectedOrder.costo_envio).toFixed(2)}</span>
-                      </div>
-                    )}
-                    {selectedOrder.impuestos && parseFloat(selectedOrder.impuestos) > 0 && (
-                      <div className="info-row">
-                        <strong>Impuestos:</strong>
-                        <span>${parseFloat(selectedOrder.impuestos).toFixed(2)}</span>
-                      </div>
-                    )}
-                    <div className="info-row total-row">
-                      <strong>Total:</strong>
-                      <span>${parseFloat(selectedOrder.total).toFixed(2)}</span>
-                    </div>
-                    {selectedOrder.notas_adicionales && (
-                      <div className="info-row full-width">
-                        <strong>Notas adicionales:</strong>
-                        <span>{selectedOrder.notas_adicionales}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
+        <div className="detalle-grid">
+          {/* COLUMNA 1 */}
+          <div className="grid-col">
+            <div className="detalle-card">
+              <h3>📋 Información del Pedido</h3>
+              <p><strong>Código:</strong> {selectedOrder.codigo_pedido}</p>
+              <p><strong>Fecha y Hora:</strong> {formatDate(selectedOrder.fecha_pedido)}</p>
+              <p>
+                <strong>Estado:</strong>
+                <span className={`estado-pill estado-${selectedOrder.estado}`}>
+                  <span className="estado-dot" /> {getStatusName(selectedOrder.estado)}
+                </span>
+              </p>
+              <p>
+                <strong>Tipo:</strong>{' '}
+                <FaTruck className="icon-small" style={{ marginRight: '4px', color: '#facc15' }} />
+                {selectedOrder.tipo_envio === 'entrega' ? 'Entrega' : 'Recogida'}
+              </p>
             </div>
 
-            <div className="order-detail-section">
-              <h3>Productos</h3>
-              <div className="product-list">
-                {selectedOrder.detalles && selectedOrder.detalles.length > 0 ? (
-                  selectedOrder.detalles.map((item, index) => (
-                    <div className="product-item" key={index}>
-                      <div className="product-header">
-                        <h4>{item.nombre_producto_original}</h4>
-                        <span className="product-price">${parseFloat(item.subtotal).toFixed(2)}</span>
-                      </div>
-                      <div className="product-details">
-                        <div className="product-specs">
-                          <span className="product-qty">Cantidad: <strong>{item.cantidad}</strong></span>
-                          <span className="product-unit-price">Precio unitario: <strong>${parseFloat(item.precio_unitario).toFixed(2)}</strong></span>
-                          {item.tamano && <span className="product-size">Tamaño: <strong>{item.tamano}</strong></span>}
-                          {item.masa && <span className="product-masa">Masa: <strong>{item.masa}</strong></span>}
-                        </div>
-                        {item.descripcion && (
-                          <div className="product-description">
-                            {item.descripcion}
-                          </div>
-                        )}
-                        {item.instrucciones_especiales && (
-                          <div className="product-instructions">
-                            <strong>Instrucciones especiales:</strong> {item.instrucciones_especiales}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="sin-productos-mensaje">Este pedido no contiene productos registrados</p>
-                )}
-              </div>
+            <div className="detalle-card">
+              <h3>🙍 Información del Cliente</h3>
+              <p><strong>Nombre:</strong> {getClientName(selectedOrder)}</p>
+              <p><strong>Teléfono:</strong> {selectedOrder.telefono}</p>
+              <p><strong>Pago:</strong> {selectedOrder.metodo_pago}</p>
+              <p><strong>Dirección:</strong> {selectedOrder.direccion_formateada}</p>
+              <p><strong>Ubicación Cliente:</strong> 📍 En tiempo real<br />
+                <span className="small-muted">
+                  {selectedOrder.lat || '13.6987'}, {selectedOrder.lng || '-89.2404'}
+                </span>
+              </p>
             </div>
 
-            <div className="order-detail-section">
-              <h3>Cambiar Estado</h3>
-              <div className="modal-actions-section">
-                <button 
-                  className="btn-state btn-pendiente"
-                  onClick={() => changeOrderStatus(selectedOrder.id_pedido, "pendiente")}
-                  disabled={selectedOrder.estado === "pendiente"}
-                >
-                  Pendiente
-                </button>
-                <button 
-                  className="btn-state btn-en_proceso"
-                  onClick={() => changeOrderStatus(selectedOrder.id_pedido, "en_proceso")}
-                  disabled={selectedOrder.estado === "en_proceso"}
-                >
-                  En Proceso
-                </button>
-                <button 
-                  className="btn-state btn-entregado"
-                  onClick={() => changeOrderStatus(selectedOrder.id_pedido, "entregado")}
-                  disabled={selectedOrder.estado === "entregado"}
-                >
-                  Entregado
-                </button>
-                <button 
-                  className="btn__action__cancell"
-                  onClick={() => handleCancelOrder(selectedOrder.id_pedido)}
-                  disabled={selectedOrder.estado === "cancelado"}
-                >
-                  Cancelar
-                </button>
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="map-modal-content">
-            <div className="map-header">
-              <h3>
-                {showRoute ? 'Ruta hacia la ubicación del cliente' : 'Ubicación del cliente'}
-              </h3>
-              <button 
-                className="map-back-button"
-                onClick={handleCloseMap}
+</div>
+
+          {/* COLUMNA 2 */}
+          <div className="grid-col">
+            <div className="detalle-card">
+              <h3>🚚 Asignar Repartidor</h3>
+              <select
+                className="asignar-select"
+                value={selectedDeliveryValue}
+                onChange={(e) => setSelectedDeliveryValue(e.target.value)}
               >
-                Volver a detalles
+                <option value="">Selecciona un repartidor</option>
+                <option value="Erick|+503 7083 0446">Erick - +503 7083 0446</option>
+                <option value="Yeferin Campos|+503 7905 8406">Yeferin Campos - +503 7905 8406</option>
+              </select>
+              <button
+                className="btn-azul"
+                onClick={handleAssignDelivery}
+                disabled={!selectedDeliveryValue}
+              >
+                <FaTruck style={{ marginRight: '8px' }} />
+                Asignar y Notificar Repartidor
+              </button>
+            </div>
+
+            {/* Ubicación en Tiempo Real */}
+            <div className="detalle-card">
+              <h3>📍 Ubicación en Tiempo Real</h3>
+              <div className="card-ubicacion">
+                <div className="icono-ubicacion-animado">
+                  <FaMapMarkerAlt />
+                </div>
+                <h4>Destino: {liveAddress}</h4>
+                <p>Lat: {selectedOrder.lat || '13.6988'}, Lng: {selectedOrder.lng || '-89.2407'}</p>
+
+                <div className="label-coordenadas-card">
+                  <div className="icono-cliente-card">
+                    <FaUserAlt />
+                    <span>Cliente</span>
+                  </div>
+                  <div className="coords">
+                    {selectedOrder.lat || '13.6988'}, {selectedOrder.lng || '-89.2407'}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* COLUMNA 3 */}
+          <div className="grid-col">
+            <div className="detalle-card comunicacion-card">
+              <h3><FaMobileAlt style={{ marginRight: '8px' }} /> Comunicación</h3>
+
+              <button className="btn-wsp-cliente">
+                <FaWhatsapp className="icono-btn" /> WhatsApp al Cliente
+              </button>
+
+              <button className="btn-call-cliente">
+                <FaPhoneAlt className="icono-btn" /> Llamar al Cliente
+              </button>
+
+              <button className="btn-ver-ubicacion-final">
+                <FaLocationArrow  className="icono-btn" /> Ver Ubicación del Cliente
               </button>
             </div>
             
-            <OrderLocationMap 
-              order={selectedOrder} 
-              showRoute={showRoute}
-            />
+           <div className="detalle-card productos-card">
+  <h3>🛍️ Productos</h3>
+
+  {selectedOrder.detalles.map((item, idx) => (
+    <div key={idx} className="producto-line">
+      <div className="producto-info">
+        <span className="producto-cantidad-nombre">
+          {item.cantidad}x {item.emoji || '🧀'} {item.nombre_producto_original}
+        </span>
+        <span className="producto-precio">${parseFloat(item.precio_unitario).toFixed(2)}</span>
+      </div>
+      {item.tamano && <div className="producto-tamano-text">({item.tamano})</div>}
+    </div>
+  ))}
+
+  <hr />
+
+  <div className="producto-totales-resumen">
+    <div className="linea-totales">
+      <span>Subtotal:</span>
+      <span>${parseFloat(selectedOrder.subtotal || 0).toFixed(2)}</span>
+    </div>
+    <div className="linea-totales">
+      <span>Impuestos:</span>
+      <span>${parseFloat(selectedOrder.impuestos || 0).toFixed(2)}</span>
+    </div>
+    <div className="linea-totales total-final">
+      <strong>Total:</strong>
+      <strong>${parseFloat(selectedOrder.total || 0).toFixed(2)}</strong>
+    </div>
+  </div>
+</div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

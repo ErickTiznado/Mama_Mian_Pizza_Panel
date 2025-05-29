@@ -1,45 +1,54 @@
 import React from 'react';
 import './OrderTabs.css';
+import { FaCheck, FaTimes } from 'react-icons/fa';
 
-const OrderTabs = ({ activeFilter, handleFilterChange, setPaginaActual }) => {
+const OrderTabs = ({ activeFilter, handleFilterChange, setPaginaActual, counts = {} }) => {
+  const tabs = [
+    {
+      key: "pendiente",
+      label: "Pendiente",
+      icon: <span className="circle-icon" style={{ backgroundColor: "#ffc107" }}></span>
+    },
+    {
+      key: "en_proceso",
+      label: "En Proceso",
+      icon: <span className="circle-icon" style={{ backgroundColor: "#0dcaf0" }}></span>
+    },
+    {
+      key: "entregado",
+      label: "Entregado",
+      icon: (
+        <span className="square-icon green-bg">
+          <FaCheck />
+        </span>
+      )
+    },
+  {
+  key: "cancelado",
+  label: "Cancelado",
+  icon: (
+    <FaTimes className="cancel-icon" />
+  )
+}
+
+  ];
+
   return (
-    <div className="order_tabs-pedidos">
-      <button
-        className={`order_tab-btn ${activeFilter === "pendiente" ? 'order_activo' : ''}`}
-        onClick={() => {
-          setPaginaActual(1);
-          handleFilterChange("pendiente");
-        }}
-      >
-        Pendientes
-      </button>
-      <button
-        className={`order_tab-btn ${activeFilter === "en_proceso" ? 'order_activo' : ''}`}
-        onClick={() => {
-          setPaginaActual(1);
-          handleFilterChange("en_proceso");
-        }}
-      >
-        En Proceso
-      </button>
-      <button
-        className={`order_tab-btn ${activeFilter === "entregado" ? 'order_activo' : ''}`}
-        onClick={() => {
-          setPaginaActual(1);
-          handleFilterChange("entregado");
-        }}
-      >
-        Entregados
-      </button>
-      <button
-        className={`order_tab-btn ${activeFilter === "cancelado" ? 'order_activo' : ''}`}
-        onClick={() => {
-          setPaginaActual(1);
-          handleFilterChange("cancelado");
-        }}
-      >
-        Cancelados
-      </button>
+    <div className="order_tabs-pedidos styled-tabs left-align">
+      {tabs.map(tab => (
+        <button
+          key={tab.key}
+          className={`styled-tab ${activeFilter === tab.key ? 'active' : ''}`}
+          onClick={() => {
+            setPaginaActual(1);
+            handleFilterChange(tab.key);
+          }}
+        >
+          <span className="tab-icon">{tab.icon}</span>
+          <span className="tab-label">{tab.label}</span>
+          <span className="tab-count">{counts[tab.key] ?? 0}</span>
+        </button>
+      ))}
     </div>
   );
 };
