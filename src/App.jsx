@@ -15,6 +15,8 @@ import GestionClientes from './components/GestionClientes/GestionClientes';
 import Inventario from './components/Inventario/Inventario';
 import Graficas from './pages/graficas/graficas';
 import NotificationsPollingManager from './components/OrderNotificationsManager';
+import ConfiguracionAdmin from './components/sidebar/ConfiguracionAdmin';
+
 
 // Importamos el contexto de notificaciones
 import { NotificationProvider } from './context/NotificationContext';
@@ -48,6 +50,7 @@ function App() {
               <Route path="/clientes" element={<GestionClientes />} />
               <Route path="/inventario" element={<Inventario />} />
               <Route path="/graficas" element={<Graficas />} />
+              <Route path="/configuracion" element={<ConfiguracionAdmin />} />
             </Routes>
           </div>
         </main>

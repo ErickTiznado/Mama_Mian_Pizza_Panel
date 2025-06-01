@@ -1,0 +1,338 @@
+.config-wrapper {
+  height: 100vh;
+  overflow-y: auto;
+  background-color: #0f172a;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+/* Cabecera más oscura */
+.config-header-section {
+  padding: 2rem 2rem 1rem;
+  background-color: #0f172a;
+}
+
+.config-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #f97316;
+  margin: 0;
+}
+
+.config-subtitle {
+  color: #94a3b8;
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+
+/* Contenido general con fondo más claro */
+.config-content-background {
+  background-color: #1e293b;
+  padding: 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+
+.config-title {
+  font-size: 1.8rem;
+  color: #f97316;
+  font-weight: bold;
+  margin-top: -20px;
+}
+.config-icon {
+  color: #f97316;
+  font-size: 1.9rem;
+  line-height: 1;
+}
+
+.config-subtitle {
+  margin-bottom: 2rem;
+  color: #cbd5e1;
+  margin-top: 10px;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background-color: #0f172a;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  margin-bottom: 1.5rem;
+}
+
+.tab {
+  padding: 0.75rem 1rem;
+  background-color: transparent;
+  border: none;
+  color: #e2e8f0;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+}
+
+.tab:hover {
+  background-color: #273549;
+}
+
+.tab.active {
+  background-color: #f97316;
+  color: white;
+}
+
+
+.config-panels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.panel {
+  background-color: #0f172a;
+  border-radius: 8px;
+  padding: 1.5rem;
+  flex: 1;
+  min-width: 320px;
+}
+.panelaccount-info {
+  background-color: #0f172a;
+  border-radius: 8px;
+  padding: 4.5rem;
+  flex: 1;
+  min-width: 320px;
+}
+
+.panel-title {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0.3rem 0 1rem;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  color: white;
+}
+
+.btn-orange {
+  background-color: #f97316;
+  color: white;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 4px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.btn-orange:disabled {
+  background-color: #9a3412;
+  cursor: not-allowed;
+}
+
+.security-box.blue {
+  background-color: #1246f01c;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  color: white;
+  border: 1px solid rgb(37 99 235 / var(--tw-border-opacity, 1));
+   color: rgb(147 197 253 / var(--tw-text-opacity, 1));
+}
+
+.security-item {
+  background-color: #2c405c84;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.security-item p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #cbd5e1;
+}
+.password-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input input {
+  flex: 1;
+  padding-right: 2.5rem;
+}
+
+.password-input span {
+  position: absolute;
+  right: 0.75rem;
+  cursor: pointer;
+  color: #94a3b8;
+  transition: color 0.2s ease-in-out;
+}
+
+.password-input span:hover {
+  color: #f97316;
+}
+.password-input input:focus {
+  outline: none;
+  border: 2px solid #f97316;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+}
+
+.badge.green {
+  background-color: rgba(4, 226, 4, 0.811);
+  padding: 0.3rem 1.6rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  color: black;
+}
+
+.btn-black {
+  background-color: #000000b3;
+  color: white;
+  padding: 0.8rem 3.6rem;
+  border: 1px solid gray;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.alert-box.orange {
+  background-color: #451a0389;
+  border: 1px solid #f97316;
+  color: #fdba74;
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.account-info {
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+  background-color: #1e293b;
+  padding: 1.5rem;
+  border-radius: 8px;
+  color: white;
+}
+
+
+.account-info h3 {
+  margin-bottom: 1rem;
+}
+
+
+.panel-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+
+
+/* Sección usuario y último acceso */
+.account-details {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.detail-block .label {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-bottom: 0.2rem;
+}
+
+.detail-block .value {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #f1f5f9;
+}
+
+/* Rol a la derecha */
+.account-role {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1.5rem;
+}
+
+.admin-tag {
+  background-color: #f97316;
+  color: white;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+
+
+.account-panel {
+  background-color: #0f172a;
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid #1e293b;
+  margin-top: 24px;
+  color: white;
+}
+
+.panel-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.account-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.detail-block .label {
+  color: #94a3b8;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.detail-block .value {
+  font-size: 16px;
+  color: white;
+}
+
+.account-role {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: -50px;
+}
+
+.account-role .label {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.admin-tag {
+  background-color: #ea580c;
+  color: white;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+

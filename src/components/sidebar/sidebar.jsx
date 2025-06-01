@@ -1,6 +1,7 @@
 import "./sidebar.css";
-import { ArrowLeftToLine, ArrowRightToLine } from "lucide-react";
-
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Settings, LogOut } from "lucide-react";
 import {
   House,
   ShoppingCart,
@@ -12,18 +13,19 @@ import {
   Bell,
   BellOff
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import NotificationBell from "../icons/notificationBell/notificationBell";
 import { useNotifications } from "../../context/NotificationContext";
-import { useEffect, useState } from "react";
 
 function Sidebar() {
   const navigate = useNavigate();
   const { requestPermission, permissionStatus, sendTestNotification } = useNotifications();
+
   const [showPermissionBanner, setShowPermissionBanner] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(() => {
     return localStorage.getItem("sidebar-collapsed") === "true";
   });
+
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   useEffect(() => {
     if ('Notification' in window) {
@@ -63,6 +65,18 @@ function Sidebar() {
     setIsCollapsed(prev => !prev);
   };
 
+  const toggleUserMenu = () => {
+    setUserMenuOpen(prev => !prev);
+  };
+
+  const handleLogout = () => {
+    navigate("/login"); // o tu ruta de logout
+  };
+
+  const handleConfig = () => {
+    navigate("/configuracion");
+  };
+
   return (
     <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
       <button className="collapse-btn" onClick={toggleSidebar}>
@@ -82,6 +96,7 @@ function Sidebar() {
         </div>
       )}
 
+      {/* Menú principal */}
       <button className="items" onClick={() => handleNavigation("/home")}>
         <span><House size={38} /> {!isCollapsed && "Inicio"}</span>
       </button>
@@ -119,6 +134,38 @@ function Sidebar() {
           {!isCollapsed && <span>Activar notificaciones</span>}
         </button>
       )}
+
+      {/* Menú Admin abajo */}
+      <div className="admin-section wide-admin">
+        <div className="admin-header" onClick={toggleUserMenu}>
+          <div className="admin-icon">
+            <span className="icon-user">👤</span>
+          </div>
+          {!isCollapsed && (
+            <>
+              <span className="admin-name">
+                <span className="gear-icon">⚙️</span> Admin
+              </span>
+              <span className="admin-dropdown-arrow">▾</span>
+            </>
+          )}
+        </div>
+
+        {!isCollapsed && userMenuOpen && (
+          <div className="admin-menu wide-admin-menu">
+            <button onClick={handleConfig}>
+              <Settings size={16} style={{ marginRight: "8px" }} />
+              Configuración
+            </button>
+            <button className="logout-btn" onClick={handleLogout}>
+              <LogOut size={16} style={{ marginRight: "8px", color: "#f87171" }} />
+              <span className="logout-text">Cerrar sesión</span>
+            </button>
+          </div>
+        )}
+
+        {!isCollapsed && <p className="dashboard-version">Dashboard v2.1.0</p>}
+      </div>
     </div>
   );
 }
