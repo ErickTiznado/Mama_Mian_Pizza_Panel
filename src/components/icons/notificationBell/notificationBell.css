@@ -3,6 +3,13 @@
   display: inline-block;
 }
 
+.notification-bell.collapsed {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  z-index: 150;
+}
+
 .notification-button {
   cursor: pointer;
   display: flex;
@@ -17,11 +24,25 @@
   transition: all 0.3s ease;
 }
 
+.notification-bell.collapsed .notification-button {
+  padding: 4px;
+}
+
 .notification-button:hover {
   transform: scale(1.1);
 }
 
-/* Estilos mejorados para el badge de notificaciones */
+/* Ajustar el dropdown cuando el sidebar está colapsado */
+.notification-bell.collapsed .notification-dropdown {
+  left: calc(100% + 15px);
+  top: -20px;
+  min-width: 320px;
+}
+
+.notification-bell:not(.collapsed) .notification-dropdown {
+  right: 0;
+  top: calc(100% + 8px);
+}
 .notification-badge {
   position: absolute;
   top: -5px;
@@ -72,6 +93,14 @@
   animation: fade-in 0.2s ease-in-out;
   overflow: hidden;
   border: 1px solid #eaeaea;
+}
+
+.notification-dropdown.collapsed-dropdown {
+  left: calc(100% + 15px);
+  right: auto;
+  top: -20px;
+  margin-top: 0;
+  margin-left: 0;
 }
 
 .notification-header {

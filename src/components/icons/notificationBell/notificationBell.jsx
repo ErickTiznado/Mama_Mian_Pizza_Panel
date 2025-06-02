@@ -3,7 +3,7 @@ import './notificationBell.css';
 import { Bell } from 'lucide-react';
 import { useNotifications } from '../../../context/NotificationContext';
 
-function NotificationBell({ category }) {
+function NotificationBell({ category, isCollapsed = false }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const { 
@@ -118,23 +118,20 @@ function NotificationBell({ category }) {
         return 'Notificaciones';
     }
   };
-
   return (
-    <div className="notification-bell" ref={dropdownRef}>
+    <div className={`notification-bell ${isCollapsed ? 'collapsed' : ''}`} ref={dropdownRef}>
       <button 
         className="notification-button"
         onClick={handleBellClick}
         aria-label="Notificaciones"
       >
-        <Bell size={24} color={count > 0 ? "#ff6600" : "#333333"} />
+        <Bell size={isCollapsed ? 16 : 24} color={count > 0 ? "#ff6600" : "#333333"} />
         
         {count > 0 && (
           <span className="notification-badge">{count > 99 ? '99+' : count}</span>
         )}
-      </button>
-
-      {isOpen && (
-        <div className="notification-dropdown">
+      </button>      {isOpen && (
+        <div className={`notification-dropdown ${isCollapsed ? 'collapsed-dropdown' : ''}`}>
           <div className="notification-header">
             <h3>{getCategoryTitle()}</h3>
             {categoryNotifications.length > 0 && (
