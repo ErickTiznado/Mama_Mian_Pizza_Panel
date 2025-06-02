@@ -29,15 +29,15 @@
 }
 
 .sidebar.collapsed {
-  width: 80px;
+  width: 135px;
 }
 
 /* Botón de toggle para colapsar - Pestaña que aparece en hover */
 .sidebar-toggle {
   position: absolute;
-  top: 70%;
+  top: 50%;
   right: -15px;
-
+  width: 52px;
   background: linear-gradient(135deg, var(--orange-accent), #e05d00);
   border: none;
   border-radius: 0 8px 8px 0;
@@ -45,7 +45,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 20px;
   z-index: 1000;
   transform: translateY(-50%) translateX(100%);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -427,7 +427,7 @@
 
 @media (min-width: 769px) {
   .sidebar.collapsed {
-    width: 80px;
+    width: 135px;
   }
   
   .sidebar:not(.collapsed) {
@@ -442,9 +442,9 @@
 }
 
 .sidebar.collapsed {
-  width: 80px;
-  min-width: 80px;
-  max-width: 80px;
+  width: 135px;
+  min-width: 135px;
+  max-width: 135px;
 }
 
 .sidebar:not(.collapsed) {

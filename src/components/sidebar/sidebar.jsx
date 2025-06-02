@@ -63,7 +63,7 @@ function Sidebar() {
   return (
     <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>      {/* Botón para colapsar/expandir */}
       <button className="sidebar-toggle" onClick={toggleSidebar}>
-        {isCollapsed ? <ChevronRight size={22}  color="white" strokeWidth={4} /> : <ChevronLeft size={22}  color="white" strokeWidth={4}/>}
+        {isCollapsed ? <ChevronRight size={28}  color="white" strokeWidth={4} /> : <ChevronLeft size={28}  color="white" strokeWidth={4}/>}
       </button>
 
       <header className="sidebar-header">
@@ -77,7 +77,7 @@ function Sidebar() {
       {showPermissionBanner && !isCollapsed && (
         <div className="notification-permission-banner">
           <div className="permission-banner-content">
-            <Bell size={20} />
+            <Bell size={28} />
             <p>Activa las notificaciones para estar al día con pedidos y alertas</p>
           </div>
           <div className="permission-banner-actions">
@@ -98,13 +98,13 @@ function Sidebar() {
       )}      <div className="sidebar-body">
         <button className="items" onClick={() => handleNavigation("/home")} title="Inicio">
           <span>
-            <House size={18} />
+            <House size={28} />
             {!isCollapsed && "Inicio"}
           </span>
         </button>        {/* Changed button to div to prevent nesting errors with NotificationBell */}
         <div className="items" onClick={() => handleNavigation("/pedidos")} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleNavigation("/pedidos")} title="Pedidos">
           <span>
-            <ShoppingCart size={18} />
+            <ShoppingCart size={28} />
             {!isCollapsed && "Pedidos"}
           </span>
           <NotificationBell category="pedidos" isCollapsed={isCollapsed} />
@@ -116,12 +116,12 @@ function Sidebar() {
           title="Contenido"
         >
           <span>
-            <ClipboardList size={18} />
+            <ClipboardList size={28} />
             {!isCollapsed && "Contenido"}
           </span>
         </button>        <button className="items" onClick={() => handleNavigation("/inventario")} title="Inventario">
           <span>
-            <Package size={18} />
+            <Package size={28} />
             {!isCollapsed && "Inventario"}
           </span>
           <NotificationBell category="inventario" isCollapsed={isCollapsed} />
@@ -129,13 +129,13 @@ function Sidebar() {
         
         <button className="items" onClick={() => handleNavigation("/graficas")} title="Informes">
           <span>
-            <ChartLine size={18} />
+            <ChartLine size={28} />
             {!isCollapsed && "Informes"}
           </span>
         </button>
           <button className="items" onClick={() => handleNavigation("/clientes")} title="Clientes">
           <span>
-            <Users size={18} />
+            <Users size={28} />
             {!isCollapsed && "Clientes"}
           </span>
           <NotificationBell category="clientes" isCollapsed={isCollapsed} />
@@ -143,7 +143,7 @@ function Sidebar() {
         
         <button className="items" onClick={() => window.open("https://contmigo.tiznadodev.com/", "_blank")} title="Tienda">
           <span>
-            <Store size={18} />
+            <Store size={28} />
             {!isCollapsed && "Tienda"}
           </span>
         </button>
