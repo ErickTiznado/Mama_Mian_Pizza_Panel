@@ -111,6 +111,7 @@
 .panel-title {
   font-size: 1.2rem;
   margin-bottom: 1rem;
+  margin-top: -50px;
 }
 
 input {
@@ -207,6 +208,7 @@ input {
   border-radius: 8px;
   font-size: 0.8rem;
   cursor: pointer;
+  margin-top: 10px;
 }
 
 .alert-box.orange {
@@ -336,3 +338,210 @@ input {
 }
 
 
+
+/* === SOPORTE PANEL === */
+
+.soporte-panel {
+  background-color: #0f172a;
+  border-radius: 8px;
+  padding: 1.5rem;
+  flex: 1;
+  min-width: 320px;
+}
+
+.soporte-form, .soporte-tickets {
+  background-color: #0f172a;
+  padding: 2rem;
+  border-radius: 8px;
+  flex: 1;
+  min-width: 666px;
+}
+
+.soporte-form h2, .soporte-tickets h2 {
+  font-size: 1.25rem;
+  color: #f97316;
+  margin-bottom: 1rem;
+}
+
+.soporte-form input,
+.soporte-form select,
+.soporte-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #1e293b;
+  color: white;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  resize: none;
+}
+
+.soporte-form textarea {
+  min-height: 100px;
+}
+
+.soporte-form .row {
+  display: flex;
+  gap: 1rem;
+}
+
+.soporte-tickets .ticket {
+  background-color: #1e293b;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  border: 1px solid #334155;
+}
+
+.soporte-tickets .ticket strong {
+  display: block;
+  color: white;
+  margin-bottom: 0.3rem;
+}
+
+/* BADGES DINÁMICOS */
+
+.contacto-grid {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.contact-card {
+display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 385px;
+
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  color: white;
+
+}
+
+.contact-card .icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+select {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #1e293b;
+  color: white;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #1e293b;
+  color: white;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  transition: all 0.2s ease-in-out;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border: 1px solid #f97316;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.4), inset 0 0 0 1px #f97316;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: black;
+}
+
+.badge .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background-color: white;
+}
+
+.badge .check {
+  font-size: 0.75rem;
+  background-color: white;
+  color: green;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Colores existentes */
+.badge.blue { background-color: #3b83f68d; }
+.badge.red { background-color: #ee4a4add; }
+.badge.green { background-color: #22c55e; }
+.badge.yellow { background-color: #facc15ee; color: black; }
+.badge.orange { background-color: #f97316; }
+.badge.gray { background-color: #496184bb; }
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.dot.blue { background-color: #005aec; }
+.dot.red { background-color: #ff1d1d; }
+.dot.green { background-color: #22c55e; }
+.dot.yellow { background-color: #ffcc00; }
+.dot.orange { background-color: yellow; }
+.dot.gray { background-color: white; }
+
+
+.align-right {
+  text-align: right;
+}
+.icon-circle {
+  font-size: 1.5rem;
+  padding: 1rem;
+  border-radius: 50%;
+  color: white;
+  margin-bottom: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-circle.blue {
+  background-color: #384bf8; /* celeste */
+  
+}
+
+.icon-circle.green {
+  background-color: #03754f; /* verde oscuro */
+}
+
+.icon-circle.orange {
+  background-color: #d15a04; /* naranja */
+}
+
+.text-muted {
+  color: #94a3b8; /* Tailwind's slate-400 */
+  font-size: 0.85rem;
+}
