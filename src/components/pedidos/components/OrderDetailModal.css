@@ -1,0 +1,348 @@
+.detalle-pedido-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.detalle-pedido-panel {
+  background-color: #0f172a;
+  color: white;
+  padding: 30px;
+  width: 95%;
+  max-width: 1100px;
+  border-radius: 12px;
+  position: relative;
+  overflow-y: auto;
+  max-height: 95vh;
+}
+
+.close-button {
+  position: absolute;
+  top: 16px;
+  right: 22px;
+  background: none;
+  border: none;
+  font-size: 26px;
+  color: #ffffffb0;
+  cursor: pointer;
+}
+
+.detalle-title {
+  font-size: 24px;
+  color: #ff8c00;
+  margin-bottom: 25px;
+  font-weight: 700;
+}
+
+.detalle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: stretch; /* <- importante para altura */
+}
+
+.detalle-card {
+  background-color: #1e293b;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px #00000025;
+  border: 1px solid #2f3e52;
+  min-height: 230px; /* <- altura mínima para uniformidad */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.detalle-card h3 {
+  margin-bottom: 12px;
+  font-size: 16px;
+  color: #f1f5f9;
+}
+
+.detalle-card p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #e2e8f0;
+}
+
+.estado-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background-color: #ffa500;
+  color: black;
+  font-weight: 600;
+  font-size: 13px;
+  margin-left: 10px;
+}
+
+.estado-dot {
+  width: 10px;
+  height: 10px;
+  background-color: yellow;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.asignar-select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  background-color: #1e293b; /* fondo oscuro para coherencia */
+  color: white; /* ⬅️ texto blanco */
+  border: 1px solid #334155;
+}
+
+/* Esto es importante para algunos navegadores (como Firefox) */
+.asignar-select option {
+  background-color: #1e293b;
+  color: white;
+}
+
+
+
+.map-preview {
+  background-color: #334155;
+  padding: 12px;
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 13px;
+}
+
+.btn-wsp,
+.btn-call,
+.btn-ver-ubicacion,
+.btn-map {
+  display: inline-block;
+  margin-top: 8px;
+  margin-right: 6px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  color: white;
+  font-weight: 500;
+}
+
+.btn-wsp {
+  background-color: #25d366;
+}
+
+.btn-call {
+  background-color: #1f2937;
+}
+
+.btn-ver-ubicacion,
+.btn-map {
+  background-color: #00c853;
+}
+
+.detalle-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.grid-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.btn-azul {
+  background-color: #3d63eb;
+  color: black;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+.btn-azul:disabled {
+  background-color: #2667c2cb;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.btn-azul:hover {
+  background-color: #1d4ed8; /* tono un poco más claro en hover */
+}
+.comunicacion-card button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 15px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: none;
+  margin: 8px 0;
+  width: 100%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.comunicacion-card button:hover {
+  transform: scale(1.03);
+}
+
+/* WhatsApp */
+.btn-wsp-cliente {
+  background-color: #22c55e;
+  color: white;
+}
+
+.btn-wsp-cliente:hover {
+  background-color: #16a34a;
+}
+
+/* Llamar al Cliente */
+.btn-call-cliente {
+  background-color: #000000bb;
+  color: white;
+}
+
+.btn-call-cliente:hover {
+  background-color: #41486fbd;
+}
+
+/* Ver Ubicación del Cliente */
+.btn-ver-ubicacion-final {
+ background-color: #000000bb;
+  color: #22c55e;
+  border: 2px solid #22c55e;
+  box-shadow: 0 0 0 1px #16f363 inset;
+}
+
+.btn-ver-ubicacion-final:hover {
+   background-color: #41486f00;
+  color: white;
+}
+
+
+/* Íconos */
+.icono-btn {
+  font-size: 16px;
+}
+
+.icono-ubicacion-animado {
+  font-size: 40px;
+  color: #ef4444; /* rojo vivo */
+  animation: bounce 1s infinite;
+  display: flex;
+  justify-content: center;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.card-ubicacion {
+  background-color: #334155;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  color: #e2e8f0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.card-ubicacion h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.card-ubicacion p {
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+
+.label-coordenadas-card {
+  margin-top: 14px;
+  background-color: #4b954b60;
+  border-radius: 8px;
+  padding: 14px;
+  color: #86efac;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.icono-cliente-card {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.coords {
+  font-size: 13px;
+}
+.productos-card h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.producto-line {
+  margin-bottom: 10px;
+}
+
+.producto-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  color: #f1f5f9;
+  font-weight: 500;
+}
+
+.producto-cantidad-nombre {
+  display: inline-block;
+}
+
+.producto-precio {
+  font-weight: 600;
+}
+
+.producto-tamano-text {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-left: 4px;
+}
+
+.producto-totales-resumen {
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+.linea-totales {
+  display: flex;
+  justify-content: space-between;
+  margin: 4px 0;
+  color: #cbd5e1;
+}
+
+.total-final {
+  margin-top: 8px;
+  color: #4ade80;
+  font-size: 16px;
+}

@@ -30,7 +30,7 @@
 
 .order__header h1{
     font-size: 2.7rem;
-    color: #FEB248;
+    color: rgb(251 146 60 / var(--tw-text-opacity, 1));
 }
 
 .order__btn-recargar {
@@ -77,7 +77,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
-  align-items: center;
+  align-items: stretch; /* ✅ Esto es importante */
   background-color: #1f2937;
   padding: 15px;
   border-radius: 8px;
@@ -87,18 +87,20 @@
   width: 100%;
 }
 
+
 .order__filter-group {
   display: flex;
   flex-direction: column;
-  min-width: 200px;
+  width: 100%;
+  flex: 1;
 }
 
+
 .order__filter-label {
-  font-size: 14px;
-  color: #9ca3af;
-  margin-bottom: 5px;
-  font-weight: 500;
+  color: red;
 }
+
+
 
 .order__filter-select {
   background-color: #202938;
@@ -122,7 +124,7 @@
 }
 
 .order__search-box {
-  flex: 1;
+   flex: 1;
   min-width: 200px;
   position: relative;
 }
@@ -163,7 +165,7 @@
 }
 
 .order__btn-reset {
-  background-color: rgba(108, 117, 125, 0.2);
+  background-color: rgba(108, 125, 111, 0.2);
   color: white;
   padding: 8px 16px;
   border-radius: 6px;
@@ -182,7 +184,7 @@
 }
 
 .order__btn-apply {
-  background-color: #FEB248;
+  background-color: rgb(249 115 22 / var(--tw-bg-opacity, 1));
   color: #821717;
   padding: 8px 16px;
   border-radius: 6px;
@@ -216,6 +218,15 @@
   font-weight: 600;
   color: #FEB248;
 }
+.filter-bar::before {
+  display: none !important;
+}
+.order_tabs-pedidos {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
 
 /* Contador de resultados (estilo consistente con AgregarContenido) */
 .cont_resultados-contador {
@@ -986,6 +997,11 @@
         padding: 6px 10px;
     }
 }
+.titulo-pedidos {
+  color: rgb(251, 146, 60);
+   font-size: 2.7rem;
+}
+
 
 @media (max-width: 992px) {
     .order__content {
@@ -1003,10 +1019,8 @@
 }
 
 @media (max-width: 768px) {
-    .order__header h1 {
-        font-size: 2rem;
-    }
-    
+
+
     .filters button {
         font-size: 16px;
     }
@@ -1135,15 +1149,10 @@
   padding: 10px;
 }
 
-.order_header h1 {
-  color: #FEB248;
-  font-size: 1.8rem;
-  margin: 0;
-  font-weight: 600;
-}
+
 
 .order_btn-agregar {
-  background-color: #FEB248;
+  background-color: rgb(249 115 22 / var(--tw-bg-opacity, 1));
   color: #821717;
   border: none;
   border-radius: 8px;
@@ -1268,12 +1277,12 @@
 /* Contador de resultados con estilo consistente */
 .cont_resultados-contador {
   font-size: 0.95rem;
-  color: #d1d5db;
+  color: white;
   margin-bottom: 15px;
   background-color: rgba(31, 41, 55, 0.5);
   display: inline-block;
-  padding: 8px 16px;
-  border-radius: 6px;
+  padding: 2px 16px;
+  border-radius: 26px;
   border: 1px solid #374151;
 }
 
@@ -1293,8 +1302,8 @@
 
 .toggle-filters-btn {
   background-color: #202938;
-  border: 1px solid #374151;
-  color: #FEB248;
+  border: 1px solid rgb(251 146 60 / var(--tw-text-opacity, 1));
+  color:rgb(251 146 60 / var(--tw-text-opacity, 1));
   border-radius: 6px;
   padding: 8px 15px;
   font-size: 14px;
@@ -1343,16 +1352,24 @@
 
 /* Contador de resultados */
 .cont_resultados-contador {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 10px 15px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 1px 18px;
+  border-radius: 30px;
+  background-color: #1f2937;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  border: 2px solid #374151;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  margin-top: 30px
 }
 
 .cont_resaltado {
+  color: #f7a12a;
   font-weight: bold;
-  color: #c0392b;
+  font-size: 19px;
 }
 
 /* ...existing code... */
@@ -1366,8 +1383,8 @@
 
 .toggle-filters-btn {
   background-color: #202938;
-  border: 1px solid #374151;
-  color: #FEB248;
+  border: 2px solid #fb923c; /* Borde naranja */
+  color: rgb(251, 146, 60);  /* Texto naranja claro */
   border-radius: 6px;
   padding: 8px 15px;
   font-size: 14px;
@@ -1380,9 +1397,12 @@
 }
 
 .toggle-filters-btn:hover {
-  background-color: #374151;
+  color: white; /* Cambiar a blanco al pasar el cursor */
+  background-color: #202938;
   transform: translateY(-1px);
+  border-color: #fb923c; /* Borde naranja */;
 }
+
 
 .toggle-filters-btn svg {
   font-size: 16px;
@@ -1575,3 +1595,122 @@ tr.pedido-urgente {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #1f2a38;
+  color: #f8f9fa;
+  font-size: 14px;
+}
+
+.styled-table th {
+  background-color: #1f2a38;
+  color: #ff8c00;
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid #37404b;
+}
+
+.styled-row td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #2c3540;
+}
+
+/* Estado */
+.estado-cell {
+  min-width: 150px;
+  
+}
+.estado-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  background-color: orange;
+  color: white;
+}
+.estado-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color:  yellow;
+}
+.estado-text {
+  line-height: 1;
+}
+
+/* Código + Hora */
+.code-time .code {
+  font-weight: bold;
+}
+.code-time .time {
+  font-size: 13px;
+  color: #adb5bd;
+}
+
+/* Cliente + Pago */
+.client-pay .client {
+  font-weight: 600;
+}
+.client-pay .pay {
+  font-size: 13px;
+  color: #adb5bd;
+}
+
+/* Dirección */
+.address {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Productos */
+.products .product-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+}
+
+/* Total */
+.total-cell {
+  font-weight: bold;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+/* Botones */
+.btn-details {
+  background: none;
+  color: #ff8c00;
+  border: 1px solid #ff8c00;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-details:hover {
+  background-color: #37404b;
+  color: white;
+}
+
+.btn-start {
+  background-color: #418bff;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
