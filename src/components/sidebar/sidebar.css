@@ -1,19 +1,64 @@
 @import '../../styles/variables.css';
 
 .sidebar{
-    background-color: var(--color-primary);
+    background-color: #0f172a;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+    border-right: #303e52 solid 1px;
 }
+
+.sidebar-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 15px 0;
+  border-bottom: #303e52 solid 1px;
+  background-color: rgba(15, 23, 42, 0.95);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-brand {
+  width: 90px;
+  height: 90px;
+  margin-bottom: 8px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  margin: -20px;
+}
+
+.sidebar-brand:hover {
+  transform: scale(1.05);
+}
+
+.sidebar-header h1 {
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-septenary);
+  margin: 0;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
 
 .items{
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px;
-    width: 80%;
+    width: 100%;
     border-radius: 10px;
     transition: color 0.3s ease-in-out;
     transition: background-color 0.3s ease-in-out;
@@ -26,7 +71,10 @@
     justify-content: start;
     align-items: center;
     gap: 10px;
-}
+    font-size: 1rem;
+    color: var(--color-septenary);
+
+  }
 
 .items:hover{
     background-color: var(--color-secondary);
@@ -34,11 +82,6 @@
     outline: none;
 }
 
-.items span{
-    font-size: 1.2rem;
-    color: var(--color-septenary);
-    font-weight: bold;
-}
 
 .items span:hover{
     color: var(--color-quaternary);

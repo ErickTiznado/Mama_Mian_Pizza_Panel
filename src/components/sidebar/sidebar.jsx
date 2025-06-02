@@ -1,4 +1,5 @@
 import "./sidebar.css";
+import Logo from "../../assets/logo.png";
 import {
   House,
   ShoppingCart,
@@ -56,6 +57,14 @@ function Sidebar() {
 
   return (
     <div className="sidebar">
+
+    <header className="sidebar-header">
+      <img className="sidebar-brand" src={Logo} alt="" />
+      <h1>
+        Mama Mian Panel
+      </h1>
+
+    </header>
       {/* Banner de solicitud de permisos */}
       {showPermissionBanner && (
         <div className="notification-permission-banner">
@@ -79,17 +88,17 @@ function Sidebar() {
           </div>
         </div>
       )}
-      
-      <button className="items" onClick={() => handleNavigation("/home")}>
+      <div className="sidebar-body">
+        <button className="items" onClick={() => handleNavigation("/home")}>
         <span>
-        <House size={38} />
+        <House size={18} />
         Inicio 
         </span>
       </button>
       {/* Changed button to div to prevent nesting errors with NotificationBell */}
       <div className="items" onClick={() => handleNavigation("/pedidos")} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleNavigation("/pedidos")}>
         <span>
-        <ShoppingCart size={38} />
+        <ShoppingCart size={18} />
         Pedidos
         </span>
         <NotificationBell category="pedidos" />
@@ -99,37 +108,38 @@ function Sidebar() {
         onClick={() => handleNavigation("/AgregarContenido")}
       >
         <span>
-        <ClipboardList size={38} />
+        <ClipboardList size={18} />
         Contenido 
         </span>
       </button>
       <button className="items" onClick={() => handleNavigation("/inventario")}>
         <span>
-        <Package size={38} />
+        <Package size={18} />
         Inventario 
         </span>
         <NotificationBell category="inventario" />
       </button>
       <button className="items" onClick={() => handleNavigation("/graficas")}>
         <span>
-        <ChartLine size={38} />
+        <ChartLine size={18} />
         Informes y Estadisticas 
         </span>
       </button>
       <button className="items" onClick={() => handleNavigation("/clientes")}>
         <span>
-        <Users size={38} />
+        <Users size={18} />
         Clientes 
         </span>
         <NotificationBell category="clientes" />
       </button>
       <button className="items" onClick={() => window.open("https://contmigo.tiznadodev.com/", "_blank")}>
         <span>
-        <Store size={38} />
+        <Store size={18} />
         Visualizar Tienda 
         </span>
       </button>
-      
+
+      </div>      
       {/* Botón para activar notificaciones (si están desactivadas) */}
       {permissionStatus !== 'granted' && !showPermissionBanner && (
         <button className="notification-toggle" onClick={handleRequestPermission} title="Activar notificaciones">
