@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import {
   Settings,
   Lock,
@@ -11,18 +12,19 @@ import {
   Shield,
   AlertTriangle,
   CheckCircle,
-  Search, // Icono para la barra de búsqueda en Historial
-  ShoppingCart, // Icono para 'Pedido' en Historial
-  Package, // Icono para 'Inventario' en Historial
-
- 
+  Search,
+  ShoppingCart,
+  Package,
+  Download,
+  RefreshCw,
+  Calendar
 } from "lucide-react";
 import "./configuracion.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane, faClock } from "@fortawesome/free-regular-svg-icons"; // Regular
+import { faPaperPlane, faClock } from "@fortawesome/free-regular-svg-icons";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import { faBroom } from "@fortawesome/free-solid-svg-icons"; // Keep faBroom for clear
+import { faBroom } from "@fortawesome/free-solid-svg-icons";
 
 function ConfiguracionAdmin() {
   const [activeTab, setActiveTab] = useState("cuenta");
@@ -47,6 +49,9 @@ function ConfiguracionAdmin() {
   const [tipo, setTipo] = useState('');
   const [estado, setEstado] = useState('');
 
+  // Estados para backup
+  const [backupData, setBackupData] = useState([]);
+
   const limpiarFiltros = () => {
     setBusqueda('');
     setTipo('');
@@ -65,7 +70,7 @@ function ConfiguracionAdmin() {
   });
 
   useEffect(() => {
-    // Datos simulados para probar
+    // Datos simulados para historial
     const historialSimulado = [
       {
         time: "14:30:15",
@@ -85,8 +90,6 @@ function ConfiguracionAdmin() {
         state: "Exitoso",
         ip: "192.168.1.100"
       },
-    
-     
       {
         time: "09:15:22",
         date: "2025-01-22",
@@ -98,7 +101,39 @@ function ConfiguracionAdmin() {
       }
     ];
 
+    // Datos simulados para backup
+    const backupSimulado = [
+      {
+        id: 1,
+        nombre: "backup_completo_2025-01-22.zip",
+        descripcion: "Backup automático completo del sistema",
+        tipo: "Completo",
+        tamaño: "245.8 MB",
+        fecha: "2025-01-22 03:00:00",
+        estado: "Completado"
+      },
+      {
+        id: 2,
+        nombre: "backup_incremental_2025-01-21.zip",
+        descripcion: "Backup incremental de cambios diarios",
+        tipo: "Incremental",
+        tamaño: "12.4 MB",
+        fecha: "2025-01-21 03:00:00",
+        estado: "Completado"
+      },
+      {
+        id: 3,
+        nombre: "backup_completo_2025-01-15.zip",
+        descripcion: "Backup semanal completo",
+        tipo: "Completo",
+        tamaño: "238.2 MB",
+        fecha: "2025-01-15 03:00:00",
+        estado: "Completado"
+      }
+    ];
+
     setData(historialSimulado);
+    setBackupData(backupSimulado);
   }, []);
 
   return (
@@ -281,7 +316,6 @@ function ConfiguracionAdmin() {
                 </button>
               </div>
 
-
               <div className="panel soporte-tickets">
                 <h2 className="panel-title">
                   <FontAwesomeIcon icon={faClock} style={{ marginRight: "8px", color: "#f97316" }} />
@@ -334,10 +368,8 @@ function ConfiguracionAdmin() {
                     </div>
                   </div>
                   <p className="ticket-update align-right">Actualizado: 2025-01-22</p>
-
                 </div>
               </div>
-
 
               {/* Contacto */}
               <div className="panelaccount-info">
@@ -369,7 +401,6 @@ function ConfiguracionAdmin() {
                   </div>
                 </div>
               </div>
-
             </>
           )}
 
@@ -377,8 +408,8 @@ function ConfiguracionAdmin() {
             <div className="historial-container">
               {/* Panel de Filtros */}
               <div className="historial-panel">
-                <div className="search-input-wrapper"> {/* Added wrapper for search icon */}
-                  <Search className="search-icon" size={16} /> {/* Search icon from lucide-react */}
+                <div className="search-input-wrapper">
+                  <Search className="search-icon" size={16} />
                   <input
                     type="text"
                     placeholder="Buscar actividades..."
@@ -411,8 +442,8 @@ function ConfiguracionAdmin() {
                 <div className="contador total"><h2>{filtrados.length}</h2><p>Resultados</p></div>
               </div>
 
-             {/* Tabla */}
-              <div className="tabla-contenedor"> {/* This div will now be scrollable */}
+              {/* Tabla */}
+              <div className="tabla-contenedor">
                 <table className="tabla-historial">
                   <thead>
                     <tr>
@@ -432,12 +463,10 @@ function ConfiguracionAdmin() {
                           <span className="descripcion">{row.description}</span>
                         </td>
                         <td>
-                          <span className={`badge tipo ${row.type.toLowerCase().replace(/\s/g, '-')}`}> {/* Added .replace(/\s/g, '-') for multi-word types */}
-                            {/* Conditional icons for 'Tipo' */}
+                          <span className={`badge tipo ${row.type.toLowerCase().replace(/\s/g, '-')}`}>
                             {row.type === 'Autenticación' && <Lock size={14} style={{ marginRight: "4px" }} />}
                             {row.type === 'Pedido' && <ShoppingCart size={14} style={{ marginRight: "4px" }} />}
                             {row.type === 'Inventario' && <Package size={14} style={{ marginRight: "4px" }} />}
-                            {/* Add other types if needed for demo data */}
                             {row.type === 'Backup' && <DatabaseBackup size={14} style={{ marginRight: "4px" }} />}
                             {row.type === 'Configuración' && <Settings size={14} style={{ marginRight: "4px" }} />}
                             {row.type === 'Seguridad' && <Shield size={14} style={{ marginRight: "4px" }} />}
@@ -447,7 +476,6 @@ function ConfiguracionAdmin() {
                         </td>
                         <td>
                           <span className={`badge estado ${row.state.toLowerCase()}`}>
-                            {/* Conditional icons for 'Estado' */}
                             {row.state === 'Exitoso' && <CheckCircle size={14} style={{ marginRight: "4px" }} />}
                             {row.state === 'Fallido' && <AlertTriangle size={14} style={{ marginRight: "4px" }} />}
                             {row.state}
@@ -463,7 +491,116 @@ function ConfiguracionAdmin() {
           )}
 
           {activeTab === "backup" && (
-            <p style={{ color: "#cbd5e1" }}>🗄️ Aquí va el contenido de Backup</p>
+            <div className="backup-container">
+              {/* Cards de estadísticas */}
+              <div className="backup-stats">
+                <div className="backup-card status">
+                  <div className="backup-card-content">
+                    <div className="backup-icon-wrapper green">
+                      <CheckCircle size={24} />
+                    </div>
+                    <div className="backup-card-info">
+                      <h3>Último Backup</h3>
+                      <p>Hace 6 horas</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="backup-card usage">
+                  <div className="backup-card-content">
+                    <div className="backup-icon-wrapper blue">
+                      <DatabaseBackup size={24} />
+                    </div>
+                    <div className="backup-card-info">
+                      <h3>Espacio Usado</h3>
+                      <p>1.2 GB</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="backup-card schedule">
+                  <div className="backup-card-content">
+                    <div className="backup-icon-wrapper orange">
+                      <Calendar size={24} />
+                    </div>
+                    <div className="backup-card-info">
+                      <h3>Próximo Backup</h3>
+                      <p>En 18 horas</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="backup-card action">
+                  <button className="btn-create-backup">
+                    <Download size={20} />
+                    Crear Backup
+                  </button>
+                </div>
+              </div>
+
+              {/* Historial de Backups */}
+              <div className="backup-history">
+                <h2 className="backup-section-title">Historial de Backups</h2>
+                
+                <div className="backup-table-container">
+                  <table className="backup-table">
+                    <thead>
+                      <tr>
+                        <th>Nombre del Archivo</th>
+                        <th>Tipo</th>
+                        <th>Tamaño</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {backupData.map((backup) => (
+                        <tr key={backup.id}>
+                          <td>
+                            <div className="backup-file-info">
+                              <strong>{backup.nombre}</strong>
+                              <span className="backup-description">{backup.descripcion}</span>
+                            </div>
+                          </td>
+                          <td>
+                            <span className={`backup-badge tipo-${backup.tipo.toLowerCase()}`}>
+                              {backup.tipo === 'Completo' && '●'}
+                              {backup.tipo === 'Incremental' && '●'}
+                              {backup.tipo}
+                            </span>
+                          </td>
+                          <td>{backup.tamaño}</td>
+                          <td>
+                            <div className="backup-date">
+                              <Calendar size={14} />
+                              {backup.fecha}
+                            </div>
+                          </td>
+                          <td>
+                            <span className="backup-badge estado-completado">
+                              <CheckCircle size={14} />
+                              {backup.estado}
+                            </span>
+                          </td>
+                          <td>
+                            <div className="backup-actions">
+                              <button className="backup-action-btn download" title="Descargar">
+                                <Download size={16} />
+                              </button>
+                              <button className="backup-action-btn restore" title="Restaurar">
+                                <RefreshCw size={16} />
+                                Restaurar
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           )}
         </div>
 

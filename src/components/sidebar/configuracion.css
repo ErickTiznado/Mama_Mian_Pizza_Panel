@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
 }
-/* Cabecera más oscura */
+
 .config-header-section {
   padding: 2rem 2rem 1rem;
   background-color: #0f172a;
@@ -25,8 +25,6 @@
   margin-bottom: 1rem;
 }
 
-
-/* Contenido general con fondo más claro */
 .config-content-background {
   background-color: #1e293b;
   padding: 2rem;
@@ -35,7 +33,6 @@
   flex-direction: column;
   gap: 2rem;
 }
-
 
 .config-title {
   font-size: 1.8rem;
@@ -85,8 +82,6 @@
   background-color: #f97316;
   color: white;
 }
-
-
 .config-panels {
   display: flex;
   flex-wrap: wrap;
@@ -106,7 +101,6 @@
   padding: 4.5rem;
   flex: 1;
   min-width: 320px;
-  
 }
 
 .panel-title {
@@ -220,7 +214,6 @@ input {
   border-radius: 6px;
   font-size: 0.9rem;
 }
-
 .account-info {
   margin-top: 2rem;
   margin-bottom: 3rem;
@@ -229,21 +222,15 @@ input {
   border-radius: 8px;
   color: white;
 }
-
-
 .account-info h3 {
   margin-bottom: 1rem;
 }
-
-
 .panel-title {
   font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 1rem;
   color: white;
 }
-
-
 
 /* Sección usuario y último acceso */
 .account-details {
@@ -264,7 +251,6 @@ input {
   color: #f1f5f9;
 }
 
-/* Rol a la derecha */
 .account-role {
   display: flex;
   justify-content: flex-end;
@@ -281,8 +267,6 @@ input {
   font-size: 0.75rem;
   font-weight: 600;
 }
-
-
 
 .account-panel {
   background-color: #0f172a;
@@ -338,10 +322,7 @@ input {
   font-weight: 500;
 }
 
-
-
 /* === SOPORTE PANEL === */
-
 .soporte-panel {
   background-color: #0f172a;
   border-radius: 8px;
@@ -418,12 +399,10 @@ display: flex;
   align-items: center;
   text-align: center;
   min-width: 385px;
-
   padding: 1.5rem;
   border-radius: 8px;
   text-align: center;
   color: white;
-
 }
 
 .contact-card .icon {
@@ -493,7 +472,6 @@ textarea:focus {
   font-weight: bold;
 }
 
-/* Colores existentes */
 .badge.blue { background-color: #3b83f68d; }
 .badge.red { background-color: #ee4a4add; }
 .badge.green { background-color: #22c55e; }
@@ -514,7 +492,6 @@ textarea:focus {
 .dot.orange { background-color: yellow; }
 .dot.gray { background-color: white; }
 
-
 .align-right {
   text-align: right;
 }
@@ -530,28 +507,26 @@ textarea:focus {
 }
 
 .icon-circle.blue {
-  background-color: #384bf8; /* celeste */
+  background-color: #384bf8; 
   
 }
 
 .icon-circle.green {
-  background-color: #03754f; /* verde oscuro */
+  background-color: #03754f; 
 }
 
 .icon-circle.orange {
-  background-color: #d15a04; /* naranja */
+  background-color: #d15a04; 
 }
 
 .text-muted {
-  color: #94a3b8; /* Tailwind's slate-400 */
+  color: #94a3b8; 
   font-size: 0.85rem;
 }
 
-
 .historial-container {
   color: #cbd5e1;
-  margin-top: 1rem;
-    
+  margin-top: 1rem;  
 }
 
 .historial-filtros {
@@ -560,8 +535,6 @@ textarea:focus {
   gap: 1rem;
   margin-bottom: 1rem;
 }
-
-
 .historial-busqueda {
   flex: 2;
   padding: 0.5rem;
@@ -578,7 +551,6 @@ textarea:focus {
   border: 1px solid #334155;
   background-color: #1e293b;
   color: #e2e8f0;
-  
 }
 
 .historial-limpiar {
@@ -714,73 +686,62 @@ textarea:focus {
   background-color: #334155db;
 }
 
-
-
-
-
-
 .search-input-wrapper {
   position: relative;
-  flex: 1; /* Allows it to take available space */
+  flex: 1; 
   display: flex;
   align-items: center;
 }
 
 .search-input-wrapper .search-icon {
   position: absolute;
-  left: 10px; /* Adjust as needed */
-  color: #6b7280; /* A grey color for the icon */
+  left: 10px; 
+  color: #6b7280; 
     margin-top: -6px;
 }
 
-/* Adjust the input padding to make space for the icon */
 .historial-input {
   padding-left: 35px; /* Make space for the icon */
   
 }
 
-/* Style for the table header text color */
 .tabla-historial thead th.orange-header {
-  color: #f97316; /* Orange color */
+  color: #f97316;
 }
 
-/* Adjustments for the icons within the badges in the table */
 .badge.tipo, .badge.estado {
-  display: inline-flex; /* To align icon and text */
+  display: inline-flex; 
   align-items: center;
   padding: 5px 10px;
   border-radius: 5px;
   font-weight: bold;
 }
 
-/* Specific colors for type badges */
 .badge.tipo.autenticación {
-  background-color: #6d28d9; /* Deep Purple */
+  background-color: #6d28d9; 
   color: white;
 }
 
 .badge.tipo.pedido {
-  background-color: #0d9488; /* Teal */
+  background-color: #0d9488; 
   color: white;
 }
 
 .badge.tipo.inventario {
-  background-color: #db2777; /* Pink */
+  background-color: #db2777; 
   color: white;
 }
 
-/* Specific colors for state badges */
 .badge.estado.exitoso {
-  background-color: #16a34a; /* Green */
+  background-color: #16a34a; 
   color: white;
 }
 
 .badge.estado.fallido {
-  background-color: #dc2626; /* Red */
+  background-color: #dc2626; 
   color: white;
 }
 
-/* General badge styling (if not already present) */
 .badge {
     padding: 4px 8px;
     border-radius: 4px;
@@ -788,4 +749,285 @@ textarea:focus {
     font-weight: 500;
 }
 
+/* ===== BACKUP SECTION */
 
+.backup-container {
+  padding: 0;
+  margin: 0;
+  margin-top: -30px;
+  width: 1400px;
+}
+
+/* Backup Stats Cards */
+.backup-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.backup-card {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.backup-card:hover {
+  border-color: #f97316;
+  transform: translateY(-2px);
+}
+
+.backup-card-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.backup-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.backup-icon-wrapper.green {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.backup-icon-wrapper.blue {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.backup-icon-wrapper.orange {
+  background: rgba(86, 75, 68, 0.2);
+  color: #f97316;
+}
+
+.backup-card-info h3 {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #cbd5e1b9;
+  margin-bottom: 0.25rem;
+}
+
+.backup-card-info p {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+/* Create Backup Button */
+.backup-card.action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.btn-create-backup {
+  background: #f97316;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.875rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-create-backup:hover {
+  background: #ea580c;
+  transform: translateY(-1px);
+}
+
+/* Backup History Section */
+.backup-history {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.backup-section-title {
+  margin: 0;
+  padding: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  border-bottom: 1px solid #334155;
+}
+
+.backup-table-container {
+  overflow-x: auto;
+}
+
+.backup-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.backup-table thead th {
+  background: #33415562;
+  color: orange;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: none;
+}
+
+.backup-table tbody td {
+  padding: 1rem;
+  border-bottom: 1px solid #334155;
+  color: #cbd5e1;
+  vertical-align: middle;
+}
+
+.backup-table tbody tr:hover {
+  background: rgba(249, 115, 22, 0.05);
+}
+
+.backup-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* File info styling */
+.backup-file-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.backup-file-info strong {
+  color: #f1f5f9;
+  font-weight: 600;
+}
+
+.backup-description {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* Backup badges */
+.backup-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.backup-badge.tipo-completo {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3880f3;
+  width: 100px;
+}
+
+.backup-badge.tipo-incremental {
+  background: rgba(34, 197, 94, 0.2);
+  color: #21eb6b;
+  width: 100px;
+}
+
+.backup-badge.estado-completado {
+  background: rgba(34, 197, 94, 0.2);
+  color: #16ea64;
+  width: 100px;
+}
+
+/* Date styling */
+.backup-date {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: #94a3b8;
+}
+
+/* Action buttons */
+.backup-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.backup-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.backup-action-btn.download {
+  background: black;
+  color: white;
+  border: 1px solid #475569;
+}
+
+.backup-action-btn.download:hover {
+  background: rgba(148, 163, 184, 0.1);
+  color: #cbd5e1;
+  border-color: #64748b;
+}
+
+.backup-action-btn.restore {
+  background: #2573f1;
+  color: black;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.backup-action-btn.restore:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .backup-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .backup-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .backup-table-container {
+    font-size: 0.875rem;
+  }
+  
+  .backup-actions {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .backup-action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
