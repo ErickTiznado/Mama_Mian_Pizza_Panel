@@ -106,12 +106,13 @@
   padding: 4.5rem;
   flex: 1;
   min-width: 320px;
+  
 }
 
 .panel-title {
   font-size: 1.2rem;
   margin-bottom: 1rem;
-  margin-top: -50px;
+  margin-top: -65px;
 }
 
 input {
@@ -545,3 +546,246 @@ textarea:focus {
   color: #94a3b8; /* Tailwind's slate-400 */
   font-size: 0.85rem;
 }
+
+
+.historial-container {
+  color: #cbd5e1;
+  margin-top: 1rem;
+    
+}
+
+.historial-filtros {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+
+.historial-busqueda {
+  flex: 2;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+.historial-select,
+.historial-limpiar {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #334155;
+  background-color: #1e293b;
+  color: #e2e8f0;
+  
+}
+
+.historial-limpiar {
+  cursor: pointer;
+}
+
+.historial-contadores {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+}
+
+.contador {
+  flex: 1;
+  padding: 1rem;
+  border-radius: 6px;
+  text-align: center;
+  background-color: #0f172a;
+  
+}
+
+.contador.exito h2 {
+  color: #22c55e;
+}
+
+.contador.fallo h2 {
+  color: #ef4444;
+}
+
+.contador.seguridad h2 {
+  color: #3b82f6;
+}
+
+.contador.total h2 {
+  color: #ffffff;
+}
+
+.tabla-contenedor {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #334155;
+}
+
+.tabla-historial {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+.tabla-historial thead {
+  background-color: #1e293b;
+}
+
+.tabla-historial th,
+.tabla-historial td {
+  padding: 0.75rem;
+  border: 1px solid #334155;
+  text-align: left;
+}
+
+.descripcion {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+.tipo.autenticación {
+  background-color: #1d4ed8;
+}
+.tipo.pedido {
+  background-color: #10b981;
+}
+.tipo.inventario {
+  background-color: #a855f7;
+}
+
+.estado.exitoso {
+  background-color: #22c55e;
+}
+
+.estado.fallido {
+  background-color: #ef4444;
+}
+.historial-panel {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  background-color: #0c1324;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  align-items: center;
+ width: 1365px;
+ margin-top: -50px;
+
+}
+
+.historial-input,
+.historial-limpiar {
+  padding: 0.5rem;
+  height: 40px;
+  border-radius: 6px;
+  border: 1px solid #334155;
+  background-color: #23335a91;
+  color: #e2e8f0;
+  width: 100%;
+  font-size: 14px;
+}
+
+.historial-limpiar {
+  background-color: black;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: -15px;
+}
+
+.historial-limpiar:hover {
+  background-color: #334155db;
+}
+
+
+
+
+
+
+.search-input-wrapper {
+  position: relative;
+  flex: 1; /* Allows it to take available space */
+  display: flex;
+  align-items: center;
+}
+
+.search-input-wrapper .search-icon {
+  position: absolute;
+  left: 10px; /* Adjust as needed */
+  color: #6b7280; /* A grey color for the icon */
+    margin-top: -6px;
+}
+
+/* Adjust the input padding to make space for the icon */
+.historial-input {
+  padding-left: 35px; /* Make space for the icon */
+  
+}
+
+/* Style for the table header text color */
+.tabla-historial thead th.orange-header {
+  color: #f97316; /* Orange color */
+}
+
+/* Adjustments for the icons within the badges in the table */
+.badge.tipo, .badge.estado {
+  display: inline-flex; /* To align icon and text */
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+/* Specific colors for type badges */
+.badge.tipo.autenticación {
+  background-color: #6d28d9; /* Deep Purple */
+  color: white;
+}
+
+.badge.tipo.pedido {
+  background-color: #0d9488; /* Teal */
+  color: white;
+}
+
+.badge.tipo.inventario {
+  background-color: #db2777; /* Pink */
+  color: white;
+}
+
+/* Specific colors for state badges */
+.badge.estado.exitoso {
+  background-color: #16a34a; /* Green */
+  color: white;
+}
+
+.badge.estado.fallido {
+  background-color: #dc2626; /* Red */
+  color: white;
+}
+
+/* General badge styling (if not already present) */
+.badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 500;
+}
+
+
