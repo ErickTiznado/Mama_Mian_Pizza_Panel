@@ -36,7 +36,7 @@ const AgregarContenido = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get('https://server.tiznadodev.com/api/content/getMenu');
+        const response = await axios.get('https://api.mamamianpizza.com/api/content/getMenu');
         const productosData = response.data.productos || [];
         
       const formattedData = productosData.map(item => ({
@@ -131,7 +131,7 @@ const AgregarContenido = () => {
     try {
       setIsLoading(true);
       // Llamar a la API para eliminar el contenido
-      await axios.delete(`https://server.tiznadodev.com/api/content/${selectedItemId}`);
+      await axios.delete(`https://api.mamamianpizza.com/api/content/${selectedItemId}`);
       
       // Actualizar el estado eliminando el elemento
       const updatedContent = contenidos.filter(item => item.id !== selectedItemId);

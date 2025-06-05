@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Clock, TrendingUp, TrendingDown } from "lucide-react";
 import './PedidosHora.css';
 
-const API_URL = 'https://server.tiznadodev.com';
+const API_URL = 'https://api.mamamianpizza.com';
 
 const PedidosHora = ({ timePeriod = 'today', orderType = 'all' }) => {
     const [pedidosHora, setPedidosHora] = useState(0);

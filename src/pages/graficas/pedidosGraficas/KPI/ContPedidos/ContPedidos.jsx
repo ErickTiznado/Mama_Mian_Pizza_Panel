@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ShoppingBag, TrendingUp, TrendingDown } from "lucide-react";
 import './ContPedidos.css';
 
-const API_URL = 'https://server.tiznadodev.com';
+const API_URL = 'https://api.mamamianpizza.com';
 
 const ContPedidos = ({ timePeriod = 'today', orderType = 'all' }) => {
     const [countPed, setCountPed] = useState(0);

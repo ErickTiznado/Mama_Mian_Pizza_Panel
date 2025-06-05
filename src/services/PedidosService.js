@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL para la API
-const API_BASE_URL = "https://server.tiznadodev.com/api/orders";
+const API_BASE_URL = "https://api.mamamianpizza.com/api/orders";
 
 // Función para obtener todos los pedidos
 export const fetchAllOrders = async () => {

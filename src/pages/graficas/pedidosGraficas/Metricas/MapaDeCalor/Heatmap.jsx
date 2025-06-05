@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Heatmap.css';
 
-const API_URL = 'https://server.tiznadodev.com';
+const API_URL = 'https://api.mamamianpizza.com';
 
 const Heatmap = () => {
     const [data, setData] = useState([]);

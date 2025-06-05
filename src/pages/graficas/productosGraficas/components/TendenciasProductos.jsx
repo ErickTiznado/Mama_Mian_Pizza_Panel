@@ -4,7 +4,7 @@ import './TendenciasProductos.css';
 import axios from 'axios';
 
 // API Base URL
-const API_BASE_URL = "https://server.tiznadodev.com/api";
+const API_BASE_URL = "https://api.mamamianpizza.com/api";
 
 // Colores de la marca MamaMianPizza
 const brandColors = {

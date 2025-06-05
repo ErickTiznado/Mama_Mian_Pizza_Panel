@@ -12,7 +12,7 @@ import DistribucionCategorias from "./components/DistribucionCategorias";
 import TendenciasProductos from "./components/TendenciasProductos";
 
 // API Base URL
-const API_BASE_URL = "https://server.tiznadodev.com/api";
+const API_BASE_URL = "https://api.mamamianpizza.com/api";
 
 function ProductosGraficas({ fechasFiltradas }) {
   const [evolutionData, setEvolutionData] = useState([]);

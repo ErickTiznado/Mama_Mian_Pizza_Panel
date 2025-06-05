@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 
-const API_URL = "https://server.tiznadodev.com";
+const API_URL = "https://api.mamamianpizza.com";
 
 const UltimosPedidos = () => {
 const [pedidos, setPedidos] = useState([]);

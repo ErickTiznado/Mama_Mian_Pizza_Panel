@@ -4,7 +4,7 @@ import { FaPizzaSlice, FaGlassWhiskey, FaHamburger, FaCarrot } from 'react-icons
 import './TopProductosVendidos.css';
 
 // API Base URL
-const API_BASE_URL = "https://server.tiznadodev.com/api/orders";
+const API_BASE_URL = "https://api.mamamianpizza.com/api/orders";
 
 const TopProductosVendidos = () => {
   // Estados para el componente

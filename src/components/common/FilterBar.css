@@ -1,11 +1,11 @@
 /* Estilos para el componente FilterBar */
 .filter-bar {
   display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  align-items: center;
-  background-color: #1a2332;
-  padding: 18px 20px;
+  flex-wrap: nowrap;
+  gap: 20px;
+  align-items: flex-end;
+  background-color: #0f172a;
+  padding: 20px 30px;
   border-radius: 10px;
   margin-bottom: 20px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.15);
@@ -13,22 +13,14 @@
   position: relative;
   overflow: hidden;
   width: 100%;
+  min-height: 80px;
 }
 
-.filter-bar::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 4px;
-  height: 100%;
-  background-color: #FEB248;
-  border-radius: 4px 0 0 4px;
-}
+
 
 /* Estilos específicos para la sección de pedidos */
 .order-filter-bar {
-  background-color: #1a2332;
+  background-color: #0f172a;
   border-color: #374151;
 }
 
@@ -42,12 +34,12 @@
   display: flex;
   flex-direction: column;
   min-width: 220px;
-  position: relative;
+  flex-shrink: 0;
 }
 
 .filter-label {
-  font-size: 14px;
-  color: #FEB248;
+  font-size: 18px;
+  color: #f97316;
   margin-bottom: 8px;
   font-weight: 600;
   display: flex;
@@ -116,6 +108,13 @@
   flex: 1;
   min-width: 250px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-input-container {
+  position: relative;
+  width: 100%;
 }
 
 .search-input {
@@ -156,7 +155,8 @@
   transition: all 0.2s ease;
 }
 
-.search-box:focus-within .search-icon {
+.search-box:focus-within .search-icon,
+.search-input-container:focus-within .search-icon {
   color: #FEB248;
 }
 
@@ -184,7 +184,7 @@
 }
 
 .btn-reset {
-  background-color: rgba(108, 117, 125, 0.2);
+  background-color: #09090b;
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -196,8 +196,8 @@
 }
 
 .btn-apply {
-  background-color: #FEB248;
-  color: #821717;
+  background-color: #f97316;
+  color: #FFF;
   border: none;
   font-weight: 600;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -229,14 +229,28 @@
 }
 
 /* Responsividad */
+@media (min-width: 769px) {
+  .filter-bar {
+    align-items: flex-end;
+  }
+  
+  .filter-group,
+  .search-box {
+    align-self: flex-end;
+  }
+}
+
 @media (max-width: 768px) {
   .filter-bar {
     flex-direction: column;
     align-items: stretch;
+    flex-wrap: wrap;
+    gap: 15px;
   }
   
   .filter-group, .search-box {
     width: 100%;
+    min-width: unset;
   }
   
   .filter-actions {

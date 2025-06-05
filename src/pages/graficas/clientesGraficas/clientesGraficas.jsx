@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers, faTrophy, faArrowUp, faCalendarAlt, faChartLine, faUserTag } from '@fortawesome/free-solid-svg-icons';
 
 // API Base URL
-const API_BASE_URL = "https://server.tiznadodev.com/api";
+const API_BASE_URL = "https://api.mamamianpizza.com/api";
 
 // Datos de muestra para cuando la API no retorna datos
 

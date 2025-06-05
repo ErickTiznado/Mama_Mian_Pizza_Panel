@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { DollarSign, TrendingUp, TrendingDown } from "lucide-react";
 import './avgTicket.css';
 
-const API_URL = 'https://server.tiznadodev.com';
+const API_URL = 'https://api.mamamianpizza.com';
 
 const AvgTicket = ({ timePeriod = 'today', orderType = 'all' }) => {
     const [ticketMedio, setTicketMedio] = useState(0);

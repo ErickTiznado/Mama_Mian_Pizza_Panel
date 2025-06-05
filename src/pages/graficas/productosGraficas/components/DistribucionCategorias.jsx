@@ -8,7 +8,7 @@ import axios from 'axios';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 // API Base URL
-const API_BASE_URL = "https://server.tiznadodev.com/api";
+const API_BASE_URL = "https://api.mamamianpizza.com/api";
 
 const DistribucionCategorias = () => {
   // Colores de la marca MamaMianPizza

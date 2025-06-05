@@ -10,7 +10,7 @@ const PedidosRecientes = ({ colorAccent, fechasFiltradas, API_BASE_URL }) => {
   const [error, setError] = useState(null);
   
   // Usar el API_BASE_URL proporcionado como prop o el valor por defecto si no está definido
-  const apiUrl = API_BASE_URL || "https://server.tiznadodev.com/api";
+  const apiUrl = API_BASE_URL || "https://api.mamamianpizza.com/api";
 
   // Función para obtener la fecha actual en formato YYYY-MM-DD
   const getFechaActual = () => {

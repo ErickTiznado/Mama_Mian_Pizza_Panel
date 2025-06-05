@@ -1,7 +1,7 @@
 // Servicio para manejar notificaciones en toda la aplicación
 
 // URL base para la API de notificaciones
-const API_URL = 'https://server.tiznadodev.com/api/notifications';
+const API_URL = 'https://api.mamamianpizza.com/api/notifications';
 
 // Categorías de notificaciones disponibles
 export const NotificationCategories = {

@@ -41,7 +41,7 @@ const OrderManager = () => {
   const elementosPorPagina = 10;
 
   // Base URL para la API
-  const API_BASE_URL = "https://server.tiznadodev.com/api/orders";
+  const API_BASE_URL = "https://api.mamamianpizza.com/api/orders";
 
   // Hook de notificaciones
   const notificationContext = useNotifications();

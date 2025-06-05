@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import './EvolucionPedidos.css';
 
-const API_URL = 'https://server.tiznadodev.com';
+const API_URL = 'https://api.mamamianpizza.com';
 
 const EvolucionPedidos = ({ timePeriod = 'month' }) => {
     const [data, setData] = useState([]);

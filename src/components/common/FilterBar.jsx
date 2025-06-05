@@ -75,17 +75,18 @@ const FilterBar = ({
             <FaChevronDown className="filter-select-icon" />
           </div>
         </div>
-      )}
+      )}      <div className="search-box">
 
-      <div className="search-box">
-        <FaSearch className="search-icon" />
-        <input
-          type="text"
-          className="search-input"
-          placeholder={searchPlaceholder}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <div className="search-input-container">
+          <FaSearch className="search-icon" />
+          <input
+            type="text"
+            className="search-input"
+            placeholder={searchPlaceholder}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
       </div>
 
       <div className="filter-actions">
@@ -102,8 +103,7 @@ const FilterBar = ({
           className="btn-apply"
           onClick={handleApplyFilters}
         >
-          <FaCheck className="btn-icon" />
-          Aplicar
+         Aplicar
         </button>
       </div>
     </div>
