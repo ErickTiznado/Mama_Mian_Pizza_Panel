@@ -61,13 +61,13 @@ function Sidebar() {
     setIsCollapsed(!isCollapsed);
   };
   return (
-    <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>      {/* Botón para colapsar/expandir */}
+    <nav className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>      {/* Botón para colapsar/expandir */}
       <button className="sidebar-toggle" onClick={toggleSidebar}>
         {isCollapsed ? <ChevronRight size={28}  color="white" strokeWidth={4} /> : <ChevronLeft size={28}  color="white" strokeWidth={4}/>}
       </button>
 
       <header className="sidebar-header">
-        <img className="sidebar-brand" src={Logo} alt="" />
+        <img className="sidebar-brand" src={Logo} alt="Logo de Mama Mian Pizza" />
         {!isCollapsed && (
           <h1>
             Mama Mian Panel
@@ -101,12 +101,19 @@ function Sidebar() {
             <House size={28} />
             {!isCollapsed && "Inicio"}
           </span>
-        </button>        {/* Changed button to div to prevent nesting errors with NotificationBell */}
-        <div className="items" onClick={() => handleNavigation("/pedidos")} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleNavigation("/pedidos")} title="Pedidos">
-          <span>
-            <ShoppingCart size={28} />
-            {!isCollapsed && "Pedidos"}
-          </span>
+        </button>
+        <div className="items">
+          <button
+            type="button"
+            className="sidebar-link"
+            onClick={() => handleNavigation("/pedidos")}
+            title="Pedidos"
+          >
+            <span>
+              <ShoppingCart size={28} />
+              {!isCollapsed && "Pedidos"}
+            </span>
+          </button>
           <NotificationBell category="pedidos" isCollapsed={isCollapsed} />
         </div>
         
@@ -154,7 +161,7 @@ function Sidebar() {
           <span>Activar notificaciones</span>
         </button>
       )}
-    </div>
+    </nav>
   );
 }
 
