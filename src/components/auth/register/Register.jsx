@@ -50,7 +50,7 @@ const Register = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:3001/registro', {
+      const response = await axios.post('https://api.mamamianpizza.com/registro', {
         nombre: form.nombre,
         apellido: form.apellido,
         correo: form.correo,

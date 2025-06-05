@@ -29,7 +29,7 @@ const Restablecer = () => {
     }
 
     try {
-      await axios.post('http://localhost:3001/restablecer-contrasena', { correo, codigo, nuevaContrasena });
+      await axios.post('https://api.mamamianpizza.com/restablecer-contrasena', { correo, codigo, nuevaContrasena });
       alert('Contraseña actualizada con éxito');
       navigate('/login');
     } catch (error) {

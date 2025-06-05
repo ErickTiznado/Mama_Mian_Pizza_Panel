@@ -12,7 +12,7 @@ const VerificarCodigo = () => {
 
   const handleVerificarCodigo = async () => {
     try {
-      await axios.post('http://localhost:3001/verificar-codigo', { correo, codigo });
+      await axios.post('https://api.mamamianpizza.com/verificar-codigo', { correo, codigo });
       navigate('/restablecer', { state: { correo, codigo } });
     } catch (error) {
       setMensaje(error.response?.data?.message || 'Código incorrecto o expirado');
