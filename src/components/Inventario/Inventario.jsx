@@ -5,7 +5,7 @@ import Sidebar from '../sidebar/sidebar';
 import Navbar from '../navbar/nabvar';
 import { FaSearch, FaTrashAlt, FaPen, FaExclamationTriangle } from 'react-icons/fa';
 
-const API_URL = 'http://bkcww48c8swokk0s4wo4gkk8.82.29.198.111.sslip.io';
+const API_URL = 'https://api.mamamianpizza.com';
 
 const Inventario = () => {
   // Menú array para almacenar el inventario y utilizarlo para las cards
