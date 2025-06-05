@@ -4,7 +4,7 @@ import NotificationBell from '../icons/notificationBell/notificationBell';
 
 function Navbar() {
     return (
-        <div className='navbar'>
+        <nav className='navbar'>
             <div className='brand'>
                 <h2>Pizza Admin</h2>
             </div>
@@ -14,7 +14,7 @@ function Navbar() {
                     <button><CircleUserRound className='icon' size={36}/></button>
                 </div>
             </div>
-        </div>
+        </nav>
     );
 }
 
