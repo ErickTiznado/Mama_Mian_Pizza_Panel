@@ -16,8 +16,15 @@ import {
   ShoppingCart,
   Package,
   Download,
+  MessageSquare,
+   Info,
   RefreshCw,
-  Calendar
+  Calendar,
+   User,    // Nuevo
+  Edit,    // Nuevo
+  Mail,    // Nuevo
+  Phone,   // Nuevo
+  Clock    // Nuevo
 } from "lucide-react";
 import "./configuracion.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,46 +33,85 @@ import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { faBroom } from "@fortawesome/free-solid-svg-icons";
 
+
+
 function ConfiguracionAdmin() {
+  
+
+const [modoEdicion, setModoEdicion] = useState(false);
+const [nombreAdmin, setNombreAdmin] = useState("Administrador Principal");
+const [emailAdmin, setEmailAdmin] = useState("admin@mitienda.com");
+const [telefonoAdmin, setTelefonoAdmin] = useState("+34 612 345 678");
+
+const [nuevaPassword, setNuevaPassword] = useState("");
+const [confirmarPassword, setConfirmarPassword] = useState("");
+
+const contrasenaValida =
+  nuevaPassword.trim().length >= 6 &&
+  confirmarPassword.trim().length >= 6 &&
+  nuevaPassword === confirmarPassword;
+
+  // ✅ ESTADOS VERIFICACIÓN DE CÓDIGO
+  const [mostrarVerificacion, setMostrarVerificacion] = useState(false);
+  const [codigoVerificacion, setCodigoVerificacion] = useState("123456");
+  const [codigoInput, setCodigoInput] = useState("");
+  const [metodoEnvio, setMetodoEnvio] = useState("");
+  const [mensajeAlerta, setMensajeAlerta] = useState("");
+  const [verificado, setVerificado] = useState(false);
+
+  // ✅ ESTADOS GENERALES
   const [activeTab, setActiveTab] = useState("cuenta");
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  // Estado para crear ticket
+  // ✅ ESTADOS FORMULARIO DE TICKET
   const [asunto, setAsunto] = useState("");
   const [prioridad, setPrioridad] = useState("");
   const [categoria, setCategoria] = useState("");
   const [descripcion, setDescripcion] = useState("");
 
+  // ✅ VALIDACIÓN DE FORMULARIO
   const formularioValido =
     asunto.trim() !== "" &&
     prioridad.trim() !== "" &&
     categoria.trim() !== "" &&
     descripcion.trim() !== "";
 
+  // ✅ ESTADOS FILTROS E HISTORIAL
   const [data, setData] = useState([]);
-  const [busqueda, setBusqueda] = useState('');
-  const [tipo, setTipo] = useState('');
-  const [estado, setEstado] = useState('');
-
-  // Estados para backup
+  const [busqueda, setBusqueda] = useState("");
+  const [tipo, setTipo] = useState("");
+  const [estado, setEstado] = useState("");
   const [backupData, setBackupData] = useState([]);
 
+  // ✅ FUNCIONES
   const limpiarFiltros = () => {
-    setBusqueda('');
-    setTipo('');
-    setEstado('');
+    setBusqueda("");
+    setTipo("");
+    setEstado("");
+  };
+
+  const enviarCodigo = (metodo) => {
+    setMetodoEnvio(metodo);
+    setMostrarVerificacion(true);
+    setCodigoInput("123456");
+
+    const mensaje = metodo === "sms"
+      ? "📲 Código enviado vía SMS al +34 612 345 678"
+      : "📧 Código enviado vía Email a admin@mitienda.com";
+
+    setMensajeAlerta(mensaje);
+
+    setTimeout(() => setMensajeAlerta(""), 3000);
   };
 
   const filtrados = data.filter((item) => {
     const coincideBusqueda =
       item.action.toLowerCase().includes(busqueda.toLowerCase()) ||
       item.description.toLowerCase().includes(busqueda.toLowerCase());
-
     const coincideTipo = tipo ? item.type === tipo : true;
     const coincideEstado = estado ? item.state === estado : true;
-
     return coincideBusqueda && coincideTipo && coincideEstado;
   });
 
@@ -172,50 +218,234 @@ function ConfiguracionAdmin() {
 
         {/* Tab Content */}
         <div className="config-panels">
-          {activeTab === "cuenta" && (
-            <>
-              <div className="panel">
-                <h2 className="panel-title">
-                  <Lock size={20} style={{ marginRight: "8px", color: "#f97316" }} />
-                  Cambiar Contraseña
-                </h2>
-                <label>Contraseña Actual</label>
-                <div className="password-input">
-                  <input
-                    type={showCurrent ? "text" : "password"}
-                    placeholder="Ingresa tu contraseña actual"
-                  />
-                  <span onClick={() => setShowCurrent(!showCurrent)}>
-                    {showCurrent ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </span>
-                </div>
+         {/* TAB: CUENTA */}
+        {activeTab === "cuenta" && (
+          <div className="config-panels">
+           <div className="panel-perfil-admin">
+  <div className="perfil-header">
+    <h2 className="panel-title">
+      <User size={20} style={{ marginRight: "8px", color: "#f97316" }} />
+      Perfil del Administrador
+    </h2>
+    <button
+      className="btn-editar"
+      onClick={() => setModoEdicion(!modoEdicion)}
+    >
+      <Edit size={16} style={{ marginRight: "4px" }} />{" "}
+      {modoEdicion ? "Cancelar" : "Editar"}
+    </button>
+  </div>
 
-                <label>Nueva Contraseña</label>
-                <div className="password-input">
-                  <input
-                    type={showNew ? "text" : "password"}
-                    placeholder="Ingresa tu nueva contraseña"
-                  />
-                  <span onClick={() => setShowNew(!showNew)}>
-                    {showNew ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </span>
-                </div>
+  {!modoEdicion ? (
+    <div className="perfil-contenido">
+      <div className="avatar-admin">
+        <User size={32} />
+      </div>
+      <div className="info-admin">
+        <h3>{nombreAdmin}</h3>
+        <span className="badge-admin">Administrador</span>
+        <p>
+          <Mail size={16} /> {emailAdmin}
+        </p>
+        <p>
+          <Phone size={16} /> {telefonoAdmin}
+        </p>
+        <p>
+          <Calendar size={16} /> Miembro desde 2023-01-15
+        </p>
+        <p>
+          <Clock size={16} /> Último acceso: Hoy, 14:30
+        </p>
+      </div>
+    </div>
+  ) : (
+    <div className="perfil-contenido">
+      <label>Nombre</label>
+      <input
+        type="text"
+        className="input-codigo"
+        value={nombreAdmin}
+        onChange={(e) => setNombreAdmin(e.target.value)}
+      />
 
-                <label>Confirmar Nueva Contraseña</label>
-                <div className="password-input">
-                  <input
-                    type={showConfirm ? "text" : "password"}
-                    placeholder="Confirma tu nueva contraseña"
-                  />
-                  <span onClick={() => setShowConfirm(!showConfirm)}>
-                    {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </span>
-                </div>
+      <label>Email</label>
+      <input
+        type="email"
+        className="input-codigo"
+        value={emailAdmin}
+        onChange={(e) => setEmailAdmin(e.target.value)}
+      />
 
-                <button className="btn-orange">Cambiar Contraseña</button>
-              </div>
+      <label>Teléfono</label>
+      <input
+        type="text"
+        className="input-codigo"
+        value={telefonoAdmin}
+        onChange={(e) => setTelefonoAdmin(e.target.value)}
+      />
 
-              <div className="panel">
+      <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
+        <button
+          className="btn-guardar-perfil"
+          onClick={() => {
+            // Aquí puedes guardar en backend si deseas
+            setModoEdicion(false);
+          }}
+        >
+          Guardar Cambios
+        </button>
+        <button className="btn-cancelar-perfil" onClick={() => setModoEdicion(false)}>
+          Cancelar
+        </button>
+      </div>
+    </div>
+  )}
+</div>
+
+           <div className="panel-cambiar-password">
+  <h2 className="panel-title">
+    <Lock size={20} style={{ marginRight: "8px", color: "#f97316" }} />
+    Cambiar Contraseña
+  </h2>
+
+  {/* Paso 1: Verificación de Identidad */}
+  {!mostrarVerificacion && !verificado && (
+    <div className="verificacion-identidad">
+      <h3>Verificación de Identidad</h3>
+      <p>Selecciona cómo quieres recibir el código de verificación</p>
+
+      <div className="opciones-verificacion">
+        <div className="opcion-verificacion">
+          <div className="opcion-contenido">
+            <Phone size={20} color="#60A5FA" />
+            <div className="texto-verificacion">
+              <strong>SMS al teléfono</strong>
+              <p>+34 612 345 678</p>
+            </div>
+          </div>
+          <button className="btn-enviar-sms" onClick={() => enviarCodigo("sms")}>
+            Enviar SMS
+          </button>
+        </div>
+
+        <div className="opcion-verificacion">
+          <div className="opcion-contenido">
+            <Mail size={20} color="#10B981" />
+            <div className="texto-verificacion">
+              <strong>Email</strong>
+              <p>admin@mitienda.com</p>
+            </div>
+          </div>
+          <button className="btn-enviar-email" onClick={() => enviarCodigo("email")}>
+            Enviar Email
+          </button>
+        </div>
+      </div>
+
+      <div className="demo-codigo">
+        <Info size={16} /> Demo: El código de verificación es: 123456
+      </div>
+
+      {mensajeAlerta && <div className="alerta-verde">{mensajeAlerta}</div>}
+    </div>
+  )}
+
+  {/* Paso 2: Ingreso del Código */}
+  {mostrarVerificacion && !verificado && (
+    <div className="panel-verificacion-codigo">
+      <div className="icono-verificacion-grande">
+        <Shield size={48} color="white" />
+      </div>
+
+      <div className="bloque-verificacion">
+        <h3 className="titulo-verificacion">Verificar Código</h3>
+        <p className="subtexto-verificacion">Ingresa el código que recibiste</p>
+      </div>
+
+      <input
+        type="text"
+        className="input-codigo"
+        maxLength={6}
+        value={codigoInput}
+        onChange={(e) => setCodigoInput(e.target.value)}
+      />
+
+      <div className="demo-codigo">
+        <Shield size={16} /> Demo: El código de verificación es: 123456
+      </div>
+
+      <div className="acciones-codigo">
+        <button className="btn-black" onClick={() => setMostrarVerificacion(false)}>
+          Volver
+        </button>
+        <button
+          className="btn-orange"
+          disabled={codigoInput !== "123456"}
+          onClick={() => {
+            setVerificado(true);
+            setMostrarVerificacion(false);
+            setCodigoInput("");
+          }}
+        >
+          Verificar
+        </button>
+      </div>
+    </div>
+  )}
+
+  {/* Paso 3: Formulario Nueva Contraseña */}
+  {verificado && (
+   <div className="panel-nueva-contrasena">
+  <h3 className="titulo-verificacion">Nueva Contraseña</h3>
+  <p className="subtexto-verificacion">Crea una nueva contraseña segura</p>
+
+  <label>Nueva Contraseña</label>
+  <input
+    type="password"
+    className="input-codigo"
+    placeholder="Ingresa tu nueva contraseña"
+    value={nuevaPassword}
+    onChange={(e) => setNuevaPassword(e.target.value)}
+  />
+
+  <label>Confirmar Nueva Contraseña</label>
+  <input
+    type="password"
+    className="input-codigo"
+    placeholder="Confirma tu nueva contraseña"
+    value={confirmarPassword}
+    onChange={(e) => setConfirmarPassword(e.target.value)}
+  />
+
+  {nuevaPassword && confirmarPassword && nuevaPassword !== confirmarPassword && (
+    <p style={{ color: "red", marginTop: "8px" }}>❗Las contraseñas no coinciden</p>
+  )}
+
+  <div className="acciones-codigo">
+    <button className="btn-black" onClick={() => setVerificado(false)}>
+      Volver
+    </button>
+    <button
+      className="btn-cambiar"
+      disabled={!contrasenaValida}
+      onClick={() => {
+        // Aquí puedes guardar o enviar la contraseña
+        console.log("Contraseña cambiada");
+        setNuevaPassword("");
+        setConfirmarPassword("");
+        setVerificado(false);
+      }}
+    >
+      Cambiar Contraseña
+    </button>
+  </div>
+</div>
+
+  )}
+</div>     
+
+
+<div className="panel-seguridad">
                 <h2 className="panel-title">
                   <Shield size={20} style={{ marginRight: "8px", color: "#f97316" }} />
                   Configuración de Seguridad
@@ -228,8 +458,8 @@ function ConfiguracionAdmin() {
 
                 <div className="security-item">
                   <div>
-                    <strong>Autenticación de dos factores</strong>
-                    <p>Protege tu cuenta con un segundo factor</p>
+                    <strong>Verificación por SMS</strong>
+                    <p>Protege cambios importantes con códigos SMS</p>
                   </div>
                   <span className="badge green">Activo</span>
                 </div>
@@ -239,7 +469,7 @@ function ConfiguracionAdmin() {
                     <strong>Sesiones activas</strong>
                     <p>Gestiona tus sesiones abiertas</p>
                   </div>
-                  <button className="btn-black">Ver sesiones</button>
+                  <button className="btn-sesiones">Ver sesiones</button>
                 </div>
 
                 <div className="security-item">
@@ -256,9 +486,10 @@ function ConfiguracionAdmin() {
                   y usa una contraseña única para esta cuenta.
                 </div>
               </div>
-            </>
-          )}
+          </div>
+        )}
 
+        
           {activeTab === "soporte" && (
             <>
               <div className="panel soporte-form">
@@ -604,26 +835,7 @@ function ConfiguracionAdmin() {
           )}
         </div>
 
-        {/* Info cuenta SOLO si es tab cuenta */}
-        {activeTab === "cuenta" && (
-          <div className="panelaccount-info">
-            <h2 className="panel-title">Información de la Cuenta</h2>
-            <div className="account-details">
-              <div className="detail-block">
-                <p className="label">Usuario</p>
-                <p className="value">admin@mitienda.com</p>
-              </div>
-              <div className="detail-block">
-                <p className="label">Último acceso</p>
-                <p className="value">Hoy, 14:30</p>
-              </div>
-            </div>
-            <div className="account-role">
-              <span className="label">Rol:</span>
-              <span className="admin-tag">Administrador</span>
-            </div>
-          </div>
-        )}
+    
       </div>
     </div>
   );
