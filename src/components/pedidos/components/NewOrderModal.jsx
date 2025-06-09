@@ -197,18 +197,30 @@ const sizeOptions = [
         <h4>Selecciona Ingredientes</h4>  
             <div className="options-grid">
               {
-                Ingredientes.map((ing) => (
+                Ingredientes.map((ing) => {
+                  const ingSelected = focused.addedIngredients.includes(ing);
+
+                  const toggleIngredient = () => {
+                    setFocused(prev => {
+                      const {addedIngredients} = prev;
+                      const newIngredients = ingSelected
+                        ? addedIngredients.filter(item => item !== ing)
+                        : [...addedIngredients, ing];
+                      return {...prev, addedIngredients: newIngredients};
+                    });
+                  };
+return(
                   <div key={ing} role="button" tabIndex={0}
-                    className={`option-card ${focused.addedIngredients === ing ? "selected" : ""}`}
-                     onClick={() => setFocused(prev => ({...prev, addedIngredients: ing}))} 
-                     onKeyDown={e => (e.key === "Enter" || e.key === "") && setFocused(prev => ({...prev, addedIngredients: ing}))}
-                     aria-pressed={focused.addedIngredients === ing}>
+                    className={`option-card ${ ingSelected ? "selected" : ""}`}
+                     onClick={toggleIngredient} 
+                     onKeyDown={e => (e.key === "Enter" || e.key === "") && toggleIngredient()}
+                     aria-pressed={ingSelected}>
                     {ing}
-                    {focused.addedIngredients === ing && <Check className="check-icon" />}
-                    {console.log("Focused Ingredientes:", focused.addedIngredients)}
+                    {ingSelected  && <Check className="check-icon" />}
                       
                   </div>
-                ))
+)
+                })
               }
             </div>
       </div>
