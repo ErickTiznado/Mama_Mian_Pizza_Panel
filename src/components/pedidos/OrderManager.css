@@ -75,7 +75,7 @@
 
 /* Botón principal */
 .order_btn-agregar {
-  background: rgba(255,255,255,0.2);
+  background: #16a34a;
   color: white;
   border: 2px solid rgba(255,255,255,0.3);
   padding: 12px 20px;
@@ -91,9 +91,7 @@
 }
 
 .order_btn-agregar:hover {
-  background: var(--orange-light);
-  border-color: var(--orange-accent);
-  color: var(--orange-accent);
+  background: #15803d;
   transform: translateY(-1px);
   box-shadow: var(--shadow-hover);
 }
@@ -608,4 +606,129 @@
   .address {
     max-width: 100px;
   }
+}
+
+
+.btn-details{
+  color: var(--orange-accent);
+  border: 1px solid var(--orange-accent);
+}
+
+.btn-start{
+  color: var(--white);
+  background-color: #2563EB;
+}
+
+.focused-view{
+  background-color: var(--dark-slate);
+  color: var(--white);
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+}
+
+.focused-header{
+  display: flex;
+  justify-content: start;
+  gap: 20px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-slate);
+  color: var(--orange-accent);
+  margin: 10px 0;
+}
+
+.nor-back-btn{
+  background-color: transparent;
+  color: var(--orange-accent);
+  border: 1px solid var(--orange-accent);
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  gap: 5px;
+}
+
+.focused-main{
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 20px;
+  background-color: var(--slate);
+}
+
+.focused-product-details{
+  flex: 1;
+  background-color: var(--dark-slate);
+  padding: 20px;
+  border-radius: 5px;
+  color: var(--white);
+  width: 40%;
+  gap: 20px;
+}
+
+.focused-product-details img{
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 200px;
+}
+
+
+.focused-product-options{
+  width: 60%;
+}
+
+.focused-product-price{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  color: var(--orange-accent);
+}
+
+.focused-product-options h4{
+  color: var(--orange-accent);
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+.option-group {
+  margin-bottom: 1.5rem;
+}
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+.option-card {
+  background: var(--slate-light);
+  border: 2px solid transparent;
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  transition: border-color .2s ease, background .2s ease;
+}
+.option-card:hover {
+  border-color: var(--orange-accent);
+}
+.option-card.selected {
+  border-color: var(--orange-accent);
+  background: var(--slate);
+}
+.check-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  color: var(--orange-accent);
 }

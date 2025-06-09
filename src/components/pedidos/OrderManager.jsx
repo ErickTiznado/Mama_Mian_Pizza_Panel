@@ -4,7 +4,7 @@ import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListCheck } from '@fortawesome/free-solid-svg-icons';
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
-
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 
 // Importación de componentes modulares
@@ -13,6 +13,7 @@ import OrderTable from './components/OrderTable';
 import OrderDetailModal from './components/OrderDetailModal';
 // Importar el nuevo componente OrderTabs en lugar de OrderFilters
 import OrderTabs from './components/OrderTabs';
+import NewOrderModal from './components/NewOrderModal';
 
 // Importar el contexto de notificaciones y servicios
 import { useNotifications } from "../../context/NotificationContext";
@@ -235,6 +236,9 @@ const OrderManager = () => {
     return detalles.reduce((total, item) => total + parseInt(item.cantidad), 0);
   };
 
+  const [showNewOrderModal, setNewOrderModal] = useState(false);
+  
+  
   // Funciones para el mapa
   const handleShowLocationMap = () => {
     setShowMap(true);
@@ -250,6 +254,15 @@ const OrderManager = () => {
     setShowMap(false);
     setShowRoute(false);
   };
+
+
+  const handleNerOrderModal = () => {
+    setNewOrderModal(true);
+  }
+
+  const closeModalNewOrder = () => {
+    setNewOrderModal(false);
+  }
   
   // Aplicar filtros avanzados (semana y búsqueda)
   const aplicarFiltros = () => {
@@ -348,12 +361,9 @@ const OrderManager = () => {
         <div className="order_header">
           <h1 className="titulo-pedidos">Gestión de Pedidos</h1>
           <button 
-            className="order_btn-agregar" 
-            onClick={() => fetchOrdersByStatus(activeFilter)}
-          >
-            <FontAwesomeIcon icon={faSyncAlt} style={{ marginRight: '10px' }} />
-         Actualizar Pedidos
-
+            className="order_btn-agregar" onClick={handleNerOrderModal}>
+            <FontAwesomeIcon icon={faPlus} style={{ marginRight: '10px' }} />
+            Nuevo Pedido
           </button>
         </div>
         
@@ -467,6 +477,8 @@ const OrderManager = () => {
         changeOrderStatus={changeOrderStatus}
         getStatusName={getStatusName}
       />
+      <NewOrderModal show={showNewOrderModal} onClose={closeModalNewOrder} />
+
     </div>
   );
 };
