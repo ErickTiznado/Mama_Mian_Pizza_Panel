@@ -1,0 +1,218 @@
+
+/* CSS específico para NewProductModal, complementa NewOrderModal.css */
+
+.new-product-modal {
+  /* Conserva estilos base de new-order-modal */
+  /* Mantiene alineación central y colores consistentes */
+  z-index: 1001; /* Asegurar que esté por encima de la tabla y otros elementos */
+}
+
+/* Estilos para el formulario del paso 1 */
+.step1-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.step1-form-row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.step1-form-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+/* Estilos específicos para campos de texto, select y textarea */
+.step1-form-input input,
+.step1-form-input select,
+.step1-form-input textarea {
+  background-color: #1E293B;
+  border: 1px solid #283446;
+  color: #FFFFFF;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+}
+
+.step1-form-input input:focus,
+.step1-form-input select:focus,
+.step1-form-input textarea:focus {
+  outline: none;
+  border-color: var(--orange-accent);
+}
+
+.step1-form-input input::placeholder,
+.step1-form-input select::placeholder,
+.step1-form-input textarea::placeholder {
+  color: #94A3B8;
+}
+
+/* Estilos para el input de tipo file */
+.file-input-container {
+  position: relative;
+}
+
+.file-input-container input[type="file"] {
+  background-color: #1E293B;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+.file-preview {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  background-color: #283446;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.clear-file-btn {
+  background: none;
+  border: none;
+  color: #94A3B8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+}
+
+.clear-file-btn:hover {
+  color: #FF6600;
+}
+
+/* Estilos para precios por tamaño */
+.price-fieldset {
+  border: 1px solid #283446;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  background-color: #1E293B;
+  margin-bottom: 1.5rem;
+}
+
+.price-fieldset legend {
+  color: #FF6600;
+  font-weight: bold;
+  padding: 0 0.5rem;
+}
+
+.prices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.price-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.price-item input {
+  background-color: #1E293B;
+  border: 1px solid #283446;
+  color: #FFFFFF;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+}
+
+.price-item input:focus {
+  outline: none;
+  border-color: var(--orange-accent);
+}
+
+.price-item label {
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
+/* Botones */
+.nor-button {
+  background-color: #FF6600;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.nor-button:hover {
+  background-color: #ff9800;
+  transform: translateY(-2px);
+}
+
+.nor-button:disabled {
+  background-color: #64748B;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Mensajes de error y carga */
+.error-message {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #FCA5A5;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.error-dismiss {
+  background: none;
+  border: none;
+  color: #FCA5A5;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.loading-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  color: #94A3B8;
+}
+
+.loading-spinner {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 3px solid #283446;
+  border-top-color: #FF6600;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .step1-form-row {
+    flex-direction: column;
+  }
+  
+  .prices-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+  }
+}

@@ -1,20 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Check, ShoppingCart, User, CreditCard, X } from 'lucide-react';
-import { useNotifications } from '../../../context/NotificationContext';
-import './NewOrderModal.css';
+import { useState, useEffect } from "react";
+import { X, ArrowLeft, Check, User, MapPin, CreditCard, ShoppingCart } from "lucide-react";
+import "./NewOrderModal.css";
 
 // Tabla de precios por pizza y tamaño
 const PIZZA_PRICES = {
-  // Pizzas regulares
   "Pepperoni": { personal: 6, mediana: 8, grande: 10 },
   "Hawaiana": { personal: 8, mediana: 10, grande: 12 },
   "Suprema": { personal: 8, mediana: 10, grande: 12 },
   "Vegetariana": { personal: 8, mediana: 10, grande: 12 },
   "4 Quesos": { personal: 10, mediana: 12, grande: 14 },
   // Especialidades
-  "Curil o Camarón": { super_personal: 7, mediana_8pc: 14, grande_10pc: 17, gigante_12pc: 20 },
-  "4 Quesos Suprema": { super_personal: 5, mediana_8pc: 12, grande_10pc: 14, gigante_12pc: 16 },
-  "Suprema (Especialidad)": { mediana_8pc: 8, grande_10pc: 10, gigante_12pc: 12 }
+  "Curil o Camarón": { "super_personal": 7, "mediana_8pc": 14, "grande_10pc": 17, "gigante_12pc": 20 },
+  "4 Quesos Suprema": { "super_personal": 5, "mediana_8pc": 12, "grande_10pc": 14, "gigante_12pc": 16 },
+  "Suprema (Especialidad)": { "mediana_8pc": 8, "grande_10pc": 10, "gigante_12pc": 12 }
 };
 
 // Función para obtener el precio correcto según pizza y tamaño
@@ -35,9 +33,10 @@ const Step1 = ({ clienteData, onClienteChange }) => {
 
   return (
     <div className="step-container">
-      <h3>Datos de Cliente</h3>
+      <h3><User className="inline-icon" /> Datos de Cliente</h3>
       
-      <form className="step1-form">
+      {/* Formulario básico de cliente */}
+      <div className="form-grid">
         <div className="step1-form-name">
           <div className="step1-form-input">
             <label htmlFor="name">Nombre *</label>
@@ -52,7 +51,7 @@ const Step1 = ({ clienteData, onClienteChange }) => {
             />
           </div>
           <div className="step1-form-input">
-            <label htmlFor="lastname">Apellido</label>
+            <label htmlFor="lastname">Apellido *</label>
             <input
               type="text"
               id="lastname"
@@ -60,6 +59,7 @@ const Step1 = ({ clienteData, onClienteChange }) => {
               value={clienteData.apellido || ""}
               onChange={(e) => handleInputChange("apellido", e.target.value)}
               placeholder="Apellido del cliente"
+              required
             />
           </div>
         </div>
@@ -77,9 +77,33 @@ const Step1 = ({ clienteData, onClienteChange }) => {
           />
         </div>
 
+        <div className="step1-form-input">
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={clienteData.email || ""}
+            onChange={(e) => handleInputChange("email", e.target.value)}
+            placeholder="correo@ejemplo.com (opcional)"
+          />
+        </div>
+
+        <div className="step1-form-input">
+          <label htmlFor="direccion">Dirección de Entrega *</label>
+          <input
+            type="text"
+            id="direccion"
+            value={clienteData.direccion || ""}
+            onChange={(e) => handleInputChange("direccion", e.target.value)}
+            placeholder="Dirección completa de entrega"
+            required
+          />
+        </div>
+
         {/* Método de pago simplificado */}
         <div className="payment-section">
-          <h4>Método de Pago</h4>
+          <h4><CreditCard className="inline-icon" /> Método de Pago</h4>
           
           <div className="payment-methods">
             <label>
@@ -102,7 +126,7 @@ const Step1 = ({ clienteData, onClienteChange }) => {
             </label>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 };
@@ -111,25 +135,11 @@ const Step2 = ({ menu, onUpdateProductos, selectedProducts }) => {
   const [categoryFilter, setCategoryFilter] = useState(0);
   const [selected, setSelected] = useState(selectedProducts || []);
   const [focused, setFocused] = useState(null);
-    // Comunica al padre la selección actual
+  
+  // Comunica al padre la selección actual
   useEffect(() => {
     onUpdateProductos(selected);
   }, [selected, onUpdateProductos]);
-
-  // Efecto para mantener sincronizado el producto enfocado con la lista seleccionada
-  useEffect(() => {
-    if (focused) {
-      setSelected(prevSelected => {
-        const existingIndex = prevSelected.findIndex(p => p.id_producto === focused.id_producto);
-        if (existingIndex >= 0) {
-          const newSelected = [...prevSelected];
-          newSelected[existingIndex] = focused;
-          return newSelected;
-        }
-        return prevSelected;
-      });
-    }
-  }, [focused]);
 
   // Listado de categorías dinámicas
   const categories = ["Todas","Pizza", "Complementos","Bebidas"];
@@ -145,43 +155,26 @@ const Step2 = ({ menu, onUpdateProductos, selectedProducts }) => {
     const dynamicPrice = getPizzaPrice(product.titulo, tamano);
     return dynamicPrice > 0 ? dynamicPrice : product.precio;
   };
+
   // Obtener tamaños únicos disponibles para un producto
   const getAvailableSizes = (product) => {
-    // Tamaños para pizzas regulares
-    const regularSizes = [
+    const allSizes = [
       { label: "Personal (4 porciones)", value: "personal" },
       { label: "Mediana (6 porciones)", value: "mediana" },
-      { label: "Grande (8 porciones)", value: "grande" }
-    ];
-
-    // Tamaños para especialidades
-    const specialtySizes = [
+      { label: "Grande (8 porciones)", value: "grande" },
       { label: "Súper Personal", value: "super_personal" },
       { label: "Mediana (8 pc)", value: "mediana_8pc" },
       { label: "Grande (10 pc)", value: "grande_10pc" },
-      { label: "Gigante (12 pc)", value: "gigante_12pc" }
+      { label: "Gigante (12 pc)", value: "gigante_12pc" },
     ];
 
-    // Verificar si el producto tiene precios definidos en la tabla
+    // Filtrar solo los tamaños que tienen precio definido para esta pizza
     const pizzaPrices = PIZZA_PRICES[product.titulo];
-    if (!pizzaPrices) {
-      // Si no está en la tabla, usar tamaños regulares por defecto
-      return regularSizes;
-    }
+    if (!pizzaPrices) return allSizes.slice(0, 3); // Por defecto personal, mediana, grande
 
-    // Determinar si es especialidad o pizza regular basado en los tamaños disponibles
-    const hasSpecialtyKeys = Object.keys(pizzaPrices).some(key => 
-      ['super_personal', 'mediana_8pc', 'grande_10pc', 'gigante_12pc'].includes(key)
-    );
-
-    if (hasSpecialtyKeys) {
-      // Es una especialidad, filtrar solo los tamaños que tienen precio
-      return specialtySizes.filter(size => pizzaPrices[size.value] !== undefined);
-    } else {
-      // Es una pizza regular, filtrar solo los tamaños que tienen precio
-      return regularSizes.filter(size => pizzaPrices[size.value] !== undefined);
-    }
+    return allSizes.filter(size => pizzaPrices[size.value] !== undefined);
   };
+
   // Selección o deselección de un producto
   const toggleSelect = (prod) => {
     const exists = selected.find((p) => p.id_producto === prod.id_producto);
@@ -197,7 +190,7 @@ const Step2 = ({ menu, onUpdateProductos, selectedProducts }) => {
         {
           ...prod,
           cantidad: 1,
-          masa: "Tradicional", // Valor por defecto
+          masa: prod.masas?.[0] || "Tradicional",
           tamano: defaultTamano,
           precio_unitario: dynamicPrice,
           precio: dynamicPrice,
@@ -208,6 +201,7 @@ const Step2 = ({ menu, onUpdateProductos, selectedProducts }) => {
       ]);
     }
   };
+
   const onCardClick = (prod) => {
     if (focused?.id_producto === prod.id_producto) {
       setFocused(null);
@@ -221,7 +215,7 @@ const Step2 = ({ menu, onUpdateProductos, selectedProducts }) => {
     const focusedProduct = {
       ...prod,
       cantidad: 1,
-      masa: "Tradicional", // Valor por defecto
+      masa: prod.masas?.[0] || "Tradicional",
       tamano: defaultTamano,
       precio_unitario: dynamicPrice,
       precio: dynamicPrice,
@@ -247,74 +241,8 @@ const Step2 = ({ menu, onUpdateProductos, selectedProducts }) => {
   const isSelected = (prod) => {
     return selected.find((p) => p.id_producto === prod.id_producto) !== undefined;
   };
-  // Función para actualizar masa dinámicamente
-  const updateMasa = (newMasa) => {
-    const updatedFocused = { 
-      ...focused, 
-      masa: newMasa
-    };
-    
-    // Actualizar focused inmediatamente
-    setFocused(updatedFocused);
-    
-    // Actualizar en selected también
-    setSelected(prevSelected => {
-      const existingIndex = prevSelected.findIndex(p => p.id_producto === focused.id_producto);
-      if (existingIndex >= 0) {
-        const newSelected = [...prevSelected];
-        newSelected[existingIndex] = updatedFocused;
-        return newSelected;
-      }
-      return prevSelected;
-    });
-  };
 
-  // Función para actualizar ingredientes dinámicamente
-  const updateIngredients = (ingrediente) => {
-    setFocused(prev => {
-      const ingSelected = prev.addedIngredients.includes(ingrediente);
-      const newIngredients = ingSelected
-        ? prev.addedIngredients.filter(item => item !== ingrediente)
-        : [...prev.addedIngredients, ingrediente];
-      
-      const updatedFocused = {...prev, addedIngredients: newIngredients};
-      
-      // También actualizar en selected
-      setSelected(prevSelected => {
-        const existingIndex = prevSelected.findIndex(p => p.id_producto === prev.id_producto);
-        if (existingIndex >= 0) {
-          const newSelected = [...prevSelected];
-          newSelected[existingIndex] = updatedFocused;
-          return newSelected;
-        }
-        return prevSelected;
-      });
-      
-      return updatedFocused;
-    });
-  };
-
-  // Función para actualizar cantidad dinámicamente
-  const updateCantidad = (nuevaCantidad) => {
-    const updatedFocused = { 
-      ...focused, 
-      cantidad: Math.max(1, nuevaCantidad)
-    };
-    
-    // Actualizar focused inmediatamente
-    setFocused(updatedFocused);
-    
-    // Actualizar en selected también
-    setSelected(prevSelected => {
-      const existingIndex = prevSelected.findIndex(p => p.id_producto === focused.id_producto);
-      if (existingIndex >= 0) {
-        const newSelected = [...prevSelected];
-        newSelected[existingIndex] = updatedFocused;
-        return newSelected;
-      }
-      return prevSelected;
-    });
-  };
+  // Actualizar precio cuando cambia el tamaño
   const updateTamanoAndPrice = (newTamano) => {
     const newPrice = calculateProductPrice(focused, newTamano);
     const updatedFocused = { 
@@ -324,19 +252,15 @@ const Step2 = ({ menu, onUpdateProductos, selectedProducts }) => {
       precio_unitario: newPrice 
     };
     
-    // Actualizar focused inmediatamente
     setFocused(updatedFocused);
     
-    // Actualizar en selected también de forma inmediata
-    setSelected(prevSelected => {
-      const existingIndex = prevSelected.findIndex(p => p.id_producto === focused.id_producto);
-      if (existingIndex >= 0) {
-        const newSelected = [...prevSelected];
-        newSelected[existingIndex] = updatedFocused;
-        return newSelected;
-      }
-      return prevSelected;
-    });
+    // Actualizar en selected también
+    const existingIndex = selected.findIndex(p => p.id_producto === focused.id_producto);
+    if (existingIndex >= 0) {
+      const newSelected = [...selected];
+      newSelected[existingIndex] = updatedFocused;
+      setSelected(newSelected);
+    }
   };
 
   // Función para confirmar producto personalizado
@@ -363,15 +287,16 @@ const Step2 = ({ menu, onUpdateProductos, selectedProducts }) => {
           </button>
           <h3>Personalizar {focused.titulo}</h3>
         </header>
-        <main className="focused-main">          <div className="focused-product-details">
+        <main className="focused-main">
+          <div className="focused-product-details">
             <img src={focused.imagen} alt="" />
             <div className="focused-product-price">
-              <p>Precio por unidad: ${focused.precio}</p>
-              <p>Cantidad: {focused.cantidad}</p>
-              <h3 className="product-price">Total: ${(focused.precio * focused.cantidad).toFixed(2)}</h3>
+              <p>Precio Total:</p>
+              <h3 className="product-price">${focused.precio}</h3>
             </div>
           </div>
-          <div className="focused-product-options">            {/* ————————— MASA ————————— */}
+          <div className="focused-product-options">
+            {/* ————————— MASA ————————— */}
             <div className="option-group">
               <h4>Selecciona Masa</h4>
               <div className="options-grid">
@@ -381,8 +306,8 @@ const Step2 = ({ menu, onUpdateProductos, selectedProducts }) => {
                     role="button"
                     tabIndex={0}
                     className={`option-card ${focused.masa === m ? "selected" : ""}`}
-                    onClick={() => updateMasa(m)}
-                    onKeyDown={e => (e.key === "Enter" || e.key === " ") && updateMasa(m)}
+                    onClick={() => setFocused(prev => ({ ...prev, masa: m }))}
+                    onKeyDown={e => (e.key === "Enter" || e.key === " ") && setFocused(prev => ({ ...prev, masa: m }))}
                     aria-pressed={focused.masa === m}
                   >
                     {m}
@@ -412,17 +337,28 @@ const Step2 = ({ menu, onUpdateProductos, selectedProducts }) => {
                 ))}
               </div>
             </div>
-              <div className="option-group">
+            
+            <div className="option-group">
               <h4>Selecciona Ingredientes</h4>  
               <div className="options-grid">
                 {Ingredientes.map((ing) => {
                   const ingSelected = focused.addedIngredients.includes(ing);
 
+                  const toggleIngredient = () => {
+                    setFocused(prev => {
+                      const {addedIngredients} = prev;
+                      const newIngredients = ingSelected
+                        ? addedIngredients.filter(item => item !== ing)
+                        : [...addedIngredients, ing];
+                      return {...prev, addedIngredients: newIngredients};
+                    });
+                  };
+
                   return(
                     <div key={ing} role="button" tabIndex={0}
                       className={`option-card ${ingSelected ? "selected" : ""}`}
-                      onClick={() => updateIngredients(ing)} 
-                      onKeyDown={e => (e.key === "Enter" || e.key === " ") && updateIngredients(ing)}
+                      onClick={toggleIngredient} 
+                      onKeyDown={e => (e.key === "Enter" || e.key === " ") && toggleIngredient()}
                       aria-pressed={ingSelected}>
                       {ing}
                       {ingSelected && <Check className="check-icon" />}
@@ -431,20 +367,27 @@ const Step2 = ({ menu, onUpdateProductos, selectedProducts }) => {
                 })}
               </div>
             </div>
-              {/* Cantidad */}
+            
+            {/* Cantidad */}
             <div className="option-group">
               <h4>Cantidad</h4>
               <div className="quantity-controls">
                 <button 
                   className="quantity-btn"
-                  onClick={() => updateCantidad(focused.cantidad - 1)}
+                  onClick={() => setFocused(prev => ({ 
+                    ...prev, 
+                    cantidad: Math.max(1, prev.cantidad - 1) 
+                  }))}
                 >
                   -
                 </button>
                 <span className="quantity-display">{focused.cantidad}</span>
                 <button 
                   className="quantity-btn"
-                  onClick={() => updateCantidad(focused.cantidad + 1)}
+                  onClick={() => setFocused(prev => ({ 
+                    ...prev, 
+                    cantidad: prev.cantidad + 1 
+                  }))}
                 >
                   +
                 </button>
@@ -584,7 +527,8 @@ const Step3 = ({ clienteData, selectedProducts, onSubmitFinal }) => {
   return (
     <div className="step-container">
       <h3>📋 Resumen del Pedido</h3>
-        {/* Resumen del Cliente */}
+      
+      {/* Resumen del Cliente */}
       <div className="order-summary-section">
         <h4><User className="inline-icon" /> Información del Cliente</h4>
         <div className="client-summary">
@@ -593,6 +537,14 @@ const Step3 = ({ clienteData, selectedProducts, onSubmitFinal }) => {
           </div>
           <div className="summary-row">
             <strong>Teléfono:</strong> {clienteData.telefono}
+          </div>
+          {clienteData.email && (
+            <div className="summary-row">
+              <strong>Email:</strong> {clienteData.email}
+            </div>
+          )}
+          <div className="summary-row">
+            <strong>Dirección:</strong> {clienteData.direccion}
           </div>
         </div>
       </div>
@@ -688,26 +640,23 @@ const NewOrderModal = ({ show, onClose }) => {
   const API_URL = "https://api.mamamianpizza.com/api";
   const totalSteps = 3;
 
-  // Hook de notificaciones
-  const notificationContext = useNotifications();
-
-  // Estados
   const [currentStep, setCurrentStep] = useState(1);
   const [menu, setMenu] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [clienteData, setClienteData] = useState({
     nombre: "",
     apellido: "",
     telefono: "",
+    email: "",
+    direccion: "",
     metodo_pago: "efectivo"
   });
+
   const nextStep = () => {
     // Validaciones antes de avanzar
     if (currentStep === 1) {
-      if (!clienteData.nombre || !clienteData.telefono) {
-        alert("Por favor complete todos los campos obligatorios (Nombre y Teléfono)");
+      if (!clienteData.nombre || !clienteData.telefono || !clienteData.direccion) {
+        alert("Por favor complete todos los campos obligatorios");
         return;
       }
       if (!clienteData.metodo_pago) {
@@ -728,6 +677,7 @@ const NewOrderModal = ({ show, onClose }) => {
 
   const prevStep = () =>
     setCurrentStep((prev) => Math.max(prev - 1, 1));
+
   const resetSteps = () => {
     setCurrentStep(1);
     setSelectedProducts([]);
@@ -735,104 +685,33 @@ const NewOrderModal = ({ show, onClose }) => {
       nombre: "",
       apellido: "",
       telefono: "",
+      email: "",
+      direccion: "",
       metodo_pago: "efectivo"
     });
-  };  // Función para enviar el pedido usando API
+  };
+
+  // Función para enviar el pedido (simplificada sin API por ahora)
   const submitOrder = async (orderData) => {
-    setIsLoading(true);
-    setError(null);
-    
     try {
-      // Preparar los datos del pedido en el formato esperado por la API
-      const orderPayload = {
-        tipo_cliente: "invitado", // Pedidos de admin son tratados como invitados
-        cliente: {
-          nombre: clienteData.nombre,
-          apellido: clienteData.apellido || "",
-          telefono: clienteData.telefono,
-          email: `admin_${Date.now()}@mamamianpizza.com` // Email temporal para admin
-        },
-        direccion: {
-          tipo_direccion: "formulario",
-          direccion: "En el Local - Pedido creado por Administrador",
-          pais: "El Salvador",
-          departamento: "San Salvador",
-          municipio: "San Salvador",
-          latitud: "13.6988",
-          longitud: "-89.2407",
-          precision_ubicacion: "high",
-          direccion_formateada: "En el Local - Mama Mian Pizza"
-        },
-        metodo_pago: clienteData.metodo_pago,
-        productos: selectedProducts.map(producto => ({
-          id_producto: producto.id_producto,
-          nombre_producto: producto.titulo, // Usar titulo como nombre_producto
-          cantidad: producto.cantidad,
-          precio_unitario: producto.precio_unitario || producto.precio,
-          masa: producto.masa || "Tradicional",
-          tamano: producto.tamano || "personal",
-          instrucciones_especiales: producto.addedIngredients && producto.addedIngredients.length > 0 
-            ? `Ingredientes extra: ${producto.addedIngredients.join(", ")}` 
-            : null,
-          subtotal: (producto.precio_unitario || producto.precio) * producto.cantidad,
-          metodo_entrega: 0 // 0 para entrega normal
-        })),
-        subtotal: orderData.subtotal,
-        costo_envio: orderData.costoEnvio,
-        impuestos: orderData.impuestos,
-        total: orderData.total,
-        aceptado_terminos: orderData.aceptadoTerminos,
-        tiempo_estimado_entrega: 30 // 30 minutos por defecto
-      };
-
-      console.log("Enviando pedido:", orderPayload);
-
-      // Realizar petición POST a la API
-      const response = await fetch(`${API_URL}/orders/neworder`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderPayload)
+      console.log("Datos del pedido:", {
+        cliente: clienteData,
+        productos: selectedProducts,
+        totales: {
+          subtotal: orderData.subtotal,
+          envio: orderData.costoEnvio,
+          impuestos: orderData.impuestos,
+          total: orderData.total
+        }
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || `Error ${response.status}: No se pudo crear el pedido`);
-      }
-
-      const result = await response.json();
-      console.log("Pedido creado exitosamente:", result);
-
-      // Mostrar notificación de éxito
-      if (notificationContext?.addNotification) {
-        notificationContext.addNotification({
-          type: 'success',
-          title: '¡Pedido creado exitosamente!',
-          message: `Pedido #${result.codigo_pedido || 'N/A'} ha sido registrado correctamente.`,
-          duration: 5000
-        });
-      }
-
-      // Cerrar modal y resetear
+      // Simular éxito
+      alert("¡Pedido creado exitosamente!");
       onClose();
       resetSteps();
-      
     } catch (error) {
       console.error('Error al enviar pedido:', error);
-      setError(error.message);
-      
-      // Mostrar notificación de error
-      if (notificationContext?.addNotification) {
-        notificationContext.addNotification({
-          type: 'error',
-          title: 'Error al crear pedido',
-          message: error.message || 'Ocurrió un error inesperado. Intente nuevamente.',
-          duration: 7000
-        });
-      }
-    } finally {
-      setIsLoading(false);
+      throw error;
     }
   };
 
@@ -843,47 +722,20 @@ const NewOrderModal = ({ show, onClose }) => {
         const data = await resp.json();
         setMenu(data.productos);
       } catch (err) {
-        console.error("Error fetching menu:", err);        // Datos mock para desarrollo
+        console.error("Error fetching menu:", err);
+        // Datos mock para desarrollo
         setMenu([
           {
             id_producto: 1,
             titulo: "Pepperoni",
-            precio: 6,
+            precio: 8,
             imagen: "/placeholder-pizza.jpg",
             id_categoria: 1
           },
           {
             id_producto: 2,
             titulo: "Hawaiana",
-            precio: 8,
-            imagen: "/placeholder-pizza.jpg",
-            id_categoria: 1
-          },
-          {
-            id_producto: 3,
-            titulo: "4 Quesos",
             precio: 10,
-            imagen: "/placeholder-pizza.jpg",
-            id_categoria: 1
-          },
-          {
-            id_producto: 4,
-            titulo: "Curil o Camarón",
-            precio: 7,
-            imagen: "/placeholder-pizza.jpg",
-            id_categoria: 1
-          },
-          {
-            id_producto: 5,
-            titulo: "4 Quesos Suprema",
-            precio: 5,
-            imagen: "/placeholder-pizza.jpg",
-            id_categoria: 1
-          },
-          {
-            id_producto: 6,
-            titulo: "Suprema (Especialidad)",
-            precio: 8,
             imagen: "/placeholder-pizza.jpg",
             id_categoria: 1
           }
@@ -925,32 +777,10 @@ const NewOrderModal = ({ show, onClose }) => {
               }}
             />
           </div>
-        </div>      </header>
-
-      {/* Mostrar error si existe */}
-      {error && (
-        <div className="error-message">
-          <strong>Error:</strong> {error}
-          <button 
-            onClick={() => setError(null)} 
-            className="error-dismiss"
-          >
-            ×
-          </button>
         </div>
-      )}
+      </header>
 
-      {/* Mostrar loading si está procesando */}
-      {isLoading && (
-        <div className="loading-message">
-          <div className="loading-spinner"></div>
-          <span>Procesando pedido...</span>
-        </div>
-      )}
-
-      <div className="new__order-modal-content"
-        style={{ opacity: isLoading ? 0.6 : 1, pointerEvents: isLoading ? 'none' : 'auto' }}
-      >
+      <div className="new__order-modal-content">
         {currentStep === 1 && (
           <Step1 
             clienteData={clienteData}

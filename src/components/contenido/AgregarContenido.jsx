@@ -13,6 +13,8 @@ import {
   faRotateLeft,
   faCalendar
 } from '@fortawesome/free-solid-svg-icons';
+// Importar componentes
+import NewProductModal from './components/NewProductModal';
 // Importar estilos principales
 import './AgregarContenido.css';
 
@@ -30,46 +32,46 @@ const AgregarContenido = () => {
   
   // Paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 10;  // Función para cargar datos desde la API
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get('https://api.mamamianpizza.com/api/content/getMenu');
+      const productosData = response.data.productos || [];
+      
+      const formattedData = productosData.map(item => ({
+        id: item.id_producto,
+        imagen: item.imagen,
+        titulo: item.titulo,
+        descripcion: item.descripcion,
+        tipo: item.seccion || 'Otros',
+        precio: `$${item.precio}`,
+        tamanos: item.porciones ? `${item.porciones} porciones` : null,
+        estado: item.activo === 1,
+        fecha: new Date(item.fecha_actualizacion || item.fecha_creacion).toISOString().split('T')[0]
+      }));
+      
+      console.log('Datos cargados:', formattedData);
+      setContenidos(formattedData);
+      setFilteredItems(formattedData);
+      
+      // Extraer tipos únicos de los datos para las pestañas
+      const tipos = ['todos', ...new Set(formattedData.map(item => item.tipo))];
+      setTiposDisponibles(tipos);
+      setError(null);
+    } catch (err) {
+      console.error('Error al cargar los datos:', err);
+      setError('Error al cargar los datos. Por favor, inténtalo de nuevo más tarde.');
+      // Usar datos de muestra como respaldo en caso de error
+      setContenidos(mockData);
+      setFilteredItems(mockData);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Cargar datos iniciales desde la API real
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get('https://api.mamamianpizza.com/api/content/getMenu');
-        const productosData = response.data.productos || [];
-        
-      const formattedData = productosData.map(item => ({
-          id: item.id_producto,
-          imagen: item.imagen,
-          titulo: item.titulo,
-          descripcion: item.descripcion,
-          tipo: item.seccion || 'Otros',
-          precio: `$${item.precio}`,
-          tamanos: item.porciones ? `${item.porciones} porciones` : null,
-          estado: item.activo === 1,
-          fecha: new Date(item.fecha_actualizacion || item.fecha_creacion).toISOString().split('T')[0]
-        }));
-        
-        console.log('Datos cargados:', formattedData);
-        setContenidos(formattedData);
-        setFilteredItems(formattedData);
-        
-        // Extraer tipos únicos de los datos para las pestañas
-        const tipos = ['todos', ...new Set(formattedData.map(item => item.tipo))];
-        setTiposDisponibles(tipos);
-        setError(null);
-      } catch (err) {
-        console.error('Error al cargar los datos:', err);
-        setError('Error al cargar los datos. Por favor, inténtalo de nuevo más tarde.');
-        // Usar datos de muestra como respaldo en caso de error
-        setContenidos(mockData);
-        setFilteredItems(mockData);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
     fetchData();
   }, []);
 
@@ -100,12 +102,12 @@ const AgregarContenido = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
-  // Estados para el diálogo de confirmación y elementos seleccionados
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);  // Estados para el diálogo de confirmación y elementos seleccionados
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
 
   // Manejadores de eventos
   const handleEdit = (id) => {
@@ -175,12 +177,14 @@ const AgregarContenido = () => {
       setShowPreviewModal(true);
     }
   };
-
   const handleAddNew = () => {
     console.log('Agregando nuevo contenido');
-    // Redirigir a la página de agregar nuevo contenido o abrir un modal
-    alert('Función para agregar nuevo contenido (proximamente)');
-    // Implementación futura: Redirigir o abrir modal para agregar contenido
+    setShowAddModal(true);
+  };
+  
+  const handleAddSuccess = () => {
+    // Recargar la lista de productos después de una adición exitosa
+    fetchData();
   };
 
   const handleSearch = (e) => {
@@ -492,6 +496,13 @@ const AgregarContenido = () => {
           </div>
         </div>
       )}
+
+      {/* Modal para agregar nuevo producto */}
+      <NewProductModal 
+        show={showAddModal} 
+        onClose={() => setShowAddModal(false)} 
+        onSuccess={handleAddSuccess} 
+      />
     </div>
   );
 };

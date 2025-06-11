@@ -14,6 +14,23 @@
     --icon-hover-color: #e2e8f0;
   }
   
+  /* Animación para el modal overlay */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes fadeInScale {
+    from { 
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to { 
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
   .admin-content-management {
     background-color: var(--dark-bg);
     color: var(--text-color);
@@ -530,7 +547,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #0f172a;
+  background-color: rgba(15, 23, 42, 0.9);
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-in-out;
 }
 
 .cont_modal-header {
@@ -542,15 +561,15 @@
               background-color: transparent;
             }
 .preview-modal{
-
             background-color: #0f172a;
             border-radius: 12px;
             width: 90%;            
             max-width: 600px;
             max-height: 90vh;
             overflow: auto;
-            box-shadow:  15px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
             animation: fadeIn 0.3s ease;
+            z-index: 1001;
 }
 
 
@@ -689,6 +708,7 @@
   max-width: 500px;
   box-shadow: 0 15px 30px rgba(0,0,0,0.3);
   animation: fadeIn 0.3s ease;
+  z-index: 1001;
 }
 
 .cont_confirm-dialog-content {
