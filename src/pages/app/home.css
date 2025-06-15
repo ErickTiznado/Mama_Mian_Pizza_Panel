@@ -45,7 +45,7 @@
     display: grid;
     grid-column: 2;
     grid-row: 1;
-    background-color: var(--color-tertiary);
+    background-color: #1e293b;
     overflow: hidden;
     min-width: 0; /* Importante para que el contenido no se desborde */
   }  
