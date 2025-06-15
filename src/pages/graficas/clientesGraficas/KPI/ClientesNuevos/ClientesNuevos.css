@@ -1,0 +1,91 @@
+.clientes-nuevos-container {
+  background-color: #0f172a;
+  border-radius: 10px;
+  border: rgb(71 85 105) solid 1px;
+  padding: 20px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.clientes-nuevos-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.clientes-nuevos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.clientes-nuevos-header h3 {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.clientes-nuevos-icon {
+  color: #10b981;
+}
+
+.clientes-nuevos-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.clientes-nuevos-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #10b981;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.clientes-nuevos-comparison {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.clientes-nuevos-comparison.positive {
+  color: #10b981;
+}
+
+.clientes-nuevos-comparison.negative {
+  color: #ef4444;
+}
+
+.clientes-nuevos-loading,
+.clientes-nuevos-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  color: #9ca3af;
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid #10b981;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 8px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

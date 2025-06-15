@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import "./graficas.css";
 import PedidosGraficas from "./pedidosGraficas/pedidosGraficas";
+import ProductosGraficas from "./productosGraficas/productosGraficas";
 import { Download, Funnel, ChevronDown } from "lucide-react";
-
+import ClientesGraficas from "./clientesGraficas/clientesGraficas";
 function Graficas() {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("pedidos"); // Agregar estado para la pestaña activa
   // Agregar estados para los filtros
   const [timePeriod, setTimePeriod] = useState("today");  // today, week, month
   const [orderType, setOrderType] = useState("all");      // all, ecommerce, local
@@ -17,21 +19,39 @@ function Graficas() {
   const handleTimePeriodChange = (e) => {
     setTimePeriod(e.target.value);
   };
-
   const handleOrderTypeChange = (e) => {
     setOrderType(e.target.value);
+  };
+
+  // Manejador para cambio de pestaña
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
   };
   
   return (
     <div className="dashboard__container">
       <div className="dash__action-bar__container">
         <div className="dash__action-bar gap--4">
-          <div className="dash__act__col-3">
-            <div className="dash__act__flex-container">
+          <div className="dash__act__col-3">            <div className="dash__act__flex-container">
               <div className="dash__act__btn-container">
-                <button className="dash__act__btn">Pedidos</button>
-                <button className="dash__act__btn">Productos</button>
-                <button className="dash__act__btn">Clientes</button>
+                <button 
+                  className={`dash__act__btn ${activeTab === 'pedidos' ? 'active' : ''}`}
+                  onClick={() => handleTabChange('pedidos')}
+                >
+                  Pedidos
+                </button>
+                <button 
+                  className={`dash__act__btn ${activeTab === 'productos' ? 'active' : ''}`}
+                  onClick={() => handleTabChange('productos')}
+                >
+                  Productos
+                </button>
+                <button 
+                  className={`dash__act__btn ${activeTab === 'clientes' ? 'active' : ''}`}
+                  onClick={() => handleTabChange('clientes')}
+                >
+                  Clientes
+                </button>
               </div>
             </div>
           </div>
@@ -80,16 +100,19 @@ function Graficas() {
             </div>
           </div>
         </div>
-      </div>
-      <div className="dash__content-container">
+      </div>      <div className="dash__content-container">
         <div className="content__container">
-                <PedidosGraficas timePeriod={timePeriod} orderType={orderType} />
-      
+          {activeTab === 'pedidos' && (
+            <PedidosGraficas timePeriod={timePeriod} orderType={orderType} />
+          )}
+          {activeTab === 'productos' && (
+            <ProductosGraficas timePeriod={timePeriod} orderType={orderType} />
+          )}
+          {activeTab === 'clientes' && (
+            <ClientesGraficas timePeriod={timePeriod} orderType={orderType} />
+          )}
         </div>
-      </div>
-    </div>
-
-    //    <PedidosGraficas />
+      </div>    </div>
   );
 }
 

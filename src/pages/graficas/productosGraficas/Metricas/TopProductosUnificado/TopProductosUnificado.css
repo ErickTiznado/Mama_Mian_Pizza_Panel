@@ -1,0 +1,316 @@
+/* TopProductosUnificado.css */
+.top-productos-unificado-container {
+    background-color: #0f172a;
+    border-radius: 10px;
+    border: rgb(71 85 105) solid 1px;
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.top-productos-unificado-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgb(71 85 105);
+}
+
+.top-productos-unificado-header .header-content h3 {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+}
+
+.top-productos-unificado-header .header-content p {
+    color: #94a3b8;
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.view-toggle {
+    display: flex;
+    background-color: rgba(71, 85, 105, 0.3);
+    border-radius: 8px;
+    padding: 4px;
+    gap: 2px;
+}
+
+.toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: transparent;
+    color: #94a3b8;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toggle-btn:hover {
+    background-color: rgba(71, 85, 105, 0.5);
+    color: #d1d5db;
+}
+
+.toggle-btn.active {
+    background-color: #ea580c;
+    color: #fff;
+    font-weight: 600;
+}
+
+.toggle-btn.active:hover {
+    background-color: #dc2626;
+}
+
+.header-icon {
+    color: #ea580c;
+    opacity: 0.8;
+    display: flex;
+    align-items: center;
+}
+
+.top-productos-unificado-container .error-text {
+    color: #ef4444;
+}
+
+.top-productos-unificado-container .no-data {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    color: #94a3b8;
+    font-style: italic;
+}
+
+/* Tabla */
+.top-productos-unificado-table {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.top-productos-unificado-table .table-header {
+    display: grid;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: rgba(71, 85, 105, 0.2);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #d1d5db;
+}
+
+.top-productos-unificado-table .table-header > div {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    justify-content: center;
+}
+
+.top-productos-unificado-table .table-header .col-product {
+    justify-content: flex-start;
+}
+
+.top-productos-unificado-table .table-header svg {
+    color: #94a3b8;
+}
+
+.top-productos-unificado-table .table-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.top-productos-unificado-table .table-row {
+    display: grid;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: rgba(30, 41, 59, 0.3);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.top-productos-unificado-table .table-row:hover {
+    background-color: rgba(30, 41, 59, 0.5);
+    transform: translateX(2px);
+}
+
+.top-productos-unificado-table .table-row.top-three {
+    background-color: rgba(234, 88, 12, 0.1);
+    border-left-color: #ea580c;
+}
+
+.top-productos-unificado-table .table-row.top-three:hover {
+    background-color: rgba(234, 88, 12, 0.15);
+}
+
+/* Columnas */
+.top-productos-unificado-table .col-rank {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.top-productos-unificado-table .rank-icon {
+    color: #ea580c;
+}
+
+.top-productos-unificado-table .rank-icon.rank-1 {
+    color: #ffd700; /* Dorado */
+}
+
+.top-productos-unificado-table .rank-icon.rank-2 {
+    color: #c0c0c0; /* Plateado */
+}
+
+.top-productos-unificado-table .rank-icon.rank-3 {
+    color: #cd7f32; /* Bronce */
+}
+
+.top-productos-unificado-table .rank-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: rgba(71, 85, 105, 0.5);
+    color: #d1d5db;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.top-productos-unificado-table .col-product {
+    min-width: 0; /* Permite el truncamiento */
+    justify-self: start;
+}
+
+.top-productos-unificado-table .product-name {
+    color: #fff;
+    font-weight: 500;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: help;
+}
+
+.top-productos-unificado-table .col-revenue,
+.top-productos-unificado-table .col-units,
+.top-productos-unificado-table .col-orders,
+.top-productos-unificado-table .col-avg-price {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.top-productos-unificado-table .metric-value {
+    color: #d1d5db;
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.top-productos-unificado-table .revenue-highlight {
+    color: #ea580c;
+    font-weight: 600;
+}
+
+/* Animaciones para el cambio de vista */
+.top-productos-unificado-table {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .top-productos-unificado-container {
+        padding: 16px;
+    }
+    
+    .top-productos-unificado-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+    
+    .header-controls {
+        justify-content: space-between;
+    }
+    
+    .view-toggle {
+        flex: 1;
+        max-width: 200px;
+    }
+    
+    .toggle-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 6px 8px;
+        font-size: 0.8rem;
+    }
+    
+    .top-productos-unificado-header .header-content h3 {
+        font-size: 1.1rem;
+    }
+    
+    .top-productos-unificado-header .header-content p {
+        font-size: 0.8rem;
+    }
+    
+    .top-productos-unificado-table .rank-number {
+        width: 20px;
+        height: 20px;
+        font-size: 0.75rem;
+    }
+    
+    .top-productos-unificado-table .rank-icon {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .top-productos-unificado-table .table-header,
+    .top-productos-unificado-table .table-row {
+        gap: 8px;
+        padding: 10px 12px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .toggle-btn {
+        padding: 6px;
+        font-size: 0.75rem;
+    }
+    
+    .toggle-btn span {
+        display: none;
+    }
+}

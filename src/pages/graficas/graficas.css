@@ -129,6 +129,22 @@
   color: #fff;
   border-radius: 5px;
   cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.dash__act__btn:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.dash__act__btn.active {
+  background-color: #3b82f6;
+  color: #fff;
+}
+
+.dash__act__btn.active:hover {
+  background-color: #2563eb;
 }
 
 .dash__act__select {
@@ -213,4 +229,26 @@
   gap: 10px;
   width: 100%;
   min-height: 100%;
+}
+
+/* Coming soon message styles */
+.coming-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.coming-soon h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #e2e8f0;
+}
+
+.coming-soon p {
+  font-size: 1.1rem;
+  opacity: 0.8;
 }

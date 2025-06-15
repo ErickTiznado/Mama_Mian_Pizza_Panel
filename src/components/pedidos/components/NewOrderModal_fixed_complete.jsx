@@ -142,75 +142,23 @@ const Step2 = ({ menu, onUpdateProductos, selectedProducts }) => {
       : menu.filter((p) => p.id_categoria === categoryFilter);
 
   console.log("Filtered Menu:", menu);
-    // Función para calcular precio dinámico
+  
+  // Función para calcular precio dinámico
   const calculateProductPrice = (product, tamano) => {
-    // Primero intentar con la tabla de precios estática
     const dynamicPrice = getPizzaPrice(product.titulo, tamano);
-    if (dynamicPrice > 0) {
-      return dynamicPrice;
-    }
-    
-    // Si no está en la tabla, buscar en las opciones del producto
-    if (product.opciones && Array.isArray(product.opciones)) {
-      // Mapear nombres de tamaños para coincidir con la API
-      const tamanoMap = {
-        'personal': 'Personal',
-        'mediana': 'Mediana', 
-        'grande': 'Grande',
-        'gigante': 'Gigante',
-        'super_personal': 'Personal', // fallback
-        'mediana_8pc': 'Mediana',
-        'grande_10pc': 'Grande', 
-        'gigante_12pc': 'Gigante'
-      };
-      
-      const targetTamano = tamanoMap[tamano] || 'Personal';
-      const opcion = product.opciones.find(opt => opt.nombre === targetTamano);
-      if (opcion && opcion.precio) {
-        return opcion.precio;
-      }
-      
-      // Si no encuentra el tamaño exacto, devolver el precio del primer tamaño disponible
-      if (product.opciones.length > 0) {
-        return product.opciones[0].precio || 0;
-      }
-    }
-    
-    // Fallback al precio base del producto (si existe)
-    return product.precio || 0;
+    return dynamicPrice > 0 ? dynamicPrice : (product.precio || 0);
   };
-    // Obtener tamaños únicos disponibles para un producto
+  
+  // Obtener tamaños únicos disponibles para un producto
   const getAvailableSizes = (product) => {
-    // Si el producto tiene opciones de la API, usar esas
-    if (product.opciones && Array.isArray(product.opciones) && product.opciones.length > 0) {
-      return product.opciones.map(opcion => {
-        // Mapear los nombres de la API a valores internos
-        const nameToValue = {
-          'Personal': 'personal',
-          'Mediana': 'mediana',
-          'Grande': 'grande',
-          'Gigante': 'gigante'
-        };
-        
-        const value = nameToValue[opcion.nombre] || opcion.nombre.toLowerCase();
-        const label = `${opcion.nombre} - $${opcion.precio}`;
-        
-        return {
-          label: label,
-          value: value,
-          precio: opcion.precio
-        };
-      });
-    }
-
-    // Tamaños para pizzas regulares (fallback)
+    // Tamaños para pizzas regulares
     const regularSizes = [
       { label: "Personal (4 porciones)", value: "personal" },
       { label: "Mediana (6 porciones)", value: "mediana" },
       { label: "Grande (8 porciones)", value: "grande" }
     ];
 
-    // Tamaños para especialidades (fallback)
+    // Tamaños para especialidades
     const specialtySizes = [
       { label: "Súper Personal", value: "super_personal" },
       { label: "Mediana (8 pc)", value: "mediana_8pc" },
@@ -545,18 +493,13 @@ const Step2 = ({ menu, onUpdateProductos, selectedProducts }) => {
           </button>
         ))}
       </div>
-          {/* 2) Grid de productos */}
+        
+      {/* 2) Grid de productos */}
       <div className="nor-product-grid">
         {filteredMenu.map((prod) => {
           const availableSizes = getAvailableSizes(prod);
           const defaultTamano = availableSizes[0]?.value || "personal";
           const displayPrice = calculateProductPrice(prod, defaultTamano);
-          
-          // Debug logs
-          console.log(`Producto: ${prod.titulo}`);
-          console.log(`Opciones disponibles:`, prod.opciones);
-          console.log(`Tamaño por defecto: ${defaultTamano}`);
-          console.log(`Precio calculado: ${displayPrice}`);
           
           return (
             <div
@@ -914,6 +857,7 @@ const NewOrderModal = ({ show, onClose }) => {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     const fetchMenu = async () => {
       try {
@@ -924,52 +868,49 @@ const NewOrderModal = ({ show, onClose }) => {
       } catch (err) {
         console.error("Error fetching menu:", err);
         
-        // Datos mock para desarrollo - actualizado con la estructura de opciones
+        // Datos mock para desarrollo
         setMenu([
           {
             id: 1,
             titulo: "Pepperoni",
+            precio: 6,
             imagen: "/placeholder-pizza.jpg",
-            id_categoria: 1,
-            opciones: [
-              { tamanoId: 1, nombre: "Personal", precio: 6 },
-              { tamanoId: 2, nombre: "Mediana", precio: 8 },
-              { tamanoId: 3, nombre: "Grande", precio: 10 }
-            ]
+            id_categoria: 1
           },
           {
             id: 2,
             titulo: "Hawaiana",
+            precio: 8,
             imagen: "/placeholder-pizza.jpg",
-            id_categoria: 1,
-            opciones: [
-              { tamanoId: 1, nombre: "Personal", precio: 8 },
-              { tamanoId: 2, nombre: "Mediana", precio: 10 },
-              { tamanoId: 3, nombre: "Grande", precio: 12 }
-            ]
+            id_categoria: 1
           },
           {
             id: 3,
             titulo: "4 Quesos",
+            precio: 10,
             imagen: "/placeholder-pizza.jpg",
-            id_categoria: 1,
-            opciones: [
-              { tamanoId: 1, nombre: "Personal", precio: 10 },
-              { tamanoId: 2, nombre: "Mediana", precio: 12 },
-              { tamanoId: 3, nombre: "Grande", precio: 14 }
-            ]
+            id_categoria: 1
           },
           {
             id: 4,
             titulo: "Curil o Camarón",
+            precio: 7,
             imagen: "/placeholder-pizza.jpg",
-            id_categoria: 1,
-            opciones: [
-              { tamanoId: 1, nombre: "Personal", precio: 7 },
-              { tamanoId: 2, nombre: "Mediana", precio: 14 },
-              { tamanoId: 3, nombre: "Grande", precio: 17 },
-              { tamanoId: 4, nombre: "Gigante", precio: 20 }
-            ]
+            id_categoria: 1
+          },
+          {
+            id: 5,
+            titulo: "4 Quesos Suprema",
+            precio: 5,
+            imagen: "/placeholder-pizza.jpg",
+            id_categoria: 1
+          },
+          {
+            id: 6,
+            titulo: "Suprema (Especialidad)",
+            precio: 8,
+            imagen: "/placeholder-pizza.jpg",
+            id_categoria: 1
           }
         ]);
       }

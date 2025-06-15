@@ -35,10 +35,8 @@ const Step1 = ({ productData, onProductChange }) => {
             placeholder="Nombre del producto"
             required
           />
-        </div>
-
-        <div className="step1-form-input">
-          <label htmlFor="descripcion">Descripción</label>
+        </div>        <div className="step1-form-input">
+          <label htmlFor="descripcion">Descripción *</label>
           <textarea
             id="descripcion"
             name="descripcion"
@@ -46,40 +44,25 @@ const Step1 = ({ productData, onProductChange }) => {
             onChange={(e) => handleInputChange("descripcion", e.target.value)}
             placeholder="Descripción detallada del producto"
             rows={4}
+            required
           />
         </div>
 
-        <div className="step1-form-row">
-          <div className="step1-form-input">
-            <label htmlFor="porciones">Porciones *</label>
-            <input
-              type="number"
-              id="porciones"
-              name="porciones"
-              value={productData.porciones || ""}
-              onChange={(e) => handleInputChange("porciones", e.target.value)}
-              placeholder="Número de porciones"
-              required
-            />
-          </div>
-          
-          <div className="step1-form-input">
-            <label htmlFor="categoria">Categoría *</label>
-            <input
-              type="text"
-              id="categoria"
-              name="categoria"
-              value={productData.categoria || ""}
-              onChange={(e) => handleInputChange("categoria", e.target.value)}
-              placeholder="Categoría del producto"
-              required
-            />
-          </div>
+        <div className="step1-form-input">
+          <label htmlFor="categoria">Categoría *</label>
+          <input
+            type="text"
+            id="categoria"
+            name="categoria"
+            value={productData.categoria || ""}
+            onChange={(e) => handleInputChange("categoria", e.target.value)}
+            placeholder="Categoría del producto"
+            required
+          />
         </div>
 
         <div className="step1-form-input">
-          <label htmlFor="sesion">Sección *</label>
-          <select
+          <label htmlFor="sesion">Sección *</label>          <select
             id="sesion"
             name="sesion"
             value={productData.sesion || ""}
@@ -87,14 +70,11 @@ const Step1 = ({ productData, onProductChange }) => {
             required
           >
             <option value="">Seleccione una sección</option>
-            <option value="menu_principal">Menú Principal</option>
-            <option value="especiales">Especiales</option>
-            <option value="bebidas">Bebidas</option>
-            <option value="complementos">Complementos</option>
+            <option value="Las mas Populares">Las mas Populares</option>
+            <option value="Recomendacion de la casa">Recomendacion de la casa</option>
+            <option value="Banners">Banners</option>
           </select>
-        </div>
-
-        <div className="step1-form-input file-input-container">
+        </div>        <div className="step1-form-input file-input-container">
           <label htmlFor="imagen">Imagen del Producto *</label>
           <input
             type="file"
@@ -116,6 +96,25 @@ const Step1 = ({ productData, onProductChange }) => {
               </button>
             </div>
           )}
+        </div>
+
+        <div className="step1-form-input">
+          <label htmlFor="activo">Estado del Producto</label>
+          <div className="switch-container">
+            <label className="switch">
+              <input
+                type="checkbox"
+                id="activo"
+                name="activo"
+                checked={productData.activo === 1}
+                onChange={(e) => handleInputChange("activo", e.target.checked ? 1 : 0)}
+              />
+              <span className="slider round"></span>
+            </label>
+            <span className="switch-label">
+              {productData.activo === 1 ? 'Activo' : 'Inactivo'}
+            </span>
+          </div>
         </div>
       </form>
     </div>
@@ -179,15 +178,14 @@ const NewProductModal = ({ show, onClose, onSuccess }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [tamanos, setTamanos] = useState([]);
-  const [productData, setProductData] = useState({
+  const [tamanos, setTamanos] = useState([]);  const [productData, setProductData] = useState({
     titulo: "",
     descripcion: "",
-    porciones: "",
     sesion: "",
     categoria: "",
     imagen: null,
-    precios: {}
+    precios: {},
+    activo: 1
   });
   
   // Obtener los tamaños disponibles para el paso 2
@@ -219,11 +217,9 @@ const NewProductModal = ({ show, onClose, onSuccess }) => {
       fetchTamanos();
     }
   }, [show, API_URL]);
-  
-  const nextStep = () => {
-    // Validaciones antes de avanzar
+    const nextStep = () => {    // Validaciones antes de avanzar
     if (currentStep === 1) {
-      if (!productData.titulo || !productData.porciones || !productData.sesion || !productData.categoria || !productData.imagen) {
+      if (!productData.titulo || !productData.descripcion || !productData.sesion || !productData.categoria || !productData.imagen) {
         notificationContext.addNotification({
           type: 'error',
           title: 'Campos incompletos',
@@ -239,18 +235,16 @@ const NewProductModal = ({ show, onClose, onSuccess }) => {
   
   const prevStep = () => {
     setCurrentStep((prev) => Math.max(prev - 1, 1));
-  };
-  
-  const resetForm = () => {
+  };  const resetForm = () => {
     setCurrentStep(1);
     setProductData({
       titulo: "",
       descripcion: "",
-      porciones: "",
       sesion: "",
       categoria: "",
       imagen: null,
-      precios: {}
+      precios: {},
+      activo: 1
     });
     setError(null);
   };
@@ -290,20 +284,20 @@ const NewProductModal = ({ show, onClose, onSuccess }) => {
     setIsLoading(true);
     setError(null);
     
-    try {
-      // Crear FormData para enviar la imagen
+    try {      // Crear FormData para enviar la imagen
       const formData = new FormData();
       formData.append('titulo', productData.titulo);
-      formData.append('descripcion', productData.descripcion);
-      formData.append('porciones', productData.porciones);
+      formData.append('descripcion', productData.descripcion || "Producto sin descripción");
+      formData.append('porciones', '1'); // Default value since backend expects it
       formData.append('sesion', productData.sesion);
       formData.append('categoria', productData.categoria);
       formData.append('imagen', productData.imagen);
+      formData.append('activo', productData.activo.toString());
       
       // Agregar precios al FormData
       formData.append('precios', JSON.stringify(productData.precios));
       
-      const response = await fetch(`${API_URL}/content/submitContent`, {
+      const response = await fetch(`${API_URL}/content/submit`, {
         method: 'POST',
         body: formData
       });
@@ -429,12 +423,11 @@ const NewProductModal = ({ show, onClose, onSuccess }) => {
             >
               Anterior
             </button>
-          )}
-          {currentStep < totalSteps ? (
+          )}          {currentStep < totalSteps ? (
             <button
               className="nor-button"
               onClick={nextStep}
-              disabled={isLoading || !productData.titulo || !productData.porciones || !productData.sesion || !productData.categoria || !productData.imagen}
+              disabled={isLoading || !productData.titulo || !productData.descripcion || !productData.sesion || !productData.categoria || !productData.imagen}
             >
               Siguiente
             </button>

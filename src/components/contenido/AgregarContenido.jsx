@@ -29,29 +29,45 @@ const AgregarContenido = () => {
   // Estados para búsqueda y filtros
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredItems, setFilteredItems] = useState([]);
-  
-  // Paginación
+    // Paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;  // Función para cargar datos desde la API
+  const itemsPerPage = 10;
+
+  // Función para cargar datos desde la API
   const fetchData = async () => {
     setIsLoading(true);
     try {
       const response = await axios.get('https://api.mamamianpizza.com/api/content/getMenu');
-      const productosData = response.data.productos || [];
+      console.log('API Response:', response.data); // Para depuración
       
-      const formattedData = productosData.map(item => ({
-        id: item.id_producto,
-        imagen: item.imagen,
-        titulo: item.titulo,
-        descripcion: item.descripcion,
-        tipo: item.seccion || 'Otros',
-        precio: `$${item.precio}`,
-        tamanos: item.porciones ? `${item.porciones} porciones` : null,
-        estado: item.activo === 1,
-        fecha: new Date(item.fecha_actualizacion || item.fecha_creacion).toISOString().split('T')[0]
-      }));
+      // La API devuelve response.data.menu en lugar de response.data.productos
+      const menuData = response.data.menu || [];
       
-      console.log('Datos cargados:', formattedData);
+      const formattedData = menuData.map(item => {
+        // Calcular el precio basado en las opciones disponibles
+        const precioMinimo = item.opciones && item.opciones.length > 0 
+          ? Math.min(...item.opciones.map(opcion => opcion.precio))
+          : 0;
+        
+        // Crear una cadena con todos los tamaños disponibles
+        const tamanosDisponibles = item.opciones 
+          ? item.opciones.map(opcion => `${opcion.nombre}: $${opcion.precio}`).join(', ')
+          : null;
+
+        return {
+          id: item.id,
+          imagen: item.imagen || 'https://via.placeholder.com/150?text=Sin+imagen',
+          titulo: item.titulo,
+          descripcion: item.descripcion,
+          tipo: item.seccion || 'Otros',
+          precio: `Desde $${precioMinimo}`,
+          tamanos: tamanosDisponibles,
+          estado: item.activo !== false, // Asumir activo si no se especifica
+          fecha: new Date().toISOString().split('T')[0] // Fecha actual como respaldo
+        };
+      });
+      
+      console.log('Datos formateados:', formattedData);
       setContenidos(formattedData);
       setFilteredItems(formattedData);
       
@@ -62,9 +78,9 @@ const AgregarContenido = () => {
     } catch (err) {
       console.error('Error al cargar los datos:', err);
       setError('Error al cargar los datos. Por favor, inténtalo de nuevo más tarde.');
-      // Usar datos de muestra como respaldo en caso de error
-      setContenidos(mockData);
-      setFilteredItems(mockData);
+      // En caso de error, mostrar lista vacía
+      setContenidos([]);
+      setFilteredItems([]);
     } finally {
       setIsLoading(false);
     }
@@ -97,12 +113,13 @@ const AgregarContenido = () => {
     // Volver a la primera página al cambiar filtros
     setCurrentPage(1); 
   }, [activeTab, searchTerm, contenidos]);
-
   // Lógica para paginación
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);  // Estados para el diálogo de confirmación y elementos seleccionados
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+
+  // Estados para el diálogo de confirmación y elementos seleccionados
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -168,7 +185,6 @@ const AgregarContenido = () => {
     setShowConfirmDialog(false);
     setSelectedItemId(null);
   };
-
   const handlePreview = (id) => {
     // Buscar el elemento para mostrar en la vista previa
     const item = contenidos.find(item => item.id === id);
@@ -177,6 +193,7 @@ const AgregarContenido = () => {
       setShowPreviewModal(true);
     }
   };
+  
   const handleAddNew = () => {
     console.log('Agregando nuevo contenido');
     setShowAddModal(true);
@@ -185,6 +202,7 @@ const AgregarContenido = () => {
   const handleAddSuccess = () => {
     // Recargar la lista de productos después de una adición exitosa
     fetchData();
+    setShowAddModal(false);
   };
 
   const handleSearch = (e) => {
@@ -292,10 +310,10 @@ const AgregarContenido = () => {
         {isLoading ? (
           <div className="loading-message">Cargando contenido...</div>
         ) : error ? (
-          <div className="error-message">{error}</div>
-        ) : (
+          <div className="error-message">{error}</div>        ) : (
           <>
-            {/* Tabla de contenido */}            <div className="content-table-container">
+            {/* Tabla de contenido */}
+            <div className="content-table-container">
               <table className="content-table">
                 <thead>
                   <tr>
@@ -307,9 +325,9 @@ const AgregarContenido = () => {
                     <th>Acciones</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {currentItems.map(item => (
-                    <tr key={item.id}>                      <td className="preview-cell">
+                <tbody>                  {currentItems.map(item => (
+                    <tr key={item.id}>
+                      <td className="preview-cell">
                         <div className="preview-image-container">
                           {item.imagen && item.imagen !== '/path/to/image' ? (
                             <img 

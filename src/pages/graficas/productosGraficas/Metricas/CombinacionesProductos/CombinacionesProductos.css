@@ -1,0 +1,347 @@
+/* CombinacionesProductos.css */
+.combinaciones-container {
+    background-color: #0f172a;
+    border-radius: 10px;
+    border: rgb(71 85 105) solid 1px;
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.combinaciones-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgb(71 85 105);
+}
+
+.combinaciones-header .header-content h3 {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+}
+
+.combinaciones-header .header-content p {
+    color: #94a3b8;
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+.header-stats {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #94a3b8;
+    font-size: 0.875rem;
+}
+
+.stat-item svg {
+    color: #ea580c;
+}
+
+.header-icon {
+    color: #ea580c;
+    opacity: 0.8;
+}
+
+.combinaciones-container .error-text {
+    color: #ef4444;
+}
+
+.combinaciones-container .no-data {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    gap: 12px;
+    color: #94a3b8;
+    font-style: italic;
+}
+
+.no-data-icon {
+    color: #475569;
+}
+
+/* Contenido principal */
+.combinaciones-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Tabla */
+.combinaciones-table {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.table-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 120px;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: rgba(71, 85, 105, 0.2);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #d1d5db;
+}
+
+.col-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+.col-header:hover {
+    color: #ea580c;
+}
+
+.sort-icon {
+    color: #94a3b8;
+    transition: all 0.2s ease;
+}
+
+.sort-icon.active {
+    color: #ea580c;
+}
+
+.sort-icon.desc {
+    transform: rotate(180deg);
+}
+
+.sort-icon.inactive {
+    opacity: 0.5;
+}
+
+.table-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.table-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 120px;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: rgba(30, 41, 59, 0.3);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.table-row:hover {
+    background-color: rgba(30, 41, 59, 0.5);
+    transform: translateX(2px);
+    border-left-color: #ea580c;
+}
+
+/* Columnas de productos */
+.col-producto-a,
+.col-producto-b {
+    min-width: 0; /* Permite el truncamiento */
+}
+
+.product-name {
+    color: #fff;
+    font-weight: 500;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: help;
+    font-size: 0.875rem;
+}
+
+/* Columna de frecuencia */
+.col-frecuencia {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.frequency-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.frequency-value {
+    font-weight: 700;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+}
+
+.frequency-label {
+    color: #94a3b8;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Paginación */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+    border-top: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.pagination-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: rgba(71, 85, 105, 0.3);
+    color: #d1d5db;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background-color: #ea580c;
+    color: #fff;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-info {
+    color: #94a3b8;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* Footer de la tabla */
+.table-footer {
+    display: flex;
+    justify-content: center;
+    padding-top: 8px;
+    border-top: 1px solid rgba(71, 85, 105, 0.2);
+}
+
+.results-info {
+    color: #94a3b8;
+    font-size: 0.8rem;
+    margin: 0;
+    font-style: italic;
+}
+
+/* Scrollbar personalizado */
+.table-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.table-body::-webkit-scrollbar-track {
+    background: rgba(71, 85, 105, 0.2);
+    border-radius: 3px;
+}
+
+.table-body::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 3px;
+}
+
+.table-body::-webkit-scrollbar-thumb:hover {
+    background: #d1d5db;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .combinaciones-container {
+        padding: 16px;
+    }
+    
+    .combinaciones-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+    
+    .header-stats {
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+    
+    .table-header,
+    .table-row {
+        grid-template-columns: 1fr 1fr 100px;
+        gap: 12px;
+        padding: 10px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .combinaciones-header .header-content h3 {
+        font-size: 1.1rem;
+    }
+    
+    .combinaciones-header .header-content p {
+        font-size: 0.8rem;
+    }
+    
+    .frequency-value {
+        font-size: 1rem;
+    }
+    
+    .pagination {
+        gap: 12px;
+    }
+    
+    .pagination-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .table-header,
+    .table-row {
+        grid-template-columns: 1fr 1fr 80px;
+        gap: 8px;
+        padding: 8px 10px;
+    }
+    
+    .stat-item {
+        font-size: 0.8rem;
+    }
+    
+    .frequency-container {
+        gap: 1px;
+    }
+    
+    .frequency-value {
+        font-size: 0.9rem;
+    }
+    
+    .frequency-label {
+        font-size: 0.7rem;
+    }
+}
