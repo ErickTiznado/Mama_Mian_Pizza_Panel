@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './GestionClientes.css';
 import { Search, User, Mail, Phone, MapPin, Star, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import ClientePerfilModal from './ClientePerfilModal';
 
 const GestionClientes = () => {
 const [clientes, setclientes] = useState([]);
@@ -14,6 +15,8 @@ const [paginacion, setPaginacion] = useState({
   elementosPorPagina: 10,
   totalPaginas: 1
 });
+const [modalVisible, setModalVisible] = useState(false);
+const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
 const API_URL = 'https://api.mamamianpizza.com'; // Reemplaza con tu URL de API
 
 const fetchClientes =  async () => {
@@ -112,6 +115,20 @@ const cambiarElementosPorPagina = (cantidad) => {
     paginaActual: 1,
     totalPaginas: Math.ceil(clientesFiltrados.length / cantidad)
   }));
+};
+
+// Funciones para el modal
+const abrirModal = (cliente) => {
+  setClienteSeleccionado(cliente);
+  setModalVisible(true);
+  // Para evitar scroll en el fondo mientras el modal está abierto
+  document.body.style.overflow = 'hidden';
+};
+
+const cerrarModal = () => {
+  setModalVisible(false);
+  // Restaurar scroll
+  document.body.style.overflow = 'auto';
 };
 
 // Obtener clientes para la página actual
@@ -282,10 +299,9 @@ useEffect(() => {
                   <div className='estado-indicator'></div>
                   {cl.estado}
                 </div>
-              </td>
-              <td>
+              </td>              <td>
                 <div className='acciones'>
-                  <button className='btn-perfil'>Ver Perfil</button>
+                  <button className='btn-perfil' onClick={() => abrirModal(cl)}>Ver Perfil</button>
                   <button className='btn-contactar'>Contactar</button>
                 </div>
               </td>
@@ -351,8 +367,16 @@ useEffect(() => {
               </div>
             </div>
           )}
-        </div>
-      </div>
+        </div>      </div>
+      
+      {/* Modal de Perfil de Cliente */}
+      {clienteSeleccionado && (
+        <ClientePerfilModal 
+          cliente={clienteSeleccionado}
+          visible={modalVisible}
+          onClose={cerrarModal}
+        />
+      )}
     </div>
   );
 };
