@@ -1,192 +1,373 @@
-@import '../../styles/variables.css';
-
-.gc-layout {
+.gestion-clientes {
   display: flex;
-  height: 100vh;
-  background-color: var(--color-secondary);
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 }
 
-.gc-main-panel {
-  flex: 1;
+.gestion-clientes-header {
+  padding: 20px;
+  background: #0f172a;
+  font-size: 1rem;
+  width: 100%;
+  height: 10%;
+  color: var(--orange-accent);
+  border-bottom: 1px solid #374151;
+}
+
+.gestion-clientes-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 20px 30px;
+}
+
+.gestion-clientes-filters{
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #0f172a;
+  gap: 10px;
+  border-radius: 20px;
+  border: 1px solid #374151;
+}
+
+.gestion-clientes-search {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 50%;
+  height: 100%;
+  padding: 10px;
+  
+}
+
+.gestion-clientes-search-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  background-color: #1e293b;
+  border-radius: 10px;
+  border: 1px solid #374151;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  gap: 10px;
+}
+
+.gestion-clientes-search-input input{
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+
+.gestion-clientes-filters-options{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  width: 100%;
+  height: 100%;
+  gap: 8px;
+}
+
+.gestion-clientes-filters-options button {
+  background-color: #374151;
+  color: #d1d5db;
+  border: 1px solid #4b5563;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.gestion-clientes-filters-options button:hover {
+  background-color: #4b5563;
+  color: #fff;
+}
+
+.gestion-clientes-filters-options button.active {
+  background-color: #f97316;
+  color: #fff;
+  border-color: #f97316;
+}
+.gestion-clientes-table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px 0;
+}
+
+.cl-table{
+  width: 100%;
+  height: 100%;
+  border-collapse: collapse;
+  padding: 20px;
+  background-color: #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.cl-table-header {
+  background-color: #1e293b;
+  color: #f97316;
+  font-weight: 600;
+  text-align: left;
+  width: 100%;
+  border-bottom: 2px solid #4b5563;
+}
+
+/* Add padding to table header cells */
+.cl-table th {
+  padding: 16px 20px;
+  vertical-align: middle;
+  font-size: 1.075rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #f97316;
+}
+
+.cl-table-body {
+  background-color: #0f172a;
+  color: #fff;
+  width: 100%;
+  height: 90%;
+}
+
+/* Nuevos estilos para la tabla */
+.cl-table tr {
+  border-bottom: 1px solid #374151;
+  transition: background-color 0.2s ease;
+}
+
+.cl-table tbody tr:hover {
+  background-color: rgba(55, 65, 81, 0.3);
+}
+
+.cl-table td {
+  padding: 20px;
+  vertical-align: middle;
+  border-bottom: 1px solid #374151;
+}
+
+/* Estilos para el avatar del cliente */
+.cliente-avatar {
+  width: 48px;
+  height: 48px;
+  background-color: #f97316;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-right: 15px;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+.cliente-avatar svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2px;
+}
+
+.cliente-info {
+  display: flex;
+  align-items: center;
+}
+
+.cliente-datos {
   display: flex;
   flex-direction: column;
 }
 
+.cliente-nombre {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #fff;
+  font-size: 1rem;
+}
 
-.gc-wrapper {
+.cliente-desde {
+  font-size: 0.875rem;
+  color: #94a3b8;
+}
+
+/* Estilos para la información de contacto */
+.contacto-info {
   display: flex;
-  justify-content: center;
-  padding: 40px 0;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.gc-card {
-  background-color: rgba(31, 31, 31, 1);
-  border-radius: 10px;
-  padding: 30px;
-  width: 100%;
-  max-width: 1400px;
-  color: white;
-  border: 1px solid white;
-  margin-top: 20px;
-  font-size: 22px;
-}
-
-.gc-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-}
-
-.newClientBtn {
-  background-color: var(--color-brand-yellow);
-  color: var(--color-brand-red);
-  border: none;
-  border-radius: 10px;
-  padding: 10px 46px;
-  cursor: pointer;
+.contacto-item {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-weight: bold;
+  color: #94a3b8;
+  font-size: 0.875rem;
 }
 
-.gc-icon {
-  font-size: 18px;  
+.contacto-item svg {
+  color: #6b7280;
+  flex-shrink: 0;
 }
 
-.gc-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.gc-inputsRow {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.gc-inputGroup {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 200px;
-}
-
-.gc-inputGroup input {
-  padding: 10px;
-  border-radius: 6px;
-  border: none;
-  font-size: 15px;
-}
-
-.gc-actions {
-  display: flex;
-  justify-content: space-between; 
-  align-items: center;
-  margin-top: 40px;
-}
-
-.gc-cancelar {
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  text-decoration: underline;
-  margin-left: 280px;
-}
-
-.gc-guardar {
-  background-color: rgba(32, 41, 56, 1);
-  border: none;
-  padding: 5px 60px;
-  border-radius: 12px;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  margin-left: 515px;
-}
-
-.gc-guardar:hover {
-  background-color: #1b2435; 
-  transition: background-color 0.3s ease;
-}
-
-.newClientBtn:hover {
-  background-color: #ffb066; 
-  transition: background-color 0.3s ease;
-}
-
-.gc-cancelar:hover {
-  text-decoration: underline;
-  opacity: 0.8;
-  transition: opacity 0.2s ease;
-}
-
-.gc-header-outside {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  width: 100%;
-  max-width: 1400px;
-  color: white;
-}
-
-.titulo-cliente {
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.gc-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 70px 0 40px 0; /* 👈 sin mucho top */
-}
-
-.gc-espacio-formulario {
-  min-height: 100px; /* o lo que mida aprox el form */
-  width: 300%;
-}
-  
-.tabla-clientes {
-  margin-top: 100px;
-  width: 95%;
-  overflow-x: auto;
-  border-radius: 10px;
-}
-  
-.tabla-clientes table {
-  width: 100%;
-  border-collapse: collapse;
-  color: white;
-  font-size: 16px;
-  background-color: rgba(31, 31, 31, 1); /* igual a tu card */
-  border: 1px solid white; /* borde general */    
-}
-  
-.tabla-clientes th, 
-.tabla-clientes td {
-  border: 1px solid rgba(255, 255, 255, 0.3); /* bordes individuales */
-  padding: 12px;
+/* Estilos para los pedidos y totales */
+.pedidos-info {
   text-align: center;
 }
-  
-.tabla-clientes th {
-  background-color: #1f1f1f;
-  font-weight: bold;
+
+.pedidos-count {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 2px;
 }
-  
-.tabla-clientes td button {
-  background: none;
-  border: none;
-  color: white;
+
+.pedidos-text {
+  font-size: 0.875rem;
+  color: #94a3b8;
+}
+
+.total-gastado {
+  color: #22c55e;
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+/* Estilos para el último pedido */
+.ultimo-pedido {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+.ultimo-pedido svg {
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+/* Estilos para las estrellas de valoración */
+.valoracion {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.valoracion-numero {
+  font-weight: 700;
+  color: #fff;
+}
+
+.valoracion-estrella {
+  color: #fbbf24;
+  width: 16px;
+  height: 16px;
+}
+
+.valoracion-total {
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+/* Estilos para los badges de estado */
+.badge-estado {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  gap: 6px;
+  font-size: 0.875rem;
+}
+
+.estado-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.badge-activo {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.badge-activo .estado-indicator {
+  background-color: #22c55e;
+}
+
+.badge-vip {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.badge-vip .estado-indicator {
+  background-color: #f59e0b;
+}
+
+.badge-inactivo {
+  background-color: rgba(156, 163, 175, 0.1);
+  color: #9ca3af;
+  border: 1px solid rgba(156, 163, 175, 0.2);
+}
+
+.badge-inactivo .estado-indicator {
+  background-color: #9ca3af;
+}
+
+/* Estilos para los botones de acciones */
+.acciones {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-perfil {
+  background-color: #374151;
+  color: #d1d5db;
+  border: 1px solid #4b5563;
+  border-radius: 6px;
+  padding: 8px 16px;
   cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
-  
-.tabla-clientes td button:hover {
-  text-decoration: underline;
+
+.btn-perfil:hover {
+  background-color: #4b5563;
+  color: #fff;
+}
+
+.btn-contactar {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-contactar:hover {
+  background-color: #2563eb;
 }

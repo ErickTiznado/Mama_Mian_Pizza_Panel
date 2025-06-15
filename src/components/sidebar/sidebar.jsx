@@ -148,7 +148,7 @@ function Sidebar() {
           <NotificationBell category="clientes" isCollapsed={isCollapsed} />
         </button>
         
-        <button className="items" onClick={() => window.open("https://contmigo.tiznadodev.com/", "_blank")} title="Tienda">
+        <button className="items" onClick={() => window.open("https://mamamianpizza.com/", "_blank")} title="Tienda">
           <span>
             <Store size={28} />
             {!isCollapsed && "Tienda"}
