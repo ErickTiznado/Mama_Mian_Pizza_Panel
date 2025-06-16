@@ -4,7 +4,7 @@ import { useNotifications } from '../../../context/NotificationContext';
 import '../AgregarContenido.css';
 import './NewProductModal.css';
 
-const Step1 = ({ productData, onProductChange }) => {
+const Step1 = ({ productData, onProductChange, isEditing = false, currentImageUrl = null }) => {
   const handleInputChange = (field, value) => {
     onProductChange({
       ...productData,
@@ -75,14 +75,25 @@ const Step1 = ({ productData, onProductChange }) => {
             <option value="Banners">Banners</option>
           </select>
         </div>        <div className="step1-form-input file-input-container">
-          <label htmlFor="imagen">Imagen del Producto *</label>
+          <label htmlFor="imagen">Imagen del Producto {!isEditing && '*'}</label>
+          {isEditing && currentImageUrl && !productData.imagen && (
+            <div className="current-image-preview">
+              <span>Imagen actual:</span>
+              <img 
+                src={currentImageUrl} 
+                alt="Imagen actual" 
+                className="current-image-thumbnail"
+                style={{ maxWidth: '100px', maxHeight: '100px', objectFit: 'cover', marginBottom: '10px' }}
+              />
+            </div>
+          )}
           <input
             type="file"
             id="imagen"
             name="imagen"
             accept="image/*"
             onChange={handleFileChange}
-            required
+            required={!isEditing}
           />
           {productData.imagen && (
             <div className="file-preview">
@@ -167,7 +178,7 @@ const Step2 = ({ tamanos, productData, onProductChange }) => {
   );
 };
 
-const NewProductModal = ({ show, onClose, onSuccess }) => {
+const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEditing = false }) => {
   const API_URL = "https://api.mamamianpizza.com/api";
   const totalSteps = 2;
   
@@ -187,6 +198,31 @@ const NewProductModal = ({ show, onClose, onSuccess }) => {
     precios: {},
     activo: 1
   });
+
+  // Efecto para cargar datos del producto en edición
+  useEffect(() => {
+    if (isEditing && editingProduct && show) {
+      // Convertir los datos del producto para edición
+      const preciosObj = {};
+      if (editingProduct.opciones) {
+        editingProduct.opciones.forEach(opcion => {
+          preciosObj[opcion.tamanoId] = opcion.precio.toString();
+        });
+      }
+
+      setProductData({
+        titulo: editingProduct.titulo || "",
+        descripcion: editingProduct.descripcion || "",
+        sesion: editingProduct.seccion || editingProduct.tipo || "",
+        categoria: editingProduct.categoria || editingProduct.tipo || "",
+        imagen: null, // Para edición, se mantendrá la imagen actual si no se cambia
+        precios: preciosObj,
+        activo: editingProduct.estado ? 1 : 0
+      });
+    } else if (!isEditing) {
+      resetForm();
+    }
+  }, [isEditing, editingProduct, show]);
   
   // Obtener los tamaños disponibles para el paso 2
   useEffect(() => {
@@ -216,10 +252,22 @@ const NewProductModal = ({ show, onClose, onSuccess }) => {
     if (show) {
       fetchTamanos();
     }
-  }, [show, API_URL]);
-    const nextStep = () => {    // Validaciones antes de avanzar
+  }, [show, API_URL]);  const nextStep = () => {
+    // Validaciones antes de avanzar
     if (currentStep === 1) {
-      if (!productData.titulo || !productData.descripcion || !productData.sesion || !productData.categoria || !productData.imagen) {
+      const requiredFields = [
+        productData.titulo, 
+        productData.descripcion, 
+        productData.sesion, 
+        productData.categoria
+      ];
+      
+      // En modo creación, la imagen es obligatoria. En edición, es opcional
+      if (!isEditing) {
+        requiredFields.push(productData.imagen);
+      }
+      
+      if (requiredFields.some(field => !field)) {
         notificationContext.addNotification({
           type: 'error',
           title: 'Campos incompletos',
@@ -273,8 +321,7 @@ const NewProductModal = ({ show, onClose, onSuccess }) => {
     
     return valid;
   };
-  
-  // Función para enviar el producto al API
+    // Función para enviar el producto al API
   const handleSubmit = async () => {
     // Validar precios
     if (!validatePrices()) {
@@ -284,27 +331,38 @@ const NewProductModal = ({ show, onClose, onSuccess }) => {
     setIsLoading(true);
     setError(null);
     
-    try {      // Crear FormData para enviar la imagen
+    try {
+      // Crear FormData para enviar la imagen
       const formData = new FormData();
       formData.append('titulo', productData.titulo);
       formData.append('descripcion', productData.descripcion || "Producto sin descripción");
       formData.append('porciones', '1'); // Default value since backend expects it
       formData.append('sesion', productData.sesion);
       formData.append('categoria', productData.categoria);
-      formData.append('imagen', productData.imagen);
+      
+      // Solo agregar imagen si se seleccionó una nueva
+      if (productData.imagen) {
+        formData.append('imagen', productData.imagen);
+      }
+      
       formData.append('activo', productData.activo.toString());
       
       // Agregar precios al FormData
       formData.append('precios', JSON.stringify(productData.precios));
+        const url = isEditing 
+        ? `${API_URL}/content/updateContent/${editingProduct.id}` 
+        : `${API_URL}/content/submit`;
       
-      const response = await fetch(`${API_URL}/content/submit`, {
-        method: 'POST',
+      const method = isEditing ? 'PUT' : 'POST';
+      
+      const response = await fetch(url, {
+        method: method,
         body: formData
       });
       
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || `Error ${response.status}: No se pudo crear el producto`);
+        throw new Error(errorData.message || `Error ${response.status}: No se pudo ${isEditing ? 'actualizar' : 'crear'} el producto`);
       }
       
       const result = await response.json();
@@ -312,8 +370,8 @@ const NewProductModal = ({ show, onClose, onSuccess }) => {
       // Mostrar notificación de éxito
       notificationContext.addNotification({
         type: 'success',
-        title: '¡Producto creado exitosamente!',
-        message: `El producto "${productData.titulo}" ha sido registrado correctamente.`,
+        title: `¡Producto ${isEditing ? 'actualizado' : 'creado'} exitosamente!`,
+        message: `El producto "${productData.titulo}" ha sido ${isEditing ? 'actualizado' : 'registrado'} correctamente.`,
         duration: 5000
       });
       
@@ -327,13 +385,13 @@ const NewProductModal = ({ show, onClose, onSuccess }) => {
       }
       
     } catch (error) {
-      console.error('Error al crear producto:', error);
+      console.error(`Error al ${isEditing ? 'actualizar' : 'crear'} producto:`, error);
       setError(error.message);
       
       // Mostrar notificación de error
       notificationContext.addNotification({
         type: 'error',
-        title: 'Error al crear producto',
+        title: `Error al ${isEditing ? 'actualizar' : 'crear'} producto`,
         message: error.message || 'Ocurrió un error inesperado. Intente nuevamente.',
         duration: 7000
       });
@@ -345,10 +403,9 @@ const NewProductModal = ({ show, onClose, onSuccess }) => {
   if (!show) return null;
   
   return (
-    <div className="new-order-modal new-product-modal">
-      <header className="new__order-modal-header">
+    <div className="new-order-modal new-product-modal">      <header className="new__order-modal-header">
         <div className="new__order-modal-header-title">
-          <h2>Nuevo Producto</h2>
+          <h2>{isEditing ? 'Editar Producto' : 'Nuevo Producto'}</h2>
           <button
             onClick={() => {
               onClose();
@@ -397,11 +454,12 @@ const NewProductModal = ({ show, onClose, onSuccess }) => {
       
       <div className="new__order-modal-content"
         style={{ opacity: isLoading ? 0.6 : 1, pointerEvents: isLoading ? 'none' : 'auto' }}
-      >
-        {currentStep === 1 && (
+      >        {currentStep === 1 && (
           <Step1 
             productData={productData}
             onProductChange={setProductData}
+            isEditing={isEditing}
+            currentImageUrl={isEditing && editingProduct ? editingProduct.imagen : null}
           />
         )}
         {currentStep === 2 && (
@@ -427,17 +485,16 @@ const NewProductModal = ({ show, onClose, onSuccess }) => {
             <button
               className="nor-button"
               onClick={nextStep}
-              disabled={isLoading || !productData.titulo || !productData.descripcion || !productData.sesion || !productData.categoria || !productData.imagen}
+              disabled={isLoading || !productData.titulo || !productData.descripcion || !productData.sesion || !productData.categoria || (!isEditing && !productData.imagen)}
             >
               Siguiente
             </button>
-          ) : (
-            <button
+          ) : (            <button
               className="nor-button"
               onClick={handleSubmit}
               disabled={isLoading}
             >
-              Crear Producto
+              {isEditing ? 'Actualizar Producto' : 'Crear Producto'}
             </button>
           )}
         </div>

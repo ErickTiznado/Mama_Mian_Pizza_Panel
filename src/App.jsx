@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, BrowserRouter } from 'react-router-dom';
 import Navbar from './components/navbar/nabvar'
 import Sidebar from './components/sidebar/sidebar';
@@ -14,12 +14,29 @@ import OrderManager from './components/pedidos/OrderManager';
 import GestionClientes from './components/GestionClientes/GestionClientes';
 import Inventario from './components/Inventario/Inventario';
 import Graficas from './pages/graficas/graficas';
+import ConfiguracionAdmin from './pages/configuracion/ConfiguracionAdmin';
 import NotificationsPollingManager from './components/OrderNotificationsManager';
 
 // Importamos el contexto de notificaciones
 import { NotificationProvider } from './context/NotificationContext';
+import './App.css';
 
 function App() {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detectar el tamaño de pantalla
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
   return (
     <NotificationProvider>
       {/* Gestor de notificaciones en tiempo real */}
@@ -27,11 +44,17 @@ function App() {
       
       <BrowserRouter>
         <main className='container'>
-
           <aside className='sidebar-container'>
-            <Sidebar/>
+            <Sidebar 
+              onToggle={setSidebarCollapsed}
+              collapsed={sidebarCollapsed}
+            />
           </aside>
-          <div className='content-container'>
+          <div 
+            className={`content-container ${
+              !isMobile && sidebarCollapsed ? 'sidebar-collapsed' : ''
+            }`}
+          >
             <Routes>
               <Route path="/" element={<Navigate to="/home" />} />
               <Route path="/login" element={<Login />} />
@@ -42,10 +65,10 @@ function App() {
               <Route path="/home" element={<Graficas/> } />
               <Route path='/prueba' element={<Prueba/>}/>
               <Route path='/AgregarContenido' element={<AgregarContenido/>}/>
-              <Route path="/pedidos" element={<OrderManager />} />
-              <Route path="/clientes" element={<GestionClientes />} />
+              <Route path="/pedidos" element={<OrderManager />} />              <Route path="/clientes" element={<GestionClientes />} />
               <Route path="/inventario" element={<Inventario />} />
               <Route path="/graficas" element={<Graficas />} />
+              <Route path="/configuracion" element={<ConfiguracionAdmin />} />
             </Routes>
           </div>
         </main>

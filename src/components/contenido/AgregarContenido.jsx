@@ -52,14 +52,14 @@ const AgregarContenido = () => {
         // Crear una cadena con todos los tamaños disponibles
         const tamanosDisponibles = item.opciones 
           ? item.opciones.map(opcion => `${opcion.nombre}: $${opcion.precio}`).join(', ')
-          : null;
-
-        return {
+          : null;        return {
           id: item.id,
           imagen: item.imagen || 'https://via.placeholder.com/150?text=Sin+imagen',
           titulo: item.titulo,
           descripcion: item.descripcion,
           tipo: item.seccion || 'Otros',
+          seccion: item.seccion || 'Otros', // Agregar campo seccion para edición
+          opciones: item.opciones || [], // Mantener opciones para edición
           precio: `Desde $${precioMinimo}`,
           tamanos: tamanosDisponibles,
           estado: item.activo !== false, // Asumir activo si no se especifica
@@ -122,19 +122,27 @@ const AgregarContenido = () => {
   // Estados para el diálogo de confirmación y elementos seleccionados
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);  const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  
+  // Estados para edición
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingItem, setEditingItem] = useState(null);
+  
+  // Estados para notificaciones
+  const [notification, setNotification] = useState(null);
 
-  // Manejadores de eventos
+  // Función para mostrar notificaciones
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000); // Auto-cerrar después de 3 segundos
+  };
   const handleEdit = (id) => {
     console.log(`Editando contenido con ID: ${id}`);
-    // Aquí se podría implementar la redirección a la página de edición
-    // o abrir un modal para editar el contenido
     const itemToEdit = contenidos.find(item => item.id === id);
     if (itemToEdit) {
-      // Implementación futura: Redireccionar a una página de edición o abrir modal
-      alert(`Editando: ${itemToEdit.titulo}`);
+      setEditingItem(itemToEdit);
+      setShowEditModal(true);
     }
   };
 
@@ -142,15 +150,13 @@ const AgregarContenido = () => {
     // Guardar el ID seleccionado y mostrar diálogo de confirmación
     setSelectedItemId(id);
     setShowConfirmDialog(true);
-  };
-
-  const confirmDelete = async () => {
+  };  const confirmDelete = async () => {
     if (!selectedItemId) return;
     
     try {
       setIsLoading(true);
-      // Llamar a la API para eliminar el contenido
-      await axios.delete(`https://api.mamamianpizza.com/api/content/${selectedItemId}`);
+      // Llamar a la API para eliminar el contenido usando el endpoint correcto
+      await axios.delete(`https://api.mamamianpizza.com/api/content/deleteContent/${selectedItemId}`);
       
       // Actualizar el estado eliminando el elemento
       const updatedContent = contenidos.filter(item => item.id !== selectedItemId);
@@ -165,16 +171,15 @@ const AgregarContenido = () => {
         }
         return true;
       }));
-      
-      // Cerrar el diálogo de confirmación
+        // Cerrar el diálogo de confirmación
       setShowConfirmDialog(false);
       setSelectedItemId(null);
       
       // Mostrar mensaje de éxito
-      alert('Contenido eliminado correctamente');
+      showNotification('Contenido eliminado correctamente', 'success');
     } catch (error) {
       console.error('Error al eliminar contenido:', error);
-      alert('Error al eliminar el contenido. Por favor, inténtalo de nuevo.');
+      showNotification('Error al eliminar el contenido. Por favor, inténtalo de nuevo.', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -198,11 +203,17 @@ const AgregarContenido = () => {
     console.log('Agregando nuevo contenido');
     setShowAddModal(true);
   };
-  
-  const handleAddSuccess = () => {
+    const handleAddSuccess = () => {
     // Recargar la lista de productos después de una adición exitosa
     fetchData();
     setShowAddModal(false);
+  };
+
+  const handleEditSuccess = () => {
+    // Recargar la lista de productos después de una edición exitosa
+    fetchData();
+    setShowEditModal(false);
+    setEditingItem(null);
   };
 
   const handleSearch = (e) => {
@@ -311,89 +322,179 @@ const AgregarContenido = () => {
           <div className="loading-message">Cargando contenido...</div>
         ) : error ? (
           <div className="error-message">{error}</div>        ) : (
-          <>
-            {/* Tabla de contenido */}
-            <div className="content-table-container">
-              <table className="content-table">
-                <thead>
-                  <tr>
-                    <th>Vista Previa</th>
-                    <th>Contenido</th>
-                    <th>Tipo</th>
-                    <th>Estado</th>
-                    <th>Fecha</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>                  {currentItems.map(item => (
-                    <tr key={item.id}>
-                      <td className="preview-cell">
-                        <div className="preview-image-container">
-                          {item.imagen && item.imagen !== '/path/to/image' ? (
-                            <img 
-                              src={item.imagen} 
-                              alt={item.titulo} 
-                              className="preview-image" 
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = 'https://via.placeholder.com/150?text=Sin+imagen';
-                              }}
-                            />
-                          ) : (
-                            <div className="preview-image-placeholder">Sin imagen</div>
-                          )}
+          <>            {/* Tabla de contenido */}
+            <div className="order__container">
+              <div className="order__content">
+                <table className="styled-table">
+                  <thead>
+                    <tr>
+                      <th className="th-preview">
+                        <div className="header-content">
+                          <FontAwesomeIcon icon={faEye} className="header-icon" />
+                          <span>Vista Previa</span>
                         </div>
-                      </td>
-                      <td className="content-cell">
-                        <div className="content-info">
-                          <h3>{item.titulo}</h3>
-                          <p>{item.descripcion}</p>
-                          {item.precio && <div className="content-price">{item.precio} {item.tamanos && <span>• {item.tamanos}</span>}</div>}
+                      </th>
+                      <th className="th-content">
+                        <div className="header-content">
+                          <FontAwesomeIcon icon={faFileCirclePlus} className="header-icon" />
+                          <span>Contenido</span>
                         </div>
-                      </td>
-                      <td className="type-cell">
-                        <span className={`type-badge type-${item.tipo.toLowerCase().replace(/\s+/g, '-')}`}>
-                          {item.tipo}
-                        </span>
-                      </td>
-                      <td className="status-cell">
-                        {item.estado ? (
-                          <span className="status-cont_active">
-                            <FontAwesomeIcon icon={faCheck} className="icon-check" />
-                            Activo
-                          </span>
-                        ) : (
-                          <span className="status-inactive">Inactivo</span>
-                        )}
-                      </td>
-                      <td className="date-cell"><FontAwesomeIcon icon={faCalendar} /> {" " + item.fecha}</td>
-                      <td className="actions-cell">
-                        <button 
-                          className="action-btn view-btn"
-                          onClick={() => handlePreview(item.id)}
-                          title="Vista previa"
-                        >
-                          <FontAwesomeIcon icon={faEye} />
-                        </button>
-                        <button 
-                          className="action-btn edit-btn"
-                          onClick={() => handleEdit(item.id)}
-                          title="Editar"
-                        >
-                          <FontAwesomeIcon icon={faPen} />
-                        </button>
-                        <button 
-                          className="action-btn delete-btn"
-                          onClick={() => handleDelete(item.id)}
-                          title="Eliminar"
-                        >
-                          <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                      </td>
+                      </th>
+                      <th className="th-type">
+                        <div className="header-content">
+                          <FontAwesomeIcon icon={faFilter} className="header-icon" />
+                          <span>Tipo</span>
+                        </div>
+                      </th>
+                      <th className="th-status">
+                        <div className="header-content">
+                          <FontAwesomeIcon icon={faCheck} className="header-icon" />
+                          <span>Estado</span>
+                        </div>
+                      </th>
+                      <th className="th-date">
+                        <div className="header-content">
+                          <FontAwesomeIcon icon={faCalendar} className="header-icon" />
+                          <span>Fecha</span>
+                        </div>
+                      </th>
+                      <th className="th-actions">
+                        <div className="header-content">
+                          <span>Acciones</span>
+                        </div>
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {currentItems.length > 0 ? (
+                      currentItems.map(item => (
+                        <tr key={item.id} className="styled-row content-row">
+                          <td className="preview-cell">
+                            <div className="preview-image-container">
+                              {item.imagen && item.imagen !== '/path/to/image' ? (
+                                <img 
+                                  src={item.imagen} 
+                                  alt={item.titulo} 
+                                  className="preview-image" 
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = 'https://via.placeholder.com/150?text=Sin+imagen';
+                                  }}
+                                />
+                              ) : (
+                                <div className="preview-image-placeholder">Sin imagen</div>
+                              )}
+                            </div>
+                          </td>
+                          <td className="content-cell">
+                            <div className="content-info">
+                              <div className="content-title">{item.titulo}</div>
+                              <div className="content-description">{item.descripcion}</div>
+                              {item.precio && (
+                                <div className="content-price">
+                                  <span className="price-label">{item.precio}</span>
+                                  {item.tamanos && <span className="sizes-info">• {item.tamanos}</span>}
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                          <td className="type-cell">
+                            <div
+                              className={`type-pill type-${item.tipo.toLowerCase().replace(/\s+/g, '-')}`}
+                              style={{
+                                backgroundColor: 
+                                  item.tipo === 'Pizzas' ? '#dc2626' :
+                                  item.tipo === 'Complementos' ? '#2563eb' :
+                                  item.tipo === 'Bebidas' ? '#16a34a' :
+                                  item.tipo === 'Banner' ? '#d97706' :
+                                  item.tipo === 'Recomendaciones' ? '#7c3aed' :
+                                  item.tipo === 'Populares' ? '#ea580c' :
+                                  '#6b7280',
+                                color: '#ffffff',
+                                fontWeight: '700'
+                              }}
+                            >
+                              <span className="type-text">{item.tipo}</span>
+                            </div>
+                          </td>
+                          <td className="status-cell">
+                            <div
+                              className={`estado-pill estado-${item.estado ? 'activo' : 'inactivo'}`}
+                              style={{
+                                backgroundColor: item.estado ? '#22c55e' : '#dc2626',
+                                color: '#ffffff',
+                                fontWeight: '700'
+                              }}
+                            >
+                              <span
+                                className="estado-dot"
+                                style={{
+                                  backgroundColor: item.estado ? '#16a34a' : '#b91c1c'
+                                }}
+                              ></span>
+                              <FontAwesomeIcon 
+                                icon={item.estado ? faCheck : faRotateLeft} 
+                                className="status-icon" 
+                              />
+                              <span className="estado-text">{item.estado ? 'Activo' : 'Inactivo'}</span>
+                            </div>
+                          </td>
+                          <td className="date-cell">
+                            <div className="date-info">
+                              <FontAwesomeIcon icon={faCalendar} className="icon-small date-icon" />
+                              <span className="date-text">{item.fecha}</span>
+                            </div>
+                          </td>
+                          <td className="actions-cell">
+                            <div className="action-buttons">
+                              <button
+                                className="btn-details enhanced-btn"
+                                onClick={() => handlePreview(item.id)}
+                                title="Vista previa"
+                              >
+                                <FontAwesomeIcon icon={faEye} className="btn-icon" />
+                                <span className="btn-text">Ver</span>
+                              </button>
+                              <button
+                                className="btn-edit enhanced-btn action-btn"
+                                onClick={() => handleEdit(item.id)}
+                                title="Editar"
+                              >
+                                <FontAwesomeIcon icon={faPen} className="action-icon" />
+                                <span className="btn-text">Editar</span>
+                              </button>
+                              <button
+                                className="btn-delete enhanced-btn action-btn"
+                                onClick={() => handleDelete(item.id)}
+                                title="Eliminar"
+                              >
+                                <FontAwesomeIcon icon={faTrash} className="action-icon" />
+                                <span className="btn-text">Eliminar</span>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr className="empty-row">
+                        <td colSpan="6" className="empty-cell">
+                          <div className="empty-state">
+                            <div className="empty-icon">
+                              <FontAwesomeIcon icon={faFileCirclePlus} className="no-data-icon" />
+                            </div>
+                            <div className="empty-text">
+                              No hay contenido para mostrar
+                            </div>
+                            <div className="empty-subtitle">
+                              Los productos aparecerán aquí cuando estén disponibles
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             {/* Paginación */}
@@ -513,14 +614,37 @@ const AgregarContenido = () => {
             </div>
           </div>
         </div>
-      )}
-
-      {/* Modal para agregar nuevo producto */}
+      )}      {/* Modal para agregar nuevo producto */}
       <NewProductModal 
         show={showAddModal} 
         onClose={() => setShowAddModal(false)} 
         onSuccess={handleAddSuccess} 
+      />      {/* Modal para editar producto */}
+      <NewProductModal 
+        show={showEditModal} 
+        onClose={() => {
+          setShowEditModal(false);
+          setEditingItem(null);
+        }} 
+        onSuccess={handleEditSuccess}
+        editingProduct={editingItem}
+        isEditing={true}
       />
+
+      {/* Componente de notificación */}
+      {notification && (
+        <div className={`notification-toast notification-${notification.type}`}>
+          <div className="notification-content">
+            <span className="notification-message">{notification.message}</span>
+            <button 
+              className="notification-close"
+              onClick={() => setNotification(null)}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
