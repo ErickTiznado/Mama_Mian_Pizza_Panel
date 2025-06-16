@@ -156,7 +156,7 @@ const ClientePerfilModal = ({ cliente, onClose, visible }) => {
     const telefonoLimpio = telefono.replace(/[\s\-\(\)]/g, '');
     
     // Mensaje profesional de saludo de la empresa
-    const mensaje = `¡Hola ${cliente.cliente}! 👋
+    const mensaje = `¡Hola ${cliente.cliente}! 
 
 Somos el equipo de Mama Mia Pizza. Esperamos que esté teniendo un excelente día.
 
