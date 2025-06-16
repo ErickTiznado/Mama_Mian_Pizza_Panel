@@ -144,7 +144,6 @@ const ClientePerfilModal = ({ cliente, onClose, visible }) => {
       alert('Error al cambiar la visibilidad del comentario. Por favor, intenta nuevamente.');
     }
   };
-
   // Función para contactar cliente por WhatsApp
   const handleContactarCliente = () => {
     const telefono = cliente.contacto?.telefono;
@@ -156,8 +155,14 @@ const ClientePerfilModal = ({ cliente, onClose, visible }) => {
     // Limpiar el número de teléfono (quitar espacios, guiones, etc.)
     const telefonoLimpio = telefono.replace(/[\s\-\(\)]/g, '');
     
-    // Mensaje predeterminado
-    const mensaje = `Hola ${cliente.cliente}, nos contactamos desde Mama Mia Pizza. ¿En qué podemos ayudarte?`;
+    // Mensaje profesional de saludo de la empresa
+    const mensaje = `¡Hola ${cliente.cliente}! 👋
+
+Somos el equipo de Mama Mia Pizza. Esperamos que esté teniendo un excelente día.
+
+Nos gustaría saber cómo ha sido su experiencia con nosotros y si hay algo en lo que podamos mejorar para servirle mejor.
+
+¡Gracias por elegirnos! 🍕`;
     
     // Crear URL de WhatsApp
     const whatsappURL = `https://wa.me/503${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
