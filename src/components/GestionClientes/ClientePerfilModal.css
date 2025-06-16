@@ -167,8 +167,9 @@
 .cliente-contacto-info {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 29px;
   margin-top: 20px;
+  
 }
 
 /* Comentarios */
@@ -640,5 +641,51 @@
     flex: 1;
     min-width: 100px;
     justify-content: center;
+  }
+}
+
+/* Botón Contactar por WhatsApp */
+.btn-contactar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  margin-top: 20px;
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
+}
+
+.btn-contactar:hover {
+  background: linear-gradient(135deg, #128C7E, #075E54);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+}
+
+.btn-contactar:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3);
+}
+
+.btn-contactar:disabled {
+  background: #64748b;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Responsive para el botón */
+@media (max-width: 768px) {
+  .btn-contactar {
+    padding: 10px 14px;
+    font-size: 13px;
   }
 }

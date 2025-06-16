@@ -302,7 +302,6 @@ useEffect(() => {
               </td>              <td>
                 <div className='acciones'>
                   <button className='btn-perfil' onClick={() => abrirModal(cl)}>Ver Perfil</button>
-                  <button className='btn-contactar'>Contactar</button>
                 </div>
               </td>
             </tr>

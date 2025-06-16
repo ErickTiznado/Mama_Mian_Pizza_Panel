@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './ClientePerfilModal.css';
-import { X, User, Mail, Phone, MapPin, Calendar, Star, CheckCircle, XCircle, Trash2 } from 'lucide-react';
+import { X, User, Mail, Phone, MapPin, Calendar, Star, CheckCircle, XCircle, Trash2, MessageCircle } from 'lucide-react';
 
 const ClientePerfilModal = ({ cliente, onClose, visible }) => {
   if (!visible) return null;
@@ -119,7 +119,6 @@ const ClientePerfilModal = ({ cliente, onClose, visible }) => {
       }
     }
   };
-
   const handleShowInStore = async (id, show) => {
     try {
       // Por ahora solo actualizar el estado local ya que no tienes endpoint específico para visibilidad
@@ -144,6 +143,27 @@ const ClientePerfilModal = ({ cliente, onClose, visible }) => {
       console.error('Error al cambiar visibilidad del comentario:', error);
       alert('Error al cambiar la visibilidad del comentario. Por favor, intenta nuevamente.');
     }
+  };
+
+  // Función para contactar cliente por WhatsApp
+  const handleContactarCliente = () => {
+    const telefono = cliente.contacto?.telefono;
+    if (!telefono) {
+      alert('No hay número de teléfono disponible para este cliente.');
+      return;
+    }
+
+    // Limpiar el número de teléfono (quitar espacios, guiones, etc.)
+    const telefonoLimpio = telefono.replace(/[\s\-\(\)]/g, '');
+    
+    // Mensaje predeterminado
+    const mensaje = `Hola ${cliente.cliente}, nos contactamos desde Mama Mia Pizza. ¿En qué podemos ayudarte?`;
+    
+    // Crear URL de WhatsApp
+    const whatsappURL = `https://wa.me/503${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
+    
+    // Abrir WhatsApp en una nueva ventana
+    window.open(whatsappURL, '_blank');
   };
 
   return (
@@ -192,11 +212,20 @@ const ClientePerfilModal = ({ cliente, onClose, visible }) => {
                   <div className="contacto-item">
                     <MapPin size={16} />
                     <span>{cliente.contacto?.direccion || 'Dirección no disponible'}</span>
-                  </div>
-                  <div className="contacto-item">
+                  </div>                  <div className="contacto-item">
                     <Calendar size={16} />
                     <span>{cliente.clienteDesde || 'Cliente desde fecha no disponible'}</span>
                   </div>
+                  
+                  <button 
+                    className='btn-contactar'
+                    onClick={handleContactarCliente}
+                    title="Contactar por WhatsApp"
+                  >
+                    <MessageCircle size={16} />
+                    Contactar por WhatsApp
+                  </button>
+
                 </div>
               </div>
 
