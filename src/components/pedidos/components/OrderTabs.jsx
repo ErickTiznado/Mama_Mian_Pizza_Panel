@@ -10,9 +10,14 @@ const OrderTabs = ({ activeFilter, handleFilterChange, setPaginaActual, counts =
       icon: <span className="circle-icon" style={{ backgroundColor: "#ffc107" }}></span>
     },
     {
-      key: "en_proceso",
+      key: "en proceso",
       label: "En Proceso",
       icon: <span className="circle-icon" style={{ backgroundColor: "#0dcaf0" }}></span>
+    },
+    {
+      key: "en camino",
+      label: "En Camino",
+      icon: <span className="circle-icon" style={{ backgroundColor: "#fd7e14" }}></span>
     },
     {
       key: "entregado",

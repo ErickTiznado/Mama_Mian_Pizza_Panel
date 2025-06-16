@@ -5,7 +5,12 @@ import {
   FaMapMarkerAlt,
   FaMoneyBillWave,
   FaPizzaSlice,
-  FaLayerGroup
+  FaLayerGroup,
+  FaPlay,
+  FaTruck,
+  FaCheck,
+  FaCheckCircle,
+  FaTimesCircle
 } from 'react-icons/fa';
 import "../OrderManager.css";
 
@@ -31,130 +36,234 @@ const OrderTable = ({
   const ordersEnPagina = displayOrders.slice(indexInicio, indexFin);
 
   const getProductIcon = (name) =>
-    name.toLowerCase().includes('pizza') ? <FaPizzaSlice className="icon-small" /> : <FaLayerGroup className="icon-small" />;
-
+    name.toLowerCase().includes('pizza') ? <FaPizzaSlice className="icon-small product-icon" /> : <FaLayerGroup className="icon-small product-icon" />;
   return (
     <div className="order__container">
       <div className="order__content">
         <table className="styled-table">
           <thead>
             <tr>
-              <th>Estado</th>
-              <th>Código + Hora</th>
-              <th>Cliente y Pago</th>
-              <th>Dirección</th>
-              <th>Productos</th>
-              <th>Total</th>
-              <th>Ver Detalles</th>
-              <th>Acción</th>
+              <th className="th-estado">
+                <div className="header-content">
+                  <span>Estado</span>
+                </div>
+              </th>
+              <th className="th-codigo">
+                <div className="header-content">
+                  <FaClock className="header-icon" />
+                  <span>Código + Hora</span>
+                </div>
+              </th>
+              <th className="th-cliente">
+                <div className="header-content">
+                  <FaMoneyBillWave className="header-icon" />
+                  <span>Cliente y Pago</span>
+                </div>
+              </th>
+              <th className="th-direccion">
+                <div className="header-content">
+                  <FaMapMarkerAlt className="header-icon" />
+                  <span>Dirección</span>
+                </div>
+              </th>
+              <th className="th-productos">
+                <div className="header-content">
+                  <FaPizzaSlice className="header-icon" />
+                  <span>Productos</span>
+                </div>
+              </th>
+              <th className="th-total">
+                <div className="header-content">
+                  <span>Total</span>
+                </div>
+              </th>
+              <th className="th-detalles">
+                <div className="header-content">
+                  <FaEye className="header-icon" />
+                  <span>Ver Detalles</span>
+                </div>
+              </th>
+              <th className="th-accion">
+                <div className="header-content">
+                  <span>Acción</span>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>
             {!loading && ordersEnPagina.length > 0 ? (
-              ordersEnPagina.map((order) => (
-                <tr key={order.id_pedido} className="styled-row">
-                 <td className="estado-cell">
-  <div
-    className="estado-pill"
-    style={{
-      backgroundColor:
-        order.estado === 'entregado'
-          ? '#3dfa69'
-          : order.estado === 'en_proceso'
-          ? 'rgb(0, 123, 255)'
-          : order.estado === 'cancelado'
-          ? 'rgb(255, 47, 0)'
-          : order.estado === 'pendiente'
-          ? '#ff8b07'
-          : '#ff8b07',
-      color:
-        order.estado === 'entregado'
-          ? ''
-          : order.estado === 'en_proceso'
-          ? '#856404'
-          : order.estado === 'pendiente'
-          ? '#721c24'
-          : '#383d41'
-    }}
-  >
-    <span
-      className="estado-dot"
-      style={{
-        backgroundColor:
-          order.estado === 'entregado'
-            ? '#28a745'
-            : order.estado === 'en_proceso'
-            ? '#rgb(3, 113, 231)'
-            : order.estado === 'pendiente'
-            ? '#dc3545'
-            : 'gray'
-      }}
-    ></span>
-    <span className="estado-text">{getStatusName(order.estado)}</span>
-  </div>
-</td>
-
-
-                  <td>
+              ordersEnPagina.map((order) => (                <tr key={order.id_pedido} className={`styled-row ${getRowBackgroundClass(order.fecha_pedido)} order-row`}>                  <td className="estado-cell">
+                    <div
+                      className={`estado-pill estado-${order.estado.replace(' ', '_')}`}
+                      style={{
+                        backgroundColor:
+                          order.estado === 'entregado'
+                            ? '#22c55e'  // Verde más oscuro para mejor contraste
+                            : order.estado === 'en proceso'
+                            ? '#2563eb'  // Azul más oscuro para mejor contraste
+                            : order.estado === 'cancelado'
+                            ? '#dc2626'  // Rojo más oscuro para mejor contraste
+                            : order.estado === 'pendiente'
+                            ? '#ea580c'  // Naranja más oscuro para mejor contraste
+                            : order.estado === 'en camino'
+                            ? '#d97706'  // Amarillo oscuro para mejor contraste
+                            : '#ea580c',
+                        color: '#ffffff',  // Texto blanco para máximo contraste
+                        fontWeight: '700'  // Texto más grueso para mejor legibilidad
+                      }}
+                    >
+                      <span
+                        className="estado-dot"
+                        style={{
+                          backgroundColor:
+                            order.estado === 'entregado'
+                              ? '#16a34a'  // Verde aún más oscuro para el punto
+                              : order.estado === 'en proceso'
+                              ? '#1d4ed8'  // Azul aún más oscuro para el punto
+                              : order.estado === 'pendiente'
+                              ? '#c2410c'  // Naranja aún más oscuro para el punto
+                              : order.estado === 'en camino'
+                              ? '#b45309'  // Amarillo aún más oscuro para el punto
+                              : order.estado === 'cancelado'
+                              ? '#b91c1c'  // Rojo aún más oscuro para el punto
+                              : '#6b7280'  // Gris por defecto
+                        }}
+                      ></span>
+                      <span className="estado-text">{getStatusName(order.estado)}</span>
+                    </div>
+                  </td><td className="codigo-cell">
                     <div className="code-time">
-                      <div className="code">{order.codigo_pedido}</div>
+                      <div className="code">
+                        <span className="code-label">#</span>
+                        <span className="code-number">{order.codigo_pedido}</span>
+                      </div>
                       <div className="time">
-                        <FaClock className="icon-small" /> {formatDate(order.fecha_pedido).split(' ')[1]}
+                        <FaClock className="icon-small time-icon" /> 
+                        <span className="time-text">{formatDate(order.fecha_pedido).split(' ')[1]}</span>
                       </div>
                     </div>
                   </td>
-                  <td>
+                  <td className="cliente-cell">
                     <div className="client-pay">
-                      <div className="client">{getClientName(order)}</div>
+                      <div className="client">
+                        <span className="client-name">{getClientName(order)}</span>
+                      </div>
                       <div className="pay">
-                        <FaMoneyBillWave className="icon-small" /> {order.metodo_pago}
+                        <FaMoneyBillWave className="icon-small payment-icon" /> 
+                        <span className="payment-method">{order.metodo_pago}</span>
                       </div>
                     </div>
                   </td>
-                  <td>
+                  <td className="direccion-cell">
                     <div className="address">
-                      <FaMapMarkerAlt className="icon-small" />
-                      {order.direccion_formateada || 'Recogida en tienda'}
+                      <FaMapMarkerAlt className="icon-small address-icon" />
+                      <span className="address-text">
+                        {order.direccion_formateada || 'Recogida en tienda'}
+                      </span>
                     </div>
                   </td>
-                  <td>
+                  <td className="productos-cell">
                     <div className="products">
                       {order.detalles.slice(0, 2).map((prod, idx) => (
                         <div key={idx} className="product-item">
-                          {getProductIcon(prod.nombre_producto_original)} {prod.nombre_producto_original} ({prod.cantidad})
+                          <span className="product-icon-wrapper">
+                            {getProductIcon(prod.nombre_producto_original)}
+                          </span>
+                          <span className="product-name">{prod.nombre_producto_original}</span>
+                          <span className="product-quantity">({prod.cantidad})</span>
                         </div>
                       ))}
+                      {order.detalles.length > 2 && (
+                        <div className="more-products">
+                          +{order.detalles.length - 2} más...
+                        </div>
+                      )}
                     </div>
                   </td>
                   <td className="total-cell">
-                    ${parseFloat(order.total).toFixed(2)}
-                  </td>
-                  <td>
+                    <div className="total-wrapper">
+                      <span className="currency-symbol">$</span>
+                      <span className="amount">{parseFloat(order.total).toFixed(2)}</span>
+                    </div>
+                  </td>                  <td className="detalles-cell">
                     <button
-  className="btn-details"
-  onClick={() => {
-    console.log("CLICK DETALLES:", order);
-    handleViewDetails(order);
-  }}
->
-  <FaEye /> Ver Detalles
-</button>
-
-                  </td>
-                  <td>
-                    <button
-                      className="btn-start"
-                      onClick={() => changeOrderStatus(order.id_pedido, 'en_proceso')}
+                      className="btn-details enhanced-btn"
+                      onClick={() => {
+                        console.log("CLICK DETALLES:", order);
+                        handleViewDetails(order);
+                      }}
                     >
-                      ▶ Iniciar
+                      <FaEye className="btn-icon" />
+                      <span className="btn-text">Ver Detalles</span>
                     </button>
+                  </td>                  <td className="accion-cell">
+                    <div className="action-buttons">
+                      {order.estado === "pendiente" && (
+                        <button
+                          className="btn-start enhanced-btn action-btn"
+                          onClick={() => changeOrderStatus(order.id_pedido, 'en proceso')}
+                        >
+                          <FaPlay className="action-icon" />
+                          <span className="btn-text">Iniciar</span>
+                        </button>
+                      )}
+                      {order.estado === "en proceso" && (
+                        <button
+                          className="btn-dispatch enhanced-btn action-btn"
+                          onClick={() => changeOrderStatus(order.id_pedido, 'en camino')}
+                        >
+                          <FaTruck className="action-icon" />
+                          <span className="btn-text">Enviar</span>
+                        </button>
+                      )}
+                      {order.estado === "en camino" && (
+                        <button
+                          className="btn-deliver enhanced-btn action-btn"
+                          onClick={() => changeOrderStatus(order.id_pedido, 'entregado')}
+                        >
+                          <FaCheck className="action-icon" />
+                          <span className="btn-text">Entregar</span>
+                        </button>
+                      )}                      {(order.estado === "entregado" || order.estado === "cancelado") && (
+                        <div className={`status-final enhanced-status status-${order.estado}`}>
+                          {order.estado === "entregado" ? (
+                            <>
+                              <FaCheckCircle className="status-icon" />
+                              <span className="status-text">Entregado</span>
+                            </>
+                          ) : (
+                            <>
+                              <FaTimesCircle className="status-icon" />
+                              <span className="status-text">Cancelado</span>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="8" style={{ textAlign: 'center', padding: '20px' }}>
-                  {loading ? 'Cargando pedidos...' : 'No hay pedidos para mostrar'}
+              ))            ) : (
+              <tr className="empty-row">
+                <td colSpan="8" className="empty-cell">
+                  <div className="empty-state">
+                    <div className="empty-icon">
+                      {loading ? (
+                        <div className="loading-spinner">
+                          <div className="spinner"></div>
+                        </div>
+                      ) : (
+                        <FaLayerGroup className="no-data-icon" />
+                      )}
+                    </div>
+                    <div className="empty-text">
+                      {loading ? 'Cargando pedidos...' : 'No hay pedidos para mostrar'}
+                    </div>
+                    {!loading && (
+                      <div className="empty-subtitle">
+                        Los pedidos aparecerán aquí cuando estén disponibles
+                      </div>
+                    )}
+                  </div>
                 </td>
               </tr>
             )}

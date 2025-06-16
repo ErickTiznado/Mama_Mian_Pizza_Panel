@@ -82,8 +82,7 @@ const OrderManager = () => {
       setError(null);
       const response = await axios.get(`${API_BASE_URL}/orders/status/${status}`);
       console.log(`Respuesta de la API (pedidos con estado ${status}):`, response.data);
-      setOrders(response.data);
-      setPaginaActual(1); // Reset de paginación al cambiar filtros
+      setOrders(response.data);      setPaginaActual(1); // Reset de paginación al cambiar filtros
       setLoading(false);
       
       // Eliminamos la creación automática de notificaciones para evitar duplicados
@@ -93,12 +92,12 @@ const OrderManager = () => {
       console.error("Error fetching orders:", err);
     }
   };
-
+  
   // Función para actualizar el estado de un pedido
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
       setError(null);
-      const response = await axios.put(`${API_BASE_URL}/orders/${orderId}/status`, {
+      const response = await axios.put(`https://api.mamamianpizza.com/api/orders/orders/${orderId}/status`, {
         estado: newStatus
       });
       console.log("Respuesta de actualización de estado:", response.data);
@@ -185,12 +184,12 @@ const OrderManager = () => {
     updateOrderStatus(orderId, newStatus);
   }
 };
-
   // Función para obtener el nombre del estado
   const getStatusName = (status) => {
     const statusMap = {
       "pendiente": "Pendiente",
-      "en_proceso": "En Proceso",
+      "en proceso": "En Proceso",
+      "en camino": "En Camino",
       "entregado": "Entregado",
       "cancelado": "Cancelado"
     };
@@ -342,13 +341,12 @@ const OrderManager = () => {
     setPaginaActual(1);
     // Volver a mostrar todos los pedidos del filtro principal
     fetchOrdersByStatus(activeFilter);
-  };
-  
-  // Calcular resultados totales para mostrar en contador
+  };    // Calcular resultados totales para mostrar en contador
   const totalPedidos = filtrosAplicados ? filteredOrders.length : orders.length;
   const counts = {
   pendiente: orders.filter(p => p.estado === "pendiente").length,
-  en_proceso: orders.filter(p => p.estado === "en_proceso").length,
+  "en proceso": orders.filter(p => p.estado === "en proceso").length,
+  "en camino": orders.filter(p => p.estado === "en camino").length,
   entregado: orders.filter(p => p.estado === "entregado").length,
   cancelado: orders.filter(p => p.estado === "cancelado").length
 };
