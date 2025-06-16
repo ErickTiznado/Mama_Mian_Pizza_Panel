@@ -4,14 +4,13 @@ import { X, User, Mail, Phone, MapPin, Calendar, Star, CheckCircle, XCircle, Tra
 
 const ClientePerfilModal = ({ cliente, onClose, visible }) => {
   if (!visible) return null;
-
   // Usar reseñas reales de la API y transformarlas al formato del componente
   const comentarios = cliente.resenas ? cliente.resenas.map(resena => ({
     id: resena.id,
     texto: resena.comentario,
     fecha: resena.fecha,
     experiencia: resena.valoracion,
-    estado: resena.estado || 'Pendiente', // Estado por defecto si no viene de la API
+    estado: resena.aprobada === 1 ? 'Aprobado' : resena.aprobada === 0 ? 'Rechazado' : 'Pendiente',
     mostrarEnTienda: resena.mostrarEnTienda !== undefined ? resena.mostrarEnTienda : true,
     producto: resena.producto
   })) : [];
@@ -21,15 +20,41 @@ const ClientePerfilModal = ({ cliente, onClose, visible }) => {
     totalPedidos: cliente.pedidos || 0,
     totalGastado: cliente.totalGastado ? `$${cliente.totalGastado}` : '$0.00',
     pedidosRecientes: cliente.pedidosRecientes || []
-  };
-  // Estado para manejar cambios locales en comentarios
+  };  // Estado para manejar cambios locales en comentarios
   const [comentariosState, setComentariosState] = useState(comentarios);
+  // URL base de la API
+  const API_URL = 'https://api.mamamianpizza.com';
 
-  // Manejadores para los botones de comentarios
+  // Función adicional para obtener reseñas por estado de aprobación (opcional)
+  const fetchResenasByApprovalStatus = async (aprobada) => {
+    try {
+      const response = await fetch(`${API_URL}/api/resenas/estado/${aprobada}`);
+      if (!response.ok) {
+        throw new Error('Error al obtener reseñas por estado');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error al obtener reseñas por estado:', error);
+      return [];
+    }
+  };
+
+  // Manejadores para los botones de comentarios con integración a la API
   const handleApprove = async (id) => {
     try {
-      // Aquí puedes agregar la llamada a tu API para aprobar
-      // await fetch(`${API_URL}/api/resenas/${id}/aprobar`, { method: 'PUT' });
+      // Llamada a la API para cambiar el estado de aprobación (1 = aprobado)
+      const response = await fetch(`${API_URL}/api/resenas/estado/${id}`, { 
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ aprobada: 1 })
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al aprobar el comentario');
+      }
       
       setComentariosState(prev => 
         prev.map(comentario => 
@@ -41,13 +66,24 @@ const ClientePerfilModal = ({ cliente, onClose, visible }) => {
       console.log('Comentario aprobado:', id);
     } catch (error) {
       console.error('Error al aprobar comentario:', error);
+      alert('Error al aprobar el comentario. Por favor, intenta nuevamente.');
     }
   };
 
   const handleReject = async (id) => {
     try {
-      // Aquí puedes agregar la llamada a tu API para rechazar
-      // await fetch(`${API_URL}/api/resenas/${id}/rechazar`, { method: 'PUT' });
+      // Llamada a la API para cambiar el estado de aprobación (0 = no aprobado/rechazado)
+      const response = await fetch(`${API_URL}/api/resenas/estado/${id}`, { 
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ aprobada: 0 })
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al rechazar el comentario');
+      }
       
       setComentariosState(prev => 
         prev.map(comentario => 
@@ -59,31 +95,35 @@ const ClientePerfilModal = ({ cliente, onClose, visible }) => {
       console.log('Comentario rechazado:', id);
     } catch (error) {
       console.error('Error al rechazar comentario:', error);
+      alert('Error al rechazar el comentario. Por favor, intenta nuevamente.');
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('¿Estás seguro de que quieres eliminar este comentario?')) {
+    if (window.confirm('¿Estás seguro de que quieres eliminar este comentario? Esta acción no se puede deshacer.')) {
       try {
-        // Aquí puedes agregar la llamada a tu API para eliminar
-        // await fetch(`${API_URL}/api/resenas/${id}`, { method: 'DELETE' });
+        // Llamada a la API para eliminar la reseña
+        const response = await fetch(`${API_URL}/api/resenas/${id}`, { 
+          method: 'DELETE' 
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al eliminar el comentario');
+        }
         
         setComentariosState(prev => prev.filter(comentario => comentario.id !== id));
         console.log('Comentario eliminado:', id);
       } catch (error) {
         console.error('Error al eliminar comentario:', error);
+        alert('Error al eliminar el comentario. Por favor, intenta nuevamente.');
       }
     }
   };
 
   const handleShowInStore = async (id, show) => {
     try {
-      // Aquí puedes agregar la llamada a tu API para cambiar visibilidad
-      // await fetch(`${API_URL}/api/resenas/${id}/visibilidad`, { 
-      //   method: 'PUT', 
-      //   body: JSON.stringify({ mostrarEnTienda: show }) 
-      // });
-      
+      // Por ahora solo actualizar el estado local ya que no tienes endpoint específico para visibilidad
+      // Podrías agregar un endpoint adicional o usar el campo 'mostrarEnTienda' en tu API
       setComentariosState(prev => 
         prev.map(comentario => 
           comentario.id === id 
@@ -92,8 +132,17 @@ const ClientePerfilModal = ({ cliente, onClose, visible }) => {
         )
       );
       console.log(`${show ? 'Mostrar' : 'Ocultar'} comentario en tienda:`, id);
+      
+      // TODO: Implementar endpoint para visibilidad si es necesario
+      // const response = await fetch(`${API_URL}/api/resenas/${id}/visibilidad`, { 
+      //   method: 'PUT', 
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ mostrarEnTienda: show }) 
+      // });
+      
     } catch (error) {
       console.error('Error al cambiar visibilidad del comentario:', error);
+      alert('Error al cambiar la visibilidad del comentario. Por favor, intenta nuevamente.');
     }
   };
 
@@ -241,14 +290,13 @@ const ClientePerfilModal = ({ cliente, onClose, visible }) => {
 
                       <div className="comentario-texto">
                         "{comentario.texto}"
-                      </div>
-
-                      <div className="comentario-actions">
+                      </div>                      <div className="comentario-actions">
                         <div className="comentario-estado">
                           <span>Estado:</span>
                           <div className={`badge-${comentario.estado.toLowerCase()}`}>
                             {comentario.estado === 'Aprobado' ? <CheckCircle size={14} /> : 
-                             comentario.estado === 'Rechazado' ? <XCircle size={14} /> : <XCircle size={14} />}
+                             comentario.estado === 'Rechazado' ? <XCircle size={14} /> : 
+                             <XCircle size={14} />}
                             {comentario.estado}
                           </div>
                         </div>
@@ -258,6 +306,7 @@ const ClientePerfilModal = ({ cliente, onClose, visible }) => {
                             <button 
                               className="btn-aprobar"
                               onClick={() => handleApprove(comentario.id)}
+                              title="Aprobar comentario"
                             >
                               <CheckCircle size={14} />
                               Aprobar
@@ -267,6 +316,7 @@ const ClientePerfilModal = ({ cliente, onClose, visible }) => {
                             <button 
                               className="btn-rechazar"
                               onClick={() => handleReject(comentario.id)}
+                              title="Rechazar comentario"
                             >
                               <XCircle size={14} />
                               Rechazar
