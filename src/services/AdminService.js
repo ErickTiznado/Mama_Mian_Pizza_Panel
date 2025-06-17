@@ -22,7 +22,7 @@ class AdminService {
   }  // GET - Obtener todos los administradores
   static async getAllAdmins() {
     try {
-      const response = await fetch(`${API_BASE_URL}/Getadmins`, {
+      const response = await fetch(`${API_BASE_URL}/Gettadmins`, {
         method: 'GET',
         headers: this.getHeaders()
       });
