@@ -1,29 +1,39 @@
 /* Global color variables for MamaMianPizza */
 :root {
   /* Base colors */
-  --color-primary: #111828;           /* Negro ligeramente más suave */
-  --color-secondary: #1E1E1E;        /* Azul oscuro profesional */
-  --color-tertiary: #1E2533;         /* Azul-gris para profundidad */
-  --color-quaternary: #E5D79A;        /* Gris muy claro para fondos */
-  --color-quinary: #F5F5F5;           /* Blanco roto para contraste */
-  --color-accent: #3D84B8;           /* Azul corporativo para acentos */
+  --color-primary: #0f172a;           /* Dark slate para headers */
+  --color-secondary: #1e293b;        /* Slate principal para fondos */
+  --color-tertiary: #334155;         /* Slate claro para contenedores */
+  --color-quaternary: #e2e8f0;       /* Gris claro para texto */
+  --color-quinary: #f8fafc;          /* Blanco para contraste */
+  --color-accent: #f97316;           /* Orange accent principal */
+  
+  /* Background colors */
+  --color-bg-primary: #1e293b;       /* Fondo principal de la app */
+  --color-bg-secondary: #0f172a;     /* Fondo para contenedores */
+  --color-bg-tertiary: #334155;      /* Fondo para elementos */
   
   /* Status colors */
-  --color-success: #4CAF50;          /* Verde para acciones positivas */
+  --color-success: #22c55e;          /* Verde para acciones positivas */
   --color-success-light: #B1F6BB;
   --color-success-text: #007712;
-  --color-warning: #FFC107;          /* Amarillo para advertencias */
+  --color-warning: #f59e0b;          /* Amarillo para advertencias */
   --color-warning-light: #ECFE48;
   --color-warning-text: #776D00;
-  --color-danger: #E53935;           /* Rojo para acciones críticas */
+  --color-danger: #ef4444;           /* Rojo para acciones críticas */
   --color-danger-light: #F6B1B1;
   --color-danger-text: #821717;
   
   /* Text colors */
-  --color-text: #333333;             /* Texto principal más suave */
-  --color-text-light: #909497;
-  --color-text-lighter: #b3b6b7;
-  --color-white: #FFFFFF;
+  --color-text: #e2e8f0;             /* Texto principal claro */
+  --color-text-light: #94a3b8;       /* Texto secundario */
+  --color-text-lighter: #64748b;     /* Texto terciario */
+  --color-white: #ffffff;
+  
+  /* Orange accent variations */
+  --orange-accent: #f97316;
+  --orange-hover: #ea580c;
+  --orange-light: rgba(249, 115, 22, 0.1);
   
   /* Brand colors */
   --color-brand-yellow: rgba(254, 178, 72, 1);

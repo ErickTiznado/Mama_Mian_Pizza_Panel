@@ -68,14 +68,20 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
       label: 'Informes',
       icon: ChartLine,
       hasNotification: false
-    },
-    {
+    },    {
       id: 'clientes',
       path: '/clientes',
       label: 'Clientes',
       icon: Users,
       hasNotification: true,
       notificationCategory: 'clientes'
+    },
+    {
+      id: 'administradores',
+      path: '/administradores',
+      label: 'Administradores',
+      icon: Settings,
+      hasNotification: false
     },
     {
       id: 'tienda',
