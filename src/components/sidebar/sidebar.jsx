@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   House,
@@ -12,9 +12,8 @@ import {
   BellOff,
   ChevronLeft,
   ChevronRight,
-  Menu,
-  X,
   User,
+    LogOut,
   Settings
 } from 'lucide-react';
 import Logo from '../../assets/Logo.png';
@@ -29,8 +28,9 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [showPermissionBanner, setShowPermissionBanner] = useState(false);
   const [activeItem, setActiveItem] = useState('/home');
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const adminRef = useRef();
 
-  // Configuración de elementos del menú
   const menuItems = [
     {
       id: 'home',
@@ -76,24 +76,17 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
       icon: Users,
       hasNotification: true,
       notificationCategory: 'clientes'
-    },    {
+    },
+    {
       id: 'tienda',
       path: 'https://mamamianpizza.com/',
       label: 'Tienda',
       icon: Store,
       hasNotification: false,
       isExternal: true
-    },
-    {
-      id: 'configuracion',
-      path: '/configuracion',
-      label: 'Configuración',
-      icon: Settings,
-      hasNotification: false
     }
   ];
 
-  // Detectar el tamaño de pantalla
   useEffect(() => {
     const checkScreenSize = () => {
       const mobile = window.innerWidth <= 768;
@@ -108,17 +101,25 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  // Verificar permisos de notificación
   useEffect(() => {
     if ('Notification' in window) {
       setShowPermissionBanner(Notification.permission === 'default');
     }
   }, [permissionStatus]);
 
-  // Establecer el elemento activo basado en la ruta actual
   useEffect(() => {
     const currentPath = window.location.pathname;
     setActiveItem(currentPath);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (adminRef.current && !adminRef.current.contains(e.target)) {
+        setIsAdminOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleNavigation = (path, isExternal = false) => {
@@ -128,17 +129,17 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
       navigate(path);
       setActiveItem(path);
     }
-    
-    // Cerrar sidebar en móvil después de navegar
+
     if (isMobile) {
       setIsCollapsed(true);
     }
+
+    setIsAdminOpen(false);
   };
+
   const toggleSidebar = () => {
     const newCollapsedState = !isCollapsed;
     setIsCollapsed(newCollapsedState);
-    
-    // Comunicar el cambio al componente padre
     if (onToggle) {
       onToggle(newCollapsedState);
     }
@@ -160,9 +161,14 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
 
   const handleDismissBanner = () => {
     setShowPermissionBanner(false);
-  };  return (
+  };
+
+  const handleAdminClick = () => {
+    setIsAdminOpen(prev => !prev);
+  };
+
+  return (
     <>
-      {/* Overlay para móvil */}
       {isMobile && !isCollapsed && (
         <div 
           className="sidebar-overlay"
@@ -171,14 +177,9 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
       )}
 
       <nav className={`sidebar ${isCollapsed ? 'sidebar--collapsed' : 'sidebar--expanded'} ${isMobile ? 'sidebar--mobile' : ''}`}>
-        {/* Header */}
         <header className="sidebar__header">
           <div className="sidebar__brand">
-            <img 
-              src={Logo} 
-              alt="Mama Mian Pizza" 
-              className="sidebar__logo"
-            />
+            <img src={Logo} alt="Mama Mian Pizza" className="sidebar__logo" />
             {!isCollapsed && (
               <div className="sidebar__brand-text">
                 <h1 className="sidebar__title">Mama Mian</h1>
@@ -188,7 +189,6 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
           </div>
         </header>
 
-        {/* Permission Banner */}
         {showPermissionBanner && !isCollapsed && (
           <div className="sidebar__notification-banner">
             <div className="notification-banner__content">
@@ -198,29 +198,21 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
               </p>
             </div>
             <div className="notification-banner__actions">
-              <button 
-                className="notification-banner__button notification-banner__button--accept"
-                onClick={handleRequestPermission}
-              >
+              <button className="notification-banner__button notification-banner__button--accept" onClick={handleRequestPermission}>
                 Activar
               </button>
-              <button 
-                className="notification-banner__button notification-banner__button--dismiss"
-                onClick={handleDismissBanner}
-              >
+              <button className="notification-banner__button notification-banner__button--dismiss" onClick={handleDismissBanner}>
                 Ahora no
               </button>
             </div>
           </div>
         )}
 
-        {/* Navigation Menu */}
         <nav className="sidebar__navigation">
           <ul className="sidebar__menu">
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeItem === item.path;
-              
               return (
                 <li key={item.id} className="sidebar__menu-item">
                   <button
@@ -231,11 +223,8 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
                   >
                     <div className="sidebar__link-content">
                       <Icon size={24} className="sidebar__icon" />
-                      {!isCollapsed && (
-                        <span className="sidebar__label">{item.label}</span>
-                      )}
+                      {!isCollapsed && <span className="sidebar__label">{item.label}</span>}
                     </div>
-                    
                     {item.hasNotification && (
                       <div className="sidebar__notification">
                         <NotificationBell 
@@ -249,9 +238,9 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
               );
             })}
           </ul>
-        </nav>        {/* Footer */}
+        </nav>
+
         <div className="sidebar__footer">
-          {/* Notification toggle */}
           {permissionStatus !== 'granted' && !showPermissionBanner && (
             <button 
               className="sidebar__notification-toggle"
@@ -264,8 +253,9 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
                   Activar notificaciones
                 </span>
               )}
-            </button>          )}
-            {/* Sidebar toggle button */}
+            </button>
+          )}
+
           <button 
             className="sidebar__toggle"
             onClick={toggleSidebar}
@@ -284,8 +274,12 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
               </>
             )}
           </button>
-            {/* User Info Section */}
-          <div className="sidebar__user-info">
+
+          <div 
+            className="sidebar__user-info"
+            ref={adminRef}
+            onClick={handleAdminClick}
+          >
             <div className="sidebar__user-avatar">
               <div className="user-avatar__circle">
                 <User size={20} className="user-avatar__icon" />
@@ -297,12 +291,41 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
                       <User size={14} className="user-details__icon" />
                       Admin
                     </span>
-                    <ChevronRight size={16} className="user-details__chevron" />
+                    <ChevronRight size={16} className={`user-details__chevron ${isAdminOpen ? 'open' : ''}`} />
                   </div>
                   <span className="user-details__version">Dashboard v2.1.0</span>
                 </div>
               )}
             </div>
+
+            {!isCollapsed && (
+             <div className={`sidebar__admin-dropdown ${isAdminOpen ? 'open' : ''}`}>
+  <button
+    className="sidebar__dropdown-item"
+    onClick={(e) => {
+      e.stopPropagation();
+      handleNavigation('/configuracion');
+    }}
+  >
+    <Settings size={16} />
+    <span>Configuración</span>
+  </button>
+  <button
+    className="sidebar__dropdown-item logout"
+    onClick={(e) => {
+      e.stopPropagation();
+      // Aquí puedes ejecutar logout real si lo tienes
+      console.log('Cerrando sesión...');
+      navigate('/login'); // Redirige al login u otra ruta
+    }}
+    
+  >
+    <LogOut size={16} />
+    <span>Cerrar sesión</span>
+  </button>
+</div>
+
+            )}
           </div>
         </div>
       </nav>
@@ -311,3 +334,4 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
 };
 
 export default Sidebar;
+
