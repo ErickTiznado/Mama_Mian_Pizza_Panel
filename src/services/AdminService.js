@@ -1,6 +1,6 @@
 // AdminService.js - Servicio para manejo de administradores
 
-const API_BASE_URL = 'https://api.mamamianpizza.com/api/users/gatadmins';
+const API_BASE_URL = 'https://api.mamamianpizza.com/api/users';
 
 class AdminService {
   // Headers comunes para todas las requests
@@ -19,11 +19,10 @@ class AdminService {
       throw new Error(errorData.message || `Error ${response.status}: ${response.statusText}`);
     }
     return response.json();
-  }
-  // GET - Obtener todos los administradores
+  }  // GET - Obtener todos los administradores
   static async getAllAdmins() {
     try {
-      const response = await fetch(API_BASE_URL, {
+      const response = await fetch(`${API_BASE_URL}/Getadmins`, {
         method: 'GET',
         headers: this.getHeaders()
       });
@@ -45,7 +44,7 @@ class AdminService {
       // Log para verificar la estructura de datos
       console.log('Datos enviados a la API:', JSON.stringify(adminData, null, 2));
       
-      const response = await fetch(API_BASE_URL, {
+      const response = await fetch(`${API_BASE_URL}/gatadmins`, {
         method: 'POST',
         headers: this.getHeaders(),
         body: JSON.stringify(adminData)
@@ -59,13 +58,12 @@ class AdminService {
       console.error('Error al crear administrador:', error);
       throw error;
     }
-  }
-  // PUT - Actualizar administrador
+  }  // PUT - Actualizar administrador
   static async updateAdmin(adminId, adminData) {
     try {
       console.log('Actualizando administrador:', adminId, JSON.stringify(adminData, null, 2));
       
-      const response = await fetch(`${API_BASE_URL}/${adminId}`, {
+      const response = await fetch(`${API_BASE_URL}/Updateadmins/${adminId}`, {
         method: 'PUT',
         headers: this.getHeaders(),
         body: JSON.stringify(adminData)
@@ -76,13 +74,12 @@ class AdminService {
       throw error;
     }
   }
-
   // DELETE - Eliminar administrador
   static async deleteAdmin(adminId) {
     try {
       console.log('Eliminando administrador:', adminId);
       
-      const response = await fetch(`${API_BASE_URL}/${adminId}`, {
+      const response = await fetch(`${API_BASE_URL}/Deleteadmins/${adminId}`, {
         method: 'DELETE',
         headers: this.getHeaders()
       });
@@ -91,12 +88,11 @@ class AdminService {
       console.error('Error al eliminar administrador:', error);
       throw error;
     }
-  }
-  // PUT - Cambiar estado del administrador (activo/inactivo)
+  }  // PUT - Cambiar estado del administrador (activo/inactivo)
   static async toggleAdminStatus(adminId, currentStatus) {
     const newStatus = currentStatus === 'activo' ? 'inactivo' : 'activo';
     try {
-      const response = await fetch(`${API_BASE_URL}/${adminId}`, {
+      const response = await fetch(`${API_BASE_URL}/Updateadmins/${adminId}`, {
         method: 'PUT',
         headers: this.getHeaders(),
         body: JSON.stringify({ 
