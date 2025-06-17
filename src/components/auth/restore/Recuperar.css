@@ -1,7 +1,7 @@
 @import '../../../styles/variables.css';
 
 .recuperar-page {
-    background-color: #fff7e6;
+    background-color: #1e293b;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -10,70 +10,87 @@
   }
   
   .recuperar-container {
-    background-color: white;
-    border: 2px solid var(--color-danger);
-    border-radius: 8px;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 12px;
     padding: 30px 40px;
     text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     width: 400px;
   }
   
   .recuperar-container h2 {
-    color: var(--color-danger);
+    color: #e2e8f0;
     margin-bottom: 10px;
+    font-weight: 600;
   }
   
   .recuperar-container .descripcion {
-    color: #5c5c5c;
+    color: #94a3b8;
     font-size: 14px;
     margin-bottom: 20px;
   }
   
   .recuperar-container input {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #cc0000;
-    border-radius: 6px;
+    padding: 12px;
+    border: 1px solid #334155;
+    border-radius: 8px;
     margin-bottom: 15px;
     font-size: 16px;
+    background-color: #111827;
+    color: #e2e8f0;
+    transition: border-color 0.2s ease;
+  }
+
+  .recuperar-container input:focus {
+    outline: none;
+    border-color: #f97316;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
   }
   
   .recuperar-container button {
-    background-color: var(--color-brand-yellow);
-    color: var(--color-danger-text);
-    font-weight: bold;
-    padding: 10px 20px;
+    background-color: #f97316;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 12px 24px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.2s ease;
+    font-size: 16px;
   }
   
   .recuperar-container button:hover {
-    background-color: #e67e00;
+    background-color: #ea580c;
+    transform: translateY(-1px);
   }
-  
-  .recuperar-container .volver {
-    margin-top: 15px;
+    .recuperar-container .volver {
+    margin-top: 20px;
     font-size: 14px;
   }
   
   .recuperar-container .volver a {
-    color: var(--color-danger);
+    color: #f97316;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  .recuperar-container .volver a:hover {
+    color: #ea580c;
+    text-decoration: underline;
   }
   
   .recuperar-notificacion {
     position: absolute;
     top: 30px;
     right: 30px;
-    background-color: white;
-    border: 2px solid var(--color-danger);
-    color: var(--color-danger);
-    padding: 10px 20px;
+    background-color: #0f172a;
+    border: 1px solid #22c55e;
+    color: #22c55e;
+    padding: 12px 20px;
     border-radius: 8px;
     font-size: 14px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }

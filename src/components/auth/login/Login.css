@@ -7,7 +7,7 @@
 .login-title{
   font-size: 1.8rem;
   font-weight: bold;
-  color: var(--color-brand-yellow);
+  color: #f97316;
 }
 
 .login-page {
@@ -17,10 +17,11 @@
   justify-content: center;
   height: 100vh;
   width: 100vw;
+  background-color: #1e293b;
 }
 
 .login-form-title {
-  color: var(--color-white);
+  color: #e2e8f0;
 }
 
 .login-container {
@@ -33,22 +34,31 @@
 }
 
 .form-box {
-  background: var(--login-background);
-  border: 2px solid var(--color-white);
-  border-radius: 6px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 12px;
   padding: 30px 40px;
   width: 100%;
   max-width: 600px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   text-align: center;
 }
 
 .login-form input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-top: 45px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  background-color: #111827;
+  color: #e2e8f0;
+  transition: border-color 0.2s ease;
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
 }
 
 .password-container {
@@ -61,13 +71,22 @@
   right: 10px;
   transform: translateY(-50%);
   cursor: pointer;
-  color: var(--color-white);
+  color: #94a3b8;
+  transition: color 0.2s ease;
+}
+
+.password-container i:hover {
+  color: #f97316;
 }
 
 .login-error-message {
-  color: #c53030;
+  color: #ef4444;
   font-size: 14px;
   margin: 10px 0;
+  background-color: rgba(239, 68, 68, 0.1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .login-header{
@@ -79,45 +98,56 @@
 }
 
 .login-form button {
-  background-color: var(--color-brand-yellow);
-  color: var(--color-brand-red);
+  background-color: #f97316;
+  color: #ffffff;
   border: none;
-  padding: 6px;
+  padding: 12px 24px;
   width: 40%;
-  border-radius: 6px;
+  border-radius: 8px;
   margin-top: 15px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.login-form button:hover {
+  background-color: #ea580c;
+  transform: translateY(-1px);
 }
 
 .forgot-link {
-  color: var(--color-white);
+  color: #f97316;
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 .forgot-link:hover {
+  color: #ea580c;
   text-decoration: underline;
 }
 
 .register-text {
   margin-top: 15px;
   font-size: 14px;
-  color: var(--color-white);
-  border-left: var(--color-brand-yellow) 3px solid;
+  color: #e2e8f0;
+  border-left: #f97316 3px solid;
+  padding-left: 12px;
 }
 
 .forgot-text{
   margin-top: 15px;
   font-size: 14px;
-  color: var(--color-white);
+  color: #e2e8f0;
 }
 
 .register-text a {
-  color: var(--color-brand-red);
-  font-weight: bold;
+  color: #f97316;
+  font-weight: 600;
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 .register-text a:hover {
+  color: #ea580c;
   text-decoration: underline;
 }

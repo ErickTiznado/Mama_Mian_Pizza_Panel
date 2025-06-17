@@ -1,7 +1,7 @@
 @import '../../../styles/variables.css';
 
 .verificar-page {
-    background-color: #fff7e6;
+    background-color: #1e293b;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -10,22 +10,23 @@
   }
   
   .verificar-container {
-    background-color: white;
-    border: 2px solid var(--color-danger);
-    border-radius: 8px;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 12px;
     padding: 30px 40px;
     text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     width: 400px;
   }
   
   .verificar-container h2 {
-    color: var(--color-danger);
+    color: #e2e8f0;
     margin-bottom: 10px;
+    font-weight: 600;
   }
   
   .verificar-container .descripcion {
-    color: var(--color-danger-text);
+    color: #94a3b8;
     font-size: 14px;
     margin-bottom: 20px;
     margin-top: 25px;
@@ -33,51 +34,70 @@
   
   .verificar-container input {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #cc0000;
-    border-radius: 6px;
+    padding: 12px;
+    border: 1px solid #334155;
+    border-radius: 8px;
     margin-bottom: 15px;
     font-size: 16px;
     outline: none;
     margin-top: 15px;
+    background-color: #111827;
+    color: #e2e8f0;
+    transition: border-color 0.2s ease;
+  }
+
+  .verificar-container input:focus {
+    border-color: #f97316;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
   }
   
   .verificar-error-message {
-    color: red;
+    color: #ef4444;
     font-size: 14px;
     margin-top: 5px;
+    background-color: rgba(239, 68, 68, 0.1);
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
   }
   
   .verificar-container button {
-    background-color: var(--color-brand-yellow);
-    color: var(--color-danger-text);
-    font-weight: bold;
-    padding: 5px 20px;
+    background-color: #f97316;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 12px 24px;
     border: none;
-    border-radius: 16px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.2s ease;
     width: 60%;
     font-size: 16px;
     margin-top: 35px;
   }
   
   .verificar-container button:disabled {
-    background-color:rgb(247, 175, 74);
+    background-color: #64748b;
     cursor: not-allowed;
+    opacity: 0.6;
   }
   
   .verificar-container button:hover:not(:disabled) {
-    background-color:rgba(254, 178, 72, 1);
+    background-color: #ea580c;
+    transform: translateY(-1px);
   }
-  
-  .verificar-container .volver {
-    margin-top: 15px;
+    .verificar-container .volver {
+    margin-top: 20px;
     font-size: 14px;
   }
   
   .verificar-container .volver a {
-    color: var(--color-danger);
+    color: #f97316;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  .verificar-container .volver a:hover {
+    color: #ea580c;
+    text-decoration: underline;
   }

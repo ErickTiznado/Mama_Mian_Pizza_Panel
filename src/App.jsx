@@ -12,6 +12,7 @@ import Prueba from './components/prueba';
 import AgregarContenido from './components/contenido/AgregarContenido';
 import OrderManager from './components/pedidos/OrderManager';
 import GestionClientes from './components/GestionClientes/GestionClientes';
+import GestionAdministradores from './components/GestionAdministradores/GestionAdministradores';
 import Inventario from './components/Inventario/Inventario';
 import Graficas from './pages/graficas/graficas';
 import ConfiguracionAdmin from './pages/configuracion/ConfiguracionAdmin';
@@ -65,8 +66,8 @@ function App() {
               <Route path="/restablecer" element={<Restablecer />} />
               <Route path="/home" element={<Graficas/> } />
               <Route path='/prueba' element={<Prueba/>}/>
-              <Route path='/AgregarContenido' element={<AgregarContenido/>}/>
-              <Route path="/pedidos" element={<OrderManager />} />              <Route path="/clientes" element={<GestionClientes />} />
+              <Route path='/AgregarContenido' element={<AgregarContenido/>}/>              <Route path="/pedidos" element={<OrderManager />} />              <Route path="/clientes" element={<GestionClientes />} />
+              <Route path="/administradores" element={<GestionAdministradores />} />
               <Route path="/inventario" element={<Inventario />} />
               <Route path="/graficas" element={<Graficas />} />
               <Route path="/configuracion" element={<ConfiguracionAdmin />} />

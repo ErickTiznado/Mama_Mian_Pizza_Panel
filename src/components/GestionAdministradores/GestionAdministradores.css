@@ -1,0 +1,719 @@
+/* Variables de colores usando la misma paleta que OrderManager */
+:root {
+  /* Colores principales del tema */
+  --dark-slate: #0f172a;
+  --slate: #1e293b;
+  --slate-light: #334155;
+  --border-slate: #303e52;
+  --orange-accent: #f97316;
+  --orange-hover: #ea580c;
+  --orange-light: rgba(249, 115, 22, 0.1);
+  
+  /* Colores de estado */
+  --success-color: #22c55e;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  
+  /* Grises y neutros */
+  --light-gray: #f5f5f5;
+  --medium-gray: #9ca3af;
+  --dark-gray: #6b7280;
+  --white: #ffffff;
+  
+  /* Efectos */
+  --shadow: 0 2px 4px rgba(0,0,0,0.1);
+  --shadow-hover: 0 4px 12px rgba(0,0,0,0.15);
+  --border-radius: 8px;
+}
+
+/* Contenedor específico para GestionAdministradores */
+.order_container {
+  background-color: var(--dark-slate);
+}
+
+/* Sección integrada de tabs y búsqueda con color específico #0f172a */
+.admin-tabs-search-section {
+  background: #0f172a !important;
+  border-radius: var(--border-radius);
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-slate);
+}
+
+/* Asegurar que el color de fondo se mantenga en elementos internos */
+.admin-tabs-search-section * {
+  background-color: inherit;
+}
+
+/* Override específico para mantener el color en tabs */
+.admin_tabs {
+  background-color: transparent !important;
+}
+
+.admin-tab {
+  background-color: #0f172a !important;
+}
+
+.admin-tab:hover,
+.admin-tab.active {
+  background-color: #0f172a !important;
+}
+
+/* Contenedor de búsqueda y filtros */
+.admin-search-filters-container {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-top: 15px;
+  flex-wrap: wrap;
+}
+
+/* Wrapper de búsqueda */
+.admin-search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 300px;
+}
+
+.admin-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--medium-gray);
+  z-index: 2;
+}
+
+.admin-search-input {
+  width: 100%;
+  padding: 12px 15px 12px 42px;
+  background: var(--dark-slate);
+  border: 1px solid var(--border-slate);
+  border-radius: var(--border-radius);
+  color: var(--white);
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.admin-search-input:focus {
+  outline: none;
+  border-color: var(--orange-accent);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.admin-search-input::placeholder {
+  color: var(--medium-gray);
+}
+
+/* Grupo de filtros */
+.admin-filters-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.admin-filter-select {
+  padding: 10px 16px;
+  background: var(--dark-slate);
+  border: 1px solid var(--border-slate);
+  border-radius: var(--border-radius);
+  color: var(--white);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+}
+
+.admin-filter-select:focus {
+  outline: none;
+  border-color: var(--orange-accent);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.admin-filter-select option {
+  background: var(--dark-slate);
+  color: var(--white);
+}
+
+/* Estilos para información de usuario */
+.admin-info-usuario {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 200px;
+}
+
+.admin-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--orange-light);
+  border-radius: 50%;
+  color: var(--orange-accent);
+}
+
+.admin-datos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-nombre {
+  color: var(--white);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.admin-id {
+  color: var(--medium-gray);
+  font-size: 12px;
+  font-family: 'Courier New', monospace;
+}
+
+/* Estilos para badges de roles */
+.badge-super-admin {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+  border: 2px solid #dc2626 !important;
+}
+
+.badge-admin {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  border: 2px solid #2563eb !important;
+}
+
+.badge-moderador {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+  border: 2px solid #059669 !important;
+}
+
+.badge-empleado {
+  background-color: #d97706 !important;
+  color: #ffffff !important;
+  border: 2px solid #d97706 !important;
+}
+
+/* Estilos para contacto */
+.admin-contacto {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 220px;
+}
+
+.admin-email,
+.admin-telefono {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.admin-email {
+  color: var(--white);
+}
+
+.admin-telefono {
+  color: var(--medium-gray);
+}
+
+.admin-email svg,
+.admin-telefono svg {
+  color: var(--orange-accent);
+}
+
+/* Estilos para fechas */
+.admin-fecha {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 180px;
+}
+
+.admin-fecha-principal {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--white);
+  font-size: 13px;
+}
+
+.admin-fecha-principal svg {
+  color: var(--orange-accent);
+}
+
+.admin-fecha-registro {
+  color: var(--medium-gray);
+  font-size: 12px;
+}
+
+/* Estados específicos para administradores */
+.estado-activo {
+  background-color: #22c55e !important;
+  color: #ffffff !important;
+  border: 2px solid #22c55e !important;
+}
+
+.estado-inactivo {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+  border: 2px solid #dc2626 !important;
+}
+
+/* Botones específicos para acciones de admin */
+.btn-cancel {
+  background: #dc2626;
+  color: #ffffff;
+  border: 2px solid #dc2626;
+}
+
+.btn-cancel:hover {
+  background: #b91c1c;
+  border-color: #991b1b;
+  color: #ffffff;
+}
+
+.btn-delete {
+  background: #dc2626;
+  color: #ffffff;
+  border: 2px solid #dc2626;
+}
+
+.btn-delete:hover {
+  background: #b91c1c;
+  border-color: #991b1b;
+  color: #ffffff;
+}
+
+/* Estilos para modales */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.admin-modal {
+  background: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-hover);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.admin-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-slate);
+  background: var(--slate);
+}
+
+.admin-modal-header h2 {
+  margin: 0;
+  color: var(--white);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.admin-modal-close {
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.admin-modal-close:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.admin-modal-content {
+  padding: 24px;
+}
+
+/* Estilos para el formulario */
+.admin-form {
+  width: 100%;
+}
+
+.admin-form-grid {
+  display: grid;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.admin-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-form-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--dark-slate);
+  font-size: 14px;
+}
+
+.admin-form-input,
+.admin-form-select {
+  padding: 12px 16px;
+  border: 2px solid var(--border-slate);
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background: var(--white);
+  color: var(--dark-slate);
+}
+
+.admin-form-input:focus,
+.admin-form-select:focus {
+  outline: none;
+  border-color: var(--orange-accent);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.admin-form-input.error,
+.admin-form-select.error {
+  border-color: var(--danger-color);
+}
+
+.admin-form-password-wrapper {
+  position: relative;
+}
+
+.admin-form-password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--medium-gray);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.2s;
+}
+
+.admin-form-password-toggle:hover {
+  color: var(--orange-accent);
+}
+
+.admin-form-error {
+  color: var(--danger-color);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.admin-form-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-slate);
+}
+
+.admin-form-btn {
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.admin-form-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-form-btn-cancel {
+  background: var(--light-gray);
+  border: 2px solid var(--medium-gray);
+  color: var(--dark-gray);
+}
+
+.admin-form-btn-cancel:hover:not(:disabled) {
+  background: var(--medium-gray);
+  color: var(--white);
+}
+
+.admin-form-btn-submit {
+  background: var(--orange-accent);
+  border: 2px solid var(--orange-accent);
+  color: var(--white);
+}
+
+.admin-form-btn-submit:hover:not(:disabled) {
+  background: var(--orange-hover);
+  border-color: var(--orange-hover);
+}
+
+.admin-form-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Estilos para el modal de confirmación */
+.admin-confirm-dialog {
+  background: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-hover);
+  width: 100%;
+  max-width: 400px;
+  padding: 0;
+}
+
+.admin-confirm-dialog-content {
+  padding: 32px;
+  text-align: center;
+}
+
+.admin-confirm-dialog-content h3 {
+  margin: 16px 0 8px 0;
+  color: var(--dark-slate);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.admin-confirm-dialog-content p {
+  margin: 0 0 24px 0;
+  color: var(--dark-gray);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.admin-confirm-dialog-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.admin-cancel-btn,
+.admin-confirm-delete-btn {
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+}
+
+.admin-cancel-btn {
+  background: var(--light-gray);
+  border: 2px solid var(--medium-gray);
+  color: var(--dark-gray);
+}
+
+.admin-cancel-btn:hover {
+  background: var(--medium-gray);
+  color: var(--white);
+}
+
+.admin-confirm-delete-btn {
+  background: var(--danger-color);
+  border: 2px solid var(--danger-color);
+  color: var(--white);
+}
+
+.admin-confirm-delete-btn:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+/* Estilos para notificaciones toast */
+.notification-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 16px 20px;
+  border-radius: var(--border-radius);
+  color: var(--white);
+  font-weight: 600;
+  box-shadow: var(--shadow-hover);
+  z-index: 10000;
+  min-width: 300px;
+  max-width: 500px;
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+.notification-success {
+  background-color: var(--success-color);
+  border-left: 4px solid #16a34a;
+}
+
+.notification-error {
+  background-color: var(--danger-color);
+  border-left: 4px solid #dc2626;
+}
+
+.notification-warning {
+  background-color: var(--warning-color);
+  border-left: 4px solid #d97706;
+  color: var(--dark-slate);
+}
+
+.notification-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.notification-message {
+  flex: 1;
+  font-size: 14px;
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.notification-close:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive para toast */
+@media (max-width: 768px) {
+  .notification-toast {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    min-width: auto;
+    max-width: none;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .admin-search-filters-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .admin-search-wrapper {
+    min-width: unset;
+  }
+  
+  .admin-filters-group {
+    justify-content: flex-start;
+  }
+  
+  .admin-filter-select {
+    min-width: 120px;
+  }
+  
+  .admin-info-usuario {
+    min-width: unset;
+  }
+  
+  .admin-contacto {
+    min-width: unset;
+  }
+  
+  .admin-fecha {
+    min-width: unset;
+  }
+  
+  .modal-overlay {
+    padding: 10px;
+  }
+  
+  .admin-modal {
+    max-width: 100%;
+    max-height: 95vh;
+  }
+  
+  .admin-modal-header {
+    padding: 16px 20px;
+  }
+  
+  .admin-modal-content {
+    padding: 20px;
+  }
+  
+  .admin-form-actions {
+    flex-direction: column;
+  }
+  
+  .admin-form-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-tabs-search-section {
+    padding: 15px;
+  }
+  
+  .admin-search-filters-container {
+    gap: 15px;
+  }
+}

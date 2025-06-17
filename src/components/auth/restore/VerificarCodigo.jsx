@@ -9,11 +9,16 @@ const VerificarCodigo = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const correo = location.state?.correo;
-
   const handleVerificarCodigo = async () => {
     try {
-      await axios.post('https://api.mamamianpizza.com/verificar-codigo', { correo, codigo });
-      navigate('/restablecer', { state: { correo, codigo } });
+      const response = await axios.post('https://api.mamamianpizza.com/api/auth/verify-reset', { 
+        correo, 
+        otp: codigo 
+      });
+      
+      // Obtener el token de la respuesta
+      const { token } = response.data;
+      navigate('/restablecer', { state: { token } });
     } catch (error) {
       setMensaje(error.response?.data?.message || 'Código incorrecto o expirado');
     }
