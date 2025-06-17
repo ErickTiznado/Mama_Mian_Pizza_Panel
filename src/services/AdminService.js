@@ -44,7 +44,7 @@ class AdminService {
       // Log para verificar la estructura de datos
       console.log('Datos enviados a la API:', JSON.stringify(adminData, null, 2));
       
-      const response = await fetch(`${API_BASE_URL}/gatadmins`, {
+      const response = await fetch(`${API_BASE_URL}/admins`, {
         method: 'POST',
         headers: this.getHeaders(),
         body: JSON.stringify(adminData)
