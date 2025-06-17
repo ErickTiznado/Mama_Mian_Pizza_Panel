@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {TrendingUp, TrendingDown, DollarSign } from "lucide-react";
+import InfoTooltip from '../../../../../components/common/InfoTooltip/InfoTooltip';
 const IngresosNetos = ({timePeriod = 'today', orderType = 'all' }) => {
     const [IngresosNetos, setIngresosNetos] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -81,9 +82,17 @@ const IngresosNetos = ({timePeriod = 'today', orderType = 'all' }) => {
     return (
         <div className="count__kpi__container">            <div className="count__kpi__header">
                 <h5>Ingresos Netos {getPeriodText()}</h5>
-                <span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <InfoTooltip
+                        title="Ingresos Netos"
+                        content="Los ingresos netos representan el dinero total que ha generado tu pizzería por ventas en el período seleccionado, después de descuentos pero antes de gastos operativos."
+                        businessImpact="Esta es la métrica más importante para evaluar el rendimiento financiero de tu pizzería. Un crecimiento constante en ingresos indica que tu negocio está sano y creciendo."
+                        actionTips="Para aumentar ingresos: optimiza tu menú con productos de alto margen, implementa estrategias de venta cruzada, mejora el ticket promedio, y ajusta precios según la demanda del mercado."
+                        position="bottom"
+                        size="small"
+                    />
                     <DollarSign size={16}/>
-                </span>
+                </div>
             </div>
             <div className="count__kpi__body">
                 <div className="count-value">

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Package, ArrowUpDown, Calendar, BarChart3, TrendingUp } from "lucide-react";
+import InfoTooltip from '../../../../../components/common/InfoTooltip/InfoTooltip';
 import './CombinacionesProductos.css';
 
 const CombinacionesProductos = ({ timePeriod = 'all', orderType = 'all' }) => {
@@ -103,13 +104,23 @@ const CombinacionesProductos = ({ timePeriod = 'all', orderType = 'all' }) => {
                 </div>
             </div>
         );
-    }
-
-    return (
+    }    return (
         <div className="combinaciones-container">
             <div className="combinaciones-header">
                 <div className="header-content">
-                    <h3>Combinaciones de Productos</h3>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                        <h3>Combinaciones de Productos</h3>
+                        <InfoTooltip
+                            title="Combinaciones de Productos"
+                            content="Análisis de qué productos se compran frecuentemente juntos en el mismo pedido. Te ayuda a identificar patrones de compra y oportunidades de venta cruzada."
+                            businessImpact="Conocer las combinaciones populares te permite crear ofertas estratégicas, optimizar el menú, mejorar recomendaciones de venta y aumentar el ticket promedio sugiriendo productos complementarios."
+                            actionTips="• Crea combos con productos que se compran juntos frecuentemente
+• Entrena al personal para sugerir estas combinaciones
+• Coloca productos complementarios cerca en el menú
+• Usa esta data para ofertas de 'compra X y lleva Y con descuento'"
+                            position="bottom"
+                        />
+                    </div>
                     <p>Productos que los clientes compran juntos</p>
                 </div>
                 <div className="header-stats">

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ShoppingBag, TrendingUp, TrendingDown } from "lucide-react";
+import InfoTooltip from '../../../../../components/common/InfoTooltip/InfoTooltip';
 import './ContPedidos.css';
 
 const API_URL = 'https://api.mamamianpizza.com';
@@ -85,14 +86,26 @@ const ContPedidos = ({ timePeriod = 'today', orderType = 'all' }) => {
     };
 
     return (
-        <div className="count__kpi__container">
-            <div className="count__kpi__header">
+        <div className="count__kpi__container">            <div className="count__kpi__header">
                 <h5>
                     Pedidos Totales {getPeriodText()}
                 </h5>
-                <span>
-                    <ShoppingBag size={16}/>
-                </span>            </div>            <div className="count__kpi__body">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>                    <InfoTooltip
+                        title="Pedidos Totales"
+                        content="Este número muestra cuántos pedidos ha recibido tu pizzería en el período seleccionado. Incluye todos los pedidos sin importar su estado (pendientes, en proceso, entregados o cancelados)."
+                        businessImpact="Un mayor número de pedidos indica mayor demanda y actividad comercial. Sin embargo, también es importante considerar el valor promedio por pedido y la eficiencia en la preparación."
+                        actionTips="• Si los pedidos están creciendo: asegúrate de tener suficiente personal y suministros
+• Si están bajando: revisa tu marketing, ofertas especiales, o calidad del servicio
+• Analiza las tendencias por horario para optimizar recursos"
+                        position="bottom"
+                        size="small"
+                        variant="compact"
+                    />
+                    <span>
+                        <ShoppingBag size={16}/>
+                    </span>
+                </div>
+            </div><div className="count__kpi__body">
                 <div className="count-value">{countPed || 0}</div>
                 {!loading && !error && (
                     <div className={`count-comparison ${comparison.isIncrease ? 'increase' : 'decrease'}`}>

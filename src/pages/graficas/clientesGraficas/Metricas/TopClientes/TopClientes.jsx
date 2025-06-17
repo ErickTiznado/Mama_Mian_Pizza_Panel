@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Trophy, Users, DollarSign } from 'lucide-react';
+import InfoTooltip from '../../../../../components/common/InfoTooltip/InfoTooltip';
 import './TopClientes.css';
 
 const API_URL = 'https://api.mamamianpizza.com';
@@ -65,15 +66,27 @@ const TopClientes = ({ timePeriod = 'all' }) => {
     };
 
     if (loading) {
-        return (
-            <div className="top-clientes-container">
-                <div className="top-clientes-header">
+    return (
+        <div className="top-clientes-container">
+            <div className="top-clientes-header">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
                     <h3>
                         <Trophy className="header-icon" size={20} />
                         Top 5 Clientes
                     </h3>
-                    <p>Los clientes más activos</p>
+                    <InfoTooltip
+                        title="Top Clientes"
+                        content="Ranking de tus 5 mejores clientes ordenados por gasto total. Incluye el número de pedidos realizados y el monto total gastado por cada cliente."
+                        businessImpact="Tus mejores clientes son tu activo más valioso. Representan una fuente estable de ingresos y pueden ayudarte a atraer nuevos clientes a través de recomendaciones."
+                        actionTips="• Implementa programas VIP para estos clientes
+• Ofrece descuentos o beneficios especiales por su lealtad
+• Pide feedback para mejorar el servicio
+• Usa sus preferencias para desarrollar nuevos productos"
+                        position="bottom"
+                    />
                 </div>
+                <p>Los clientes más activos</p>
+            </div>
                 <div className="top-clientes-loading">
                     <div className="loading-spinner"></div>
                     <p>Cargando clientes...</p>

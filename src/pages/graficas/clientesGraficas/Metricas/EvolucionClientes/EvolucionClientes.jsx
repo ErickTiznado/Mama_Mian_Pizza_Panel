@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart3, Users, Repeat, TrendingUp } from 'lucide-react';
+import InfoTooltip from '../../../../../components/common/InfoTooltip/InfoTooltip';
 import './EvolucionClientes.css';
 
 const API_URL = 'https://api.mamamianpizza.com';
@@ -192,16 +193,27 @@ const EvolucionClientes = ({ timePeriod = 'all' }) => {
                     <button onClick={fetchCustomerData} className="retry-button">
                         Reintentar
                     </button>
-                </div>
-            </div>
+                </div>            </div>
         );
     }    return (
         <div className="evolucion-clientes-container">
             <div className="evolucion-clientes-header">
-                <h3>
-                    <BarChart3 className="header-icon" size={20} />
-                    Evolución de Clientes
-                </h3>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                    <h3>
+                        <BarChart3 className="header-icon" size={20} />
+                        Evolución de Clientes
+                    </h3>
+                    <InfoTooltip
+                        title="Evolución de Clientes"
+                        content="Análisis completo del comportamiento de tus clientes mostrando la evolución mensual de clientes nuevos vs recurrentes, y la distribución por frecuencia de compra."
+                        businessImpact="Entender la evolución de tu base de clientes te ayuda a identificar tendencias de crecimiento, evaluar la efectividad de tus estrategias de retención y planificar acciones para maximizar el valor de cada cliente."
+                        actionTips="• Si hay muchos clientes de 1 pedido: implementa estrategias de follow-up
+• Si los recurrentes disminuyen: revisa la experiencia del cliente
+• Usa los patrones para anticipar demanda y planificar promociones
+• Enfócate en convertir clientes nuevos en recurrentes"
+                        position="bottom"
+                    />
+                </div>
                 <p>Análisis de clientes nuevos vs recurrentes y frecuencia de compra</p>
             </div>
             

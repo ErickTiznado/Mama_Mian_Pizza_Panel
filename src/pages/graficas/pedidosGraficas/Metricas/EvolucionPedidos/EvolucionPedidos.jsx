@@ -1,6 +1,7 @@
 // filepath: c:\Users\Precision 7520\Documents\Programacion\MamaMianPizza\src\pages\graficas\pedidosGraficas\Metricas\EvolucionPedidos\EvolucionPedidos.jsx
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import InfoTooltip from '../../../../../components/common/InfoTooltip/InfoTooltip';
 import './EvolucionPedidos.css';
 
 const API_URL = 'https://api.mamamianpizza.com';
@@ -19,15 +20,15 @@ const EvolucionPedidos = ({ timePeriod = 'month' }) => {
             default:
                 return procesarDatosPorMes(pedidos);
         }
-    };
-
-    // Función para procesar los datos de los pedidos y agruparlos por hora (para "Hoy")
+    };    // Función para procesar los datos de los pedidos y agruparlos por hora (para "Hoy")
     const procesarDatosPorHora = (pedidos) => {
-        // Inicializar un objeto para almacenar pedidos por hora (24 horas)
+        // Inicializar un objeto para almacenar pedidos por hora (horario de atención: 10 AM - 8 PM)
         const pedidosPorHora = {};
+        const horaInicio = 10; // 10 AM
+        const horaFin = 20; // 8 PM
         
-        // Inicializar todas las horas del día para asegurar que aparezcan en el gráfico
-        for (let i = 0; i < 24; i++) {
+        // Inicializar solo las horas del horario de atención para asegurar que aparezcan en el gráfico
+        for (let i = horaInicio; i <= horaFin; i++) {
             const horaFormateada = String(i).padStart(2, '0');
             pedidosPorHora[horaFormateada] = {
                 key: horaFormateada,
@@ -35,16 +36,15 @@ const EvolucionPedidos = ({ timePeriod = 'month' }) => {
                 hora: i,
                 cantidad: 0
             };
-        }
-        
-        // Agrupar los pedidos por hora
+        }        
+        // Agrupar los pedidos por hora solo en el horario de atención
         pedidos.forEach(pedido => {
             const fecha = new Date(pedido.fecha_pedido);
             const hora = fecha.getHours();
             const horaKey = String(hora).padStart(2, '0');
             
-            // Incrementar el contador para esa hora
-            if (pedidosPorHora[horaKey]) {
+            // Solo incrementar el contador si está dentro del horario de atención (10 AM - 8 PM)
+            if (hora >= horaInicio && hora <= horaFin && pedidosPorHora[horaKey]) {
                 pedidosPorHora[horaKey].cantidad += 1;
             }
         });
@@ -254,9 +254,18 @@ const EvolucionPedidos = ({ timePeriod = 'month' }) => {
         }
     };
 
-    return (
-        <div className="evolucion-pedidos-container">
-            <h2 className="evolucion-pedidos-title">Evolución {getPeriodText()} de Pedidos</h2>
+    return (        <div className="evolucion-pedidos-container">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '20px' }}>
+                <h2 className="evolucion-pedidos-title">Evolución {getPeriodText()} de Pedidos</h2>
+                <InfoTooltip
+                    title="Evolución de Pedidos"
+                    content="Esta gráfica muestra cómo han cambiado tus pedidos a lo largo del tiempo. Te permite ver tendencias, picos de demanda y periodos de baja actividad según el filtro seleccionado (hoy, semana o mes)."
+                    businessImpact="Identificar tendencias te ayuda a anticipar demanda futura, planificar inventario, ajustar personal y detectar el impacto de promociones o eventos externos en tu negocio."
+                    actionTips="Líneas ascendentes: considera expandir capacidad o preparar más stock. Líneas descendentes: revisa calidad, precios, competencia o implementa promociones. Picos específicos: analiza qué los causó para replicarlos."
+                    position="bottom"
+                    size="medium"
+                />
+            </div>
             
             <div className="evolucion-pedidos-chart">
                 {loading ? (

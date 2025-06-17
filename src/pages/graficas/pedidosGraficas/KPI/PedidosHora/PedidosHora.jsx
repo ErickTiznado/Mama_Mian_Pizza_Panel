@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Clock, TrendingUp, TrendingDown } from "lucide-react";
+import InfoTooltip from '../../../../../components/common/InfoTooltip/InfoTooltip';
 import './PedidosHora.css';
 
 const API_URL = 'https://api.mamamianpizza.com';
@@ -85,14 +86,23 @@ const PedidosHora = ({ timePeriod = 'today', orderType = 'all' }) => {
     const formatValue = (value) => {
         return parseFloat(value).toFixed(2);
     };    return (
-        <div className="avgt__count__kpi__container">
-            <div className="avgt__count__kpi__header">
+        <div className="avgt__count__kpi__container">            <div className="avgt__count__kpi__header">
                 <h5>
                     Pedidos por Hora {getPeriodText()}
                 </h5>
-                <span>
-                    <Clock size={16}/>
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <InfoTooltip
+                        title="Pedidos por Hora"
+                        content="Este promedio muestra cuántos pedidos recibe tu pizzería cada hora durante el período seleccionado. Te ayuda a entender la intensidad de trabajo por hora."
+                        businessImpact="Un promedio alto indica momentos de mucha demanda. Esto es útil para planificar personal, hornos y recursos durante las horas pico."
+                        actionTips="Usa esta información para: programar más personal en horas pico, preparar ingredientes anticipadamente, ajustar ofertas en horas bajas, y optimizar los tiempos de entrega."
+                        position="bottom"
+                        size="small"
+                    />
+                    <span>
+                        <Clock size={16}/>
+                    </span>
+                </div>
             </div>
             <div className="avgt__count__kpi__body">
                 <div className="avgt__count-value">{formatValue(pedidosHora)}</div>

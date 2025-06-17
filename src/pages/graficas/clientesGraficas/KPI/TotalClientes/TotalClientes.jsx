@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Users, TrendingUp, TrendingDown } from "lucide-react";
+import InfoTooltip from '../../../../../components/common/InfoTooltip/InfoTooltip';
 import './TotalClientes.css';
 
 const API_URL = 'https://api.mamamianpizza.com';
@@ -86,13 +87,21 @@ const TotalClientes = ({ timePeriod = 'all', orderType = 'all' }) => {
                 </div>
             </div>
         );
-    }
-
-    return (
+    }    return (
         <div className="total-clientes-container">
             <div className="total-clientes-header">
                 <h3>Total Clientes</h3>
-                <Users className="total-clientes-icon" size={24} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <InfoTooltip
+                        title="Total de Clientes"
+                        content="Este número representa todos los clientes únicos que han realizado al menos un pedido en tu pizzería. Son las personas que conocen y confían en tu marca."
+                        businessImpact="Una base sólida de clientes es tu activo más valioso. Más clientes significa mayor estabilidad de ingresos y oportunidades de crecimiento a través de recomendaciones."
+                        actionTips="Para aumentar tu base de clientes: mejora la experiencia del cliente, implementa programas de referidos, usa redes sociales, y mantén alta calidad en productos y servicio."
+                        position="bottom"
+                        size="small"
+                    />
+                    <Users className="total-clientes-icon" size={24} />
+                </div>
             </div>
             <div className="total-clientes-content">
                 <div className="total-clientes-number">

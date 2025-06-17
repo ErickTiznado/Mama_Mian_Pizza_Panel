@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { DollarSign, TrendingUp, TrendingDown } from "lucide-react";
+import InfoTooltip from '../../../../../components/common/InfoTooltip/InfoTooltip';
 import './avgTicket.css';
 
 const API_URL = 'https://api.mamamianpizza.com';
@@ -88,14 +89,28 @@ const AvgTicket = ({ timePeriod = 'today', orderType = 'all' }) => {
     };
 
     return (
-        <div className="avgt__count__kpi__container">
-            <div className="avgt__count__kpi__header">
+        <div className="avgt__count__kpi__container">            <div className="avgt__count__kpi__header">
                 <h5>
                     Ticket Medio {getPeriodText()}
                 </h5>
-                <span>
-                    <DollarSign size={16}/>
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>                    <InfoTooltip
+                        title="Ticket Medio"
+                        content="El ticket medio es el valor promedio que cada cliente gasta por pedido. Se calcula dividiendo los ingresos totales entre el número de pedidos."
+                        businessImpact="Un ticket medio alto indica que los clientes compran más productos o productos de mayor valor. Esto es excelente para la rentabilidad ya que aumenta los ingresos sin necesidad de más pedidos."
+                        actionTips="• Para aumentar el ticket medio: ofrece combos, sugiere productos complementarios, promociona pizzas familiares
+• Incluye bebidas y postres en las recomendaciones
+• Capacita al personal en técnicas de venta cruzada
+• Implementa descuentos por compra mínima"
+                        position="bottom"
+                        size="small"
+                        variant="detailed"
+                        showBookmark={true}
+                        bookmarkKey="ticket-medio"
+                    />
+                    <span>
+                        <DollarSign size={16}/>
+                    </span>
+                </div>
             </div>
             <div className="avgt__count__kpi__body">
                 <div className="avgt__count-value">{formatCurrency(ticketMedio)}</div>

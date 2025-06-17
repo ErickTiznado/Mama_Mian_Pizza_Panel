@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Repeat, TrendingUp, TrendingDown } from "lucide-react";
+import InfoTooltip from '../../../../../components/common/InfoTooltip/InfoTooltip';
 import './TasaRetencion.css';
 
 const API_URL = 'https://api.mamamianpizza.com';
@@ -97,13 +98,20 @@ const TasaRetencion = ({ timePeriod = 'all', orderType = 'all' }) => {
                 </div>
             </div>
         );
-    }
-
-    return (
+    }    return (
         <div className="tasa-retencion-container">
             <div className="tasa-retencion-header">
                 <h3>Tasa de Retención</h3>
-                <Repeat className="tasa-retencion-icon" size={24} />
+                <div className="header-icons">
+                    <InfoTooltip
+                        title="Tasa de Retención"
+                        content="Porcentaje de clientes que han realizado más de un pedido. Una tasa alta indica que los clientes regresan a tu pizzería."
+                        businessImpact="Una tasa de retención alta es fundamental para la rentabilidad a largo plazo. Retener clientes cuesta menos que adquirir nuevos y genera ingresos más predecibles."
+                        actionTips="Para mejorar retención: implementa programas de fidelidad, mejora la calidad consistente, personaliza ofertas para clientes frecuentes, y mantén excelente servicio al cliente."
+                        position="left"
+                    />
+                    <Repeat className="tasa-retencion-icon" size={24} />
+                </div>
             </div>
             <div className="tasa-retencion-content">
                 <div className="tasa-retencion-number">

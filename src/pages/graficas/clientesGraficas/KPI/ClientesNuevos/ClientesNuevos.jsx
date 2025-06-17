@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { UserPlus, TrendingUp, TrendingDown } from "lucide-react";
+import InfoTooltip from '../../../../../components/common/InfoTooltip/InfoTooltip';
 import './ClientesNuevos.css';
 
 const API_URL = 'https://api.mamamianpizza.com';
@@ -109,13 +110,22 @@ const ClientesNuevos = ({ timePeriod = 'all', orderType = 'all' }) => {
                 </div>
             </div>
         );
-    }
-
-    return (
+    }    return (
         <div className="clientes-nuevos-container">
             <div className="clientes-nuevos-header">
                 <h3>Clientes Nuevos</h3>
-                <UserPlus className="clientes-nuevos-icon" size={24} />
+                <div className="header-icons">
+                    <InfoTooltip
+                        title="Clientes Nuevos"
+                        content="Número de clientes que realizaron su primera compra en el período seleccionado."
+                        businessImpact="Esta métrica es clave para evaluar el crecimiento de su base de clientes y la efectividad de sus estrategias de marketing y adquisición. Un aumento constante indica que su pizzería está atrayendo nuevos consumidores."
+                        actionTips="• Si la cifra es baja: refuerce marketing local, promociones de bienvenida o mejore la presencia online
+• Si es alta pero las ventas totales no crecen: revise la retención de clientes
+• Use promociones especiales para primeros pedidos para atraer más clientes nuevos"
+                        position="left"
+                    />
+                    <UserPlus className="clientes-nuevos-icon" size={24} />
+                </div>
             </div>
             <div className="clientes-nuevos-content">
                 <div className="clientes-nuevos-number">

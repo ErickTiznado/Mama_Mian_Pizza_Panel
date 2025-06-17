@@ -55,7 +55,7 @@
 /* Hours labels */
 .heatmap-hours-labels {
     display: grid;
-    grid-template-columns: 60px repeat(13, 1fr);
+    grid-template-columns: 60px repeat(11, 1fr);
     gap: 2px;
     margin-bottom: 5px;
 }
@@ -82,7 +82,7 @@
 /* Heatmap row */
 .heatmap-row {
     display: grid;
-    grid-template-columns: 50px repeat(13, 1fr);
+    grid-template-columns: 50px repeat(11, 1fr);
     gap: 4px;
     align-items: center;
 }
@@ -176,10 +176,10 @@
     }
     
     .heatmap-title {
-        font-size: 1.125rem;
-    }
-      .heatmap-row {
-        grid-template-columns: 50px repeat(13, 1fr);
+        font-size: 1.125rem;    }
+    
+    .heatmap-row {
+        grid-template-columns: 50px repeat(11, 1fr);
     }
     
     .day-label {
@@ -198,10 +198,10 @@
     }
     
     .hour-label {
-        font-size: 0.65rem;
-    }
-      .heatmap-hours-labels {
-        grid-template-columns: 50px repeat(13, 1fr);
+        font-size: 0.65rem;    }
+    
+    .heatmap-hours-labels {
+        grid-template-columns: 50px repeat(11, 1fr);
     }
     
     .hour-label-empty {
@@ -216,10 +216,10 @@
     
     .heatmap-title {
         font-size: 1rem;
-        margin-bottom: 15px;
-    }
-      .heatmap-row {
-        grid-template-columns: 40px repeat(13, 1fr);
+        margin-bottom: 15px;    }
+    
+    .heatmap-row {
+        grid-template-columns: 40px repeat(11, 1fr);
     }
     
     .day-label {
@@ -238,10 +238,10 @@
     }
     
     .hour-label {
-        font-size: 0.6rem;
-    }
-      .heatmap-hours-labels {
-        grid-template-columns: 40px repeat(13, 1fr);
+        font-size: 0.6rem;    }
+    
+    .heatmap-hours-labels {
+        grid-template-columns: 40px repeat(11, 1fr);
     }
     
     .hour-label-empty {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {TrendingUp, TrendingDown, Package } from "lucide-react";
+import InfoTooltip from '../../../../../components/common/InfoTooltip/InfoTooltip';
 
 
 const UnidadesVendidas = ({timePeriod = 'today', orderType = 'all' }) => {
@@ -83,9 +84,17 @@ const UnidadesVendidas = ({timePeriod = 'today', orderType = 'all' }) => {
     return (
         <div className="count__kpi__container">            <div className="count__kpi__header">
                 <h5>Unidades Vendidas {getPeriodText()}</h5>
-                <span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <InfoTooltip
+                        title="Unidades Vendidas"
+                        content="El número total de productos individuales (pizzas, bebidas, acompañamientos, etc.) que se han vendido en el período seleccionado."
+                        businessImpact="Esta métrica te ayuda a entender la demanda real de productos y la capacidad de producción necesaria. Un alto volumen de unidades significa mayor actividad operativa."
+                        actionTips="Si las unidades son altas pero los ingresos bajos: revisa la estrategia de precios. Si ambos son bajos: enfócate en marketing y promociones. Usa esta data para planificar inventario y personal."
+                        position="bottom"
+                        size="small"
+                    />
                     <Package size={16}/>
-                </span>
+                </div>
             </div>
             <div className="count__kpi__body">
                 <div className="count-value">

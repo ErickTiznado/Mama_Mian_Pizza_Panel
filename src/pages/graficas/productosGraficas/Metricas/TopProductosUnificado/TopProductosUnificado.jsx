@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Trophy, TrendingUp, Package, DollarSign, Star, ToggleLeft, ToggleRight } from "lucide-react";
-import './TopProductosUnificado.css';
+import InfoTooltip from '../../../../../components/common/InfoTooltip/InfoTooltip';
+import "./TopProductosUnificado.css";
 
 const TopProductosUnificado = ({ timePeriod = 'all', orderType = 'all' }) => {
     const [topProducts, setTopProducts] = useState([]);
@@ -177,10 +178,21 @@ const TopProductosUnificado = ({ timePeriod = 'all', orderType = 'all' }) => {
     const config = getHeaderConfig();
 
     return (
-        <div className="top-productos-unificado-container">
-            <div className="top-productos-unificado-header">
+        <div className="top-productos-unificado-container">            <div className="top-productos-unificado-header">
                 <div className="header-content">
-                    <h3>{config.title}</h3>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <h3>{config.title}</h3>
+                        <InfoTooltip
+                            title="Top Productos"
+                            content="Ranking de los 5 productos más exitosos según el criterio seleccionado (unidades vendidas o ingresos generados). Puedes alternar entre ambas vistas para obtener diferentes perspectivas."
+                            businessImpact="Conocer tus productos estrella te permite optimizar tu menú, enfocar esfuerzos de marketing, gestionar inventario eficientemente y maximizar la rentabilidad promocionando los productos más exitosos."
+                            actionTips="• Promociona más los productos top para aumentar ventas
+• Analiza qué hace exitosos estos productos para replicar en otros
+• Asegúrate de tener suficiente inventario de productos populares
+• Considera crear variaciones de tus productos más vendidos"
+                            position="bottom"
+                        />
+                    </div>
                     <p>Período: {period}</p>
                 </div>
                 <div className="header-controls">

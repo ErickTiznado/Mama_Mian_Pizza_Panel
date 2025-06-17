@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import InfoTooltip from '../../../../../components/common/InfoTooltip/InfoTooltip';
 import './Heatmap.css';
 
 const API_URL = 'https://api.mamamianpizza.com';
@@ -15,10 +16,10 @@ const Heatmap = () => {
     const procesarDatosAcumulativos = (pedidos) => {
         const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
         const heatmapData = [];
-        const horaInicio = 8; // 8 AM
-        const horaFin = 20; // 8 PM
+        const horaInicio = 10; // 10 AM - Horario de apertura
+        const horaFin = 20; // 8 PM - Horario de cierre
 
-        // Inicializar matriz de datos acumulativos (8 AM a 8 PM para cada día de la semana)
+        // Inicializar matriz de datos acumulativos (10 AM a 8 PM para cada día de la semana)
         for (let dia = 0; dia < 7; dia++) {
             for (let hora = horaInicio; hora <= horaFin; hora++) {
                 heatmapData.push({
@@ -103,9 +104,21 @@ const Heatmap = () => {
     // Etiquetas fijas para días de la semana
     const etiquetasDias = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
-    return (
-        <div className="heatmap-container">
-            <h2 className="heatmap-title">Mapa de Calor Histórico de Pedidos</h2>
+    return (        <div className="heatmap-container">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '20px' }}>
+                <h2 className="heatmap-title">Mapa de Calor Histórico de Pedidos</h2>                <InfoTooltip
+                    title="Mapa de Calor de Pedidos"
+                    content="Este mapa muestra cuándo recibes más pedidos durante la semana. Los colores más intensos (rojos) indican las horas y días con más pedidos históricos, mientras que los colores fríos (grises/azules) muestran momentos de menor actividad."
+                    businessImpact="Te permite identificar patrones de demanda para optimizar horarios de personal, preparación de ingredientes y estrategias de marketing. Los puntos 'calientes' son tus horas de mayor ganancia."
+                    actionTips="• Horarios rojos: asegúrate de tener suficiente personal y stock
+• Horarios azules: considera promociones especiales o ofertas de descuento
+• Usa estos datos para planificar turnos y reducir costos operativos
+• Implementa menús especiales en horarios de baja demanda"
+                    position="bottom"
+                    size="medium"
+                    variant="detailed"
+                />
+            </div>
             
             <div className="heatmap-content">
                 {loading ? (
@@ -116,11 +129,11 @@ const Heatmap = () => {
                     <div className="no-data-message">No hay datos disponibles</div>
                 ) : (
                     <div className="heatmap-wrapper">
-                        {/* Etiquetas de horas - Solo horario comercial (8 AM - 8 PM) */}
+                        {/* Etiquetas de horas - Solo horario comercial (10 AM - 8 PM) */}
                         <div className="heatmap-hours-labels">
                             <div className="hour-label-empty"></div>
-                            {Array.from({ length: 13 }, (_, i) => {
-                                const hora = i + 8; // Horario comercial 8 AM - 8 PM
+                            {Array.from({ length: 11 }, (_, i) => {
+                                const hora = i + 10; // Horario comercial 10 AM - 8 PM
                                 return (
                                     <div key={hora} className="hour-label">
                                         {hora % 2 === 0 ? `${String(hora).padStart(2, '0')}:00` : ''}
@@ -134,8 +147,8 @@ const Heatmap = () => {
                             {etiquetasDias.map((dia, diaIndex) => (
                                 <div key={dia} className="heatmap-row">
                                     <div className="day-label">{dia}</div>
-                                    {Array.from({ length: 13 }, (_, i) => {
-                                        const hora = i + 8; // Horario comercial 8 AM - 8 PM
+                                    {Array.from({ length: 11 }, (_, i) => {
+                                        const hora = i + 10; // Horario comercial 10 AM - 8 PM
                                         const dataPoint = data.find(item => 
                                             item.dia === diaIndex && item.hora === hora
                                         );
@@ -161,10 +174,26 @@ const Heatmap = () => {
                         </div>
 
                         {/* Leyenda de colores */}
-
+                        <div className="heatmap-legend">
+                            <span className="legend-label">Menos</span>
+                            {colorScale.map((color, index) => (
+                                <div
+                                    key={index}
+                                    className="legend-color"
+                                    style={{ backgroundColor: color }}
+                                    title={`Nivel ${index + 1}`}
+                                ></div>
+                            ))}
+                            <span className="legend-label">Más</span>
+                        </div>
                         
                         {/* Descripción explicativa */}
-
+                        <div className="heatmap-description">
+                            <p>
+                                Este mapa de calor muestra la distribución acumulada de pedidos por día de la semana y hora.
+                                Horario de atención: 10:00 AM - 8:00 PM. Los colores más intensos indican mayor cantidad de pedidos históricos.
+                            </p>
+                        </div>
                     </div>
                 )}
             </div>
