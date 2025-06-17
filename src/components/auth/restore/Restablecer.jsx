@@ -10,16 +10,16 @@ const Restablecer = () => {
   const [error, setError] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
-  const { correo, codigo } = location.state || {};
+  const { token } = location.state || {};
 
   const validarContrasena = (password) => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    // Validación según las instrucciones: mínimo 8 caracteres, mayúscula, minúscula, número
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
     return regex.test(password);
   };
-
   const handleRestablecer = async () => {
     if (!validarContrasena(nuevaContrasena)) {
-      setError('Debe tener al menos 8 caracteres, una mayúscula, un número y un símbolo.');
+      setError('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.');
       return;
     }
 
@@ -28,14 +28,27 @@ const Restablecer = () => {
       return;
     }
 
+    if (!token) {
+      setError('Token de verificación no encontrado. Por favor, inicia el proceso nuevamente.');
+      return;
+    }
+
     try {
-      await axios.post('https://api.mamamianpizza.com/restablecer-contrasena', { correo, codigo, nuevaContrasena });
+      const response = await axios.put('https://api.mamamianpizza.com/api/auth/reset-password', { 
+        token, 
+        nuevaContrasena 
+      });
+      
       alert('Contraseña actualizada con éxito');
       navigate('/login');
     } catch (error) {
-      setError(error.response?.data?.message || 'Error al actualizar la contraseña');
-    }
-  };
+      console.error('Error al actualizar contraseña:', error);
+      if (error.response?.status === 400) {
+        setError(error.response.data.error || 'Token inválido o expirado');
+      } else {
+        setError('Error al actualizar la contraseña. Por favor, intenta nuevamente.');
+      }
+    }  };
 
   return (
     <div className="restablecer-page">
@@ -43,11 +56,17 @@ const Restablecer = () => {
         <h2>Restablecer Contraseña</h2>
         <p className="descripcion">Ingresa tu nueva contraseña.</p>
 
+        {!token && (
+          <div style={{ color: 'red', marginBottom: '15px', textAlign: 'center' }}>
+            ⚠️ Token de verificación no encontrado. Por favor, inicia el proceso de recuperación nuevamente.
+          </div>
+        )}
+
         <input
           type="password"
-          placeholder="Nueva Contraseña"
+          placeholder="Nueva Contraseña (mín. 8 caracteres, 1 mayúscula, 1 minúscula, 1 número)"
           value={nuevaContrasena}
-          onChange={(e) => setNuevaContrasena(e.target.value)}
+          onChange={(e) => setNuevaContrasena(e.target.value)}          disabled={!token}
         />
 
         <input
@@ -55,13 +74,21 @@ const Restablecer = () => {
           placeholder="Confirmar Contraseña"
           value={confirmarContrasena}
           onChange={(e) => setConfirmarContrasena(e.target.value)}
+          disabled={!token}
         />
 
         {error && <p className="error-message">{error}</p>}
 
-        <button onClick={handleRestablecer} disabled={!nuevaContrasena || !confirmarContrasena}>
+        <button 
+          onClick={handleRestablecer} 
+          disabled={!nuevaContrasena || !confirmarContrasena || !token}
+        >
           Restablecer Contraseña
         </button>
+
+        <div style={{ marginTop: '15px', textAlign: 'center' }}>
+          <a href="/recuperar">← Volver a recuperar contraseña</a>
+        </div>
       </div>
     </div>
   );
