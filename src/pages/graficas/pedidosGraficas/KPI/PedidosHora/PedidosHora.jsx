@@ -90,13 +90,12 @@ const PedidosHora = ({ timePeriod = 'today', orderType = 'all' }) => {
                 <h5>
                     Pedidos por Hora {getPeriodText()}
                 </h5>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <InfoTooltip
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>                    <InfoTooltip
                         title="Pedidos por Hora"
                         content="Este promedio muestra cuántos pedidos recibe tu pizzería cada hora durante el período seleccionado. Te ayuda a entender la intensidad de trabajo por hora."
                         businessImpact="Un promedio alto indica momentos de mucha demanda. Esto es útil para planificar personal, hornos y recursos durante las horas pico."
                         actionTips="Usa esta información para: programar más personal en horas pico, preparar ingredientes anticipadamente, ajustar ofertas en horas bajas, y optimizar los tiempos de entrega."
-                        position="bottom"
+                        position="left"
                         size="small"
                     />
                     <span>
