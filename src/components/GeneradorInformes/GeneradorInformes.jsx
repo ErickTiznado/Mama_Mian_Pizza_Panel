@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import './GeneradorInformes.css';
+import ReportTemplates from './ReportTemplates';
 import {
   FaCog,
   FaEye,
@@ -77,10 +78,19 @@ const GeneradorInformes = () => {
     };
     setSelectedComponents(prev => [...prev, duplicated]);
   }, [selectedComponents]);
-
   const addComponent = useCallback((component) => {
     const newComponent = {
       ...component,
+      id: Date.now() + Math.random(),
+      position: selectedComponents.length
+    };
+    setSelectedComponents(prev => [...prev, newComponent]);
+  }, [selectedComponents]);
+
+  const handleTemplateSelection = useCallback((templateComponent) => {
+    // Agregar componente desde plantilla con configuración específica
+    const newComponent = {
+      ...templateComponent,
       id: Date.now() + Math.random(),
       position: selectedComponents.length
     };
@@ -382,51 +392,11 @@ const GeneradorInformes = () => {
                       ))
                     )}
                   </div>
-                )}
-
-                {activeLibraryTab === 'plantillas' && (
-                  <div className="component-list">
-                    {templatesList.map((template) => {
-                      const Icon = template.icon;
-                      return (
-                        <div key={template.name} className="component-card template-card">
-                          <div className="card-icon orange">
-                            <Icon />
-                          </div>
-                          <div className="card-content">
-                            <div className="card-title-row">
-                              <strong>{template.name}</strong>
-                              <span className="badge plantilla">Plantilla</span>
-                            </div>
-                            <p>{template.description}</p>
-                            <div className="template-tags">
-                              {template.components.slice(0, 3).map((comp, index) => (
-                                <span key={index} className="template-tag">{comp}</span>
-                              ))}
-                              {template.components.length > 3 && (
-                                <span className="template-tag more">+{template.components.length - 3} más</span>
-                              )}
-                            </div>
-                          </div>
-                          <button 
-                            className="add-btn"
-                            onClick={() => {
-                              // Agregar todos los componentes de la plantilla
-                              template.components.forEach(compName => {
-                                const component = componentsList.find(c => c.name === compName);
-                                if (component) {
-                                  addComponent(component);
-                                }
-                              });
-                            }}
-                            title="Usar plantilla"
-                          >
-                            <FaPlus />
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
+                )}                {activeLibraryTab === 'plantillas' && (
+                  <ReportTemplates 
+                    onSelectTemplate={handleTemplateSelection}
+                    componentsList={componentsList}
+                  />
                 )}
               </div>
             </section>

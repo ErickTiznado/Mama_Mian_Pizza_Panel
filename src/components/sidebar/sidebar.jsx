@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import {
   House,
   ShoppingCart,
@@ -23,6 +24,7 @@ import './sidebar.css';
 
 const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const { requestPermission, permissionStatus, sendTestNotification } = useNotifications();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -314,14 +316,12 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
   >
     <Settings size={16} />
     <span>Configuración</span>
-  </button>
-  <button
+  </button>  <button
     className="sidebar__dropdown-item logout"
     onClick={(e) => {
       e.stopPropagation();
-      // Aquí puedes ejecutar logout real si lo tienes
-      console.log('Cerrando sesión...');
-      navigate('/login'); // Redirige al login u otra ruta
+      logout();
+      navigate('/login');
     }}
     
   >

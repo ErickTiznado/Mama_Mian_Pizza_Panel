@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/navbar/nabvar'
 import Sidebar from './components/sidebar/sidebar';
 import Login from './components/auth/login/Login1';     // Asegúrate que esté bien el nombre del archivo
@@ -37,46 +39,59 @@ function App() {
     checkScreenSize();
     window.addEventListener('resize', checkScreenSize);
     return () => window.removeEventListener('resize', checkScreenSize);
-  }, []);
-
-  return (
-    <NotificationProvider>
-      {/* Gestor de notificaciones en tiempo real */}
-      <NotificationsPollingManager />
-      
-      <BrowserRouter>
-        <main className='container'>
-          <aside className='sidebar-container'>
-            <Sidebar 
-              onToggle={setSidebarCollapsed}
-              collapsed={sidebarCollapsed}
-            />
-          </aside>
-          <div 
-            className={`content-container ${
-              !isMobile && sidebarCollapsed ? 'sidebar-collapsed' : ''
-            }`}
-          >
-            <Routes>
-              <Route path="/" element={<Navigate to="/home" />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/registro" element={<Register />} />
-              <Route path="/recuperar" element={<Recuperar />} />
-              <Route path="/verificar-codigo" element={<VerificarCodigo />} />
-              <Route path="/restablecer" element={<Restablecer />} />
-              <Route path="/home" element={<Graficas/> } />
-              <Route path='/prueba' element={<Prueba/>}/>
-              <Route path='/AgregarContenido' element={<AgregarContenido/>}/>              <Route path="/pedidos" element={<OrderManager />} />              <Route path="/clientes" element={<GestionClientes />} />
-              <Route path="/administradores" element={<GestionAdministradores />} />
-              <Route path="/inventario" element={<Inventario />} />
-              <Route path="/graficas" element={<Graficas />} />
-              <Route path="/configuracion" element={<ConfiguracionAdmin />} />
-               <Route path="/generadordeinformes" element={<GeneradorInformes />} />
-            </Routes>
-          </div>
-        </main>
-      </BrowserRouter>
-    </NotificationProvider>
+  }, []);  return (
+    <AuthProvider>
+      <NotificationProvider>
+        {/* Gestor de notificaciones en tiempo real */}
+        <NotificationsPollingManager />
+        
+        <BrowserRouter>
+          <Routes>
+            {/* Ruta principal redirige al login */}
+            <Route path="/" element={<Navigate to="/login" />} />
+            
+            {/* Rutas de autenticación sin sidebar */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/registro" element={<Register />} />
+            <Route path="/recuperar" element={<Recuperar />} />
+            <Route path="/verificar-codigo" element={<VerificarCodigo />} />
+            <Route path="/restablecer" element={<Restablecer />} />
+            
+            {/* Rutas autenticadas con sidebar */}
+            <Route path="/*" element={
+              <ProtectedRoute>
+                <main className='container'>
+                  <aside className='sidebar-container'>
+                    <Sidebar 
+                      onToggle={setSidebarCollapsed}
+                      collapsed={sidebarCollapsed}
+                    />
+                  </aside>
+                  <div 
+                    className={`content-container ${
+                      !isMobile && sidebarCollapsed ? 'sidebar-collapsed' : ''
+                    }`}
+                  >
+                    <Routes>
+                      <Route path="/home" element={<Graficas/> } />
+                      <Route path='/prueba' element={<Prueba/>}/>
+                      <Route path='/AgregarContenido' element={<AgregarContenido/>}/>
+                      <Route path="/pedidos" element={<OrderManager />} />
+                      <Route path="/clientes" element={<GestionClientes />} />
+                      <Route path="/administradores" element={<GestionAdministradores />} />
+                      <Route path="/inventario" element={<Inventario />} />
+                      <Route path="/graficas" element={<Graficas />} />
+                      <Route path="/configuracion" element={<ConfiguracionAdmin />} />
+                      <Route path="/generadordeinformes" element={<GeneradorInformes />} />
+                    </Routes>
+                  </div>
+                </main>
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </BrowserRouter>
+      </NotificationProvider>
+    </AuthProvider>
   );
 }
 

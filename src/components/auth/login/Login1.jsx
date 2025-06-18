@@ -1,18 +1,33 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import './Login.css'; 
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../../context/AuthContext';
+import './Login.css';
 
 const Login = () => {
   const [correo, setCorreo] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login, isAuthenticated } = useAuth();
+
+  // Si ya está autenticado, redirigir
+  useEffect(() => {
+    if (isAuthenticated) {
+      const from = location.state?.from?.pathname || '/home';
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, navigate, location]);
 
   const togglePassword = () => setShowPassword(!showPassword);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(false);
 
     try {
       const response = await fetch('https://api.mamamianpizza.com/api/users/login', {
@@ -24,14 +39,20 @@ const Login = () => {
       const data = await response.json();
 
       if (data.success) {
-        setError(false);
-        navigate('/home'); // Redirige a Prueba.jsx
+        // Usar el contexto de autenticación para hacer login
+        login(data.user, data.token);
+        
+        // Redirigir a la página que intentaba acceder o a home por defecto
+        const from = location.state?.from?.pathname || '/home';
+        navigate(from, { replace: true });
       } else {
-        setError(true); // Muestra mensaje de error en pantalla
+        setError(true);
       }
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
       setError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,7 +95,9 @@ const Login = () => {
               </p>
             )}
 
-            <button type="submit">Ingresar</button>
+            <button type="submit" disabled={loading}>
+              {loading ? 'Ingresando...' : 'Ingresar'}
+            </button>
 
             <p className="register-text">
             Por seguridad, cambie su contraseña predeterminada después del primer acceso.
