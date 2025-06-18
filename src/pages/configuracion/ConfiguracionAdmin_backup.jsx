@@ -28,35 +28,36 @@ import {
 } from "lucide-react";
 import "./configuracion.css";
 import AdminService from "../../services/AdminService";
-import { useAuth } from "../../context/AuthContext";
 
 
 
 function ConfiguracionAdmin() {
   
-// Hook de autenticación
-const { user, isAuthenticated } = useAuth();
-
 // Estados de datos del administrador
 const [adminData, setAdminData] = useState(null);
 const [loading, setLoading] = useState(true);
 const [error, setError] = useState(null);
-const [successMessage, setSuccessMessage] = useState(null);
 
 const [modoEdicion, setModoEdicion] = useState(false);
 const [nombreAdmin, setNombreAdmin] = useState("");
 const [emailAdmin, setEmailAdmin] = useState("");
 const [telefonoAdmin, setTelefonoAdmin] = useState("");
 
-const [contrasenaActual, setContrasenaActual] = useState("");
 const [nuevaPassword, setNuevaPassword] = useState("");
 const [confirmarPassword, setConfirmarPassword] = useState("");
 
 const contrasenaValida =
-  contrasenaActual.trim().length >= 6 &&
   nuevaPassword.trim().length >= 6 &&
   confirmarPassword.trim().length >= 6 &&
   nuevaPassword === confirmarPassword;
+
+  // ✅ ESTADOS VERIFICACIÓN DE CÓDIGO
+  const [mostrarVerificacion, setMostrarVerificacion] = useState(false);
+  const [codigoVerificacion, setCodigoVerificacion] = useState("123456");
+  const [codigoInput, setCodigoInput] = useState("");
+  const [metodoEnvio, setMetodoEnvio] = useState("");
+  const [mensajeAlerta, setMensajeAlerta] = useState("");
+  const [verificado, setVerificado] = useState(false);
 
   // ✅ ESTADOS GENERALES
   const [activeTab, setActiveTab] = useState("cuenta");
@@ -68,34 +69,22 @@ const contrasenaValida =
   const [busqueda, setBusqueda] = useState("");
   const [tipo, setTipo] = useState("");
   const [estado, setEstado] = useState("");
-  const [backupData, setBackupData] = useState([]);  // ✅ FUNCIONES
+  const [backupData, setBackupData] = useState([]);
+  // ✅ FUNCIONES
   const limpiarFiltros = () => {
     setBusqueda("");
     setTipo("");
     setEstado("");
   };
-  // Función auxiliar para obtener el ID del administrador
-  const getAdminId = () => {
-    if (!user) return null;
-    // La API de login devuelve id_admin directamente en el objeto user
-    return user.id_admin;
-  };// Función para cargar datos del administrador
+
+  // Función para cargar datos del administrador
   const cargarDatosAdmin = async () => {
     try {
       setLoading(true);
       setError(null);
       
-      const adminId = getAdminId();
-      
-      // Verificar que el usuario esté autenticado y tenga un ID
-      if (!isAuthenticated || !adminId) {
-        throw new Error('Usuario no autenticado o ID de administrador no disponible');
-      }
-      
-      console.log('Cargando datos para el administrador ID:', adminId);
-      
-      // Obtener datos del administrador logueado
-      const admin = await AdminService.getAdminById(adminId);
+      // Obtener datos del administrador con ID 3
+      const admin = await AdminService.getAdminById(3);
       
       setAdminData(admin);
       setNombreAdmin(admin.nombre || "");
@@ -108,24 +97,15 @@ const contrasenaValida =
     } finally {
       setLoading(false);
     }
-  };  // Función para guardar cambios del perfil
+  };
+
+  // Función para guardar cambios del perfil
   const guardarCambiosPerfil = async () => {
     try {
       setLoading(true);
-      setError(null);
-      setSuccessMessage(null);
-      
-      const adminId = getAdminId();
-      
-      // Verificar que el usuario esté autenticado
-      if (!isAuthenticated || !adminId) {
-        throw new Error('Usuario no autenticado');
-      }
       
       // Aquí puedes implementar la llamada a la API para actualizar los datos
-      // Por ejemplo: await AdminService.updateAdmin(adminId, { nombre: nombreAdmin, correo: emailAdmin, celular: telefonoAdmin });
-      
-      console.log('Guardando cambios para el administrador ID:', adminId);
+      // Por ejemplo: await AdminService.updateAdmin(3, { nombre: nombreAdmin, correo: emailAdmin, celular: telefonoAdmin });
       
       // Por ahora solo actualizamos el estado local
       setAdminData(prev => ({
@@ -136,21 +116,10 @@ const contrasenaValida =
       }));
       
       setModoEdicion(false);
-      setSuccessMessage('Datos del perfil actualizados exitosamente');
-      
-      // Ocultar mensaje después de 5 segundos
-      setTimeout(() => {
-        setSuccessMessage(null);
-      }, 5000);
       
     } catch (error) {
       console.error('Error al guardar cambios:', error);
-      setError('Error al guardar los cambios del perfil');
-      
-      // Ocultar error después de 5 segundos
-      setTimeout(() => {
-        setError(null);
-      }, 5000);
+      setError('Error al guardar los cambios');
     } finally {
       setLoading(false);
     }
@@ -177,155 +146,20 @@ const contrasenaValida =
     if (dias === 0) return 'Hoy';
     if (dias === 1) return 'Ayer';
     return `Hace ${dias} días`;
-  };  // 🔍 Función para probar contraseña actual
-  const probarContrasenaActual = async () => {
-    try {
-      setLoading(true);
-      
-      const adminId = getAdminId();
-      
-      if (!isAuthenticated || !adminId) {
-        alert('❌ Usuario no autenticado');
-        return;
-      }
-      
-      if (!contrasenaActual.trim()) {
-        alert('❌ Ingresa la contraseña actual primero');
-        return;
-      }
-      
-      console.log('=== 🔍 PROBANDO CONTRASEÑA ACTUAL ===');
-      console.log('Admin ID:', adminId);
-      console.log('Contraseña a probar:', contrasenaActual);
-      
-      // Probar la contraseña usando el método de debugging
-      const resultado = await AdminService.debugPassword(adminId, contrasenaActual);
-      
-      console.log('Resultado de la prueba:', resultado);
-      
-      if (resultado.success) {
-        alert('✅ ¡CONTRASEÑA CORRECTA! La contraseña actual es válida.');
-        setSuccessMessage('Contraseña actual verificada correctamente');
-      } else {
-        alert(`❌ CONTRASEÑA INCORRECTA: ${resultado.message}`);
-        setError(`Contraseña incorrecta: ${resultado.message}`);
-      }
-      
-    } catch (error) {
-      console.error('Error al probar contraseña:', error);
-      alert(`❌ Error al probar contraseña: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }  };
-
-  // 🔍 Función para probar contraseña como texto plano
-  const probarContrasenaTextoPlano = async () => {
-    try {
-      setLoading(true);
-      
-      const adminId = getAdminId();
-      
-      if (!isAuthenticated || !adminId) {
-        alert('❌ Usuario no autenticado');
-        return;
-      }
-      
-      if (!contrasenaActual.trim()) {
-        alert('❌ Ingresa la contraseña actual primero');
-        return;
-      }
-      
-      console.log('=== 🔍 PROBANDO CONTRASEÑA COMO TEXTO PLANO ===');
-      console.log('Admin ID:', adminId);
-      console.log('Contraseña a probar:', contrasenaActual);
-      
-      // Probar la contraseña como texto plano
-      const resultado = await AdminService.testPlainTextPassword(adminId, contrasenaActual);
-      
-      console.log('Resultado de la prueba:', resultado);
-      
-      if (resultado.success) {
-        alert('✅ ¡CONTRASEÑA CORRECTA! La contraseña texto plano es válida.');
-        setSuccessMessage('Contraseña texto plano verificada correctamente');
-      } else {
-        alert(`❌ CONTRASEÑA INCORRECTA: ${resultado.message}`);
-        setError(`Contraseña texto plano incorrecta: ${resultado.message}`);
-      }
-      
-    } catch (error) {
-      console.error('Error al probar contraseña texto plano:', error);
-      alert(`❌ Error al probar contraseña texto plano: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
   };
 
-  // Función para cambiar contraseña
-  const cambiarContrasena = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      setSuccessMessage(null);
-      
-      const adminId = getAdminId();
-      
-      // Verificar que el usuario esté autenticado
-      if (!isAuthenticated || !adminId) {
-        throw new Error('Usuario no autenticado');
-      }
-      
-      // Debug: Mostrar datos que se enviarán
-      console.log('=== DEBUG CAMBIO DE CONTRASEÑA ===');
-      console.log('Admin ID:', adminId);
-      console.log('Contraseña actual length:', contrasenaActual.length);
-      console.log('Nueva contraseña length:', nuevaPassword.length);
-      console.log('Usuario completo:', user);
-      
-      // Llamada a la API para cambiar la contraseña
-      await AdminService.changePassword(adminId, contrasenaActual, nuevaPassword);
-      
-      // Limpiar los campos después del cambio exitoso
-      setContrasenaActual("");
-      setNuevaPassword("");
-      setConfirmarPassword("");
-      
-      // Mostrar mensaje de éxito
-      setSuccessMessage('Contraseña cambiada exitosamente');
-      
-      // Ocultar mensaje después de 5 segundos
-      setTimeout(() => {
-        setSuccessMessage(null);
-      }, 5000);
-      
-    } catch (error) {
-      console.error('Error completo al cambiar contraseña:', error);
-      console.error('Mensaje del error:', error.message);
-      
-      // Mostrar mensaje de error específico
-      let errorMessage = 'Error al cambiar la contraseña';
-      
-      if (error.message.includes('401') || error.message.includes('Unauthorized')) {
-        errorMessage = 'Contraseña actual incorrecta. Verifica que hayas ingresado la contraseña correcta.';
-      } else if (error.message.includes('400') || error.message.includes('Bad Request')) {
-        errorMessage = 'Datos de contraseña inválidos. Verifica que la nueva contraseña tenga al menos 6 caracteres.';
-      } else if (error.message.includes('403') || error.message.includes('Forbidden')) {
-        errorMessage = 'No tienes permisos para cambiar la contraseña';
-      } else if (error.message.includes('Network') || error.message.includes('fetch')) {
-        errorMessage = 'Error de conexión. Verifica tu conexión a internet.';
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      
-      setError(errorMessage);
-      
-      // Ocultar error después de 8 segundos para dar más tiempo a leer
-      setTimeout(() => {
-        setError(null);
-      }, 8000);
-      
-    } finally {
-      setLoading(false);
-    }
+  const enviarCodigo = (metodo) => {
+    setMetodoEnvio(metodo);
+    setMostrarVerificacion(true);
+    setCodigoInput("123456");
+
+    const mensaje = metodo === "sms"
+      ? "📲 Código enviado vía SMS al +34 612 345 678"
+      : "📧 Código enviado vía Email a admin@mitienda.com";
+
+    setMensajeAlerta(mensaje);
+
+    setTimeout(() => setMensajeAlerta(""), 3000);
   };
 
   const filtrados = data.filter((item) => {
@@ -335,23 +169,10 @@ const contrasenaValida =
     const coincideTipo = tipo ? item.type === tipo : true;
     const coincideEstado = estado ? item.state === estado : true;
     return coincideBusqueda && coincideTipo && coincideEstado;
-  });  useEffect(() => {
-    // Debug: Mostrar información del usuario logueado
-    console.log('Usuario autenticado:', isAuthenticated);
-    console.log('Datos del usuario:', user);
-    console.log('ID del administrador detectado:', getAdminId());
-    
-    // Solo cargar datos si el usuario está autenticado
-    if (isAuthenticated && getAdminId()) {
-      cargarDatosAdmin();
-    } else {
-      setLoading(false);
-      if (isAuthenticated) {
-        setError('ID de administrador no disponible en los datos del usuario');
-      } else {
-        setError('Usuario no autenticado');
-      }
-    }
+  });
+  useEffect(() => {
+    // Cargar datos del administrador
+    cargarDatosAdmin();
     
     // Datos simulados para historial
     const historialSimulado = [
@@ -417,7 +238,7 @@ const contrasenaValida =
 
     setData(historialSimulado);
     setBackupData(backupSimulado);
-  }, [isAuthenticated, user]);
+  }, []);
   return (
     <div className="config-wrapper">
       {/* Header */}
@@ -428,7 +249,9 @@ const contrasenaValida =
           Gestiona la configuración de tu cuenta, historial y backups
         </p>
         <div className="config-divider" />
-      </div>      {/* Indicador de carga */}
+      </div>
+
+      {/* Indicador de carga */}
       {loading && (
         <div style={{ 
           display: 'flex', 
@@ -442,24 +265,8 @@ const contrasenaValida =
         </div>
       )}
 
-      {/* Mensaje de usuario no autenticado */}
-      {!isAuthenticated && !loading && (
-        <div style={{
-          background: '#fef3c7',
-          border: '1px solid #f59e0b',
-          borderRadius: '0.5rem',
-          padding: '1rem',
-          margin: '1rem 0',
-          color: '#92400e',
-          textAlign: 'center'
-        }}>
-          <Lock size={16} style={{ marginRight: '0.5rem' }} />
-          Necesitas iniciar sesión para acceder a la configuración del administrador.
-        </div>
-      )}
-
       {/* Mensaje de error */}
-      {error && isAuthenticated && (
+      {error && (
         <div style={{
           background: '#fee2e2',
           border: '1px solid #fecaca',
@@ -488,7 +295,7 @@ const contrasenaValida =
       )}
 
       {/* Main Content */}
-      {!loading && !error && isAuthenticated && adminData && (
+      {!loading && !error && adminData && (
         <div className="config-content-background">
         {/* Tabs */}
         <div className="tabs">          {[
@@ -526,27 +333,26 @@ const contrasenaValida =
       {modoEdicion ? "Cancelar" : "Editar"}
     </button>
   </div>
+
   {!modoEdicion ? (
     <div className="perfil-contenido">
       <div className="avatar-admin">
         <User size={32} />
       </div>
       <div className="info-admin">
-        <h3>{adminData?.nombre || 'Nombre no disponible'}</h3>
-        <span className="badge-admin">
-          {adminData?.rol === 'super_admin' ? 'Super Administrador' : 'Administrador'}
-        </span>
+        <h3>{nombreAdmin}</h3>
+        <span className="badge-admin">Administrador</span>
         <p>
-          <Mail size={16} /> {adminData?.correo || 'Email no disponible'}
+          <Mail size={16} /> {emailAdmin}
         </p>
         <p>
-          <Phone size={16} /> {adminData?.celular || 'Teléfono no disponible'}
+          <Phone size={16} /> {telefonoAdmin}
         </p>
         <p>
-          <Calendar size={16} /> Miembro desde {formatearFecha(adminData?.fecha_creacion)}
+          <Calendar size={16} /> Miembro desde 2023-01-15
         </p>
         <p>
-          <Clock size={16} /> Último acceso: {formatearUltimoAcceso(adminData?.ultimo_acceso)}
+          <Clock size={16} /> Último acceso: Hoy, 14:30
         </p>
       </div>
     </div>
@@ -574,13 +380,17 @@ const contrasenaValida =
         className="input-codigo"
         value={telefonoAdmin}
         onChange={(e) => setTelefonoAdmin(e.target.value)}
-      />      <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
+      />
+
+      <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
         <button
           className="btn-guardar-perfil"
-          onClick={guardarCambiosPerfil}
-          disabled={loading}
+          onClick={() => {
+            // Aquí puedes guardar en backend si deseas
+            setModoEdicion(false);
+          }}
         >
-          {loading ? 'Guardando...' : 'Guardar Cambios'}
+          Guardar Cambios
         </button>
         <button className="btn-cancelar-perfil" onClick={() => setModoEdicion(false)}>
           Cancelar
@@ -588,170 +398,149 @@ const contrasenaValida =
       </div>
     </div>
   )}
-</div>           <div className="panel-cambiar-password">
+</div>
+
+           <div className="panel-cambiar-password">
   <h2 className="panel-title">
     <Lock size={20} style={{ marginRight: "8px", color: "#f97316" }} />
     Cambiar Contraseña
   </h2>
 
-  {/* Mensaje de éxito */}
-  {successMessage && (
-    <div style={{
-      background: '#d1fae5',
-      border: '1px solid #10b981',
-      borderRadius: '0.5rem',
-      padding: '1rem',
-      margin: '1rem 0',
-      color: '#065f46',
-      display: 'flex',
-      alignItems: 'center'
-    }}>
-      <CheckCircle size={16} style={{ marginRight: '0.5rem' }} />
-      {successMessage}
+  {/* Paso 1: Verificación de Identidad */}
+  {!mostrarVerificacion && !verificado && (
+    <div className="verificacion-identidad">
+      <h3>Verificación de Identidad</h3>
+      <p>Selecciona cómo quieres recibir el código de verificación</p>
+
+      <div className="opciones-verificacion">
+        <div className="opcion-verificacion">
+          <div className="opcion-contenido">
+            <Phone size={20} color="#60A5FA" />
+            <div className="texto-verificacion">
+              <strong>SMS al teléfono</strong>
+              <p>+34 612 345 678</p>
+            </div>
+          </div>
+          <button className="btn-enviar-sms" onClick={() => enviarCodigo("sms")}>
+            Enviar SMS
+          </button>
+        </div>
+
+        <div className="opcion-verificacion">
+          <div className="opcion-contenido">
+            <Mail size={20} color="#10B981" />
+            <div className="texto-verificacion">
+              <strong>Email</strong>
+              <p>admin@mitienda.com</p>
+            </div>
+          </div>
+          <button className="btn-enviar-email" onClick={() => enviarCodigo("email")}>
+            Enviar Email
+          </button>
+        </div>
+      </div>
+
+      <div className="demo-codigo">
+        <Info size={16} /> Demo: El código de verificación es: 123456
+      </div>
+
+      {mensajeAlerta && <div className="alerta-verde">{mensajeAlerta}</div>}
     </div>
   )}
 
-  {/* Mensaje de error específico para cambio de contraseña */}
-  {error && (
-    <div style={{
-      background: '#fee2e2',
-      border: '1px solid #fecaca',
-      borderRadius: '0.5rem',
-      padding: '1rem',
-      margin: '1rem 0',
-      color: '#dc2626',
-      display: 'flex',
-      alignItems: 'center'
-    }}>
-      <AlertTriangle size={16} style={{ marginRight: '0.5rem' }} />
-      {error}
+  {/* Paso 2: Ingreso del Código */}
+  {mostrarVerificacion && !verificado && (
+    <div className="panel-verificacion-codigo">
+      <div className="icono-verificacion-grande">
+        <Shield size={48} color="white" />
+      </div>
+
+      <div className="bloque-verificacion">
+        <h3 className="titulo-verificacion">Verificar Código</h3>
+        <p className="subtexto-verificacion">Ingresa el código que recibiste</p>
+      </div>
+
+      <input
+        type="text"
+        className="input-codigo"
+        maxLength={6}
+        value={codigoInput}
+        onChange={(e) => setCodigoInput(e.target.value)}
+      />
+
+      <div className="demo-codigo">
+        <Shield size={16} /> Demo: El código de verificación es: 123456
+      </div>
+
+      <div className="acciones-codigo">
+        <button className="btn-black" onClick={() => setMostrarVerificacion(false)}>
+          Volver
+        </button>
+        <button
+          className="btn-orange"
+          disabled={codigoInput !== "123456"}
+          onClick={() => {
+            setVerificado(true);
+            setMostrarVerificacion(false);
+            setCodigoInput("");
+          }}
+        >
+          Verificar
+        </button>
+      </div>
     </div>
   )}
 
-  <div className="panel-nueva-contrasena">
-    <h3 className="titulo-verificacion">Cambiar Contraseña</h3>
-    <p className="subtexto-verificacion">Ingresa tu contraseña actual y la nueva contraseña</p>
+  {/* Paso 3: Formulario Nueva Contraseña */}
+  {verificado && (
+   <div className="panel-nueva-contrasena">
+  <h3 className="titulo-verificacion">Nueva Contraseña</h3>
+  <p className="subtexto-verificacion">Crea una nueva contraseña segura</p>
 
-    <label>Contraseña Actual</label>
-    <div style={{ position: 'relative' }}>
-      <input
-        type={showCurrent ? "text" : "password"}
-        className="input-codigo"
-        placeholder="Ingresa tu contraseña actual"
-        value={contrasenaActual}
-        onChange={(e) => setContrasenaActual(e.target.value)}
-      />
-      <button
-        type="button"
-        onClick={() => setShowCurrent(!showCurrent)}
-        style={{
-          position: 'absolute',
-          right: '10px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          border: 'none',
-          background: 'transparent',
-          cursor: 'pointer'
-        }}
-      >
-        {showCurrent ? <EyeOff size={16} /> : <Eye size={16} />}
-      </button>
-    </div>
+  <label>Nueva Contraseña</label>
+  <input
+    type="password"
+    className="input-codigo"
+    placeholder="Ingresa tu nueva contraseña"
+    value={nuevaPassword}
+    onChange={(e) => setNuevaPassword(e.target.value)}
+  />
 
-    <label>Nueva Contraseña</label>
-    <div style={{ position: 'relative' }}>
-      <input
-        type={showNew ? "text" : "password"}
-        className="input-codigo"
-        placeholder="Ingresa tu nueva contraseña"
-        value={nuevaPassword}
-        onChange={(e) => setNuevaPassword(e.target.value)}
-      />
-      <button
-        type="button"
-        onClick={() => setShowNew(!showNew)}
-        style={{
-          position: 'absolute',
-          right: '10px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          border: 'none',
-          background: 'transparent',
-          cursor: 'pointer'
-        }}
-      >
-        {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
-      </button>
-    </div>
+  <label>Confirmar Nueva Contraseña</label>
+  <input
+    type="password"
+    className="input-codigo"
+    placeholder="Confirma tu nueva contraseña"
+    value={confirmarPassword}
+    onChange={(e) => setConfirmarPassword(e.target.value)}
+  />
 
-    <label>Confirmar Nueva Contraseña</label>
-    <div style={{ position: 'relative' }}>
-      <input
-        type={showConfirm ? "text" : "password"}
-        className="input-codigo"
-        placeholder="Confirma tu nueva contraseña"
-        value={confirmarPassword}
-        onChange={(e) => setConfirmarPassword(e.target.value)}
-      />
-      <button
-        type="button"
-        onClick={() => setShowConfirm(!showConfirm)}
-        style={{
-          position: 'absolute',
-          right: '10px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          border: 'none',
-          background: 'transparent',
-          cursor: 'pointer'
-        }}
-      >
-        {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
-      </button>
-    </div>
+  {nuevaPassword && confirmarPassword && nuevaPassword !== confirmarPassword && (
+    <p style={{ color: "red", marginTop: "8px" }}>❗Las contraseñas no coinciden</p>
+  )}
 
-    {nuevaPassword && confirmarPassword && nuevaPassword !== confirmarPassword && (
-      <p style={{ color: "red", marginTop: "8px" }}>❗Las contraseñas no coinciden</p>
-    )}
-
-    {nuevaPassword && nuevaPassword.length < 6 && (
-      <p style={{ color: "orange", marginTop: "8px" }}>⚠️ La contraseña debe tener al menos 6 caracteres</p>
-    )}    <div className="acciones-codigo">
-      <button 
-        className="btn-secondary" 
-        onClick={() => {
-          setContrasenaActual("");
-          setNuevaPassword("");
-          setConfirmarPassword("");
-          setError(null);
-          setSuccessMessage(null);
-        }}
-        disabled={loading}
-      >
-        <RefreshCw size={16} style={{ marginRight: "6px" }} />
-        Limpiar Campos
-      </button>
-      
-      <button
-        className="btn-primary"
-        disabled={!contrasenaValida || loading}
-        onClick={cambiarContrasena}
-      >
-        {loading ? (
-          <>
-            <Loader size={16} className="animate-spin" style={{ marginRight: "6px" }} />
-            Cambiando...
-          </>
-        ) : (
-          <>
-            <Lock size={16} style={{ marginRight: "6px" }} />
-            Cambiar Contraseña
-          </>
-        )}
-      </button>
-    </div>
+  <div className="acciones-codigo">
+    <button className="btn-black" onClick={() => setVerificado(false)}>
+      Volver
+    </button>
+    <button
+      className="btn-cambiar"
+      disabled={!contrasenaValida}
+      onClick={() => {
+        // Aquí puedes guardar o enviar la contraseña
+        console.log("Contraseña cambiada");
+        setNuevaPassword("");
+        setConfirmarPassword("");
+        setVerificado(false);
+      }}
+    >
+      Cambiar Contraseña
+    </button>
   </div>
 </div>
+
+  )}
+</div>     
 
 
 <div className="panel-seguridad">
@@ -995,7 +784,7 @@ const contrasenaValida =
               </div>
             </div>          )}
         </div>
-        </div>
+
       )}
     </div>
   );

@@ -34,13 +34,26 @@ const Login = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ correo, contrasena }),
-      });
+      });      const data = await response.json();
 
-      const data = await response.json();
+      // Debug: Log de la respuesta completa de la API
+      console.log('Respuesta completa de la API de login:', JSON.stringify(data, null, 2));
 
       if (data.success) {
+        // La API devuelve los datos del usuario directamente en la respuesta
+        // Crear un objeto user con los datos necesarios
+        const userData = {
+          id_admin: data.id_admin,
+          nombre: data.nombre,
+          rol: data.rol,
+          correo: correo // Agregar el correo que usó para hacer login
+        };
+        
+        console.log('Datos del usuario a guardar:', JSON.stringify(userData, null, 2));
+        
         // Usar el contexto de autenticación para hacer login
-        login(data.user, data.token);
+        // Como no hay token separado, podemos usar un token simulado o vacío
+        login(userData, 'token-session-active');
         
         // Redirigir a la página que intentaba acceder o a home por defecto
         const from = location.state?.from?.pathname || '/home';

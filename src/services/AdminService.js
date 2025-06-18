@@ -2,14 +2,19 @@
 
 const API_BASE_URL = 'https://api.mamamianpizza.com/api/users';
 
-class AdminService {
-  // Headers comunes para todas las requests
+class AdminService {  // Headers comunes para todas las requests
   static getHeaders() {
-    return {
+    const token = localStorage.getItem('authToken');
+    const headers = {
       'Content-Type': 'application/json',
-      // Agregar token de autenticación cuando esté disponible
-      // 'Authorization': `Bearer ${localStorage.getItem('token')}`
     };
+    
+    // Agregar token de autenticación si está disponible
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    
+    return headers;
   }
 
   // Manejar errores de respuesta
@@ -102,6 +107,57 @@ class AdminService {
       return await this.handleResponse(response);
     } catch (error) {
       console.error('Error al cambiar estado del administrador:', error);
+      throw error;
+    }
+  }  // GET - Obtener administrador por ID
+  static async getAdminById(adminId) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/admins/${adminId}`, {
+        method: 'GET',
+        headers: this.getHeaders()
+      });
+      
+      const data = await this.handleResponse(response);
+      console.log('Administrador obtenido:', JSON.stringify(data, null, 2));
+      
+      // Devolver solo el objeto administrador
+      return data.administrador || data;
+    } catch (error) {
+      console.error('Error al obtener administrador por ID:', error);
+      throw error;
+    }
+  }  // PUT - Cambiar contraseña del administrador
+  static async changePassword(adminId, contrasenaActual, nuevaContrasena) {
+    try {
+      // Asegurar que adminId sea un número
+      const idAdmin = parseInt(adminId);
+      
+      const payload = {
+        id_admin: idAdmin,
+        contrasenaActual: contrasenaActual,
+        nuevaContrasena: nuevaContrasena
+      };
+
+      console.log('Cambiando contraseña para administrador ID:', idAdmin);
+      
+      const response = await fetch('https://api.mamamianpizza.com/api/auth/admin/change-password', {
+        method: 'PUT',
+        headers: this.getHeaders(),
+        body: JSON.stringify(payload)
+      });
+      
+      // Si no es exitoso, intentamos obtener más detalles del error
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Error del servidor:', errorData);
+        throw new Error(errorData.message || `Error ${response.status}: ${response.statusText}`);
+      }
+      
+      const result = await response.json();
+      console.log('Contraseña cambiada exitosamente');
+      
+      return result;    } catch (error) {
+      console.error('Error en changePassword:', error);
       throw error;
     }
   }
