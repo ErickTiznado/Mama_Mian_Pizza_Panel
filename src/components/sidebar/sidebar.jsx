@@ -61,14 +61,13 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
       icon: Package,
       hasNotification: true,
       notificationCategory: 'inventario'
-    },
-    {
-      id: 'graficas',
-      path: '/graficas',
+    },    {
+      id: 'generadordeinformes',
+      path: '/generadordeinformes',
       label: 'Informes',
       icon: ChartLine,
       hasNotification: false
-    },    {
+    },{
       id: 'clientes',
       path: '/clientes',
       label: 'Clientes',

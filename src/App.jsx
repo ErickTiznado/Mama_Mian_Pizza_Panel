@@ -17,7 +17,7 @@ import Inventario from './components/Inventario/Inventario';
 import Graficas from './pages/graficas/graficas';
 import ConfiguracionAdmin from './pages/configuracion/ConfiguracionAdmin';
 import NotificationsPollingManager from './components/OrderNotificationsManager';
-import Generadordeinformes from  './components/GeneradorInformes/GeneradorInformes';
+import GeneradorInformes from  './components/GeneradorInformes/GeneradorInformes';
 
 // Importamos el contexto de notificaciones
 import { NotificationProvider } from './context/NotificationContext';
@@ -71,7 +71,7 @@ function App() {
               <Route path="/inventario" element={<Inventario />} />
               <Route path="/graficas" element={<Graficas />} />
               <Route path="/configuracion" element={<ConfiguracionAdmin />} />
-               <Route path="/generadordeinformes" element={<Generadordeinformes />} />
+               <Route path="/generadordeinformes" element={<GeneradorInformes />} />
             </Routes>
           </div>
         </main>
