@@ -52,20 +52,12 @@ const InfoTooltip = ({
             document.removeEventListener('mousedown', handleClickOutside);
             document.removeEventListener('keydown', handleEscapeKey);
         };
-    }, [isVisible]);
-
-    const openTooltip = () => {
-        setIsAnimating(true);
+    }, [isVisible]);    const openTooltip = () => {
         setIsVisible(true);
-        setTimeout(() => setIsAnimating(false), 300);
     };
 
     const closeTooltip = () => {
-        setIsAnimating(true);
-        setTimeout(() => {
-            setIsVisible(false);
-            setIsAnimating(false);
-        }, 200);
+        setIsVisible(false);
     };
 
     const toggleTooltip = () => {
@@ -122,31 +114,34 @@ ${actionTips}
     };
 
     return (
-        <div className="info-tooltip-container">
-            <button
+        <div className="info-tooltip-container">            <button
                 ref={triggerRef}
                 className={`info-tooltip-trigger ${size} ${variant} ${isVisible ? 'active' : ''}`}
-                onMouseEnter={() => !isVisible && variant !== 'compact' && openTooltip()}
-                onMouseLeave={() => variant !== 'compact' && setTimeout(() => {
-                    if (!tooltipRef.current?.matches(':hover')) {
-                        closeTooltip();
-                    }
-                }, 100)}
+                onMouseEnter={() => {}} // Hover deshabilitado
+                onMouseLeave={() => {}} // Hover deshabilitado
                 onClick={toggleTooltip}
                 aria-label={`Información sobre ${title}`}
                 aria-expanded={isVisible}
+                style={{
+                    transition: 'none',
+                    transform: 'none'
+                }}
             >
                 <HelpCircle size={size === 'small' ? 14 : size === 'large' ? 20 : 16} />
                 {variant === 'detailed' && (
                     <span className="trigger-pulse"></span>
                 )}
-            </button>            
-            {isVisible && (
+            </button>            {isVisible && (
                 <div 
                     ref={tooltipRef}
-                    className={`info-tooltip-popup ${position} ${variant} ${isAnimating ? 'animating' : ''}`}
-                    onMouseEnter={() => setIsVisible(true)}
-                    onMouseLeave={() => variant !== 'compact' && closeTooltip()}
+                    className={`info-tooltip-popup ${position} ${variant}`}
+                    onMouseEnter={() => {}} // Hover deshabilitado
+                    onMouseLeave={() => {}} // Hover deshabilitado
+                    style={{
+                        transition: 'none',
+                        transform: 'none',
+                        animation: 'none'
+                    }}
                 >
                     <div className="tooltip-header">
                         <div className="header-content">

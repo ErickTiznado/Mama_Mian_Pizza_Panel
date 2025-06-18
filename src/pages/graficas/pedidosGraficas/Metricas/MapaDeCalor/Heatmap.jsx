@@ -114,7 +114,7 @@ const Heatmap = () => {
 • Horarios azules: considera promociones especiales o ofertas de descuento
 • Usa estos datos para planificar turnos y reducir costos operativos
 • Implementa menús especiales en horarios de baja demanda"
-                    position="bottom"
+                    position="left"
                     size="medium"
                     variant="detailed"
                 />
