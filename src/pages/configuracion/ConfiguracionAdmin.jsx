@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-
 import {
   Settings,
   Lock,
@@ -15,16 +14,17 @@ import {
   ShoppingCart,
   Package,
   Download,
-  MessageSquare,
-   Info,
   RefreshCw,
   Calendar,
-   User,    // Nuevo
-  Edit,    // Nuevo
-  Mail,    // Nuevo
-  Phone,   // Nuevo
-  Clock,    // Nuevo
-  Loader
+  User,
+  Edit,
+  Mail,
+  Phone,
+  Clock,
+  Loader,
+  Save,
+  X,
+  LogOut
 } from "lucide-react";
 import "./configuracion.css";
 import AdminService from "../../services/AdminService";
@@ -33,51 +33,54 @@ import { useAuth } from "../../context/AuthContext";
 
 
 function ConfiguracionAdmin() {
-  
-// Hook de autenticación
-const { user, isAuthenticated } = useAuth();
+  // Hook de autenticación
+  const { user, isAuthenticated, logout } = useAuth();
 
-// Estados de datos del administrador
-const [adminData, setAdminData] = useState(null);
-const [loading, setLoading] = useState(true);
-const [error, setError] = useState(null);
-const [successMessage, setSuccessMessage] = useState(null);
+  // Estados de datos del administrador
+  const [adminData, setAdminData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
-const [modoEdicion, setModoEdicion] = useState(false);
-const [nombreAdmin, setNombreAdmin] = useState("");
-const [emailAdmin, setEmailAdmin] = useState("");
-const [telefonoAdmin, setTelefonoAdmin] = useState("");
+  // Estados de edición de perfil
+  const [modoEdicion, setModoEdicion] = useState(false);
+  const [nombreAdmin, setNombreAdmin] = useState("");
+  const [emailAdmin, setEmailAdmin] = useState("");
+  const [telefonoAdmin, setTelefonoAdmin] = useState("");
 
-const [contrasenaActual, setContrasenaActual] = useState("");
-const [nuevaPassword, setNuevaPassword] = useState("");
-const [confirmarPassword, setConfirmarPassword] = useState("");
+  // Estados de cambio de contraseña
+  const [contrasenaActual, setContrasenaActual] = useState("");
+  const [nuevaPassword, setNuevaPassword] = useState("");
+  const [confirmarPassword, setConfirmarPassword] = useState("");
 
-const contrasenaValida =
-  contrasenaActual.trim().length >= 6 &&
-  nuevaPassword.trim().length >= 6 &&
-  confirmarPassword.trim().length >= 6 &&
-  nuevaPassword === confirmarPassword;
+  // Validación de contraseña
+  const contrasenaValida =
+    contrasenaActual.trim().length >= 6 &&
+    nuevaPassword.trim().length >= 6 &&
+    confirmarPassword.trim().length >= 6 &&
+    nuevaPassword === confirmarPassword;
 
-  // ✅ ESTADOS GENERALES
+  // Estados generales
   const [activeTab, setActiveTab] = useState("cuenta");
   const [showCurrent, setShowCurrent] = useState(false);
-  const [showNew, setShowNew] = useState(false);  const [showConfirm, setShowConfirm] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  // ✅ ESTADOS FILTROS E HISTORIAL
+  // Estados de historial y filtros
   const [data, setData] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [tipo, setTipo] = useState("");
   const [estado, setEstado] = useState("");
-  const [backupData, setBackupData] = useState([]);  // ✅ FUNCIONES
+  const [backupData, setBackupData] = useState([]);  // Funciones utilitarias
   const limpiarFiltros = () => {
     setBusqueda("");
     setTipo("");
     setEstado("");
   };
+
   // Función auxiliar para obtener el ID del administrador
   const getAdminId = () => {
     if (!user) return null;
-    // La API de login devuelve id_admin directamente en el objeto user
     return user.id_admin;
   };// Función para cargar datos del administrador
   const cargarDatosAdmin = async () => {
@@ -173,94 +176,10 @@ const contrasenaValida =
     const fechaAcceso = new Date(fecha);
     const diferencia = ahora - fechaAcceso;
     const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-    
-    if (dias === 0) return 'Hoy';
+      if (dias === 0) return 'Hoy';
     if (dias === 1) return 'Ayer';
     return `Hace ${dias} días`;
-  };  // 🔍 Función para probar contraseña actual
-  const probarContrasenaActual = async () => {
-    try {
-      setLoading(true);
-      
-      const adminId = getAdminId();
-      
-      if (!isAuthenticated || !adminId) {
-        alert('❌ Usuario no autenticado');
-        return;
-      }
-      
-      if (!contrasenaActual.trim()) {
-        alert('❌ Ingresa la contraseña actual primero');
-        return;
-      }
-      
-      console.log('=== 🔍 PROBANDO CONTRASEÑA ACTUAL ===');
-      console.log('Admin ID:', adminId);
-      console.log('Contraseña a probar:', contrasenaActual);
-      
-      // Probar la contraseña usando el método de debugging
-      const resultado = await AdminService.debugPassword(adminId, contrasenaActual);
-      
-      console.log('Resultado de la prueba:', resultado);
-      
-      if (resultado.success) {
-        alert('✅ ¡CONTRASEÑA CORRECTA! La contraseña actual es válida.');
-        setSuccessMessage('Contraseña actual verificada correctamente');
-      } else {
-        alert(`❌ CONTRASEÑA INCORRECTA: ${resultado.message}`);
-        setError(`Contraseña incorrecta: ${resultado.message}`);
-      }
-      
-    } catch (error) {
-      console.error('Error al probar contraseña:', error);
-      alert(`❌ Error al probar contraseña: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }  };
-
-  // 🔍 Función para probar contraseña como texto plano
-  const probarContrasenaTextoPlano = async () => {
-    try {
-      setLoading(true);
-      
-      const adminId = getAdminId();
-      
-      if (!isAuthenticated || !adminId) {
-        alert('❌ Usuario no autenticado');
-        return;
-      }
-      
-      if (!contrasenaActual.trim()) {
-        alert('❌ Ingresa la contraseña actual primero');
-        return;
-      }
-      
-      console.log('=== 🔍 PROBANDO CONTRASEÑA COMO TEXTO PLANO ===');
-      console.log('Admin ID:', adminId);
-      console.log('Contraseña a probar:', contrasenaActual);
-      
-      // Probar la contraseña como texto plano
-      const resultado = await AdminService.testPlainTextPassword(adminId, contrasenaActual);
-      
-      console.log('Resultado de la prueba:', resultado);
-      
-      if (resultado.success) {
-        alert('✅ ¡CONTRASEÑA CORRECTA! La contraseña texto plano es válida.');
-        setSuccessMessage('Contraseña texto plano verificada correctamente');
-      } else {
-        alert(`❌ CONTRASEÑA INCORRECTA: ${resultado.message}`);
-        setError(`Contraseña texto plano incorrecta: ${resultado.message}`);
-      }
-      
-    } catch (error) {
-      console.error('Error al probar contraseña texto plano:', error);
-      alert(`❌ Error al probar contraseña texto plano: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Función para cambiar contraseña
+  };  // Función para cambiar contraseña
   const cambiarContrasena = async () => {
     try {
       setLoading(true);
@@ -269,17 +188,9 @@ const contrasenaValida =
       
       const adminId = getAdminId();
       
-      // Verificar que el usuario esté autenticado
       if (!isAuthenticated || !adminId) {
         throw new Error('Usuario no autenticado');
       }
-      
-      // Debug: Mostrar datos que se enviarán
-      console.log('=== DEBUG CAMBIO DE CONTRASEÑA ===');
-      console.log('Admin ID:', adminId);
-      console.log('Contraseña actual length:', contrasenaActual.length);
-      console.log('Nueva contraseña length:', nuevaPassword.length);
-      console.log('Usuario completo:', user);
       
       // Llamada a la API para cambiar la contraseña
       await AdminService.changePassword(adminId, contrasenaActual, nuevaPassword);
@@ -298,8 +209,7 @@ const contrasenaValida =
       }, 5000);
       
     } catch (error) {
-      console.error('Error completo al cambiar contraseña:', error);
-      console.error('Mensaje del error:', error.message);
+      console.error('Error al cambiar contraseña:', error);
       
       // Mostrar mensaje de error específico
       let errorMessage = 'Error al cambiar la contraseña';
@@ -318,13 +228,28 @@ const contrasenaValida =
       
       setError(errorMessage);
       
-      // Ocultar error después de 8 segundos para dar más tiempo a leer
+      // Ocultar error después de 8 segundos
       setTimeout(() => {
         setError(null);
       }, 8000);
       
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Función para cerrar sesión
+  const cerrarSesion = () => {
+    if (window.confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+      // Llamar a la función de logout del contexto de autenticación
+      if (typeof logout === 'function') {
+        logout();
+      } else {
+        // Fallback: limpiar localStorage y recargar la página
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+      }
     }
   };
 
@@ -417,573 +342,829 @@ const contrasenaValida =
 
     setData(historialSimulado);
     setBackupData(backupSimulado);
-  }, [isAuthenticated, user]);
-  return (
+  }, [isAuthenticated, user]);  return (
     <div className="config-wrapper">
-      {/* Header */}
+      {/* Header mejorado */}
       <div className="config-header-section">
-        <h1 className="config-title">
-          <Settings className="config-icon" /> Configuración del Administrador
-        </h1>        <p className="config-subtitle">
-          Gestiona la configuración de tu cuenta, historial y backups
-        </p>
-        <div className="config-divider" />
-      </div>      {/* Indicador de carga */}
-      {loading && (
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center', 
-          padding: '2rem',
-          gap: '0.5rem'
-        }}>
-          <Loader className="animate-spin" size={20} />
-          <span>Cargando datos del administrador...</span>
-        </div>
-      )}
-
-      {/* Mensaje de usuario no autenticado */}
-      {!isAuthenticated && !loading && (
-        <div style={{
-          background: '#fef3c7',
-          border: '1px solid #f59e0b',
-          borderRadius: '0.5rem',
-          padding: '1rem',
-          margin: '1rem 0',
-          color: '#92400e',
-          textAlign: 'center'
-        }}>
-          <Lock size={16} style={{ marginRight: '0.5rem' }} />
-          Necesitas iniciar sesión para acceder a la configuración del administrador.
-        </div>
-      )}
-
-      {/* Mensaje de error */}
-      {error && isAuthenticated && (
-        <div style={{
-          background: '#fee2e2',
-          border: '1px solid #fecaca',
-          borderRadius: '0.5rem',
-          padding: '1rem',
-          margin: '1rem 0',
-          color: '#dc2626'
-        }}>
-          <AlertTriangle size={16} style={{ marginRight: '0.5rem' }} />
-          {error}
-          <button 
-            onClick={cargarDatosAdmin}
-            style={{
-              marginLeft: '1rem',
-              background: '#dc2626',
-              color: 'white',
-              border: 'none',
-              borderRadius: '0.25rem',
-              padding: '0.25rem 0.5rem',
-              cursor: 'pointer'
-            }}
-          >
-            Reintentar
-          </button>
-        </div>
-      )}
-
-      {/* Main Content */}
-      {!loading && !error && isAuthenticated && adminData && (
-        <div className="config-content-background">
-        {/* Tabs */}
-        <div className="tabs">          {[
-            { key: "cuenta", label: "Cuenta", icon: Lock },
-            { key: "historial", label: "Historial", icon: Activity },
-            { key: "backup", label: "Backup", icon: DatabaseBackup },
-          ].map(({ key, label, icon: Icon }) => (
-            <button
-              key={key}
-              className={`tab ${activeTab === key ? "active" : ""}`}
-              onClick={() => setActiveTab(key)}
-            >
-              <Icon size={16} style={{ marginRight: "6px" }} />
-              {label}
-            </button>
-          ))}
-        </div>
-
-        {/* Tab Content */}
-        <div className="config-panels">
-         {/* TAB: CUENTA */}
-        {activeTab === "cuenta" && (
-          <div className="config-panels">
-           <div className="panel-perfil-admin">
-  <div className="perfil-header">
-    <h2 className="panel-title">
-      <User size={20} style={{ marginRight: "8px", color: "#f97316" }} />
-      Perfil del Administrador
-    </h2>
-    <button
-      className="btn-editar"
-      onClick={() => setModoEdicion(!modoEdicion)}
-    >
-      <Edit size={16} style={{ marginRight: "4px" }} />{" "}
-      {modoEdicion ? "Cancelar" : "Editar"}
-    </button>
-  </div>
-  {!modoEdicion ? (
-    <div className="perfil-contenido">
-      <div className="avatar-admin">
-        <User size={32} />
-      </div>
-      <div className="info-admin">
-        <h3>{adminData?.nombre || 'Nombre no disponible'}</h3>
-        <span className="badge-admin">
-          {adminData?.rol === 'super_admin' ? 'Super Administrador' : 'Administrador'}
-        </span>
-        <p>
-          <Mail size={16} /> {adminData?.correo || 'Email no disponible'}
-        </p>
-        <p>
-          <Phone size={16} /> {adminData?.celular || 'Teléfono no disponible'}
-        </p>
-        <p>
-          <Calendar size={16} /> Miembro desde {formatearFecha(adminData?.fecha_creacion)}
-        </p>
-        <p>
-          <Clock size={16} /> Último acceso: {formatearUltimoAcceso(adminData?.ultimo_acceso)}
-        </p>
-      </div>
-    </div>
-  ) : (
-    <div className="perfil-contenido">
-      <label>Nombre</label>
-      <input
-        type="text"
-        className="input-codigo"
-        value={nombreAdmin}
-        onChange={(e) => setNombreAdmin(e.target.value)}
-      />
-
-      <label>Email</label>
-      <input
-        type="email"
-        className="input-codigo"
-        value={emailAdmin}
-        onChange={(e) => setEmailAdmin(e.target.value)}
-      />
-
-      <label>Teléfono</label>
-      <input
-        type="text"
-        className="input-codigo"
-        value={telefonoAdmin}
-        onChange={(e) => setTelefonoAdmin(e.target.value)}
-      />      <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
-        <button
-          className="btn-guardar-perfil"
-          onClick={guardarCambiosPerfil}
-          disabled={loading}
-        >
-          {loading ? 'Guardando...' : 'Guardar Cambios'}
-        </button>
-        <button className="btn-cancelar-perfil" onClick={() => setModoEdicion(false)}>
-          Cancelar
-        </button>
-      </div>
-    </div>
-  )}
-</div>           <div className="panel-cambiar-password">
-  <h2 className="panel-title">
-    <Lock size={20} style={{ marginRight: "8px", color: "#f97316" }} />
-    Cambiar Contraseña
-  </h2>
-
-  {/* Mensaje de éxito */}
-  {successMessage && (
-    <div style={{
-      background: '#d1fae5',
-      border: '1px solid #10b981',
-      borderRadius: '0.5rem',
-      padding: '1rem',
-      margin: '1rem 0',
-      color: '#065f46',
-      display: 'flex',
-      alignItems: 'center'
-    }}>
-      <CheckCircle size={16} style={{ marginRight: '0.5rem' }} />
-      {successMessage}
-    </div>
-  )}
-
-  {/* Mensaje de error específico para cambio de contraseña */}
-  {error && (
-    <div style={{
-      background: '#fee2e2',
-      border: '1px solid #fecaca',
-      borderRadius: '0.5rem',
-      padding: '1rem',
-      margin: '1rem 0',
-      color: '#dc2626',
-      display: 'flex',
-      alignItems: 'center'
-    }}>
-      <AlertTriangle size={16} style={{ marginRight: '0.5rem' }} />
-      {error}
-    </div>
-  )}
-
-  <div className="panel-nueva-contrasena">
-    <h3 className="titulo-verificacion">Cambiar Contraseña</h3>
-    <p className="subtexto-verificacion">Ingresa tu contraseña actual y la nueva contraseña</p>
-
-    <label>Contraseña Actual</label>
-    <div style={{ position: 'relative' }}>
-      <input
-        type={showCurrent ? "text" : "password"}
-        className="input-codigo"
-        placeholder="Ingresa tu contraseña actual"
-        value={contrasenaActual}
-        onChange={(e) => setContrasenaActual(e.target.value)}
-      />
-      <button
-        type="button"
-        onClick={() => setShowCurrent(!showCurrent)}
-        style={{
-          position: 'absolute',
-          right: '10px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          border: 'none',
-          background: 'transparent',
-          cursor: 'pointer'
-        }}
-      >
-        {showCurrent ? <EyeOff size={16} /> : <Eye size={16} />}
-      </button>
-    </div>
-
-    <label>Nueva Contraseña</label>
-    <div style={{ position: 'relative' }}>
-      <input
-        type={showNew ? "text" : "password"}
-        className="input-codigo"
-        placeholder="Ingresa tu nueva contraseña"
-        value={nuevaPassword}
-        onChange={(e) => setNuevaPassword(e.target.value)}
-      />
-      <button
-        type="button"
-        onClick={() => setShowNew(!showNew)}
-        style={{
-          position: 'absolute',
-          right: '10px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          border: 'none',
-          background: 'transparent',
-          cursor: 'pointer'
-        }}
-      >
-        {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
-      </button>
-    </div>
-
-    <label>Confirmar Nueva Contraseña</label>
-    <div style={{ position: 'relative' }}>
-      <input
-        type={showConfirm ? "text" : "password"}
-        className="input-codigo"
-        placeholder="Confirma tu nueva contraseña"
-        value={confirmarPassword}
-        onChange={(e) => setConfirmarPassword(e.target.value)}
-      />
-      <button
-        type="button"
-        onClick={() => setShowConfirm(!showConfirm)}
-        style={{
-          position: 'absolute',
-          right: '10px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          border: 'none',
-          background: 'transparent',
-          cursor: 'pointer'
-        }}
-      >
-        {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
-      </button>
-    </div>
-
-    {nuevaPassword && confirmarPassword && nuevaPassword !== confirmarPassword && (
-      <p style={{ color: "red", marginTop: "8px" }}>❗Las contraseñas no coinciden</p>
-    )}
-
-    {nuevaPassword && nuevaPassword.length < 6 && (
-      <p style={{ color: "orange", marginTop: "8px" }}>⚠️ La contraseña debe tener al menos 6 caracteres</p>
-    )}    <div className="acciones-codigo">
-      <button 
-        className="btn-secondary" 
-        onClick={() => {
-          setContrasenaActual("");
-          setNuevaPassword("");
-          setConfirmarPassword("");
-          setError(null);
-          setSuccessMessage(null);
-        }}
-        disabled={loading}
-      >
-        <RefreshCw size={16} style={{ marginRight: "6px" }} />
-        Limpiar Campos
-      </button>
-      
-      <button
-        className="btn-primary"
-        disabled={!contrasenaValida || loading}
-        onClick={cambiarContrasena}
-      >
-        {loading ? (
-          <>
-            <Loader size={16} className="animate-spin" style={{ marginRight: "6px" }} />
-            Cambiando...
-          </>
-        ) : (
-          <>
-            <Lock size={16} style={{ marginRight: "6px" }} />
-            Cambiar Contraseña
-          </>
-        )}
-      </button>
-    </div>
-  </div>
-</div>
-
-
-<div className="panel-seguridad">
-                <h2 className="panel-title">
-                  <Shield size={20} style={{ marginRight: "8px", color: "#f97316" }} />
-                  Configuración de Seguridad
-                </h2>
-
-                <div className="security-box blue">
-                  <CheckCircle size={18} style={{ marginRight: "8px", color: "white" }} />
-                  Tu cuenta está protegida con las mejores prácticas de seguridad.
-                </div>
-
-                <div className="security-item">
-                  <div>
-                    <strong>Verificación por SMS</strong>
-                    <p>Protege cambios importantes con códigos SMS</p>
-                  </div>
-                  <span className="badge green">Activo</span>
-                </div>
-
-                <div className="security-item">
-                  <div>
-                    <strong>Sesiones activas</strong>
-                    <p>Gestiona tus sesiones abiertas</p>
-                  </div>
-                  <button className="btn-sesiones">Ver sesiones</button>
-                </div>
-
-                <div className="security-item">
-                  <div>
-                    <strong>Notificaciones de seguridad</strong>
-                    <p>Recibe alertas de actividad sospechosa</p>
-                  </div>
-                  <span className="badge green">Activo</span>
-                </div>
-
-                <div className="alert-box orange">
-                  <AlertTriangle size={18} style={{ marginRight: "8px", color: "white" }} />
-                  <strong>Recomendación:</strong> Cambia tu contraseña cada 90 días
-                  y usa una contraseña única para esta cuenta.
-                </div>
+        <div className="config-header-content">
+          <div className="config-title-container">
+            <Settings className="config-icon" size={32} />
+            <div>
+              <h1 className="config-title">Configuración del Administrador</h1>
+              <p className="config-subtitle">
+                Gestiona la configuración de tu cuenta, historial y backups del sistema
+              </p>
+            </div>
+          </div>
+          
+          {/* Badge de estado del usuario */}
+          {adminData && (
+            <div className="admin-status-badge">
+              <div className="admin-avatar">
+                <User size={20} />
               </div>
-          </div>        )}
-
-          {activeTab === "historial" && (
-            <div className="historial-container">
-              {/* Panel de Filtros */}
-              <div className="historial-panel">
-                <div className="search-input-wrapper">
-                  <Search className="search-icon" size={16} />
-                  <input
-                    type="text"
-                    placeholder="Buscar actividades..."
-                    className="historial-input"
-                    value={busqueda}
-                    onChange={(e) => setBusqueda(e.target.value)}
-                  />
-                </div>
-                <select className="historial-input" value={tipo} onChange={(e) => setTipo(e.target.value)}>
-                  <option value="">Todos los tipos</option>
-                  <option value="Autenticación">Autenticación</option>
-                  <option value="Pedido">Pedido</option>
-                  <option value="Inventario">Inventario</option>
-                </select>
-                <select className="historial-input" value={estado} onChange={(e) => setEstado(e.target.value)}>
-                  <option value="">Todos los estados</option>
-                  <option value="Exitoso">Exitoso</option>
-                  <option value="Fallido">Fallido</option>
-                </select>
-                <button className="historial-limpiar" onClick={limpiarFiltros}>
-                  <Filter size={16} style={{ marginRight: "6px" }} /> Limpiar
-                </button>
-              </div>
-
-              {/* Contadores */}
-              <div className="historial-contadores">
-                <div className="contador exito"><h2>{filtrados.filter(d => d.state === 'Exitoso').length}</h2><p>Acciones Exitosas</p></div>
-                <div className="contador fallo"><h2>{filtrados.filter(d => d.state === 'Fallido').length}</h2><p>Acciones Fallidas</p></div>
-                <div className="contador seguridad"><h2>{filtrados.filter(d => d.type === 'Autenticación').length}</h2><p>Eventos de Seguridad</p></div>
-                <div className="contador total"><h2>{filtrados.length}</h2><p>Resultados</p></div>
-              </div>
-
-              {/* Tabla */}
-              <div className="tabla-contenedor">
-                <table className="tabla-historial">
-                  <thead>
-                    <tr>
-                      <th className="orange-header">Fecha y Hora</th>
-                      <th className="orange-header">Acción</th>
-                      <th className="orange-header">Tipo</th>
-                      <th className="orange-header">Estado</th>
-                      <th className="orange-header">IP</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filtrados.map((row, i) => (
-                      <tr key={i}>
-                        <td>{`${row.time} ${row.date}`}</td>
-                        <td>
-                          <strong>{row.action}</strong><br />
-                          <span className="descripcion">{row.description}</span>
-                        </td>
-                        <td>
-                          <span className={`badge tipo ${row.type.toLowerCase().replace(/\s/g, '-')}`}>
-                            {row.type === 'Autenticación' && <Lock size={14} style={{ marginRight: "4px" }} />}
-                            {row.type === 'Pedido' && <ShoppingCart size={14} style={{ marginRight: "4px" }} />}
-                            {row.type === 'Inventario' && <Package size={14} style={{ marginRight: "4px" }} />}
-                            {row.type === 'Backup' && <DatabaseBackup size={14} style={{ marginRight: "4px" }} />}
-                            {row.type === 'Configuración' && <Settings size={14} style={{ marginRight: "4px" }} />}
-                            {row.type === 'Seguridad' && <Shield size={14} style={{ marginRight: "4px" }} />}
-                            {row.type === 'Problema Técnico' && <AlertTriangle size={14} style={{ marginRight: "4px" }} />}
-                            {row.type}
-                          </span>
-                        </td>
-                        <td>
-                          <span className={`badge estado ${row.state.toLowerCase()}`}>
-                            {row.state === 'Exitoso' && <CheckCircle size={14} style={{ marginRight: "4px" }} />}
-                            {row.state === 'Fallido' && <AlertTriangle size={14} style={{ marginRight: "4px" }} />}
-                            {row.state}
-                          </span>
-                        </td>
-                        <td>{row.ip}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="admin-info">
+                <span className="admin-name">{adminData.nombre}</span>
+                <span className="admin-role">
+                  {adminData.rol === 'super_admin' ? 'Super Administrador' : 'Administrador'}
+                </span>
               </div>
             </div>
           )}
+        </div>
+        <div className="config-divider" />
+      </div>      {/* Indicador de carga mejorado */}
+      {loading && (
+        <div className="loading-container">
+          <div className="loading-content">
+            <Loader className="loading-spinner" size={24} />
+            <span className="loading-text">Cargando datos del administrador...</span>
+          </div>
+        </div>
+      )}
 
-          {activeTab === "backup" && (
-            <div className="backup-container">
-              {/* Cards de estadísticas */}
-              <div className="backup-stats">
-                <div className="backup-card status">
-                  <div className="backup-card-content">
-                    <div className="backup-icon-wrapper green">
-                      <CheckCircle size={24} />
+      {/* Mensaje de usuario no autenticado mejorado */}
+      {!isAuthenticated && !loading && (
+        <div className="alert-container warning">
+          <div className="alert-content">
+            <Lock size={20} className="alert-icon" />
+            <div>
+              <h3>Acceso Restringido</h3>
+              <p>Necesitas iniciar sesión para acceder a la configuración del administrador.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mensaje de error mejorado */}
+      {error && isAuthenticated && (
+        <div className="alert-container error">
+          <div className="alert-content">
+            <AlertTriangle size={20} className="alert-icon" />
+            <div className="alert-text">
+              <h3>Error</h3>
+              <p>{error}</p>
+            </div>
+            <button 
+              onClick={cargarDatosAdmin}
+              className="alert-action-btn"
+            >
+              Reintentar
+            </button>
+          </div>
+        </div>
+      )}      {/* Main Content */}
+      {!loading && !error && isAuthenticated && adminData && (
+        <div className="config-content-background">
+          {/* Tabs mejorados */}
+          <div className="tabs-container">
+            <div className="tabs">
+              {[
+                { key: "cuenta", label: "Mi Cuenta", icon: User, description: "Perfil y seguridad" },
+                { key: "historial", label: "Historial", icon: Activity, description: "Actividad reciente" },
+                { key: "backup", label: "Backups", icon: DatabaseBackup, description: "Respaldos del sistema" },
+              ].map(({ key, label, icon: Icon, description }) => (
+                <button
+                  key={key}
+                  className={`tab ${activeTab === key ? "active" : ""}`}
+                  onClick={() => setActiveTab(key)}
+                >
+                  <Icon size={18} className="tab-icon" />
+                  <div className="tab-content">
+                    <span className="tab-label">{label}</span>
+                    <span className="tab-description">{description}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>        {/* Tab Content */}
+        <div className="config-panels">          {/* TAB: CUENTA */}
+          {activeTab === "cuenta" && (
+            <div className="account-tab-content">
+              {/* Layout optimizado en dos columnas */}
+              <div className="account-optimized-layout">
+                {/* Columna principal - Información y contraseña */}
+                <div className="account-main-column">
+                  {/* Panel de perfil mejorado */}
+                  <div className="panel-perfil-admin modern-card">
+                  <div className="panel-header">
+                    <div className="panel-title-section">
+                      <User size={24} className="panel-icon" />
+                      <div>
+                        <h2 className="panel-title">Información Personal</h2>
+                        <p className="panel-subtitle">Gestiona tu información de perfil</p>
+                      </div>
                     </div>
-                    <div className="backup-card-info">
-                      <h3>Último Backup</h3>
-                      <p>Hace 6 horas</p>
+                    <button
+                      className={`edit-toggle-btn ${modoEdicion ? 'editing' : ''}`}
+                      onClick={() => setModoEdicion(!modoEdicion)}
+                    >
+                      {modoEdicion ? (
+                        <>
+                          <X size={16} />
+                          Cancelar
+                        </>
+                      ) : (
+                        <>
+                          <Edit size={16} />
+                          Editar
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {!modoEdicion ? (
+                    <div className="profile-display">
+                      <div className="profile-avatar-section">
+                        <div className="profile-avatar">
+                          <User size={40} />
+                        </div>
+                        <div className="profile-status">
+                          <span className={`status-badge ${adminData?.rol === 'super_admin' ? 'super-admin' : 'admin'}`}>
+                            {adminData?.rol === 'super_admin' ? 'Super Administrador' : 'Administrador'}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="profile-info-grid">
+                        <div className="info-item">
+                          <User size={16} className="info-icon" />
+                          <div>
+                            <label>Nombre completo</label>
+                            <span>{adminData?.nombre || 'No disponible'}</span>
+                          </div>
+                        </div>
+                        
+                        <div className="info-item">
+                          <Mail size={16} className="info-icon" />
+                          <div>
+                            <label>Correo electrónico</label>
+                            <span>{adminData?.correo || 'No disponible'}</span>
+                          </div>
+                        </div>
+                        
+                        <div className="info-item">
+                          <Phone size={16} className="info-icon" />
+                          <div>
+                            <label>Teléfono</label>
+                            <span>{adminData?.celular || 'No disponible'}</span>
+                          </div>
+                        </div>
+                        
+                        <div className="info-item">
+                          <Calendar size={16} className="info-icon" />
+                          <div>
+                            <label>Miembro desde</label>
+                            <span>{formatearFecha(adminData?.fecha_creacion)}</span>
+                          </div>
+                        </div>
+                        
+                        <div className="info-item">
+                          <Clock size={16} className="info-icon" />
+                          <div>
+                            <label>Último acceso</label>
+                            <span>{formatearUltimoAcceso(adminData?.ultimo_acceso)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="profile-edit-form">
+                      <div className="form-grid">
+                        <div className="form-group">
+                          <label className="form-label">
+                            <User size={16} />
+                            Nombre completo
+                          </label>
+                          <input
+                            type="text"
+                            className="form-input"
+                            value={nombreAdmin}
+                            onChange={(e) => setNombreAdmin(e.target.value)}
+                            placeholder="Ingresa tu nombre completo"
+                          />
+                        </div>
+
+                        <div className="form-group">
+                          <label className="form-label">
+                            <Mail size={16} />
+                            Correo electrónico
+                          </label>
+                          <input
+                            type="email"
+                            className="form-input"
+                            value={emailAdmin}
+                            onChange={(e) => setEmailAdmin(e.target.value)}
+                            placeholder="Ingresa tu correo electrónico"
+                          />
+                        </div>
+
+                        <div className="form-group">
+                          <label className="form-label">
+                            <Phone size={16} />
+                            Teléfono
+                          </label>
+                          <input
+                            type="text"
+                            className="form-input"
+                            value={telefonoAdmin}
+                            onChange={(e) => setTelefonoAdmin(e.target.value)}
+                            placeholder="Ingresa tu número de teléfono"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="form-actions">
+                        <button
+                          className="btn-primary"
+                          onClick={guardarCambiosPerfil}
+                          disabled={loading}
+                        >
+                          <Save size={16} />
+                          {loading ? 'Guardando...' : 'Guardar Cambios'}
+                        </button>
+                        <button 
+                          className="btn-secondary" 
+                          onClick={() => setModoEdicion(false)}
+                        >
+                          <X size={16} />
+                          Cancelar
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Panel de cambio de contraseña */}
+                <div className="panel-password-change modern-card">
+                  <div className="panel-header">
+                    <div className="panel-title-section">
+                      <Lock size={24} className="panel-icon security" />
+                      <div>
+                        <h2 className="panel-title">Cambiar Contraseña</h2>
+                        <p className="panel-subtitle">Actualiza tu contraseña para mantener tu cuenta segura</p>
+                      </div>
+                    </div>
+                    <div className="security-badge">
+                      <Shield size={16} />
+                      <span>Cifrado 256-bit</span>
+                    </div>
+                  </div>
+
+                  {/* Alertas mejoradas */}
+                  {successMessage && (
+                    <div className="alert-container success">
+                      <div className="alert-content">
+                        <CheckCircle size={20} className="alert-icon" />
+                        <div className="alert-text">
+                          <h4>¡Contraseña actualizada!</h4>
+                          <p>{successMessage}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {error && (
+                    <div className="alert-container error">
+                      <div className="alert-content">
+                        <AlertTriangle size={20} className="alert-icon" />
+                        <div className="alert-text">
+                          <h4>Error al cambiar contraseña</h4>
+                          <p>{error}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="password-form">
+                    <div className="password-fields">
+                      <div className="form-group">
+                        <label className="form-label">
+                          <Lock size={16} />
+                          Contraseña actual
+                        </label>
+                        <div className="password-input-wrapper">
+                          <input
+                            type={showCurrent ? "text" : "password"}
+                            className="form-input password-input"
+                            placeholder="Ingresa tu contraseña actual"
+                            value={contrasenaActual}
+                            onChange={(e) => setContrasenaActual(e.target.value)}
+                          />
+                          <button
+                            type="button"
+                            className="password-toggle-btn"
+                            onClick={() => setShowCurrent(!showCurrent)}
+                          >
+                            {showCurrent ? <EyeOff size={16} /> : <Eye size={16} />}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">
+                          <Lock size={16} />
+                          Nueva contraseña
+                        </label>
+                        <div className="password-input-wrapper">
+                          <input
+                            type={showNew ? "text" : "password"}
+                            className="form-input password-input"
+                            placeholder="Ingresa tu nueva contraseña"
+                            value={nuevaPassword}
+                            onChange={(e) => setNuevaPassword(e.target.value)}
+                          />
+                          <button
+                            type="button"
+                            className="password-toggle-btn"
+                            onClick={() => setShowNew(!showNew)}
+                          >
+                            {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
+                          </button>
+                        </div>
+                        {nuevaPassword && nuevaPassword.length < 6 && (
+                          <div className="field-warning">
+                            <AlertTriangle size={14} />
+                            La contraseña debe tener al menos 6 caracteres
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">
+                          <Lock size={16} />
+                          Confirmar nueva contraseña
+                        </label>
+                        <div className="password-input-wrapper">
+                          <input
+                            type={showConfirm ? "text" : "password"}
+                            className="form-input password-input"
+                            placeholder="Confirma tu nueva contraseña"
+                            value={confirmarPassword}
+                            onChange={(e) => setConfirmarPassword(e.target.value)}
+                          />
+                          <button
+                            type="button"
+                            className="password-toggle-btn"
+                            onClick={() => setShowConfirm(!showConfirm)}
+                          >
+                            {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+                          </button>
+                        </div>
+                        {nuevaPassword && confirmarPassword && nuevaPassword !== confirmarPassword && (
+                          <div className="field-error">
+                            <X size={14} />
+                            Las contraseñas no coinciden
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="password-actions">
+                      <button 
+                        className="btn-secondary" 
+                        onClick={() => {
+                          setContrasenaActual("");
+                          setNuevaPassword("");
+                          setConfirmarPassword("");
+                          setError(null);
+                          setSuccessMessage(null);
+                        }}
+                        disabled={loading}
+                      >
+                        <RefreshCw size={16} />
+                        Limpiar
+                      </button>
+                      
+                      <button
+                        className="btn-primary"
+                        disabled={!contrasenaValida || loading}
+                        onClick={cambiarContrasena}
+                      >
+                        {loading ? (
+                          <>
+                            <Loader size={16} className="loading-spinner" />
+                            Cambiando...
+                          </>
+                        ) : (
+                          <>
+                            <Save size={16} />
+                            Cambiar Contraseña
+                          </>
+                        )}
+                      </button>                    </div>
+                  </div>
+                </div>
+                </div>
+
+                {/* Columna lateral - Panel de logout */}
+                <div className="account-sidebar-column">
+                  {/* Panel de cerrar sesión */}
+                  <div className="panel-logout modern-card">
+                    <div className="panel-header">
+                      <div className="panel-title-section">
+                        <LogOut size={24} className="panel-icon logout" />
+                        <div>
+                          <h2 className="panel-title">Sesión</h2>
+                          <p className="panel-subtitle">Administra tu sesión actual</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="logout-content">
+                      <div className="logout-info">
+                        <div className="logout-warning">
+                          <AlertTriangle size={20} className="warning-icon" />
+                          <div className="warning-text">
+                            <h4>Cerrar Sesión</h4>
+                            <p>Al cerrar sesión perderás el acceso a la administración del sistema hasta que vuelvas a iniciar sesión.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="logout-actions">
+                        <button
+                          className="btn-logout"
+                          onClick={cerrarSesion}
+                        >
+                          <LogOut size={16} />
+                          Cerrar Sesión
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-                
-                <div className="backup-card usage">
-                  <div className="backup-card-content">
-                    <div className="backup-icon-wrapper blue">
-                      <DatabaseBackup size={24} />
-                    </div>
-                    <div className="backup-card-info">
-                      <h3>Espacio Usado</h3>
-                      <p>1.2 GB</p>
-                    </div>
+              </div>
+            </div>)}{activeTab === "historial" && (
+            <div className="historial-layout">
+              {/* Header section with filters */}
+              <div className="historial-header">
+                <div className="historial-title-section">
+                  <Activity size={28} className="section-icon" />
+                  <div>
+                    <h2 className="section-title">Historial de Actividades</h2>
+                    <p className="section-subtitle">Monitorea todas las acciones realizadas en el sistema</p>
                   </div>
-                </div>
-                
-                <div className="backup-card schedule">
-                  <div className="backup-card-content">
-                    <div className="backup-icon-wrapper orange">
-                      <Calendar size={24} />
-                    </div>
-                    <div className="backup-card-info">
-                      <h3>Próximo Backup</h3>
-                      <p>En 18 horas</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="backup-card action">
-                  <button className="btn-create-backup">
-                    <Download size={20} />
-                    Crear Backup
-                  </button>
                 </div>
               </div>
 
-              {/* Historial de Backups */}
-              <div className="backup-history">
-                <h2 className="backup-section-title">Historial de Backups</h2>
+              {/* Filters and search panel */}
+              <div className="historial-controls modern-card compact">
+                <div className="controls-grid">
+                  <div className="search-group">
+                    <label className="control-label">Buscar actividades</label>
+                    <div className="search-input-wrapper">
+                      <Search className="search-icon" size={16} />
+                      <input
+                        type="text"
+                        placeholder="Buscar por acción o descripción..."
+                        className="search-input"
+                        value={busqueda}
+                        onChange={(e) => setBusqueda(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="filter-group">
+                    <label className="control-label">Tipo de acción</label>
+                    <select className="filter-select" value={tipo} onChange={(e) => setTipo(e.target.value)}>
+                      <option value="">Todos los tipos</option>
+                      <option value="Autenticación">Autenticación</option>
+                      <option value="Pedido">Pedido</option>
+                      <option value="Inventario">Inventario</option>
+                    </select>
+                  </div>
+                  
+                  <div className="filter-group">
+                    <label className="control-label">Estado</label>
+                    <select className="filter-select" value={estado} onChange={(e) => setEstado(e.target.value)}>
+                      <option value="">Todos los estados</option>
+                      <option value="Exitoso">Exitoso</option>
+                      <option value="Fallido">Fallido</option>
+                    </select>
+                  </div>
+                  
+                  <div className="filter-actions">
+                    <button className="btn-clear-filters" onClick={limpiarFiltros}>
+                      <Filter size={16} />
+                      Limpiar filtros
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Statistics cards */}
+              <div className="historial-stats">
+                <div className="stat-card success">
+                  <div className="stat-content">
+                    <div className="stat-icon-wrapper">
+                      <CheckCircle size={24} />
+                    </div>
+                    <div className="stat-details">
+                      <span className="stat-number">{filtrados.filter(d => d.state === 'Exitoso').length}</span>
+                      <span className="stat-description">Acciones Exitosas</span>
+                    </div>
+                  </div>
+                </div>
                 
-                <div className="backup-table-container">
-                  <table className="backup-table">
+                <div className="stat-card error">
+                  <div className="stat-content">
+                    <div className="stat-icon-wrapper">
+                      <AlertTriangle size={24} />
+                    </div>
+                    <div className="stat-details">
+                      <span className="stat-number">{filtrados.filter(d => d.state === 'Fallido').length}</span>
+                      <span className="stat-description">Acciones Fallidas</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="stat-card security">
+                  <div className="stat-content">
+                    <div className="stat-icon-wrapper">
+                      <Shield size={24} />
+                    </div>
+                    <div className="stat-details">
+                      <span className="stat-number">{filtrados.filter(d => d.type === 'Autenticación').length}</span>
+                      <span className="stat-description">Eventos de Seguridad</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="stat-card total">
+                  <div className="stat-content">
+                    <div className="stat-icon-wrapper">
+                      <Activity size={24} />
+                    </div>
+                    <div className="stat-details">
+                      <span className="stat-number">{filtrados.length}</span>
+                      <span className="stat-description">Total de Resultados</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Activity table */}
+              <div className="historial-table-container modern-card">
+                <div className="table-header">
+                  <h3 className="table-title">Registro de Actividades</h3>
+                  <span className="table-subtitle">{filtrados.length} resultados encontrados</span>
+                </div>
+                
+                <div className="table-wrapper">
+                  <table className="activity-table">
                     <thead>
                       <tr>
-                        <th>Nombre del Archivo</th>
+                        <th>Fecha y Hora</th>
+                        <th>Acción</th>
+                        <th>Tipo</th>
+                        <th>Estado</th>
+                        <th>Dirección IP</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filtrados.map((row, i) => (
+                        <tr key={i} className="activity-row">
+                          <td className="datetime-cell">
+                            <div className="datetime-content">
+                              <span className="date">{row.date}</span>
+                              <span className="time">{row.time}</span>
+                            </div>
+                          </td>
+                          <td className="action-cell">
+                            <div className="action-content">
+                              <span className="action-title">{row.action}</span>
+                              <span className="action-description">{row.description}</span>
+                            </div>
+                          </td>
+                          <td className="type-cell">
+                            <span className={`type-badge ${row.type.toLowerCase().replace(/\s/g, '-')}`}>
+                              {row.type === 'Autenticación' && <Lock size={14} />}
+                              {row.type === 'Pedido' && <ShoppingCart size={14} />}
+                              {row.type === 'Inventario' && <Package size={14} />}
+                              {row.type === 'Backup' && <DatabaseBackup size={14} />}
+                              {row.type === 'Configuración' && <Settings size={14} />}
+                              {row.type === 'Seguridad' && <Shield size={14} />}
+                              {row.type === 'Problema Técnico' && <AlertTriangle size={14} />}
+                              {row.type}
+                            </span>
+                          </td>
+                          <td className="status-cell">
+                            <span className={`status-badge ${row.state.toLowerCase()}`}>
+                              {row.state === 'Exitoso' && <CheckCircle size={14} />}
+                              {row.state === 'Fallido' && <AlertTriangle size={14} />}
+                              {row.state}
+                            </span>
+                          </td>
+                          <td className="ip-cell">{row.ip}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}          {activeTab === "backup" && (
+            <div className="backup-layout">
+              {/* Header section */}
+              <div className="backup-header">
+                <div className="backup-title-section">
+                  <DatabaseBackup size={28} className="section-icon" />
+                  <div>
+                    <h2 className="section-title">Gestión de Backups</h2>
+                    <p className="section-subtitle">Administra los respaldos del sistema y configura la programación automática</p>
+                  </div>
+                </div>
+                <button className="btn-create-backup-header">
+                  <Download size={20} />
+                  Crear Backup Ahora
+                </button>
+              </div>
+
+              {/* Status overview cards */}
+              <div className="backup-overview">
+                <div className="backup-status-card success">
+                  <div className="status-card-content">
+                    <div className="status-icon-wrapper">
+                      <CheckCircle size={32} />
+                    </div>
+                    <div className="status-info">
+                      <h3>Último Backup</h3>
+                      <p className="status-time">Hace 6 horas</p>
+                      <span className="status-detail">Backup completo exitoso</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="backup-status-card info">
+                  <div className="status-card-content">
+                    <div className="status-icon-wrapper">
+                      <DatabaseBackup size={32} />
+                    </div>
+                    <div className="status-info">
+                      <h3>Espacio Utilizado</h3>
+                      <p className="status-time">1.2 GB</p>
+                      <span className="status-detail">De 10 GB disponibles</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="backup-status-card warning">
+                  <div className="status-card-content">
+                    <div className="status-icon-wrapper">
+                      <Clock size={32} />
+                    </div>
+                    <div className="status-info">
+                      <h3>Próximo Backup</h3>
+                      <p className="status-time">En 18 horas</p>
+                      <span className="status-detail">Backup automático programado</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="backup-status-card neutral">
+                  <div className="status-card-content">
+                    <div className="status-icon-wrapper">
+                      <Calendar size={32} />
+                    </div>
+                    <div className="status-info">
+                      <h3>Retención</h3>
+                      <p className="status-time">30 días</p>
+                      <span className="status-detail">Período de conservación</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Backup configuration panel */}
+              <div className="backup-config modern-card">
+                <div className="config-header">
+                  <div className="config-title-group">
+                    <Settings size={24} className="config-icon" />
+                    <div>
+                      <h3>Configuración de Backups</h3>
+                      <p>Personaliza la frecuencia y tipos de respaldo</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="config-options">
+                  <div className="config-option">
+                    <div className="option-info">
+                      <h4>Backup Automático</h4>
+                      <p>Respaldos programados diariamente</p>
+                    </div>
+                    <div className="option-control">
+                      <span className="status-badge active">
+                        <CheckCircle size={14} />
+                        Activo
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="config-option">
+                    <div className="option-info">
+                      <h4>Notificaciones</h4>
+                      <p>Alertas sobre estado de backups</p>
+                    </div>
+                    <div className="option-control">
+                      <span className="status-badge active">
+                        <CheckCircle size={14} />
+                        Habilitado
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="config-option">
+                    <div className="option-info">
+                      <h4>Compresión</h4>
+                      <p>Reducir tamaño de archivos de backup</p>
+                    </div>
+                    <div className="option-control">
+                      <span className="status-badge active">
+                        <CheckCircle size={14} />
+                        Activo
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Backup history table */}
+              <div className="backup-history modern-card">
+                <div className="history-header">
+                  <div className="history-title-group">
+                    <Activity size={24} className="history-icon" />
+                    <div>
+                      <h3>Historial de Backups</h3>
+                      <p>Registro completo de todos los respaldos realizados</p>
+                    </div>
+                  </div>
+                  <div className="history-actions">
+                    <button className="btn-download-all">
+                      <Download size={16} />
+                      Descargar Reporte
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="backup-table-wrapper">
+                  <table className="backup-history-table">
+                    <thead>
+                      <tr>
+                        <th>Archivo de Backup</th>
                         <th>Tipo</th>
                         <th>Tamaño</th>
-                        <th>Fecha</th>
+                        <th>Fecha de Creación</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
                       {backupData.map((backup) => (
-                        <tr key={backup.id}>
-                          <td>
-                            <div className="backup-file-info">
-                              <strong>{backup.nombre}</strong>
-                              <span className="backup-description">{backup.descripcion}</span>
+                        <tr key={backup.id} className="backup-row">
+                          <td className="file-cell">
+                            <div className="file-info">
+                              <div className="file-icon">
+                                <DatabaseBackup size={20} />
+                              </div>
+                              <div className="file-details">
+                                <span className="file-name">{backup.nombre}</span>
+                                <span className="file-description">{backup.descripcion}</span>
+                              </div>
                             </div>
                           </td>
-                          <td>
-                            <span className={`backup-badge tipo-${backup.tipo.toLowerCase()}`}>
-                              {backup.tipo === 'Completo' && '●'}
-                              {backup.tipo === 'Incremental' && '●'}
+                          <td className="type-cell">
+                            <span className={`backup-type-badge ${backup.tipo.toLowerCase()}`}>
+                              <span className="type-indicator"></span>
                               {backup.tipo}
                             </span>
                           </td>
-                          <td>{backup.tamaño}</td>
-                          <td>
-                            <div className="backup-date">
-                              <Calendar size={14} />
-                              {backup.fecha}
+                          <td className="size-cell">
+                            <span className="size-value">{backup.tamaño}</span>
+                          </td>
+                          <td className="date-cell">
+                            <div className="date-info">
+                              <Calendar size={14} className="date-icon" />
+                              <span className="date-value">{backup.fecha}</span>
                             </div>
                           </td>
-                          <td>
-                            <span className="backup-badge estado-completado">
+                          <td className="status-cell">
+                            <span className="backup-status-badge completado">
                               <CheckCircle size={14} />
                               {backup.estado}
                             </span>
                           </td>
-                          <td>
-                            <div className="backup-actions">
-                              <button className="backup-action-btn download" title="Descargar">
+                          <td className="actions-cell">
+                            <div className="backup-row-actions">
+                              <button className="action-btn download" title="Descargar backup">
                                 <Download size={16} />
                               </button>
-                              <button className="backup-action-btn restore" title="Restaurar">
+                              <button className="action-btn restore" title="Restaurar desde este backup">
                                 <RefreshCw size={16} />
-                                Restaurar
+                              </button>
+                              <button className="action-btn info" title="Ver detalles">
+                                <Settings size={16} />
                               </button>
                             </div>
                           </td>
@@ -993,7 +1174,7 @@ const contrasenaValida =
                   </table>
                 </div>
               </div>
-            </div>          )}
+            </div>)}
         </div>
         </div>
       )}
