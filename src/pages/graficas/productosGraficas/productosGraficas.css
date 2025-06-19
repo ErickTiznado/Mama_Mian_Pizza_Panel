@@ -25,6 +25,57 @@
     height: 100%;
 }
 
+/* Loading and Error States for KPI Components */
+.loading-text {
+    color: #94a3b8;
+    font-size: 14px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.error-text {
+    color: #ef4444;
+    font-size: 12px;
+    margin-top: 4px;
+    text-align: center;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Improved data display */
+.count-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #f97316;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+}
+
+.count-comparison {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.count-comparison.increase {
+    color: #10b981;
+}
+
+.count-comparison.descrease {
+    color: #ef4444;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .productos-graficas__body {
@@ -45,5 +96,20 @@
     .combinaciones__container {
         width: 100%;
         min-height: 400px;
+    }
+}
+
+/* Responsive improvements for mobile */
+@media (max-width: 480px) {
+    .count-value {
+        font-size: 1.5rem;
+        min-height: 36px;
+    }
+    
+    .count-comparison {
+        font-size: 0.75rem;
+        flex-wrap: wrap;
+        text-align: center;
+        justify-content: center;
     }
 }

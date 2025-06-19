@@ -1,4 +1,4 @@
-w/* Estilos para el componente FilterBar */
+/* Estilos para el componente FilterBar */
 .filter-bar {
   display: flex;
   flex-wrap: nowrap;
@@ -20,8 +20,100 @@ w/* Estilos para el componente FilterBar */
 
 /* Estilos específicos para la sección de pedidos */
 .order-filter-bar {
-  background-color: #0f172a;
-  border-color: #374151;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border: 1px solid #334155;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.order-filter-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #f97316, transparent);
+  opacity: 0.6;
+}
+
+.order-filter-bar .filter-label {
+  color: #f97316;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.order-filter-bar .filter-select {
+  background-color: #1e293b;
+  border: 1px solid #475569;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) inset;
+}
+
+.order-filter-bar .filter-select:hover {
+  border-color: #f97316;
+  background-color: #334155;
+}
+
+.order-filter-bar .filter-select:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1) inset;
+  background-color: #334155;
+}
+
+.order-filter-bar .filter-select option {
+  background-color: #1e293b;
+  color: #ffffff;
+  padding: 10px;
+}
+
+.order-filter-bar .search-input {
+  background-color: #1e293b;
+  border: 1px solid #475569;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) inset;
+  padding: 10px;
+  gap: 20px;
+}
+
+.order-filter-bar .search-input::placeholder {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.order-filter-bar .search-input:hover {
+  border-color: #f97316;
+  background-color: #334155;
+}
+
+.order-filter-bar .search-input:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1) inset;
+  background-color: #334155;
+}
+
+.order-filter-bar .btn-reset {
+  background-color: #374151;
+  border: 1px solid #4b5563;
+  color: #d1d5db;
+}
+
+.order-filter-bar .btn-reset:hover {
+  background-color: #4b5563;
+  border-color: #6b7280;
+  color: #ffffff;
+}
+
+.order-filter-bar .btn-apply {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  border: none;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.3);
+}
+
+.order-filter-bar .btn-apply:hover {
+  background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(249, 115, 22, 0.4);
 }
 
 /* Estilos específicos para la sección de contenido */
@@ -115,6 +207,7 @@ w/* Estilos para el componente FilterBar */
 .search-input-container {
   position: relative;
   width: 100%;
+  gap: 10px;
 }
 
 .search-input {
@@ -246,6 +339,7 @@ w/* Estilos para el componente FilterBar */
     align-items: stretch;
     flex-wrap: wrap;
     gap: 15px;
+    padding: 15px 20px;
   }
   
   .filter-group, .search-box {
@@ -263,4 +357,83 @@ w/* Estilos para el componente FilterBar */
     flex: 1;
     justify-content: center;
   }
+  
+  /* Mejoras específicas para order-filter-bar en móvil */
+  .order-filter-bar {
+    margin-bottom: 15px;
+  }
+  
+  .order-filter-bar .filter-label {
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+  
+  .order-filter-bar .filter-select,
+  .order-filter-bar .search-input {
+    padding: 12px 14px;
+    font-size: 16px; /* Evita zoom en iOS */
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-bar {
+    padding: 12px 15px;
+    gap: 12px;
+  }
+  
+  .order-filter-bar .filter-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .order-filter-bar .btn-reset,
+  .order-filter-bar .btn-apply {
+    width: 100%;
+    padding: 12px 16px;
+  }
+}
+
+/* Estilos adicionales para mejor integración con OrderManager */
+
+/* Animaciones suaves para las interacciones */
+.order-filter-bar .filter-select,
+.order-filter-bar .search-input,
+.order-filter-bar .btn-reset,
+.order-filter-bar .btn-apply {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Estados de foco mejorados */
+.order-filter-bar .filter-select:focus,
+.order-filter-bar .search-input:focus {
+  transform: translateY(-1px);
+}
+
+/* Mejora visual para iconos */
+.order-filter-bar .filter-icon,
+.order-filter-bar .search-icon {
+  transition: all 0.3s ease;
+}
+
+.order-filter-bar .filter-group:hover .filter-icon {
+  color: #f97316;
+  transform: scale(1.1);
+}
+
+.order-filter-bar .search-input-container:hover .search-icon {
+  color: #f97316;
+  transform: scale(1.1);
+}
+
+/* Consistencia con el contador de resultados del OrderManager */
+.order-filter-bar + div .cont_resultados-contador {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border: 1px solid #334155;
+  color: #d1d5db;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.order-filter-bar + div .cont_resaltado {
+  color: #f97316;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }

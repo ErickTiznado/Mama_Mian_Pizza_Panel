@@ -13,9 +13,7 @@ const CombinacionesProductos = ({ timePeriod = 'all', orderType = 'all' }) => {
     const [sortOrder, setSortOrder] = useState('desc');
     const [currentPage, setCurrentPage] = useState(1);
 
-    const API_URL = 'https://api.mamamianpizza.com';
-
-    const fetchCombinaciones = async () => {
+    const API_URL = 'https://api.mamamianpizza.com';    const fetchCombinaciones = async () => {
         try {
             setLoading(true);
             setError(null);
@@ -27,13 +25,21 @@ const CombinacionesProductos = ({ timePeriod = 'all', orderType = 'all' }) => {
                 limit: 10
             });
 
-            const response = await fetch(`${API_URL}/api/orders/statistics/product-combinations?${params}`);
+            if (timePeriod && timePeriod !== 'all') {
+                params.append('period', timePeriod);
+            }
+
+            const url = `${API_URL}/api/orders/statistics/product-combinations?${params}`;
+            console.log('Fetching combinations from:', url);
+            
+            const response = await fetch(url);
             
             if (!response.ok) {
-                throw new Error('Error al obtener las combinaciones de productos');
+                throw new Error(`Error al obtener las combinaciones de productos: ${response.status}`);
             }
 
             const data = await response.json();
+            console.log('Combinations data received:', data);
             
             setCombinaciones(data.data || []);
             setPagination(data.pagination || {});

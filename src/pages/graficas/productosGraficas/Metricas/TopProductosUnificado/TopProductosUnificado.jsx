@@ -10,32 +10,43 @@ const TopProductosUnificado = ({ timePeriod = 'all', orderType = 'all' }) => {
     const [period, setPeriod] = useState('');
     const [viewMode, setViewMode] = useState('unidades'); // 'unidades' o 'ingresos'
 
-    const API_URL = 'https://api.mamamianpizza.com';
-
-    const fetchTopProducts = async () => {
+    const API_URL = 'https://api.mamamianpizza.com';    const fetchTopProducts = async () => {
         try {
             setLoading(true);
             setError(null);
             
             let url;
-            
-            if (viewMode === 'unidades') {
+              if (viewMode === 'unidades') {
                 url = `${API_URL}/api/orders/statistics/top-products-filtered`;
+                if (timePeriod && timePeriod !== 'all') {
+                    url += `?period=${timePeriod}`;
+                }
+                if (orderType && orderType !== 'all') {
+                    const separator = url.includes('?') ? '&' : '?';
+                    url += `${separator}orderType=${orderType}`;
+                }
             } else {
                 // Para ingresos
                 url = `${API_URL}/api/orders/statistics/top-revenue`;
                 if (timePeriod && timePeriod !== 'all') {
                     url = `${API_URL}/api/orders/statistics/top-revenue-filtered?period=${timePeriod}`;
+                    if (orderType && orderType !== 'all') {
+                        url += `&orderType=${orderType}`;
+                    }
+                } else if (orderType && orderType !== 'all') {
+                    url += `?orderType=${orderType}`;
                 }
             }
             
+            console.log('Fetching top products from:', url);
             const response = await fetch(url);
             
             if (!response.ok) {
-                throw new Error(`Error al obtener los top productos por ${viewMode}`);
+                throw new Error(`Error al obtener los top productos por ${viewMode}: ${response.status}`);
             }
 
             const data = await response.json();
+            console.log('Top products data received:', data);
             
             setTopProducts(data.topProducts || []);
             setPeriod(data.period || 'todos los tiempos');
@@ -113,38 +124,36 @@ const TopProductosUnificado = ({ timePeriod = 'all', orderType = 'all' }) => {
                 </div>
                 
                 {viewMode === 'unidades' ? (
-                    <>
-                        <div className="col-units">
+                    <>                        <div className="col-units">
                             <span className="metric-value">
-                                {product.totalUnitsSold}
+                                {new Intl.NumberFormat('es-MX').format(product.totalUnitsSold || 0)}
                             </span>
                         </div>
                         <div className="col-orders">
                             <span className="metric-value">
-                                {product.ordersCount}
+                                {new Intl.NumberFormat('es-MX').format(product.ordersCount || 0)}
                             </span>
                         </div>
                         <div className="col-revenue">
                             <span className="metric-value revenue-highlight">
-                                {formatCurrency(product.totalRevenue)}
+                                {formatCurrency(product.totalRevenue || 0)}
                             </span>
                         </div>
                     </>
                 ) : (
-                    <>
-                        <div className="col-revenue">
+                    <>                        <div className="col-revenue">
                             <span className="metric-value revenue-highlight">
-                                {formatCurrency(product.totalRevenue)}
+                                {formatCurrency(product.totalRevenue || 0)}
                             </span>
                         </div>
                         <div className="col-units">
                             <span className="metric-value">
-                                {product.totalUnitsSold}
+                                {new Intl.NumberFormat('es-MX').format(product.totalUnitsSold || 0)}
                             </span>
                         </div>
                         <div className="col-avg-price">
                             <span className="metric-value">
-                                {formatCurrency(product.avgPrice)}
+                                {formatCurrency(product.avgPrice || 0)}
                             </span>
                         </div>
                     </>

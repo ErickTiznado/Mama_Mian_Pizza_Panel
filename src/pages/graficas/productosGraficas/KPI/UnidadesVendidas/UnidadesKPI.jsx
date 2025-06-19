@@ -95,10 +95,15 @@ const UnidadesVendidas = ({timePeriod = 'today', orderType = 'all' }) => {
                     />
                     <Package size={16}/>
                 </div>
-            </div>
-            <div className="count__kpi__body">
+            </div>            <div className="count__kpi__body">
                 <div className="count-value">
-                    {UnidadesVendidas}
+                    {loading ? (
+                        <span className="loading-text">Cargando...</span>
+                    ) : error ? (
+                        <span className="error-text">Error</span>
+                    ) : (
+                        new Intl.NumberFormat('es-MX').format(UnidadesVendidas || 0)
+                    )}
                 </div>
                 {!loading && !error && (
                     <div className={`count-comparison ${comparison.isIncrease ? 'increase' : 'descrease'}`}>
@@ -108,16 +113,16 @@ const UnidadesVendidas = ({timePeriod = 'today', orderType = 'all' }) => {
                                 ) : (
                                     <TrendingDown size={16} />
                                 )
-                            }
-                            <span>
+                            }                            <span>
                                 {comparison.percentage === 0 
                                     ? `Sin cambios ${comparison.comparisonText}`
-                                    : `${comparison.isIncrease ? '+' : '-'}${comparison.percentage}% ${comparison.comparisonText}`
+                                    : `${comparison.isIncrease ? '+' : '-'}${parseFloat(comparison.percentage).toFixed(1)}% ${comparison.comparisonText}`
                                 }
                             </span>
-                    </div>
-                )
+                    </div>                )
                 }
+                {loading && <div className="loading-text">Cargando...</div>}
+                {error && <div className="error-text">Error: {error}</div>}
             </div>
         </div>
     )

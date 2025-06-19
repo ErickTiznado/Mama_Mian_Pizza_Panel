@@ -95,10 +95,15 @@ const UnidadesPorOrden = ({timePeriod = 'today', orderType = 'all' }) => {
                     />
                     <BarChart3 size={16}/>
                 </div>
-            </div>
-            <div className="count__kpi__body">
+            </div>            <div className="count__kpi__body">
                 <div className="count-value">
-                    {UnidadespOrden}
+                    {loading ? (
+                        <span className="loading-text">Cargando...</span>
+                    ) : error ? (
+                        <span className="error-text">Error</span>
+                    ) : (
+                        parseFloat(UnidadespOrden || 0).toFixed(1)
+                    )}
                 </div>
                 {!loading && !error && (
                     <div className={`count-comparison ${comparison.isIncrease ? 'increase' : 'descrease'}`}>
@@ -108,16 +113,16 @@ const UnidadesPorOrden = ({timePeriod = 'today', orderType = 'all' }) => {
                                 ) : (
                                     <TrendingDown size={16} />
                                 )
-                            }
-                            <span>
+                            }                            <span>
                                 {comparison.percentage === 0 
                                     ? `Sin cambios ${comparison.comparisonText}`
-                                    : `${comparison.isIncrease ? '+' : '-'}${comparison.percentage}% ${comparison.comparisonText}`
+                                    : `${comparison.isIncrease ? '+' : '-'}${parseFloat(comparison.percentage).toFixed(1)}% ${comparison.comparisonText}`
                                 }
                             </span>
-                    </div>
-                )
+                    </div>                )
                 }
+                {loading && <div className="loading-text">Cargando...</div>}
+                {error && <div className="error-text">Error: {error}</div>}
             </div>
         </div>
     )

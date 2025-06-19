@@ -72,13 +72,11 @@ const FilterBar = ({
               <option value="anterior">Semana anterior</option>
               <option value="ultimoMes">Último mes</option>
             </select>
-            <FaChevronDown className="filter-select-icon" />
           </div>
         </div>
       )}      <div className="search-box">
 
         <div className="search-input-container">
-          <FaSearch className="search-icon" />
           <input
             type="text"
             className="search-input"
@@ -97,13 +95,13 @@ const FilterBar = ({
         >
           <FaUndoAlt className="btn-icon" />
           Resetear
-        </button>
-        <button
+        </button>        <button
           type="button"
           className="btn-apply"
           onClick={handleApplyFilters}
         >
-         Aplicar
+          <FaCheck className="btn-icon" />
+          Aplicar
         </button>
       </div>
     </div>
