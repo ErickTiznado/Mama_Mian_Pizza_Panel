@@ -1,0 +1,295 @@
+/* Contenedor principal */
+.comparativa-entrega-container {
+    width: 100%;
+    background-color: #0f172a;
+    border-radius: 10px;
+    padding: 20px;
+    border: rgb(71 85 105) solid 1px;
+    min-height: 300px;
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+}
+
+.comparativa-entrega-container::before {
+    display: none;
+}
+
+/* Header */
+.comparativa-entrega-header {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.comparativa-entrega-title {
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    text-align: center;
+}
+
+/* Contenido principal */
+.comparativa-entrega-content {
+    width: 100%;
+}
+
+/* Layout del gráfico y estadísticas - Simplificado */
+.chart-and-stats {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 24px;
+    align-items: start;
+    height: calc(100% - 80px);
+    width: 100%;
+}
+
+/* Contenedor del gráfico de torta - Simplificado */
+.pie-chart-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border-radius: 8px;
+    padding: 15px;
+    min-height: 350px;
+}
+
+/* Contenedor de estadísticas - Simplificado */
+.stats-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    height: 100%;
+}
+
+.stat-card-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+/* Tarjetas de estadísticas - Simplificadas */
+.stat-card {
+    background-color: #1e293b;
+    border-radius: 8px;
+    padding: 16px;
+    border: 1px solid rgb(71 85 105);
+    transition: all 0.2s ease;
+}
+
+.stat-card::before {
+    display: none;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.stat-card:hover::before {
+    display: none;
+}
+
+/* Header de las tarjetas */
+.stat-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.stat-header h4 {
+    color: #e2e8f0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Iconos de estadísticas - Simplificados */
+.stat-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.stat-card.local .stat-icon {
+    background-color: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+}
+
+.stat-card.domicilio .stat-icon {
+    background-color: rgba(249, 115, 22, 0.15);
+    color: #f97316;
+}
+
+.stat-icon.total-icon {
+    background-color: rgba(249, 115, 22, 0.15);
+    color: #f97316;
+}
+
+.stat-icon.preferred-icon {
+    background-color: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+}
+
+/* Contenido de estadísticas */
+.stat-content {
+    text-align: center;
+}
+
+.stat-number {
+    color: #ffffff;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 4px 0;
+    line-height: 1;
+}
+
+.stat-number.total-number {
+    color: #94a3b8;
+    font-size: 1.5rem;
+}
+
+.stat-percentage {
+    color: #94a3b8;
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 2px 0;
+}
+
+.stat-label {
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 400;
+    text-transform: lowercase;
+}
+
+/* Método preferido - Simplificado */
+.preferred-method {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: #22c55e;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-top: 6px;
+    padding: 4px 8px;
+    background-color: rgba(34, 197, 94, 0.1);
+    border-radius: 4px;
+}
+
+/* Tooltip personalizado - Simplificado */
+.comparativa-tooltip {
+    background-color: #1e293b;
+    border-radius: 6px;
+    padding: 12px 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgb(71 85 105);
+    font-family: 'Poppins', sans-serif;
+    color: #ffffff;
+    min-width: 150px;
+}
+
+.tooltip-label {
+    margin: 0 0 6px 0;
+    font-weight: 600;
+    font-size: 13px;
+    color: #e2e8f0;
+    border-bottom: 1px solid rgb(71 85 105);
+    padding-bottom: 6px;
+}
+
+.tooltip-value,
+.tooltip-percentage {
+    margin: 4px 0;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+}
+
+.tooltip-value span:first-child,
+.tooltip-percentage span:first-child {
+    color: #94a3b8;
+}
+
+.tooltip-value span:last-child,
+.tooltip-percentage span:last-child {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* Estados de carga y error - Simplificados */
+.loading-message,
+.error-message,
+.no-data-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 250px;
+    color: #9ca3af;
+    font-size: 1rem;
+    font-weight: 400;
+    text-align: center;
+}
+
+.error-message {
+    color: #ef4444;
+}
+
+/* Estilos para la leyenda de recharts - Simplificados */
+.recharts-legend-wrapper {
+    padding-top: 20px !important;
+}
+
+.recharts-legend-item {
+    color: #e2e8f0 !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+}
+
+/* Responsive design - Simplificado */
+@media (max-width: 1024px) {
+    .chart-and-stats {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    
+    .pie-chart-container {
+        min-height: 320px;
+    }
+}
+
+@media (max-width: 768px) {
+    .comparativa-entrega-container {
+        padding: 16px;
+    }
+
+    .stat-card-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .stat-card {
+        padding: 12px;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+    }
+
+    .stat-number.total-number {
+        font-size: 1.25rem;
+    }
+}

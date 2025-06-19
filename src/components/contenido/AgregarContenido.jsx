@@ -37,13 +37,12 @@ const AgregarContenido = () => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get('https://api.mamamianpizza.com/api/content/getMenu');
-      console.log('API Response:', response.data); // Para depuración
+      const response = await axios.get('https://api.mamamianpizza.com/api/content/getMenu');      console.log('API Response:', response.data); // Para depuración
+      console.log('Menu data sample:', response.data.menu?.[0]); // Ver estructura del primer elemento
       
       // La API devuelve response.data.menu en lugar de response.data.productos
       const menuData = response.data.menu || [];
-      
-      const formattedData = menuData.map(item => {
+        const formattedData = menuData.map(item => {
         // Calcular el precio basado en las opciones disponibles
         const precioMinimo = item.opciones && item.opciones.length > 0 
           ? Math.min(...item.opciones.map(opcion => opcion.precio))
@@ -52,17 +51,19 @@ const AgregarContenido = () => {
         // Crear una cadena con todos los tamaños disponibles
         const tamanosDisponibles = item.opciones 
           ? item.opciones.map(opcion => `${opcion.nombre}: $${opcion.precio}`).join(', ')
-          : null;        return {
+          : null;
+          return {
           id: item.id,
           imagen: item.imagen || 'https://via.placeholder.com/150?text=Sin+imagen',
           titulo: item.titulo,
           descripcion: item.descripcion,
-          tipo: item.seccion || 'Otros',
-          seccion: item.seccion || 'Otros', // Agregar campo seccion para edición
+          tipo: item.categoria || 'Otros', // Usar categoria en lugar de seccion
+          categoria: item.categoria || 'Otros', // Mantener categoria para compatibilidad
+          categoria_descripcion: item.categoria_descripcion || '',
           opciones: item.opciones || [], // Mantener opciones para edición
-          precio: `Desde $${precioMinimo}`,
-          tamanos: tamanosDisponibles,
-          estado: item.activo !== false, // Asumir activo si no se especifica
+          precio: precioMinimo > 0 ? `Desde $${precioMinimo}` : 'Precio no disponible',
+          tamanos: tamanosDisponibles || 'Sin opciones de tamaño',
+          estado: item.activo === 1, // Convertir 0/1 a boolean
           fecha: new Date().toISOString().split('T')[0] // Fecha actual como respaldo
         };
       });
@@ -237,6 +238,23 @@ const AgregarContenido = () => {
     }
   };
 
+  // Función para obtener el color de cada categoría
+  const getCategoryColor = (tipo) => {
+    const colorMap = {
+      'Pizza': '#dc2626',
+      'Pizzas': '#dc2626', // Para compatibilidad
+      'Complementos': '#2563eb',
+      'Bebidas': '#16a34a',
+      'Banner': '#d97706',
+      'Recomendaciones': '#7c3aed',
+      'Populares': '#ea580c',
+      'Banner Final': '#f59e0b',
+      'Postres': '#ec4899',
+      'Promociones': '#8b5cf6'
+    };
+    return colorMap[tipo] || '#6b7280'; // Color por defecto si no se encuentra la categoría
+  };
+
   // Renderizar componente principal
   return (
     <div className="admin-content-management">
@@ -265,54 +283,27 @@ const AgregarContenido = () => {
           />
             </div>          <div className="content-tabs-wrapper">
             <div className="content-tabs">
+              {/* Botón "Todos" siempre presente */}
               <button 
                 className={`tab-button ${activeTab === 'todos' ? 'cont_active' : ''}`}
                 onClick={() => handleTabChange('todos')}
               >
                 Todos
               </button>
-              <button 
-                className={`tab-button ${activeTab === 'Pizzas' ? 'cont_active' : ''}`}
-                onClick={() => handleTabChange('Pizzas')}
-              >
-                Pizzas
-              </button>
-              <button 
-                className={`tab-button ${activeTab === 'Complementos' ? 'cont_active' : ''}`}
-                onClick={() => handleTabChange('Complementos')}
-              >
-                Complementos
-              </button>
-              <button 
-                className={`tab-button ${activeTab === 'Bebidas' ? 'cont_active' : ''}`}
-                onClick={() => handleTabChange('Bebidas')}
-              >
-                Bebidas
-              </button>
-              <button 
-                className={`tab-button ${activeTab === 'Banner' ? 'cont_active' : ''}`}
-                onClick={() => handleTabChange('Banner')}
-              >
-                Banner
-              </button>
-              <button 
-                className={`tab-button ${activeTab === 'Recomendaciones' ? 'cont_active' : ''}`}
-                onClick={() => handleTabChange('Recomendaciones')}
-              >
-                Recomendaciones
-              </button>
-              <button 
-                className={`tab-button ${activeTab === 'Populares' ? 'cont_active' : ''}`}
-                onClick={() => handleTabChange('Populares')}
-              >
-                Populares
-              </button>
-              <button 
-                className={`tab-button ${activeTab === 'Banner Final' ? 'cont_active' : ''}`}
-                onClick={() => handleTabChange('Banner Final')}
-              >
-                Banner Final
-              </button>
+              
+              {/* Generar botones dinámicamente basados en las categorías disponibles */}
+              {tiposDisponibles
+                .filter(tipo => tipo !== 'todos') // Excluir 'todos' ya que lo agregamos manualmente
+                .map(tipo => (
+                  <button 
+                    key={tipo}
+                    className={`tab-button ${activeTab === tipo ? 'cont_active' : ''}`}
+                    onClick={() => handleTabChange(tipo)}
+                  >
+                    {tipo}
+                  </button>
+                ))
+              }
             </div>
           </div>
 
@@ -397,19 +388,10 @@ const AgregarContenido = () => {
                                 </div>
                               )}
                             </div>
-                          </td>
-                          <td className="type-cell">
-                            <div
+                          </td>                          <td className="type-cell">                            <div
                               className={`type-pill type-${item.tipo.toLowerCase().replace(/\s+/g, '-')}`}
                               style={{
-                                backgroundColor: 
-                                  item.tipo === 'Pizzas' ? '#dc2626' :
-                                  item.tipo === 'Complementos' ? '#2563eb' :
-                                  item.tipo === 'Bebidas' ? '#16a34a' :
-                                  item.tipo === 'Banner' ? '#d97706' :
-                                  item.tipo === 'Recomendaciones' ? '#7c3aed' :
-                                  item.tipo === 'Populares' ? '#ea580c' :
-                                  '#6b7280',
+                                backgroundColor: getCategoryColor(item.tipo),
                                 color: '#ffffff',
                                 fontWeight: '700'
                               }}

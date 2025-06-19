@@ -3,7 +3,7 @@ import KPITicket from './KPI/TicketMedio/avgTicket';
 import KPIHora from './KPI/PedidosHora/PedidosHora';
 import EvolucionPedidos from './Metricas/EvolucionPedidos/EvolucionPedidos';
 import Heatmap from './Metricas/MapaDeCalor/Heatmap';
-import UltimosPedidos from './Metricas/UltimosPedidos/UltimosPedidos'
+import ComparativaEntrega from './Metricas/ComparativaEntrega/ComparativaEntrega';
 import './pedidosGraficas.css';
 
 // Recibir las props desde el componente padre
@@ -41,14 +41,15 @@ const pedidosGraficas = ({ timePeriod, orderType }) => {
           <EvolucionPedidos 
             timePeriod={timePeriod} 
           />
-        </div>
-        <div className="metrics__containers heatmap__container">
+        </div>        <div className="metrics__containers heatmap__container">
           <Heatmap />
         </div>
       </div>
-      <div className='ultimos-pedidos__container'>
-        <div className='ultimos-pedidos'>
-          <UltimosPedidos />
+      <div className='comparativa-entrega__section'>
+        <div className="metrics__containers comparativa-entrega__container">
+          <ComparativaEntrega 
+            timePeriod={timePeriod} 
+          />
         </div>
       </div>
     </div>

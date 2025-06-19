@@ -58,13 +58,11 @@ const CombinacionesProductos = ({ timePeriod = 'all', orderType = 'all' }) => {
             setSortOrder('desc');
         }
         setCurrentPage(1); // Reset to first page when sorting
-    };
-
-    const getFrequencyColor = (frequency) => {
+    };    const getFrequencyColor = (frequency) => {
         if (!statistics.uniqueCombinations || frequency === 0) return '#94a3b8';
         
         // Calculate intensity based on relative frequency
-        const maxFreq = Math.max(...combinaciones.map(c => c.vecesJuntos));
+        const maxFreq = Math.max(...combinaciones.map(c => c.frequency));
         const intensity = frequency / maxFreq;
         
         if (intensity >= 0.8) return '#10b981'; // Verde intenso
@@ -144,20 +142,19 @@ const CombinacionesProductos = ({ timePeriod = 'all', orderType = 'all' }) => {
             ) : (
                 <div className="combinaciones-content">
                     <div className="combinaciones-table">
-                        <div className="table-header">
-                            <div 
+                        <div className="table-header">                            <div 
                                 className="col-header producto-a"
-                                onClick={() => handleSort('productoA')}
+                                onClick={() => handleSort('productA')}
                             >
                                 <span>Producto A</span>
-                                {getSortIcon('productoA')}
+                                {getSortIcon('productA')}
                             </div>
                             <div 
                                 className="col-header producto-b"
-                                onClick={() => handleSort('productoB')}
+                                onClick={() => handleSort('productB')}
                             >
                                 <span>Producto B</span>
-                                {getSortIcon('productoB')}
+                                {getSortIcon('productB')}
                             </div>
                             <div 
                                 className="col-header frecuencia"
@@ -167,27 +164,26 @@ const CombinacionesProductos = ({ timePeriod = 'all', orderType = 'all' }) => {
                                 {getSortIcon('frequency')}
                             </div>
                         </div>
-                        
-                        <div className="table-body">
+                          <div className="table-body">
                             {combinaciones.map((combinacion, index) => (
-                                <div key={`${combinacion.productoA}-${combinacion.productoB}-${index}`} className="table-row">
+                                <div key={`${combinacion.productA?.name}-${combinacion.productB?.name}-${index}`} className="table-row">
                                     <div className="col-producto-a">
-                                        <span className="product-name" title={combinacion.productoA}>
-                                            {combinacion.productoA}
+                                        <span className="product-name" title={combinacion.productA?.name}>
+                                            {combinacion.productA?.name}
                                         </span>
                                     </div>
                                     <div className="col-producto-b">
-                                        <span className="product-name" title={combinacion.productoB}>
-                                            {combinacion.productoB}
+                                        <span className="product-name" title={combinacion.productB?.name}>
+                                            {combinacion.productB?.name}
                                         </span>
                                     </div>
                                     <div className="col-frecuencia">
                                         <div className="frequency-container">
                                             <span 
                                                 className="frequency-value"
-                                                style={{ color: getFrequencyColor(combinacion.vecesJuntos) }}
+                                                style={{ color: getFrequencyColor(combinacion.frequency) }}
                                             >
-                                                {combinacion.vecesJuntos}
+                                                {combinacion.frequency}
                                             </span>
                                             <span className="frequency-label">veces</span>
                                         </div>

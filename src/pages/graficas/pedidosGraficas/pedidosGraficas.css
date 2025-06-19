@@ -68,3 +68,29 @@
   height: 100%;
   gap: 10px;
 }
+
+.comparativa-entrega__section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.comparativa-entrega__container {
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  min-height: 450px;
+}
+
+/* Responsive adjustments for the new component */
+@media (max-width: 768px) {
+  .comparativa-entrega__section {
+    margin-top: 16px;
+  }
+  
+  .comparativa-entrega__container {
+    max-width: 100%;
+    min-height: 400px;
+  }
+}

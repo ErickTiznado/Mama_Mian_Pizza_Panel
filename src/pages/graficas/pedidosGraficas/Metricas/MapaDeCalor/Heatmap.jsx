@@ -182,17 +182,8 @@ const Heatmap = () => {
                                     className="legend-color"
                                     style={{ backgroundColor: color }}
                                     title={`Nivel ${index + 1}`}
-                                ></div>
-                            ))}
+                                ></div>                        ))}
                             <span className="legend-label">Más</span>
-                        </div>
-                        
-                        {/* Descripción explicativa */}
-                        <div className="heatmap-description">
-                            <p>
-                                Este mapa de calor muestra la distribución acumulada de pedidos por día de la semana y hora.
-                                Horario de atención: 10:00 AM - 8:00 PM. Los colores más intensos indican mayor cantidad de pedidos históricos.
-                            </p>
                         </div>
                     </div>
                 )}
