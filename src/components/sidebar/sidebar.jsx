@@ -48,28 +48,29 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
       icon: ShoppingCart,
       hasNotification: true,
       notificationCategory: 'pedidos'
-    },
-    {
+    },    {
       id: 'contenido',
       path: '/AgregarContenido',
       label: 'Contenido',
       icon: ClipboardList,
       hasNotification: false
     },
+    // {
+    //   id: 'inventario',
+    //   path: '/inventario',
+    //   label: 'Inventario',
+    //   icon: Package,
+    //   hasNotification: true,
+    //   notificationCategory: 'inventario'
+    // },
+    // {
+    //   id: 'generadordeinformes',
+    //   path: '/generadordeinformes',
+    //   label: 'Informes',
+    //   icon: ChartLine,
+    //   hasNotification: false
+    // },
     {
-      id: 'inventario',
-      path: '/inventario',
-      label: 'Inventario',
-      icon: Package,
-      hasNotification: true,
-      notificationCategory: 'inventario'
-    },    {
-      id: 'generadordeinformes',
-      path: '/generadordeinformes',
-      label: 'Informes',
-      icon: ChartLine,
-      hasNotification: false
-    },{
       id: 'clientes',
       path: '/clientes',
       label: 'Clientes',

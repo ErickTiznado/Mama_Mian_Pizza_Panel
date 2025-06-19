@@ -7,24 +7,32 @@ import {
   FaMapMarkerAlt,
   FaPhoneAlt,
   FaUserAlt,
-  FaLocationArrow 
+  FaLocationArrow,
+  FaRoute,
+  FaTimes
 } from 'react-icons/fa';
+import OrderLocationMap from '../../map/OrderLocationMap';
 
 const OrderDetailModal = ({
   showModal,
   selectedOrder,
+  showMap,
+  showRoute,
   closeModal,
+  handleShowLocationMap,
+  handleShowRoute,
+  handleCloseMap,
   formatDate,
   getClientName,
+  changeOrderStatus,
   getStatusName
 }) => {
   const [selectedDeliveryValue, setSelectedDeliveryValue] = useState('');
   const [liveAddress, setLiveAddress] = useState('');
-
   useEffect(() => {
     const getReverseAddress = async () => {
-      const lat = selectedOrder?.lat || '13.6988';
-      const lng = selectedOrder?.lng || '-89.2407';
+      const lat = selectedOrder?.latitud || selectedOrder?.lat || '13.6988';
+      const lng = selectedOrder?.longitud || selectedOrder?.lng || '-89.2407';
 
       try {
         const res = await fetch(
@@ -38,7 +46,7 @@ const OrderDetailModal = ({
       }
     };
 
-    if (showModal && selectedOrder?.lat && selectedOrder?.lng) {
+    if (showModal && (selectedOrder?.latitud || selectedOrder?.lat) && (selectedOrder?.longitud || selectedOrder?.lng)) {
       getReverseAddress();
     }
   }, [selectedOrder, showModal]);
@@ -86,12 +94,7 @@ const OrderDetailModal = ({
               <p><strong>Nombre:</strong> {getClientName(selectedOrder)}</p>
               <p><strong>Teléfono:</strong> {selectedOrder.telefono}</p>
               <p><strong>Pago:</strong> {selectedOrder.metodo_pago}</p>
-              <p><strong>Dirección:</strong> {selectedOrder.direccion_formateada}</p>
-              <p><strong>Ubicación Cliente:</strong> 📍 En tiempo real<br />
-                <span className="small-muted">
-                  {selectedOrder.lat || '13.6987'}, {selectedOrder.lng || '-89.2404'}
-                </span>
-              </p>
+              <p><strong>Dirección:</strong> {selectedOrder.direccion_formateada}</p>              <p><strong>Ubicación Cliente:</strong> 📍 En tiempo real</p>
             </div>
 
 </div>
@@ -117,17 +120,13 @@ const OrderDetailModal = ({
                 <FaTruck style={{ marginRight: '8px' }} />
                 Asignar y Notificar Repartidor
               </button>
-            </div>
-
-            {/* Ubicación en Tiempo Real */}
+            </div>            {/* Ubicación en Tiempo Real */}
             <div className="detalle-card">
               <h3>📍 Ubicación en Tiempo Real</h3>
               <div className="card-ubicacion">
                 <div className="icono-ubicacion-animado">
                   <FaMapMarkerAlt />
-                </div>
-                <h4>Destino: {liveAddress}</h4>
-                <p>Lat: {selectedOrder.lat || '13.6988'}, Lng: {selectedOrder.lng || '-89.2407'}</p>
+                </div>                <h4>Destino: {liveAddress}</h4>
 
                 <div className="label-coordenadas-card">
                   <div className="icono-cliente-card">
@@ -135,9 +134,52 @@ const OrderDetailModal = ({
                     <span>Cliente</span>
                   </div>
                   <div className="coords">
-                    {selectedOrder.lat || '13.6988'}, {selectedOrder.lng || '-89.2407'}
+                    Ubicación verificada
                   </div>
                 </div>
+
+                {/* Botones para mapa */}
+                <div className="map-controls">
+                  <button 
+                    className="btn-mapa"
+                    onClick={handleShowLocationMap}
+                  >
+                    <FaMapMarkerAlt className="icono-btn" />
+                    Ver en Mapa
+                  </button>
+                  <button 
+                    className="btn-ruta"
+                    onClick={handleShowRoute}
+                  >
+                    <FaRoute className="icono-btn" />
+                    Obtener Ruta
+                  </button>
+                </div>
+
+                {/* Mapa de ubicación */}
+                {showMap && (
+                  <div className="map-container">
+                    <div className="map-header">
+                      <h4>
+                        {showRoute ? '🗺️ Ruta al Cliente' : '📍 Ubicación del Cliente'}
+                      </h4>
+                      <button 
+                        className="map-close-btn"
+                        onClick={handleCloseMap}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                    <OrderLocationMap 
+                      order={{
+                        ...selectedOrder,
+                        latitud: selectedOrder.latitud || selectedOrder.lat,
+                        longitud: selectedOrder.longitud || selectedOrder.lng
+                      }}
+                      showRoute={showRoute}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -153,10 +195,11 @@ const OrderDetailModal = ({
 
               <button className="btn-call-cliente">
                 <FaPhoneAlt className="icono-btn" /> Llamar al Cliente
-              </button>
-
-              <button className="btn-ver-ubicacion-final">
-                <FaLocationArrow  className="icono-btn" /> Ver Ubicación del Cliente
+              </button>              <button 
+                className="btn-ver-ubicacion-final"
+                onClick={handleShowLocationMap}
+              >
+                <FaLocationArrow className="icono-btn" /> Ver Ubicación del Cliente
               </button>
             </div>
             

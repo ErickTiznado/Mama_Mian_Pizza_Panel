@@ -14,15 +14,15 @@ const EvolucionClientes = ({ timePeriod = 'all' }) => {
             setLoading(true);
             setError(null);
             
-            // Usar el endpoint de clientes únicos para obtener datos de segmentación
-            const response = await fetch(`${API_URL}/api/customers/unique-customers`);
+            // Usar el endpoint específico de segmentación
+            const response = await fetch(`${API_URL}/api/segmentacion/`);
             if (!response.ok) {
                 throw new Error('Error al obtener datos de segmentación');
             }
             
             const data = await response.json();
             
-            // Procesar los datos para generar análisis de valor por segmento
+            // Procesar los datos reales del API
             const processedData = processSegmentData(data);
             setLifetimeValueData(processedData);
 
@@ -36,7 +36,7 @@ const EvolucionClientes = ({ timePeriod = 'all' }) => {
         } finally {
             setLoading(false);
         }
-    };    // Función para generar datos de muestra de segmentación
+    };// Función para generar datos de muestra de segmentación
     const generateSampleSegmentData = () => {
         return [
             { segment: 'Nuevos (1 pedido)', customers: 168, avgValue: 35.50, totalValue: 5964, color: '#94a3b8', percentage: 51.9 },
@@ -44,15 +44,19 @@ const EvolucionClientes = ({ timePeriod = 'all' }) => {
             { segment: 'Habituales (4-6)', customers: 52, avgValue: 142.80, totalValue: 7426, color: '#10b981', percentage: 16.0 },
             { segment: 'Leales (7+)', customers: 28, avgValue: 284.60, totalValue: 7969, color: '#8b5cf6', percentage: 8.6 }
         ];
-    };
-
-    // Función para procesar los datos reales del API (cuando esté disponible)
+    };    // Función para procesar los datos reales del API
     const processSegmentData = (apiData) => {
-        const { uniqueCustomers, customerFrequencyDistribution } = apiData;
+        const { segments, totalCustomers } = apiData;
         
-        // En una implementación real, aquí procesarías los datos del API
-        // Por ahora, generamos datos de muestra basados en la estructura real
-        return generateSampleSegmentData();
+        // Procesar cada segmento con los datos reales del API
+        return segments.map(segment => ({
+            segment: segment.segment,
+            customers: segment.customers,
+            avgValue: parseFloat(segment.avgValue),
+            totalValue: parseFloat(segment.totalValue),
+            color: segment.color,
+            percentage: segment.percentage
+        }));
     };    useEffect(() => {
         fetchSegmentValueData();
     }, [timePeriod]);
@@ -63,6 +67,103 @@ const EvolucionClientes = ({ timePeriod = 'all' }) => {
             style: 'currency',
             currency: 'MXN'
         }).format(amount);
+    };
+
+    // Función para generar insights inteligentes basados en los datos reales
+    const generateSmartInsights = (segmentData) => {
+        if (!segmentData || segmentData.length === 0) return [];
+
+        const insights = [];
+        const totalCustomers = segmentData.reduce((sum, segment) => sum + segment.customers, 0);
+        const totalRevenue = segmentData.reduce((sum, segment) => sum + segment.totalValue, 0);
+
+        segmentData.forEach(segment => {
+            const revenuePercentage = ((segment.totalValue / totalRevenue) * 100).toFixed(1);
+            
+            switch (segment.segment) {
+                case 'Nuevos (1 pedido)':
+                    insights.push({
+                        type: segment.percentage > 70 ? 'critical' : segment.percentage > 50 ? 'opportunity' : 'success',
+                        title: segment.segment,
+                        content: generateNewCustomerInsight(segment, revenuePercentage, totalCustomers)
+                    });
+                    break;
+                    
+                case 'Ocasionales (2-3)':
+                    insights.push({
+                        type: segment.percentage < 15 ? 'opportunity' : 'success',
+                        title: segment.segment,
+                        content: generateOccasionalInsight(segment, revenuePercentage)
+                    });
+                    break;
+                    
+                case 'Habituales (4-6)':
+                    insights.push({
+                        type: segment.percentage > 0 ? 'action' : 'opportunity',
+                        title: segment.segment,
+                        content: generateRegularInsight(segment, revenuePercentage)
+                    });
+                    break;
+                    
+                case 'Leales (7+)':
+                    insights.push({
+                        type: segment.percentage < 10 ? 'critical' : 'success',
+                        title: segment.segment,
+                        content: generateLoyalInsight(segment, revenuePercentage)
+                    });
+                    break;
+                    
+                default:
+                    // Para cualquier otro segmento que pueda aparecer
+                    insights.push({
+                        type: 'action',
+                        title: segment.segment,
+                        content: `Este segmento representa ${segment.percentage}% de clientes (${segment.customers}) con valor promedio de ${formatCurrency(segment.avgValue)}.`
+                    });
+            }
+        });
+
+        return insights;
+    };
+
+    const generateNewCustomerInsight = (segment, revenuePercentage, totalCustomers) => {
+        if (segment.percentage > 80) {
+            return `¡ALERTA! El ${segment.percentage}% de tus clientes (${segment.customers} de ${totalCustomers}) son nuevos, pero solo generan el ${revenuePercentage}% de ingresos. <strong>Acción urgente:</strong> Implementa campañas de retención inmediatas y seguimiento personalizado.`;
+        } else if (segment.percentage > 60) {
+            return `Tienes ${segment.customers} clientes nuevos (${segment.percentage}%) con valor promedio de ${formatCurrency(segment.avgValue)}. <strong>Oportunidad:</strong> Programa seguimiento automático en 48-72 horas con descuentos del 15-20%.`;
+        } else if (segment.percentage > 40) {
+            return `Balance saludable: ${segment.customers} nuevos clientes (${segment.percentage}%) generan ${revenuePercentage}% de ingresos. <strong>Mantén:</strong> Calidad en primera experiencia y programa de bienvenida.`;
+        } else {
+            return `Excelente retención: Solo ${segment.percentage}% son clientes nuevos. <strong>Continúa:</strong> Tu estrategia de fidelización está funcionando muy bien.`;
+        }
+    };
+
+    const generateOccasionalInsight = (segment, revenuePercentage) => {
+        if (segment.customers === 0) {
+            return `No tienes clientes ocasionales actualmente. <strong>Oportunidad:</strong> Enfócate en convertir a los nuevos clientes con promociones de "segunda compra" atractivas.`;
+        } else if (segment.percentage < 10) {
+            return `Solo ${segment.customers} clientes ocasionales (${segment.percentage}%). <strong>Estrategia:</strong> Aumenta conversión de nuevos a ocasionales con ofertas personalizadas y recordatorios cada 10-14 días.`;
+        } else {
+            return `${segment.customers} clientes ocasionales (${segment.percentage}%) con valor promedio de ${formatCurrency(segment.avgValue)}. <strong>Optimiza:</strong> Programa promociones quincenales para convertirlos en habituales.`;
+        }
+    };
+
+    const generateRegularInsight = (segment, revenuePercentage) => {
+        if (segment.customers === 0) {
+            return `Sin clientes habituales detectados. <strong>Prioridad:</strong> Desarrolla programa de fidelización para convertir ocasionales en habituales con beneficios progresivos.`;
+        } else {
+            return `${segment.customers} clientes habituales (${segment.percentage}%) con excelente valor promedio de ${formatCurrency(segment.avgValue)}. <strong>Mantén:</strong> Calidad consistente y tiempos de entrega. Son tu base más estable.`;
+        }
+    };
+
+    const generateLoyalInsight = (segment, revenuePercentage) => {
+        if (segment.customers === 0) {
+            return `Sin clientes leales identificados. <strong>Oportunidad:</strong> Crea programa VIP para clientes con 7+ pedidos. Implementa sistema de puntos y beneficios exclusivos.`;
+        } else if (segment.percentage < 5) {
+            return `Solo ${segment.customers} cliente${segment.customers > 1 ? 's' : ''} leal${segment.customers > 1 ? 'es' : ''} (${segment.percentage}%) pero con alto valor: ${formatCurrency(segment.avgValue)}. <strong>Acción VIP:</strong> Programa de referidos y beneficios exclusivos.`;
+        } else {
+            return `Excelente: ${segment.customers} clientes leales (${segment.percentage}%) con valor premium de ${formatCurrency(segment.avgValue)}. <strong>Expande:</strong> Programa de embajadores y referencias para multiplicar este segmento.`;
+        }
     };if (loading) {
         return (
             <div className="evolucion-clientes-container">
@@ -177,41 +278,33 @@ const EvolucionClientes = ({ timePeriod = 'all' }) => {
                             </div>
                         </div>
                     </button>
-                    
-                    {showInsights && (
+                      {showInsights && (
                         <div className="insights-content">
                             <div className="recommendation-grid">
-                                <div className="recommendation-item opportunity">
-                                    <div className="rec-header">
-                                        <DollarSign size={16} />
-                                        <strong>Nuevos Clientes (1 pedido)</strong>
+                                {generateSmartInsights(lifetimeValueData).map((insight, index) => (
+                                    <div key={index} className={`recommendation-item ${insight.type}`}>
+                                        <div className="rec-header">
+                                            <DollarSign size={16} />
+                                            <strong>{insight.title}</strong>
+                                        </div>
+                                        <p dangerouslySetInnerHTML={{ __html: insight.content }}></p>
                                     </div>
-                                    <p>Representan el 52% de tu base pero solo el 21% de ingresos. <strong>Oportunidad clave:</strong> Implementa seguimiento automático a las 48-72 horas post-compra con ofertas personalizadas.</p>
-                                </div>
+                                ))}
                                 
-                                <div className="recommendation-item success">
-                                    <div className="rec-header">
-                                        <DollarSign size={16} />
-                                        <strong>Ocasionales (2-3 pedidos)</strong>
+                                {/* Insight adicional basado en el análisis general */}
+                                {lifetimeValueData.length > 0 && (
+                                    <div className="recommendation-item summary">
+                                        <div className="rec-header">
+                                            <DollarSign size={16} />
+                                            <strong>Análisis General</strong>
+                                        </div>
+                                        <p>
+                                            <strong>Total de clientes:</strong> {lifetimeValueData.reduce((sum, segment) => sum + segment.customers, 0)} • 
+                                            <strong> Valor total:</strong> {formatCurrency(lifetimeValueData.reduce((sum, segment) => sum + segment.totalValue, 0))} • 
+                                            <strong> Valor promedio general:</strong> {formatCurrency(lifetimeValueData.reduce((sum, segment) => sum + segment.totalValue, 0) / lifetimeValueData.reduce((sum, segment) => sum + segment.customers, 0))}
+                                        </p>
                                     </div>
-                                    <p>Balance ideal entre volumen y valor. <strong>Estrategia:</strong> Usa promociones frecuentes (cada 2 semanas) y recordatorios para mantener el momentum y convertirlos en habituales.</p>
-                                </div>
-                                
-                                <div className="recommendation-item action">
-                                    <div className="rec-header">
-                                        <DollarSign size={16} />
-                                        <strong>Habituales (4-6 pedidos)</strong>
-                                    </div>
-                                    <p>Alta conversión y valor promedio excelente. <strong>Mantén:</strong> Calidad consistente, tiempos de entrega y servicio al cliente. Son la base sólida de tu negocio.</p>
-                                </div>
-                                
-                                <div className="recommendation-item critical">
-                                    <div className="rec-header">
-                                        <DollarSign size={16} />
-                                        <strong>Leales (7+ pedidos)</strong>
-                                    </div>
-                                    <p>Máximo valor per cápita pero pocos clientes. <strong>Acción VIP:</strong> Crea programa de beneficios exclusivos y pídeles que recomienden tu pizzería a amigos.</p>
-                                </div>
+                                )}
                             </div>
                         </div>
                     )}

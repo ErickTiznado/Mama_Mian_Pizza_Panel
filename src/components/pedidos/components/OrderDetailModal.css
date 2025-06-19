@@ -293,6 +293,12 @@
 
 .coords {
   font-size: 13px;
+  color: #10b981;
+  font-weight: 600;
+  padding: 4px 8px;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 4px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 .productos-card h3 {
   font-size: 18px;
@@ -345,4 +351,104 @@
   margin-top: 8px;
   color: #4ade80;
   font-size: 16px;
+}
+
+/* Estilos para controles del mapa */
+.map-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn-mapa, .btn-ruta {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-mapa {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+}
+
+.btn-mapa:hover {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.btn-ruta {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.btn-ruta:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+/* Contenedor del mapa */
+.map-container {
+  margin-top: 20px;
+  border-radius: 12px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  overflow: hidden;
+}
+
+.map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #2d3748;
+  border-bottom: 1px solid #4a5568;
+}
+
+.map-header h4 {
+  margin: 0;
+  color: #f7fafc;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.map-close-btn {
+  background: none;
+  border: none;
+  color: #a0aec0;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.map-close-btn:hover {
+  background: #4a5568;
+  color: #ffffff;
+}
+
+/* Ajustes responsivos para el mapa */
+@media (max-width: 768px) {
+  .detalle-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .map-controls {
+    flex-direction: column;
+  }
+  
+  .btn-mapa, .btn-ruta {
+    width: 100%;
+  }
 }
