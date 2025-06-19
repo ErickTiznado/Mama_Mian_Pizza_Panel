@@ -84,7 +84,10 @@
 .combinaciones-table {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 2px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(71, 85, 105, 0.3);
 }
 
 .table-header {
@@ -92,12 +95,12 @@
     grid-template-columns: 1fr 1fr 120px;
     gap: 16px;
     align-items: center;
-    padding: 12px 16px;
-    background-color: rgba(71, 85, 105, 0.2);
-    border-radius: 8px;
+    padding: 16px;
+    background-color: rgba(71, 85, 105, 0.4);
     font-size: 0.875rem;
     font-weight: 600;
     color: #d1d5db;
+    border-bottom: 1px solid rgba(71, 85, 105, 0.5);
 }
 
 .col-header {
@@ -107,10 +110,20 @@
     cursor: pointer;
     user-select: none;
     transition: color 0.2s ease;
+    min-height: 20px;
 }
 
 .col-header:hover {
     color: #ea580c;
+}
+
+.col-header.producto-a,
+.col-header.producto-b {
+    justify-content: flex-start;
+}
+
+.col-header.frecuencia {
+    justify-content: center;
 }
 
 .sort-icon {
@@ -133,7 +146,7 @@
 .table-body {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 0;
 }
 
 .table-row {
@@ -141,11 +154,16 @@
     grid-template-columns: 1fr 1fr 120px;
     gap: 16px;
     align-items: center;
-    padding: 12px 16px;
+    padding: 16px;
     background-color: rgba(30, 41, 59, 0.3);
-    border-radius: 8px;
     transition: all 0.2s ease;
     border-left: 3px solid transparent;
+    border-bottom: 1px solid rgba(71, 85, 105, 0.2);
+    min-height: 60px;
+}
+
+.table-row:last-child {
+    border-bottom: none;
 }
 
 .table-row:hover {
@@ -158,6 +176,9 @@
 .col-producto-a,
 .col-producto-b {
     min-width: 0; /* Permite el truncamiento */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 }
 
 .product-name {
@@ -169,6 +190,7 @@
     text-overflow: ellipsis;
     cursor: help;
     font-size: 0.875rem;
+    line-height: 1.2;
 }
 
 /* Columna de frecuencia */
@@ -176,6 +198,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 40px;
 }
 
 .frequency-container {
@@ -183,18 +206,25 @@
     flex-direction: column;
     align-items: center;
     gap: 2px;
+    padding: 8px;
+    border-radius: 6px;
+    background-color: rgba(71, 85, 105, 0.2);
+    min-width: 60px;
 }
 
 .frequency-value {
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     transition: all 0.2s ease;
+    line-height: 1;
 }
 
 .frequency-label {
     color: #94a3b8;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* Paginación */
@@ -285,13 +315,21 @@
         justify-content: space-between;
         flex-wrap: wrap;
     }
-    
-    .table-header,
+      .table-header,
     .table-row {
         grid-template-columns: 1fr 1fr 100px;
         gap: 12px;
-        padding: 10px 12px;
+        padding: 12px;
         font-size: 0.8rem;
+    }
+    
+    .table-row {
+        min-height: 50px;
+    }
+    
+    .frequency-container {
+        min-width: 50px;
+        padding: 6px;
     }
     
     .combinaciones-header .header-content h3 {
@@ -321,7 +359,11 @@
     .table-row {
         grid-template-columns: 1fr 1fr 80px;
         gap: 8px;
-        padding: 8px 10px;
+        padding: 10px;
+    }
+    
+    .table-row {
+        min-height: 45px;
     }
     
     .stat-item {
@@ -330,6 +372,8 @@
     
     .frequency-container {
         gap: 1px;
+        min-width: 40px;
+        padding: 4px;
     }
     
     .frequency-value {
@@ -337,6 +381,6 @@
     }
     
     .frequency-label {
-        font-size: 0.7rem;
+        font-size: 0.6rem;
     }
 }
