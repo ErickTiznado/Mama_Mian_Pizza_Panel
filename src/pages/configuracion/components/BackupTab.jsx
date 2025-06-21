@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React from 'react';
 import {
   DatabaseBackup,
   Download,
@@ -8,66 +8,11 @@ import {
   Settings,
   Activity,
   RefreshCw
-} from 'lucide-react';
+} from "lucide-react";
 
-const BackupTab = () => {
-  // Estados para datos de backup
-  const [backupData, setBackupData] = useState([]);
-
-  // Cargar datos simulados de backup
-  useEffect(() => {
-    const datosBackup = [
-      {
-        id: 1,
-        nombre: 'backup_completo_2024_01_15.sql',
-        descripcion: 'Backup completo del sistema',
-        tipo: 'Completo',
-        tamaño: '245.8 MB',
-        fecha: '15/01/2024 02:00:00',
-        estado: 'Completado'
-      },      {
-        id: 2,
-        nombre: 'backup_incremental_2024_01_14.sql',
-        descripcion: 'Backup incremental diario',
-        tipo: 'Incremental',
-        tamaño: '42.3 MB',
-        fecha: '14/01/2024 02:00:00',
-        estado: 'Completado'
-      },
-      {
-        id: 3,
-        nombre: 'backup_completo_2024_01_08.sql',
-        descripcion: 'Backup completo semanal',
-        tipo: 'Completo',
-        tamaño: '238.1 MB',
-        fecha: '08/01/2024 02:00:00',
-        estado: 'Completado'
-      },
-      {
-        id: 4,
-        nombre: 'backup_incremental_2024_01_07.sql',
-        descripcion: 'Backup incremental diario',
-        tipo: 'Incremental',
-        tamaño: '38.7 MB',
-        fecha: '07/01/2024 02:00:00',
-        estado: 'Completado'
-      },
-      {
-        id: 5,
-        nombre: 'backup_diferencial_2024_01_06.sql',
-        descripcion: 'Backup diferencial',
-        tipo: 'Diferencial',
-        tamaño: '95.2 MB',
-        fecha: '06/01/2024 02:00:00',
-        estado: 'Completado'
-      }
-    ];
-    setBackupData(datosBackup);
-  }, []);
-
+function BackupTab({ backupData }) {
   return (
     <div className="backup-layout">
-      {/* Header de backup */}
       <div className="backup-header">
         <div className="backup-title-section">
           <DatabaseBackup size={28} className="section-icon" />
@@ -82,7 +27,6 @@ const BackupTab = () => {
         </button>
       </div>
 
-      {/* Resumen de estado de backups */}
       <div className="backup-overview">
         <div className="backup-status-card success">
           <div className="status-card-content">
@@ -137,7 +81,6 @@ const BackupTab = () => {
         </div>
       </div>
 
-      {/* Configuración de backups */}
       <div className="backup-config modern-card">
         <div className="config-header">
           <div className="config-title-group">
@@ -191,7 +134,6 @@ const BackupTab = () => {
         </div>
       </div>
 
-      {/* Historial de backups */}
       <div className="backup-history modern-card">
         <div className="history-header">
           <div className="history-title-group">
@@ -277,6 +219,6 @@ const BackupTab = () => {
       </div>
     </div>
   );
-};
+}
 
 export default BackupTab;

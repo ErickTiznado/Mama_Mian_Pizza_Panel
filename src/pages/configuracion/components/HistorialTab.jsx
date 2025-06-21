@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Activity,
   Search,
@@ -11,102 +11,18 @@ import {
   Package,
   DatabaseBackup,
   Settings
-} from 'lucide-react';
+} from "lucide-react";
 
-const HistorialTab = () => {
-  // Estados para historial y filtros
-  const [data, setData] = useState([]);
-  const [busqueda, setBusqueda] = useState("");
-  const [tipo, setTipo] = useState("");
-  const [estado, setEstado] = useState("");
-
-  // Funciones utilitarias
-  const limpiarFiltros = () => {
-    setBusqueda("");
-    setTipo("");
-    setEstado("");
-  };
-
-  // Datos simulados para historial
-  useEffect(() => {
-    const datosSimulados = [
-      {
-        date: '2024-01-15',
-        time: '14:30:22',
-        action: 'Inicio de sesión exitoso',
-        description: 'Acceso al panel de administración desde IP 192.168.1.100',
-        type: 'Autenticación',
-        state: 'Exitoso',
-        ip: '192.168.1.100'
-      },
-      {
-        date: '2024-01-15',
-        time: '14:25:15',
-        action: 'Creación de nuevo pedido',
-        description: 'Pedido #12345 creado por el administrador',
-        type: 'Pedido',
-        state: 'Exitoso',
-        ip: '192.168.1.100'
-      },
-      {
-        date: '2024-01-15',
-        time: '14:20:08',
-        action: 'Actualización de inventario',
-        description: 'Stock actualizado para producto Pizza Margherita',
-        type: 'Inventario',
-        state: 'Exitoso',
-        ip: '192.168.1.100'
-      },
-      {
-        date: '2024-01-15',
-        time: '13:45:33',
-        action: 'Intento de acceso fallido',
-        description: 'Credenciales incorrectas desde IP 203.0.113.45',
-        type: 'Autenticación',
-        state: 'Fallido',
-        ip: '203.0.113.45'
-      },
-      {
-        date: '2024-01-15',
-        time: '12:15:27',
-        action: 'Backup automático completado',
-        description: 'Respaldo diario del sistema ejecutado correctamente',
-        type: 'Backup',
-        state: 'Exitoso',
-        ip: 'Sistema'
-      },
-      {
-        date: '2024-01-15',
-        time: '11:30:12',
-        action: 'Modificación de configuración',
-        description: 'Cambios en configuración de notificaciones',
-        type: 'Configuración',
-        state: 'Exitoso',
-        ip: '192.168.1.100'
-      },
-      {
-        date: '2024-01-15',
-        time: '10:45:55',
-        action: 'Detección de actividad sospechosa',
-        description: 'Múltiples intentos de acceso desde IP no reconocida',
-        type: 'Seguridad',
-        state: 'Exitoso',
-        ip: '198.51.100.25'
-      },
-      {
-        date: '2024-01-15',
-        time: '09:20:18',
-        action: 'Error en procesamiento de pago',
-        description: 'Fallo en gateway de pagos para pedido #12340',
-        type: 'Problema Técnico',
-        state: 'Fallido',
-        ip: '192.168.1.100'
-      }
-    ];
-    setData(datosSimulados);
-  }, []);
-
-  // Filtrar datos según criterios
+function HistorialTab({
+  data,
+  busqueda,
+  setBusqueda,
+  tipo,
+  setTipo,
+  estado,
+  setEstado,
+  limpiarFiltros
+}) {
   const filtrados = data.filter((item) => {
     const coincideBusqueda =
       item.action.toLowerCase().includes(busqueda.toLowerCase()) ||
@@ -118,7 +34,6 @@ const HistorialTab = () => {
 
   return (
     <div className="historial-layout">
-      {/* Header del historial */}
       <div className="historial-header">
         <div className="historial-title-section">
           <Activity size={28} className="section-icon" />
@@ -129,7 +44,6 @@ const HistorialTab = () => {
         </div>
       </div>
 
-      {/* Controles de filtros */}
       <div className="historial-controls modern-card compact">
         <div className="controls-grid">
           <div className="search-group">
@@ -153,10 +67,6 @@ const HistorialTab = () => {
               <option value="Autenticación">Autenticación</option>
               <option value="Pedido">Pedido</option>
               <option value="Inventario">Inventario</option>
-              <option value="Backup">Backup</option>
-              <option value="Configuración">Configuración</option>
-              <option value="Seguridad">Seguridad</option>
-              <option value="Problema Técnico">Problema Técnico</option>
             </select>
           </div>
           
@@ -178,7 +88,6 @@ const HistorialTab = () => {
         </div>
       </div>
 
-      {/* Estadísticas del historial */}
       <div className="historial-stats">
         <div className="stat-card success">
           <div className="stat-content">
@@ -229,7 +138,6 @@ const HistorialTab = () => {
         </div>
       </div>
 
-      {/* Tabla de historial */}
       <div className="historial-table-container modern-card">
         <div className="table-header">
           <h3 className="table-title">Registro de Actividades</h3>
@@ -290,6 +198,6 @@ const HistorialTab = () => {
       </div>
     </div>
   );
-};
+}
 
 export default HistorialTab;

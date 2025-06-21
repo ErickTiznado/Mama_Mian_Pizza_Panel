@@ -1,108 +1,51 @@
-import { useState, useEffect } from 'react';
+import React from 'react';
 import {
   FileText,
   RefreshCw,
-  Activity,
-  User,
-  DatabaseBackup,
   Filter,
   Search,
   X,
   AlertTriangle,
   Loader,
-  ChevronLeft,
-  ChevronRight,
+  User,
   Lock,
   Package,
   Eye,
-  Edit
-} from 'lucide-react';
+  Edit,
+  Activity,
+  DatabaseBackup,
+  ChevronLeft,
+  ChevronRight
+} from "lucide-react";
 import LogsService from '../../../services/LogsService';
 
-const LogsTab = ({ user }) => {
-  // Estados para logs reales
-  const [logs, setLogs] = useState([]);
-  const [logsLoading, setLogsLoading] = useState(false);
-  const [logsError, setLogsError] = useState(null);
-  const [logsStats, setLogsStats] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalLogs, setTotalLogs] = useState(0);
-  
-  // Estados para filtros de logs
-  const [accionFiltro, setAccionFiltro] = useState("");
-  const [tablaFiltro, setTablaFiltro] = useState("");
-  const [fechaInicioFiltro, setFechaInicioFiltro] = useState("");
-  const [fechaFinFiltro, setFechaFinFiltro] = useState("");
-  const [usuarioFiltro, setUsuarioFiltro] = useState("");
-  const [busquedaLogs, setBusquedaLogs] = useState("");
-
-  // Funciones para limpiar filtros de logs
-  const limpiarFiltrosLogs = () => {
-    setAccionFiltro("");
-    setTablaFiltro("");
-    setFechaInicioFiltro("");
-    setFechaFinFiltro("");
-    setUsuarioFiltro("");
-    setBusquedaLogs("");
-    setCurrentPage(1);
-  };
-  // Función para cargar logs desde la API
-  const cargarLogs = async (page = 1) => {
-    try {
-      setLogsLoading(true);
-      setLogsError(null);
-
-      const filtros = {
-        page,
-        limit: 10,
-        accion: accionFiltro,
-        tabla_afectada: tablaFiltro,
-        fecha_inicio: fechaInicioFiltro,
-        fecha_fin: fechaFinFiltro,
-        id_usuario: usuarioFiltro,
-        search: busquedaLogs
-      };
-
-      const response = await LogsService.getLogs(filtros);
-      
-      setLogs(response.logs);
-      setLogsStats(response.estadisticas);
-      setCurrentPage(response.pagination.current_page);
-      setTotalPages(response.pagination.total_pages);
-      setTotalLogs(response.pagination.total_logs);
-    } catch (error) {
-      console.error('Error al cargar logs:', error);
-      setLogsError(error.message || 'Error al cargar los logs del sistema');
-      setLogs([]);
-      setLogsStats(null);
-    } finally {
-      setLogsLoading(false);
-    }
-  };
-
-  // Función para aplicar filtros de logs
-  const aplicarFiltrosLogs = () => {
-    setCurrentPage(1);
-    cargarLogs(1);
-  };
-
-  // Función para cambiar página
-  const cambiarPagina = (nuevaPagina) => {
-    if (nuevaPagina >= 1 && nuevaPagina <= totalPages) {
-      setCurrentPage(nuevaPagina);
-      cargarLogs(nuevaPagina);
-    }
-  };
-
-  // useEffect para cargar logs cuando se cambia a la pestaña de logs
-  useEffect(() => {
-    cargarLogs(currentPage);
-  }, [accionFiltro, tablaFiltro, fechaInicioFiltro, fechaFinFiltro, usuarioFiltro, busquedaLogs]);
-
+function LogsTab({
+  logsStats,
+  cargarLogs,
+  currentPage,
+  limpiarFiltrosLogs,
+  busquedaLogs,
+  setBusquedaLogs,
+  accionFiltro,
+  setAccionFiltro,
+  tablaFiltro,
+  setTablaFiltro,
+  usuarioFiltro,
+  setUsuarioFiltro,
+  fechaInicioFiltro,
+  setFechaInicioFiltro,
+  fechaFinFiltro,
+  setFechaFinFiltro,
+  aplicarFiltrosLogs,
+  logsError,
+  logsLoading,
+  logs,
+  totalLogs,
+  totalPages,
+  cambiarPagina
+}) {
   return (
     <div className="logs-layout">
-      {/* Header de logs */}
       <div className="logs-header">
         <div className="logs-title-section">
           <FileText size={28} className="section-icon" />
@@ -119,7 +62,6 @@ const LogsTab = ({ user }) => {
         </div>
       </div>
 
-      {/* Estadísticas de logs */}
       {logsStats && (
         <div className="logs-stats">
           <div className="stat-card total">
@@ -172,7 +114,6 @@ const LogsTab = ({ user }) => {
         </div>
       )}
 
-      {/* Filtros de logs */}
       <div className="logs-filters modern-card compact">
         <div className="filters-header">
           <h3 className="filters-title">
@@ -272,7 +213,6 @@ const LogsTab = ({ user }) => {
         </div>
       </div>
 
-      {/* Mensaje de error */}
       {logsError && (
         <div className="alert-container error">
           <div className="alert-content">
@@ -291,7 +231,6 @@ const LogsTab = ({ user }) => {
         </div>
       )}
 
-      {/* Indicador de carga */}
       {logsLoading && (
         <div className="loading-container">
           <div className="loading-content">
@@ -301,7 +240,6 @@ const LogsTab = ({ user }) => {
         </div>
       )}
 
-      {/* Tabla de logs */}
       {!logsLoading && !logsError && logs.length > 0 && (
         <div className="logs-table-container modern-card">
           <div className="table-header">
@@ -351,7 +289,7 @@ const LogsTab = ({ user }) => {
                       <span className={`action-badge ${LogsService.getColorAccion(log.accion)}`}>
                         {log.accion === 'LOGIN' && <Lock size={14} />}
                         {log.accion === 'CREATE' && <Package size={14} />}
-                        {log.accion === 'READ' && <Eye size={14} />}
+                        {log.accion === 'read' && <Eye size={14} />}
                         {log.accion === 'UPDATE' && <Edit size={14} />}
                         {log.accion === 'DELETE' && <X size={14} />}
                         {log.accion}
@@ -381,7 +319,6 @@ const LogsTab = ({ user }) => {
             </table>
           </div>
 
-          {/* Paginación */}
           <div className="pagination-container">
             <div className="pagination-info">
               <span>Mostrando {logs.length} de {totalLogs} registros</span>
@@ -398,15 +335,15 @@ const LogsTab = ({ user }) => {
               
               <div className="pagination-pages">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  const pageNum = Math.max(1, currentPage - 2) + i;
-                  if (pageNum <= totalPages) {
+                  const pageNumber = Math.max(1, currentPage - 2) + i;
+                  if (pageNumber <= totalPages) {
                     return (
-                      <button 
-                        key={pageNum}
-                        className={`pagination-page ${pageNum === currentPage ? 'active' : ''}`}
-                        onClick={() => cambiarPagina(pageNum)}
+                      <button
+                        key={pageNumber}
+                        className={`pagination-page ${currentPage === pageNumber ? 'active' : ''}`}
+                        onClick={() => cambiarPagina(pageNumber)}
                       >
-                        {pageNum}
+                        {pageNumber}
                       </button>
                     );
                   }
@@ -427,7 +364,6 @@ const LogsTab = ({ user }) => {
         </div>
       )}
 
-      {/* Estado vacío */}
       {!logsLoading && !logsError && logs.length === 0 && (
         <div className="empty-state modern-card">
           <div className="empty-content">
@@ -443,6 +379,6 @@ const LogsTab = ({ user }) => {
       )}
     </div>
   );
-};
+}
 
 export default LogsTab;
