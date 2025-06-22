@@ -61,6 +61,7 @@
   min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   animation: Logs_fadeIn 0.3s ease-in-out;
+  width: 100%;
 }
 
 /* Header Section - Similar a AgregarContenido */
