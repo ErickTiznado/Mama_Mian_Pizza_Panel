@@ -20,7 +20,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import AdminService from '../../services/AdminService';
 import LogsService from '../../services/LogsService';
-import "./configuracion.css";
+import "./configuracion_optimized.css";
 
 // Importaciones de los componentes modularizados
 import HistorialTab from './components/HistorialTab';

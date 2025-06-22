@@ -1,40 +1,37 @@
 import React from 'react';
 import {
-  LogOut,
-  AlertTriangle
+  LogOut
 } from "lucide-react";
+import './SesionAdmin.css';
 
 function SesionAdmin({ cerrarSesion }) {
   return (
-    <div className="panel-logout modern-card">
+    <div className="panel-session modern-card">
       <div className="panel-header">
         <div className="panel-title-section">
           <LogOut size={24} className="panel-icon logout" />
           <div>
-            <h2 className="panel-title">Sesión</h2>
-            <p className="panel-subtitle">Administra tu sesión actual</p>
+            <h2 className="panel-title">Control de Sesión</h2>
+            <p className="panel-subtitle">Administra tu sesión de forma segura</p>
           </div>
         </div>
       </div>
 
-      <div className="logout-content">
-        <div className="logout-info">
-          <div className="logout-warning">
-            <AlertTriangle size={20} className="warning-icon" />
-            <div className="warning-text">
-              <h4>Cerrar Sesión</h4>
-              <p>Al cerrar sesión perderás el acceso a la administración del sistema hasta que vuelvas a iniciar sesión.</p>
-            </div>
+      <div className="session-content">
+        {/* Status de sesión */}
+        <div className="session-status">
+          <div className="status-indicator active">
+            <div className="status-dot"></div>
+            <span>Sesión Activa</span>
           </div>
-        </div>
-
-        <div className="logout-actions">
+        </div>        {/* Acciones de sesión */}
+        <div className="session-actions">
           <button
-            className="btn-logout"
+            className="btn-logout-primary"
             onClick={cerrarSesion}
           >
-            <LogOut size={16} />
-            Cerrar Sesión
+            <LogOut size={18} />
+            <span>Cerrar Sesión</span>
           </button>
         </div>
       </div>

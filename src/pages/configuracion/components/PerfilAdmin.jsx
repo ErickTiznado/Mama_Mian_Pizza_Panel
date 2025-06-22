@@ -9,6 +9,7 @@ import {
   X,
   Save
 } from "lucide-react";
+import './PerfilAdmin.css';
 
 function PerfilAdmin({
   adminData,
@@ -34,146 +35,144 @@ function PerfilAdmin({
             <h2 className="panel-title">Información Personal</h2>
             <p className="panel-subtitle">Gestiona tu información de perfil</p>
           </div>
-        </div>
-        <button
+        </div>        <button
           className={`edit-toggle-btn ${modoEdicion ? 'editing' : ''}`}
           onClick={() => setModoEdicion(!modoEdicion)}
         >
           {modoEdicion ? (
             <>
-              <X size={16} />
+              <X size={18} />
               Cancelar
             </>
           ) : (
             <>
-              <Edit size={16} />
+              <Edit size={18} />
               Editar
             </>
           )}
         </button>
       </div>
-
-      {!modoEdicion ? (
-        <div className="profile-display">
-          <div className="profile-avatar-section">
-            <div className="profile-avatar">
-              <User size={40} />
-            </div>
-            <div className="profile-status">
-              <span className={`status-badge ${adminData?.rol === 'super_admin' ? 'super-admin' : 'admin'}`}>
-                {adminData?.rol === 'super_admin' ? 'Super Administrador' : 'Administrador'}
-              </span>
-            </div>
-          </div>
-          
-          <div className="profile-info-grid">
-            <div className="info-item">
-              <User size={16} className="info-icon" />
-              <div>
-                <label>Nombre completo</label>
-                <span>{adminData?.nombre || 'No disponible'}</span>
+      
+      <div className="panel-content">        {!modoEdicion ? (
+          <div className="profile-unified-container">
+            <div className="profile-unified-section">
+              {/* Header con avatar, nombre y rol */}
+              <div className="profile-header-info">
+                <div className="profile-avatar">
+                  <User size={48} />
+                </div>
+                <div className="profile-basic-info">
+                  <h3 className="profile-name">{adminData?.nombre || 'Usuario'}</h3>
+                  <span className={`status-badge ${adminData?.rol === 'super_admin' ? 'super-admin' : 'admin'}`}>
+                    {adminData?.rol === 'super_admin' ? 'Super Administrador' : 'Administrador'}
+                  </span>
+                </div>
               </div>
+              
+              {/* Información adicional integrada */}
+              <div className="profile-additional-info">                <div className="info-item">
+                  <Mail size={20} className="info-icon" />
+                  <div className="info-content">
+                    <label>Correo electrónico</label>
+                    <span>{adminData?.correo || 'No disponible'}</span>
+                  </div>
+                </div>
+                
+                <div className="info-item">
+                  <Phone size={20} className="info-icon" />
+                  <div className="info-content">
+                    <label>Teléfono</label>
+                    <span>{adminData?.celular || 'No disponible'}</span>
+                  </div>
+                </div>
+                
+                <div className="info-item">
+                  <Calendar size={20} className="info-icon" />
+                  <div className="info-content">
+                    <label>Miembro desde</label>
+                    <span>{formatearFecha(adminData?.fecha_creacion)}</span>
+                  </div>
+                </div>
+                
+                <div className="info-item">
+                  <Clock size={20} className="info-icon" />
+                  <div className="info-content">
+                    <label>Último acceso</label>
+                    <span>{formatearUltimoAcceso(adminData?.ultimo_acceso)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>) : (
+          <div className="profile-edit-container">
+            <div className="edit-form-header">
+              <h3>Editar Información Personal</h3>
+              <p>Actualiza tu información de perfil</p>
             </div>
             
-            <div className="info-item">
-              <Mail size={16} className="info-icon" />
-              <div>
-                <label>Correo electrónico</label>
-                <span>{adminData?.correo || 'No disponible'}</span>
-              </div>
-            </div>
-            
-            <div className="info-item">
-              <Phone size={16} className="info-icon" />
-              <div>
-                <label>Teléfono</label>
-                <span>{adminData?.celular || 'No disponible'}</span>
-              </div>
-            </div>
-            
-            <div className="info-item">
-              <Calendar size={16} className="info-icon" />
-              <div>
-                <label>Miembro desde</label>
-                <span>{formatearFecha(adminData?.fecha_creacion)}</span>
-              </div>
-            </div>
-            
-            <div className="info-item">
-              <Clock size={16} className="info-icon" />
-              <div>
-                <label>Último acceso</label>
-                <span>{formatearUltimoAcceso(adminData?.ultimo_acceso)}</span>
+            <div className="profile-edit-form">
+              <div className="form-grid">                <div className="form-group">
+                  <label className="form-label">
+                    <User size={18} />
+                    Nombre completo
+                  </label>
+                  <input
+                    type="text"
+                    className="form-input"
+                    value={nombreAdmin}
+                    onChange={(e) => setNombreAdmin(e.target.value)}
+                    placeholder="Ingresa tu nombre completo"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    <Mail size={18} />
+                    Correo electrónico
+                  </label>
+                  <input
+                    type="email"
+                    className="form-input"
+                    value={emailAdmin}
+                    onChange={(e) => setEmailAdmin(e.target.value)}
+                    placeholder="Ingresa tu correo electrónico"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    <Phone size={18} />
+                    Teléfono
+                  </label>
+                  <input
+                    type="text"
+                    className="form-input"
+                    value={telefonoAdmin}
+                    onChange={(e) => setTelefonoAdmin(e.target.value)}
+                    placeholder="Ingresa tu número de teléfono"
+                  />
+                </div>
+              </div>              <div className="form-actions">
+                <button
+                  className="btn-primary"
+                  onClick={guardarCambiosPerfil}
+                  disabled={loading}
+                >
+                  <Save size={18} />
+                  {loading ? 'Guardando...' : 'Guardar Cambios'}
+                </button>
+                <button 
+                  className="btn-secondary" 
+                  onClick={() => setModoEdicion(false)}
+                >
+                  <X size={18} />
+                  Cancelar
+                </button>
               </div>
             </div>
           </div>
-        </div>
-      ) : (
-        <div className="profile-edit-form">
-          <div className="form-grid">
-            <div className="form-group">
-              <label className="form-label">
-                <User size={16} />
-                Nombre completo
-              </label>
-              <input
-                type="text"
-                className="form-input"
-                value={nombreAdmin}
-                onChange={(e) => setNombreAdmin(e.target.value)}
-                placeholder="Ingresa tu nombre completo"
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">
-                <Mail size={16} />
-                Correo electrónico
-              </label>
-              <input
-                type="email"
-                className="form-input"
-                value={emailAdmin}
-                onChange={(e) => setEmailAdmin(e.target.value)}
-                placeholder="Ingresa tu correo electrónico"
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">
-                <Phone size={16} />
-                Teléfono
-              </label>
-              <input
-                type="text"
-                className="form-input"
-                value={telefonoAdmin}
-                onChange={(e) => setTelefonoAdmin(e.target.value)}
-                placeholder="Ingresa tu número de teléfono"
-              />
-            </div>
-          </div>
-
-          <div className="form-actions">
-            <button
-              className="btn-primary"
-              onClick={guardarCambiosPerfil}
-              disabled={loading}
-            >
-              <Save size={16} />
-              {loading ? 'Guardando...' : 'Guardar Cambios'}
-            </button>
-            <button 
-              className="btn-secondary" 
-              onClick={() => setModoEdicion(false)}
-            >
-              <X size={16} />
-              Cancelar
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>    </div>
   );
 }
 

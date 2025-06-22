@@ -11,6 +11,7 @@ import {
   Save,
   Loader
 } from "lucide-react";
+import './CambiarContrasena.css';
 
 function CambiarContrasena({
   successMessage,

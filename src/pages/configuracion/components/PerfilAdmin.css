@@ -1,0 +1,507 @@
+/* =========================================
+   PERFIL ADMIN - CSS ESPECÍFICO
+   ========================================= */
+
+/* Variables específicas para PerfilAdmin */
+.panel-perfil-admin {
+  --perfil-primary-color: #f97316;
+  --perfil-bg-dark: #0f172a;
+  --perfil-bg-light: #1e293b;
+  --perfil-border: #334155;
+  --perfil-text-primary: #ffffff;
+  --perfil-text-secondary: #94a3b8;
+  --perfil-text-muted: #64748b;
+}
+
+/* Panel principal */
+.panel-perfil-admin.modern-card {
+  background-color: var(--perfil-bg-light);
+  border: 1px solid var(--perfil-border);
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 600px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Header del panel */
+.panel-perfil-admin .panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--perfil-border);
+  background-color: var(--perfil-bg-dark);
+}
+
+.panel-perfil-admin .panel-title-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.panel-perfil-admin .panel-icon {
+  color: var(--perfil-primary-color);
+  background-color: var(--perfil-bg-light);
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--perfil-border);
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.panel-perfil-admin .panel-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--perfil-text-primary);
+  margin: 0 0 0.25rem 0;
+  line-height: 1.2;
+}
+
+.panel-perfil-admin .panel-subtitle {
+  font-size: 0.9rem;
+  color: var(--perfil-text-secondary);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Botón de edición */
+.panel-perfil-admin .edit-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background-color: #374151;
+  color: #d1d5db;
+  border: 1px solid #4b5563;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.panel-perfil-admin .edit-toggle-btn:hover {
+  background-color: #4b5563;
+  transform: translateY(-1px);
+}
+
+.panel-perfil-admin .edit-toggle-btn.editing {
+  background-color: #dc2626;
+  border-color: #ef4444;
+  color: white;
+}
+
+.panel-perfil-admin .edit-toggle-btn.editing:hover {
+  background-color: #b91c1c;
+}
+
+/* Contenido del panel */
+.panel-perfil-admin .panel-content {
+  padding: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* =======================================
+   MODO VISUALIZACIÓN - UNIFICADO
+   ======================================= */
+
+.panel-perfil-admin .profile-unified-container {
+  padding: 2rem;
+  min-height: 400px;
+}
+
+/* Sección unificada - Una sola tarjeta */
+.panel-perfil-admin .profile-unified-section {
+  background-color: var(--perfil-bg-dark);
+  border-radius: 12px;
+  border: 1px solid var(--perfil-border);
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  transition: border-color 0.3s ease;
+}
+
+.panel-perfil-admin .profile-unified-section:hover {
+  border-color: var(--perfil-primary-color);
+}
+
+/* Header integrado con avatar, nombre y rol */
+.panel-perfil-admin .profile-header-info {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--perfil-border);
+}
+
+.panel-perfil-admin .profile-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background-color: var(--perfil-primary-color);
+  border-radius: 12px;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
+}
+
+.panel-perfil-admin .profile-basic-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+}
+
+.panel-perfil-admin .profile-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--perfil-text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.panel-perfil-admin .status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  width: fit-content;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.panel-perfil-admin .status-badge.super-admin {
+  background-color: #dc2626;
+  color: white;
+}
+
+.panel-perfil-admin .status-badge.admin {
+  background-color: #2563eb;
+  color: white;
+}
+
+/* Información adicional integrada en la misma tarjeta */
+.panel-perfil-admin .profile-additional-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.panel-perfil-admin .info-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background-color: var(--perfil-bg-light);
+  border-radius: 8px;
+  border: 1px solid var(--perfil-border);
+  transition: all 0.3s ease;
+}
+
+.panel-perfil-admin .info-item:hover {
+  border-color: var(--perfil-primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.15);
+}
+
+.panel-perfil-admin .info-icon {
+  color: var(--perfil-primary-color);
+  flex-shrink: 0;
+  background-color: rgba(249, 115, 22, 0.1);
+  padding: 0.5rem;
+  border-radius: 6px;
+  min-width: 20px;
+  min-height: 20px;
+}
+
+.panel-perfil-admin .info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.panel-perfil-admin .info-item label {
+  font-size: 0.8rem;
+  color: var(--perfil-text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.panel-perfil-admin .info-item span {
+  font-size: 1rem;
+  color: var(--perfil-text-primary);
+  font-weight: 500;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+/* =======================================
+   MODO EDICIÓN
+   ======================================= */
+
+.panel-perfil-admin .profile-edit-container {
+  padding: 2.5rem;
+}
+
+.panel-perfil-admin .edit-form-header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.08) 0%, transparent 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(249, 115, 22, 0.2);
+}
+
+.panel-perfil-admin .edit-form-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--perfil-text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.panel-perfil-admin .edit-form-header p {
+  font-size: 0.95rem;
+  color: var(--perfil-text-secondary);
+  margin: 0;
+}
+
+.panel-perfil-admin .profile-edit-form {  background-color: var(--perfil-bg-light);
+  border-radius: 8px;
+  border: 1px solid var(--perfil-border);
+  padding: 2rem;
+}
+
+.panel-perfil-admin .form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.panel-perfil-admin .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.panel-perfil-admin .form-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--perfil-text-primary);
+  margin: 0;
+}
+
+.panel-perfil-admin .form-input {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background-color: var(--perfil-bg-dark);
+  border: 2px solid var(--perfil-border);
+  border-radius: 10px;
+  color: var(--perfil-text-primary);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.panel-perfil-admin .form-input:focus {
+  outline: none;
+  border-color: var(--perfil-primary-color);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+  background-color: rgba(15, 23, 42, 0.8);
+}
+
+.panel-perfil-admin .form-input::placeholder {
+  color: var(--perfil-text-muted);
+}
+
+.panel-perfil-admin .form-actions {
+  display: flex;
+  gap: 1.25rem;
+  justify-content: flex-end;
+  padding-top: 2rem;
+  border-top: 2px solid var(--perfil-border);
+}
+
+.panel-perfil-admin .btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--perfil-primary-color) 0%, #ea580c 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 180px;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
+}
+
+.panel-perfil-admin .btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(249, 115, 22, 0.4);
+}
+
+.panel-perfil-admin .btn-primary:disabled {
+  background: #6b7280;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.panel-perfil-admin .btn-secondary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background-color: #374151;
+  color: #d1d5db;
+  border: 1px solid #4b5563;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 160px;
+  justify-content: center;
+}
+
+.panel-perfil-admin .btn-secondary:hover:not(:disabled) {
+  background-color: #4b5563;
+  border-color: #6b7280;
+  color: #f3f4f6;
+  transform: translateY(-1px);
+}
+
+/* Asegurar que todos los iconos tengan tamaño visible */
+.panel-perfil-admin svg {
+  min-width: 16px;
+  min-height: 16px;
+}
+
+/* Iconos específicos más grandes */
+.panel-perfil-admin .info-icon svg,
+.panel-perfil-admin .form-label svg {
+  min-width: 18px;
+  min-height: 18px;
+}
+
+.panel-perfil-admin .panel-icon svg {
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.panel-perfil-admin .profile-avatar svg {
+  min-width: 48px;
+  min-height: 48px;
+}
+
+/* =======================================
+   RESPONSIVE DESIGN
+   ======================================= */
+
+@media (max-width: 1200px) {
+  .panel-perfil-admin .profile-additional-info {
+    grid-template-columns: 1fr;
+  }
+  
+  .panel-perfil-admin .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .panel-perfil-admin .panel-header {
+    padding: 1.5rem 2rem 1rem;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .panel-perfil-admin .profile-unified-container,
+  .panel-perfil-admin .profile-edit-container {
+    padding: 1.5rem;
+  }
+  
+  .panel-perfil-admin .profile-unified-section {
+    padding: 2rem;
+  }
+  
+  .panel-perfil-admin .profile-header-info {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .panel-perfil-admin .profile-additional-info {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .panel-perfil-admin .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .panel-perfil-admin .info-item {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .panel-perfil-admin .panel-header {
+    padding: 1rem 1.5rem;
+  }
+  
+  .panel-perfil-admin .profile-unified-container,
+  .panel-perfil-admin .profile-edit-container {
+    padding: 1rem;
+  }
+  
+  .panel-perfil-admin .profile-unified-section {
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+  
+  .panel-perfil-admin .profile-header-info {
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  .panel-perfil-admin .profile-name {
+    font-size: 1.5rem;
+  }
+  
+  .panel-perfil-admin .info-item {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+  
+  .panel-perfil-admin .profile-avatar {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .panel-perfil-admin .profile-avatar svg {
+    width: 40px;
+    height: 40px;
+  }
+}
