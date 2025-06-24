@@ -754,6 +754,12 @@
   color: var(--Logs-text-secondary);
   max-width: 400px;
   line-height: 1.5;
+  text-align: center;
+}
+
+.Logs_empty-subtitle strong {
+  color: var(--Logs-orange-accent);
+  font-weight: 700;
 }
 
 .Logs_btn-clear-empty {
@@ -774,6 +780,44 @@
 .Logs_btn-clear-empty:hover {
   background: var(--Logs-orange-hover);
   transform: translateY(-1px);
+}
+
+/* Indicador de filtros activos */
+.Logs_filter-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.Logs_filter-active-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(249, 115, 22, 0.2);
+  color: var(--Logs-orange-accent);
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(249, 115, 22, 0.3);
+}
+
+/* Total original en contador */
+.Logs_total-original {
+  color: var(--Logs-text-secondary);
+  font-weight: 400;
+  font-size: 13px;
+  margin-left: 8px;
+}
+
+/* Animación para filtros en tiempo real */
+.Logs_styled-table {
+  transition: opacity 0.3s ease;
+}
+
+.Logs_filtering {
+  opacity: 0.7;
 }
 
 /* Responsive Design */
@@ -823,6 +867,22 @@
   .Logs_description-cell {
     min-width: 200px;
     max-width: 250px;
+  }
+
+  .Logs_filter-status {
+    margin-top: 16px;
+    justify-content: flex-start;
+  }
+
+  .Logs_filter-active-indicator {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .Logs_total-original {
+    display: block;
+    margin-top: 4px;
+    margin-left: 0;
   }
 }
 

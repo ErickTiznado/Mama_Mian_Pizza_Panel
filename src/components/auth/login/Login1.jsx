@@ -27,14 +27,12 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(false);
-
-    try {
-      const response = await fetch('https://api.mamamianpizza.com/api/users/login', {
+    setError(false);    try {
+      const response = await fetch('https://api.mamamianpizza.com/api/auth/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ correo, contrasena }),
-      });      const data = await response.json();
+      });const data = await response.json();
 
       // Debug: Log de la respuesta completa de la API
       console.log('Respuesta completa de la API de login:', JSON.stringify(data, null, 2));

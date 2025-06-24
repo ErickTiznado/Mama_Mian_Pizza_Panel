@@ -1,3 +1,23 @@
+/**
+ * AgregarContenido Component
+ * 
+ * Componente principal para la gestión de contenido (productos del menú).
+ * Incluye funcionalidades de creación, edición, eliminación y visualización de productos.
+ * 
+ * Características principales:
+ * - Visualización tabular con filtros y búsqueda
+ * - Paginación de resultados
+ * - Modales para crear y editar productos
+ * - Sistema de logging que registra todas las acciones del usuario
+ * - Integración con AuthContext para identificar al usuario
+ * 
+ * Logging de acciones:
+ * - CREATE: Se registra cuando se crea un nuevo producto
+ * - UPDATE: Se registra cuando se modifica un producto existente
+ * - DELETE: Se registra cuando se elimina un producto
+ * - Todos los logs incluyen el ID del usuario autenticado
+ */
+
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,10 +35,22 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 // Importar componentes
 import NewProductModal from './components/NewProductModal';
+// Importar contexto de autenticación
+import { useAuth } from '../../context/AuthContext';
+// Importar servicio de logs
+import UserLogService from '../../services/UserLogService';
 // Importar estilos principales
 import './AgregarContenido.css';
 
 const AgregarContenido = () => {
+  // Obtener datos del usuario autenticado
+  const { user } = useAuth();
+  
+  // Log para verificar que el usuario esté disponible
+  useEffect(() => {
+    console.log('Usuario autenticado en AgregarContenido:', user);
+  }, [user]);
+  
   // Estados para manejo de contenido
   const [contenidos, setContenidos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -154,10 +186,38 @@ const AgregarContenido = () => {
   };  const confirmDelete = async () => {
     if (!selectedItemId) return;
     
+    const itemToDelete = contenidos.find(item => item.id === selectedItemId);
+    
     try {
       setIsLoading(true);
+      
+      // Preparar datos para el log incluyendo el ID del usuario
+      const deleteData = {
+        user_id: user?.id || null,
+        action: 'DELETE',
+        item_id: selectedItemId,
+        item_title: itemToDelete?.titulo || 'Producto eliminado'
+      };
+      
+      console.log('Enviando datos de eliminación:', deleteData);
+      
       // Llamar a la API para eliminar el contenido usando el endpoint correcto
-      await axios.delete(`https://api.mamamianpizza.com/api/content/deleteContent/${selectedItemId}`);
+      await axios.delete(`https://api.mamamianpizza.com/api/content/deleteContent/${selectedItemId}`, {
+        data: deleteData,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      // Registrar la acción en los logs del sistema
+      if (user?.id && itemToDelete) {
+        await UserLogService.logProductAction(user.id, 'DELETE', {
+          id: selectedItemId,
+          titulo: itemToDelete.titulo,
+          categoria: itemToDelete.categoria || itemToDelete.tipo,
+          descripcion: itemToDelete.descripcion
+        }, itemToDelete);
+      }
       
       // Actualizar el estado eliminando el elemento
       const updatedContent = contenidos.filter(item => item.id !== selectedItemId);
@@ -600,7 +660,8 @@ const AgregarContenido = () => {
       <NewProductModal 
         show={showAddModal} 
         onClose={() => setShowAddModal(false)} 
-        onSuccess={handleAddSuccess} 
+        onSuccess={handleAddSuccess}
+        user={user}
       />      {/* Modal para editar producto */}
       <NewProductModal 
         show={showEditModal} 
@@ -611,6 +672,7 @@ const AgregarContenido = () => {
         onSuccess={handleEditSuccess}
         editingProduct={editingItem}
         isEditing={true}
+        user={user}
       />
 
       {/* Componente de notificación */}

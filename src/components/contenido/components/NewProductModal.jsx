@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { X, ArrowLeft } from 'lucide-react';
 import { useNotifications } from '../../../context/NotificationContext';
+import { useAuth } from '../../../context/AuthContext';
+import UserLogService from '../../../services/UserLogService';
 import '../AgregarContenido.css';
 import './NewProductModal.css';
 
@@ -253,11 +255,15 @@ const Step2 = ({ tamanos, productData, onProductChange }) => {
   );
 };
 
-const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEditing = false }) => {
+const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEditing = false, user: propUser }) => {
   const API_URL = "https://api.mamamianpizza.com/api";
   
-  // Hook de notificaciones
+  // Hook de notificaciones y autenticación
   const notificationContext = useNotifications();
+  const { user: contextUser } = useAuth();
+  
+  // Usar el usuario pasado como prop o el del contexto
+  const user = propUser || contextUser;
   
   // Estados
   const [currentStep, setCurrentStep] = useState(1);
@@ -406,8 +412,7 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
     }
     
     return valid;
-  };
-    // Función para enviar el producto al API
+  };    // Función para enviar el producto al API
   const handleSubmit = async () => {
     // Validar precios
     if (!validatePrices()) {
@@ -425,6 +430,17 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
       formData.append('porciones', '1'); // Default value since backend expects it
       formData.append('sesion', productData.sesion);
       formData.append('categoria', productData.categoria);
+        // Agregar ID del usuario para logging
+      formData.append('user_id', user?.id || null);
+      formData.append('action', isEditing ? 'UPDATE' : 'CREATE');
+      
+      // Log para verificar que los datos del usuario se están enviando
+      console.log('Enviando datos del producto con usuario:', {
+        user_id: user?.id || null,
+        action: isEditing ? 'UPDATE' : 'CREATE',
+        titulo: productData.titulo,
+        user_info: user
+      });
       
       // Solo agregar imagen si se seleccionó una nueva
       if (productData.imagen) {
@@ -450,8 +466,27 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
         const errorData = await response.json();
         throw new Error(errorData.message || `Error ${response.status}: No se pudo ${isEditing ? 'actualizar' : 'crear'} el producto`);
       }
+        const result = await response.json();
       
-      const result = await response.json();
+      // Registrar la acción en los logs del sistema
+      if (user?.id) {
+        const productDataForLog = {
+          id: result.id || editingProduct?.id,
+          titulo: productData.titulo,
+          descripcion: productData.descripcion,
+          categoria: productData.categoria,
+          sesion: productData.sesion,
+          activo: productData.activo,
+          precios: productData.precios
+        };
+        
+        await UserLogService.logProductAction(
+          user.id, 
+          isEditing ? 'UPDATE' : 'CREATE', 
+          productDataForLog, 
+          isEditing ? editingProduct : null
+        );
+      }
       
       // Mostrar notificación de éxito
       notificationContext.addNotification({

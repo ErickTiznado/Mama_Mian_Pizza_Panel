@@ -30,9 +30,8 @@ import TabNavigation from './components/TabNavigation';
 import CuentaTab from './components/CuentaTab';
 import BackupTab from './components/BackupTab';
 
-function ConfiguracionAdmin() {
-  // Hook de autenticación
-  const { user, isAuthenticated, logout } = useAuth();
+function ConfiguracionAdmin() {  // Hook de autenticación
+  const { user, isAuthenticated, logout, loading: authLoading } = useAuth();
 
   // Estados de datos del administrador
   const [adminData, setAdminData] = useState(null);
@@ -161,18 +160,29 @@ function ConfiguracionAdmin() {
       cargarLogs(nuevaPagina);
     }
   };
-  
-  // Función para cargar datos del administrador
+    // Función para cargar datos del administrador
   const cargarDatosAdmin = async () => {
     try {
       setLoading(true);
       setError(null);
+        // Esperar a que la autenticación esté completamente cargada
+      if (authLoading) {
+        console.log('Esperando a que termine la carga de autenticación...');
+        return;
+      }
       
       const adminId = getAdminId();
       
+      console.log('Estado de autenticación:', { isAuthenticated, user, adminId });
+      
       // Verificar que el usuario esté autenticado y tenga un ID
-      if (!isAuthenticated || !adminId) {
-        throw new Error('Usuario no autenticado o ID de administrador no disponible');
+      if (!isAuthenticated) {
+        throw new Error('Usuario no autenticado');
+      }
+      
+      if (!adminId) {
+        console.log('Estructura del usuario:', user);
+        throw new Error('ID de administrador no disponible en los datos del usuario');
       }
       
       console.log('Cargando datos para el administrador ID:', adminId);
@@ -256,15 +266,8 @@ function ConfiguracionAdmin() {
       if (!contrasenaValida) {
         throw new Error('Las contraseñas no cumplen con los requisitos o no coinciden');
       }
-      
-      // Preparar los datos para el cambio de contraseña
-      const datosContrasena = {
-        contrasena_actual: contrasenaActual,
-        nueva_contrasena: nuevaPassword
-      };
-      
-      // Enviar solicitud de cambio de contraseña
-      await AdminService.changePassword(adminId, datosContrasena);
+        // Enviar solicitud de cambio de contraseña
+      await AdminService.changePassword(adminId, contrasenaActual, nuevaPassword);
       
       // Limpiar los campos de contraseña
       setContrasenaActual("");
@@ -340,10 +343,12 @@ function ConfiguracionAdmin() {
   const cerrarSesion = () => {
     logout();
   };
-  
   // Cargar datos cuando se monta el componente
   useEffect(() => {
-    cargarDatosAdmin();
+    // Solo cargar datos si la autenticación ha terminado de cargar y el usuario está autenticado
+    if (!authLoading && isAuthenticated) {
+      cargarDatosAdmin();
+    }
     // Simulamos datos de historial (en un caso real, vendría de una API)
     setData([
       {
@@ -431,10 +436,9 @@ function ConfiguracionAdmin() {
         tamaño: "44.2 MB",
         fecha: "10/06/2023 23:00",
         estado: "Completado"
-      }
-    ]);
+      }    ]);
     
-  }, []);
+  }, [authLoading, isAuthenticated]);
   
   // Cargar logs cuando se cambia a esa pestaña
   useEffect(() => {

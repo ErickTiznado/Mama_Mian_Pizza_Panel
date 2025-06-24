@@ -256,15 +256,8 @@ function ConfiguracionAdmin() {
       if (!contrasenaValida) {
         throw new Error('Las contraseñas no cumplen con los requisitos o no coinciden');
       }
-      
-      // Preparar los datos para el cambio de contraseña
-      const datosContrasena = {
-        contrasena_actual: contrasenaActual,
-        nueva_contrasena: nuevaPassword
-      };
-      
-      // Enviar solicitud de cambio de contraseña
-      await AdminService.changePassword(adminId, datosContrasena);
+        // Enviar solicitud de cambio de contraseña
+      await AdminService.changePassword(adminId, contrasenaActual, nuevaPassword);
       
       // Limpiar los campos de contraseña
       setContrasenaActual("");
