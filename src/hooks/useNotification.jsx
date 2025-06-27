@@ -10,10 +10,16 @@ export function NotificationProvider({ children }) {
 
     const markAllRead = async () => {
         try {
-            await axios.patch('https://api.mamamianpizza.com/api/notifications/mark-all-read', {}, {withCredentials: true} );
+            // Actualizar inmediatamente el estado local
             setnoleidas(0);
+            setNotifications(prev => prev.map(notif => ({ ...notif, read: true })));
+            
+            // Hacer la llamada al servidor
+            await axios.post('https://api.mamamianpizza.com/api/notifications/mark-all-read', {}, {withCredentials: true} );
         } catch (err){
             console.error('Error marcando notificaciones como leídas:', err);
+            // En caso de error, revertir el estado
+            fetchNoLeidas();
         }
     };
 
