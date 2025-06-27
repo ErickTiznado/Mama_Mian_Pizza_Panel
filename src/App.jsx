@@ -5,6 +5,7 @@ import { NotificationProvider } from './hooks/useNotification.jsx';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/navbar/nabvar'
 import Sidebar from './components/sidebar/sidebar';
+import PushNotificationBanner from './components/common/PushNotificationBanner';
 import Login from './components/auth/login/Login1';     // Asegúrate que esté bien el nombre del archivo
 import Register from './components/auth/register/Register'; // Ruta correcta al componente Register
 import Recuperar from './components/auth/restore/Recuperar'; // Ruta correcta al componente Recuperar
@@ -79,6 +80,8 @@ function App() {
                         <Route path="/generadordeinformes" element={<GeneradorInformes />} />
                       </Routes>
                     </div>
+                    {/* Banner de notificaciones push */}
+                    <PushNotificationBanner />
                   </main>
                 </NotificationProvider>
               </ProtectedRoute>

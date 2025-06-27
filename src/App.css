@@ -98,3 +98,24 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Mejorar la visibilidad del favicon */
+:root {
+  --favicon-size: 48px; /* Tamaño más grande */
+}
+
+/* Para navegadores que soportan CSS custom properties en el favicon */
+link[rel="icon"] {
+  width: var(--favicon-size);
+  height: var(--favicon-size);
+}
+
+/* Forzar tamaño más grande del favicon en la pestaña */
+head {
+  --tab-favicon-size: 24px;
+}
+
+/* Asegurar que el título de la página sea descriptivo para mejor identificación */
+head title {
+  font-weight: bold;
+}

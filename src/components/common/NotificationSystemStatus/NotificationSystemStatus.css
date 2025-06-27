@@ -1,0 +1,157 @@
+.notification-system-status {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.notification-system-status:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.status-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.status-icon-container {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.status-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.status-title {
+    margin: 0 0 4px 0;
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.status-description {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.3;
+}
+
+.unread-count {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #ff8c00;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.status-dot.active {
+    background: #4caf50;
+    animation: pulse-success 2s infinite;
+}
+
+.status-dot.pending {
+    background: #ff9800;
+    animation: pulse-warning 2s infinite;
+}
+
+.status-dot.blocked {
+    background: #f44336;
+}
+
+.status-dot.unsupported {
+    background: #9e9e9e;
+}
+
+.status-text {
+    color: #666;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@keyframes pulse-success {
+    0% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 6px rgba(76, 175, 80, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+    }
+}
+
+@keyframes pulse-warning {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 6px rgba(255, 152, 0, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 152, 0, 0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .notification-system-status {
+        padding: 16px;
+    }
+    
+    .status-header {
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .status-icon-container {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .status-title {
+        font-size: 15px;
+    }
+    
+    .status-description {
+        font-size: 13px;
+    }
+    
+    .unread-count {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+}

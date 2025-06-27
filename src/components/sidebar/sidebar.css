@@ -335,6 +335,7 @@
 
 .sidebar--collapsed .sidebar__link-content {
   justify-content: center;
+  gap: 0;
 }
 
 .sidebar__icon {
@@ -630,6 +631,18 @@
   to {
     opacity: 1;
     transform: translateY(-50%) scale(1);
+  }
+}
+
+@keyframes pulse-notification {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
   }
 }
 
@@ -1012,4 +1025,145 @@ margin-left: -10px;
   color: #ff8c00;
   flex-shrink: 0;
   margin-top: 2px;
+}
+
+/* Estilos para contadores de notificaciones en elementos del menú */
+.sidebar__icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar__notification-counter {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ff4757;
+  color: white;
+  border-radius: 50%;
+  min-width: 18px;
+  height: 18px;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  box-shadow: 0 2px 4px rgba(255, 71, 87, 0.3);
+  animation: pulse-notification 2s infinite;
+  z-index: 10;
+}
+
+@keyframes pulse-notification {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+/* Ajustes para modo colapsado */
+.sidebar--collapsed .sidebar__notification-counter {
+  top: -4px;
+  right: -4px;
+  min-width: 16px;
+  height: 16px;
+  font-size: 10px;
+}
+
+/* Estilos hover para elementos con notificaciones */
+.sidebar__link:hover .sidebar__notification-counter {
+  background: #ff3742;
+  box-shadow: 0 4px 8px rgba(255, 71, 87, 0.4);
+}
+
+/* Push Notification Status Indicator */
+.sidebar__push-status {
+  margin-top: 8px;
+  padding: 0 4px;
+}
+
+.push-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.push-status-indicator.enabled {
+  background: rgba(76, 175, 80, 0.1);
+  border-color: rgba(76, 175, 80, 0.3);
+  color: #4caf50;
+}
+
+.push-status-indicator.disabled {
+  background: rgba(255, 193, 7, 0.1);
+  border-color: rgba(255, 193, 7, 0.3);
+  color: #ffc107;
+}
+
+.push-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.push-status-indicator.enabled .push-status-dot {
+  background: #4caf50;
+  animation: pulse-success 2s infinite;
+}
+
+.push-status-indicator.disabled .push-status-dot {
+  background: #ffc107;
+  animation: pulse-warning 2s infinite;
+}
+
+@keyframes pulse-success {
+  0% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 4px rgba(76, 175, 80, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+  }
+}
+
+@keyframes pulse-warning {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 4px rgba(255, 193, 7, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+  }
+}
+
+.push-status-text {
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar__push-status {
+    display: none;
+  }
 }

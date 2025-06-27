@@ -120,7 +120,9 @@ const OrderTable = ({
             </thead>
             <tbody>
               {!loading && ordersEnPagina.length > 0 ? (
-                ordersEnPagina.map((order) => (                  <tr key={order.id_pedido} className={`styled-row ${getRowBackgroundClass(order.fecha_pedido)} order-row`}>                    <td className="estado-cell">
+                ordersEnPagina.map((order) => (
+                  <tr key={order.id_pedido} className={`styled-row ${getRowBackgroundClass(order.fecha_pedido)} order-row`}>
+                    <td className="estado-cell">
                       <div
                         className={`estado-pill estado-${order.estado.replace(' ', '_')}`}
                         style={{
@@ -270,7 +272,8 @@ const OrderTable = ({
                       </div>
                     </td>
                   </tr>
-                ))              ) : (
+                ))
+              ) : (
                 <tr className="empty-row">
                   <td colSpan="8" className="empty-cell">
                     <div className="empty-state">

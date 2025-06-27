@@ -15,11 +15,13 @@ import {
   Calendar,
   Clock,
   RefreshCw,
-  Download
+  Download,
+  Bell
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import AdminService from '../../services/AdminService';
 import LogsService from '../../services/LogsService';
+import PushNotificationSettings from '../../components/common/PushNotificationSettings';
 import "./configuracion.css";
 
 // Importaciones de los componentes modularizados
@@ -549,6 +551,7 @@ function ConfiguracionAdmin() {  // Hook de autenticación
             <div className="tabs">
               {[
                 { key: "cuenta", label: "Mi Cuenta", icon: User, description: "Perfil y seguridad" },
+                { key: "notificaciones", label: "Notificaciones", icon: Bell, description: "Configurar notificaciones push" },
                 { key: "historial", label: "Historial", icon: Activity, description: "Actividad reciente" },
                 { key: "logs", label: "Logs del Sistema", icon: FileText, description: "Logs detallados" },
                 { key: "backup", label: "Backups", icon: DatabaseBackup, description: "Respaldos del sistema" },
@@ -604,6 +607,13 @@ function ConfiguracionAdmin() {  // Hook de autenticación
                 cambiarContrasena={cambiarContrasena}
                 cerrarSesion={cerrarSesion}
               />
+            )}
+            
+            {/* TAB: NOTIFICACIONES */}
+            {activeTab === "notificaciones" && (
+              <div className="config-panel">
+                <PushNotificationSettings />
+              </div>
             )}
             
             {/* TAB: HISTORIAL */}
