@@ -16,10 +16,19 @@ class AdminService {  // Headers comunes para todas las requests
     
     return headers;
   }
-
   // Manejar errores de respuesta
   static async handleResponse(response) {
     if (!response.ok) {
+      // Si es error 401 (Unauthorized), podría ser token expirado
+      if (response.status === 401) {
+        console.warn('Token expirado o inválido, redirigiendo al login');
+        // Limpiar localStorage y redirigir al login
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
+        window.location.href = '/login';
+        throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
+      }
+      
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message || `Error ${response.status}: ${response.statusText}`);
     }
@@ -124,6 +133,25 @@ class AdminService {  // Headers comunes para todas las requests
       return data.administrador || data;
     } catch (error) {
       console.error('Error al obtener administrador por ID:', error);
+      throw error;
+    }
+  }
+
+  // GET - Obtener administrador por email
+  static async getAdminByEmail(email) {
+    try {
+      // Primero intentar obtener todos los administradores y filtrar por email
+      const admins = await this.getAllAdmins();
+      const admin = admins.find(admin => admin.correo === email);
+      
+      if (admin) {
+        console.log('Administrador encontrado por email:', JSON.stringify(admin, null, 2));
+        return admin;
+      }
+      
+      throw new Error('Administrador no encontrado con el email proporcionado');
+    } catch (error) {
+      console.error('Error al obtener administrador por email:', error);
       throw error;
     }
   }  // PUT - Cambiar contraseña del administrador

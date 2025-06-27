@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Check, ShoppingCart, User, CreditCard, X } from 'lucide-react';
-import { useNotifications } from '../../../context/NotificationContext';
 import './NewOrderModal.css';
 
 // Tabla de precios por pizza y tamaño
@@ -763,9 +762,6 @@ const NewOrderModal = ({ show, onClose }) => {
   const API_URL = "https://api.mamamianpizza.com/api";
   const totalSteps = 3;
 
-  // Hook de notificaciones
-  const notificationContext = useNotifications();
-
   // Estados
   const [currentStep, setCurrentStep] = useState(1);
   const [menu, setMenu] = useState([]);
@@ -883,15 +879,7 @@ const NewOrderModal = ({ show, onClose }) => {
       const result = await response.json();
       console.log("Pedido creado exitosamente:", result);
 
-      // Mostrar notificación de éxito
-      if (notificationContext?.addNotification) {
-        notificationContext.addNotification({
-          type: 'success',
-          title: '¡Pedido creado exitosamente!',
-          message: `Pedido #${result.codigo_pedido || 'N/A'} ha sido registrado correctamente.`,
-          duration: 5000
-        });
-      }
+      console.log("Pedido creado exitosamente");
 
       // Cerrar modal y resetear
       onClose();
@@ -901,15 +889,7 @@ const NewOrderModal = ({ show, onClose }) => {
       console.error('Error al enviar pedido:', error);
       setError(error.message);
       
-      // Mostrar notificación de error
-      if (notificationContext?.addNotification) {
-        notificationContext.addNotification({
-          type: 'error',
-          title: 'Error al crear pedido',
-          message: error.message || 'Ocurrió un error inesperado. Intente nuevamente.',
-          duration: 7000
-        });
-      }
+      console.error('Error al crear pedido:', error.message);
     } finally {
       setIsLoading(false);
     }

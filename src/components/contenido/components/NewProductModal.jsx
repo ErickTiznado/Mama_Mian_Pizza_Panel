@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { X, ArrowLeft } from 'lucide-react';
-import { useNotifications } from '../../../context/NotificationContext';
 import { useAuth } from '../../../context/AuthContext';
 import UserLogService from '../../../services/UserLogService';
 import '../AgregarContenido.css';
@@ -258,9 +257,8 @@ const Step2 = ({ tamanos, productData, onProductChange }) => {
 const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEditing = false, user: propUser }) => {
   const API_URL = "https://api.mamamianpizza.com/api";
   
-  // Hook de notificaciones y autenticación
-  const notificationContext = useNotifications();
-  const { user: contextUser } = useAuth();
+  // Hook de autenticación
+  const { user: contextUser, getToken, checkAuth, logout } = useAuth();
   
   // Usar el usuario pasado como prop o el del contexto
   const user = propUser || contextUser;
@@ -276,9 +274,16 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
     categoria: "",
     imagen: null,
     precios: {},
-    precio_unico: "",
-    activo: 1
+    precio_unico: "",    activo: 1
   });
+
+  // Verificar autenticación al mostrar el modal
+  useEffect(() => {
+    if (show && !checkAuth()) {
+      console.error('Acceso denegado - Debe iniciar sesión para acceder a esta función');
+      onClose();
+    }
+  }, [show, checkAuth, onClose]);
 
   // Efecto para cargar datos del producto en edición
   useEffect(() => {
@@ -360,12 +365,7 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
       }
       
       if (requiredFields.some(field => !field)) {
-        notificationContext.addNotification({
-          type: 'error',
-          title: 'Campos incompletos',
-          message: 'Por favor complete todos los campos obligatorios.',
-          duration: 5000
-        });
+        console.error('Campos incompletos - Por favor complete todos los campos obligatorios');
         return;
       }
     }
@@ -389,6 +389,34 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
     setError(null);
   };
   
+  // Función para crear headers de autenticación
+  const createAuthHeaders = () => {
+    const token = getToken();
+    if (!token) {
+      throw new Error('Token de autenticación no disponible');
+    }
+    
+    return {
+      'Authorization': `Bearer ${token}`
+    };
+  };
+
+  // Función para manejar errores de autenticación
+  const handleAuthError = (response) => {
+    if (response.status === 401) {
+      console.error('Sesión expirada - Su sesión ha expirado. Redirigiendo al login...');
+      setTimeout(() => {
+        logout();
+        // Aquí podrías agregar navegación al login si tienes acceso a navigate
+      }, 2000);
+      return true;
+    } else if (response.status === 403) {
+      console.error('Sin permisos - No tiene permisos para realizar esta acción');
+      return true;
+    }
+    return false;
+  };
+
   // Función para validar los precios
   const validatePrices = () => {
     let valid = true;
@@ -412,8 +440,14 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
     }
     
     return valid;
-  };    // Función para enviar el producto al API
+  };  // Función para enviar el producto al API
   const handleSubmit = async () => {
+    // Verificar autenticación antes de proceder
+    if (!checkAuth()) {
+      console.error('Sesión expirada - Debe iniciar sesión para realizar esta acción');
+      return;
+    }
+
     // Validar precios
     if (!validatePrices()) {
       return;
@@ -457,10 +491,20 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
       
       const method = isEditing ? 'PUT' : 'POST';
       
+      // Crear headers de autenticación
+      const authHeaders = createAuthHeaders();
+      
       const response = await fetch(url, {
         method: method,
+        headers: authHeaders,
         body: formData
       });
+      
+      // Manejar errores de autenticación
+      if (response.status === 401 || response.status === 403) {
+        handleAuthError(response);
+        return;
+      }
       
       if (!response.ok) {
         const errorData = await response.json();
@@ -488,13 +532,8 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
         );
       }
       
-      // Mostrar notificación de éxito
-      notificationContext.addNotification({
-        type: 'success',
-        title: `¡Producto ${isEditing ? 'actualizado' : 'creado'} exitosamente!`,
-        message: `El producto "${productData.titulo}" ha sido ${isEditing ? 'actualizado' : 'registrado'} correctamente.`,
-        duration: 5000
-      });
+      // Log de éxito
+      console.log(`Producto ${isEditing ? 'actualizado' : 'creado'} exitosamente: ${productData.titulo}`);
       
       // Cerrar modal y resetear formulario
       onClose();
@@ -509,13 +548,7 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
       console.error(`Error al ${isEditing ? 'actualizar' : 'crear'} producto:`, error);
       setError(error.message);
       
-      // Mostrar notificación de error
-      notificationContext.addNotification({
-        type: 'error',
-        title: `Error al ${isEditing ? 'actualizar' : 'crear'} producto`,
-        message: error.message || 'Ocurrió un error inesperado. Intente nuevamente.',
-        duration: 7000
-      });
+      console.error(`Error al ${isEditing ? 'actualizar' : 'crear'} producto: ${error.message}`);
     } finally {
       setIsLoading(false);
     }

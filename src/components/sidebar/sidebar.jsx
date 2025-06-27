@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useNotifications } from '../../hooks/useNotification.jsx';
 import {
   House,
   ShoppingCart,
@@ -9,29 +10,27 @@ import {
   Package,
   ChartLine,
   Store,
-  Bell,
-  BellOff,
   ChevronLeft,
   ChevronRight,
   User,
-    LogOut,
-  Settings
+  LogOut,
+  Settings,
+  Bell
 } from 'lucide-react';
 import Logo from '../../assets/Logo.png';
-import NotificationBell from '../icons/notificationBell/notificationBell';
-import { useNotifications } from '../../context/NotificationContext';
 import './sidebar.css';
 
 const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
   const navigate = useNavigate();
   const { logout } = useAuth();
-  const { requestPermission, permissionStatus, sendTestNotification } = useNotifications();
+  const { notifications, markAllRead, noleidas } = useNotifications();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [showPermissionBanner, setShowPermissionBanner] = useState(false);
   const [activeItem, setActiveItem] = useState('/home');
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const adminRef = useRef();
+  const notificationRef = useRef();
 
   const menuItems = [
     {
@@ -110,12 +109,6 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
   }, []);
 
   useEffect(() => {
-    if ('Notification' in window) {
-      setShowPermissionBanner(Notification.permission === 'default');
-    }
-  }, [permissionStatus]);
-
-  useEffect(() => {
     const currentPath = window.location.pathname;
     setActiveItem(currentPath);
   }, []);
@@ -124,6 +117,9 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
     const handleClickOutside = (e) => {
       if (adminRef.current && !adminRef.current.contains(e.target)) {
         setIsAdminOpen(false);
+      }
+      if (notificationRef.current && !notificationRef.current.contains(e.target)) {
+        setShowNotifications(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -153,26 +149,26 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
     }
   };
 
-  const handleRequestPermission = async () => {
-    try {
-      const result = await requestPermission();
-      if (result === 'granted') {
-        setShowPermissionBanner(false);
-        setTimeout(async () => {
-          await sendTestNotification();
-        }, 1000);
-      }
-    } catch (error) {
-      console.error('Error al solicitar permisos:', error);
+  const handleAdminClick = () => {
+    setIsAdminOpen(prev => !prev);
+  };
+
+  const toggleNotifications = () => {
+    setShowNotifications(prev => !prev);
+    if (!showNotifications && noleidas > 0) {
+      markAllRead();
     }
   };
 
-  const handleDismissBanner = () => {
-    setShowPermissionBanner(false);
-  };
-
-  const handleAdminClick = () => {
-    setIsAdminOpen(prev => !prev);
+  const formatNotificationTime = (timestamp) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffInMinutes = Math.floor((now - date) / (1000 * 60));
+    
+    if (diffInMinutes < 1) return 'Ahora';
+    if (diffInMinutes < 60) return `${diffInMinutes}m`;
+    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h`;
+    return `${Math.floor(diffInMinutes / 1440)}d`;
   };
 
   return (
@@ -197,25 +193,6 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
           </div>
         </header>
 
-        {showPermissionBanner && !isCollapsed && (
-          <div className="sidebar__notification-banner">
-            <div className="notification-banner__content">
-              <Bell size={20} className="notification-banner__icon" />
-              <p className="notification-banner__text">
-                Activa las notificaciones para mantenerte al día
-              </p>
-            </div>
-            <div className="notification-banner__actions">
-              <button className="notification-banner__button notification-banner__button--accept" onClick={handleRequestPermission}>
-                Activar
-              </button>
-              <button className="notification-banner__button notification-banner__button--dismiss" onClick={handleDismissBanner}>
-                Ahora no
-              </button>
-            </div>
-          </div>
-        )}
-
         <nav className="sidebar__navigation">
           <ul className="sidebar__menu">
             {menuItems.map((item) => {
@@ -233,14 +210,6 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
                       <Icon size={24} className="sidebar__icon" />
                       {!isCollapsed && <span className="sidebar__label">{item.label}</span>}
                     </div>
-                    {item.hasNotification && (
-                      <div className="sidebar__notification">
-                        <NotificationBell 
-                          category={item.notificationCategory} 
-                          isCollapsed={isCollapsed} 
-                        />
-                      </div>
-                    )}
                   </button>
                 </li>
               );
@@ -249,20 +218,72 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
         </nav>
 
         <div className="sidebar__footer">
-          {permissionStatus !== 'granted' && !showPermissionBanner && (
+          {/* Notificaciones Bell */}
+          <div className="sidebar__notification-container" ref={notificationRef}>
             <button 
-              className="sidebar__notification-toggle"
-              onClick={handleRequestPermission}
-              title={isCollapsed ? 'Activar notificaciones' : ''}
+              className="sidebar__notification-bell"
+              onClick={toggleNotifications}
+              title={isCollapsed ? 'Notificaciones' : ''}
+              aria-label="Notificaciones"
             >
-              <BellOff size={20} className="sidebar__notification-icon" />
-              {!isCollapsed && (
-                <span className="sidebar__notification-text">
-                  Activar notificaciones
-                </span>
+              <Bell size={20} className="sidebar__notification-bell-icon" />
+              {noleidas > 0 && (
+                <span className="sidebar__notification-badge">{noleidas > 99 ? '99+' : noleidas}</span>
               )}
+              {!isCollapsed && <span>Notificaciones</span>}
             </button>
-          )}
+
+            {showNotifications && (
+              <div className="sidebar__notification-dropdown">
+                <div className="sidebar__notification-header">
+                  <h3>Notificaciones</h3>
+                  {notifications.length > 0 && (
+                    <button 
+                      className="sidebar__notification-clear"
+                      onClick={markAllRead}
+                    >
+                      Marcar todas como leídas
+                    </button>
+                  )}
+                </div>
+                <div className="sidebar__notification-list">
+                  {notifications.length === 0 ? (
+                    <div className="sidebar__notification-empty">
+                      <Bell size={24} />
+                      <p>No hay notificaciones</p>
+                    </div>
+                  ) : (
+                    notifications.slice(0, 10).map((notification, index) => (
+                      <div 
+                        key={`${notification.id}-${index}`} 
+                        className="sidebar__notification-item"
+                        onClick={() => {
+                          if (notification.category === 'pedidos') {
+                            handleNavigation('/pedidos');
+                          }
+                        }}
+                      >
+                        <div className="sidebar__notification-content">
+                          <div className="sidebar__notification-title">
+                            {notification.title || 'Nuevo pedido'}
+                          </div>
+                          <div className="sidebar__notification-message">
+                            {notification.message || notification.data || 'Nueva notificación disponible'}
+                          </div>
+                          <div className="sidebar__notification-time">
+                            {formatNotificationTime(notification.timestamp || notification.created_at)}
+                          </div>
+                        </div>
+                        {notification.category === 'pedidos' && (
+                          <ShoppingCart size={16} className="sidebar__notification-icon" />
+                        )}
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
 
           <button 
             className="sidebar__toggle"

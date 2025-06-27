@@ -1,6 +1,5 @@
 import './navbar.css';
 import { Bell, CircleUserRound } from 'lucide-react';
-import NotificationBell from '../icons/notificationBell/notificationBell';
 
 function Navbar() {
     return (

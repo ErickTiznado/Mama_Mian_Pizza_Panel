@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNotifications } from '../context/NotificationContext';
-import { testNotification, NotificationCategories } from '../services/NotificationService';
 
 const Prueba = () => {
-  const notificationContext = useNotifications();
   const [testResult, setTestResult] = useState(null);
-  const [diagnostico, setDiagnostico] = useState(null);
   
   useEffect(() => {
     // Realizar diagnóstico al cargar

@@ -15,10 +15,6 @@ import OrderDetailModal from './components/OrderDetailModal';
 import OrderTabs from './components/OrderTabs';
 import NewOrderModal from './components/NewOrderModal';
 
-// Importar el contexto de notificaciones y servicios
-import { useNotifications } from "../../context/NotificationContext";
-import { createOrderStatusNotification, createOrderNotification } from "../../services/NotificationService";
-
 const OrderManager = () => {
   // Estados principales
   const [orders, setOrders] = useState([]);
@@ -43,9 +39,6 @@ const OrderManager = () => {
 
   // Base URL para la API
   const API_BASE_URL = "https://api.mamamianpizza.com/api/orders";
-
-  // Hook de notificaciones
-  const notificationContext = useNotifications();
 
   // Cargar pedidos por defecto (pendientes) al montar el componente
   useEffect(() => {
@@ -110,11 +103,7 @@ const OrderManager = () => {
       // Refrescar los pedidos después de actualizar el estado
       fetchOrdersByStatus(activeFilter);
 
-      // Crear notificación de cambio de estado
-      const currentOrder = orders.find(order => order.id_pedido === orderId);
-      if (currentOrder) {
-        createOrderStatusNotification(notificationContext, currentOrder, newStatus);
-      }
+      console.log("Estado del pedido actualizado correctamente");
     } catch (err) {
       setError("Error al actualizar el estado del pedido: " + err.message);
       console.error("Error updating order status:", err);

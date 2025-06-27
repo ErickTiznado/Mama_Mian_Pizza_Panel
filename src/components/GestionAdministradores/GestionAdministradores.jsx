@@ -51,9 +51,6 @@ const GestionAdministradores = () => {
   const [selectedAdmin, setSelectedAdmin] = useState(null);
   const [selectedAdminId, setSelectedAdminId] = useState(null);
   const [editingAdmin, setEditingAdmin] = useState(null);
-  
-  // Estados para notificaciones
-  const [notification, setNotification] = useState(null);
 
   // Función para cargar datos desde la API
   const fetchData = async () => {
@@ -99,12 +96,6 @@ const GestionAdministradores = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredAdmins.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredAdmins.length / itemsPerPage);
-
-  // Función para mostrar notificaciones
-  const showNotification = (message, type = 'success') => {
-    setNotification({ message, type });
-    setTimeout(() => setNotification(null), 3000);
-  };
 
   // Función para manejar el cambio de filtro de tabs
   const handleFilterChange = (filter) => {
@@ -152,9 +143,9 @@ const GestionAdministradores = () => {
       );
       setAdministradores(updatedAdmins);
       
-      showNotification(`Estado del administrador ${nuevoEstado === 'activo' ? 'activado' : 'desactivado'} correctamente`);
+      console.log(`Estado del administrador ${nuevoEstado === 'activo' ? 'activado' : 'desactivado'} correctamente`);
     } catch (error) {
-      showNotification('Error al cambiar el estado del administrador: ' + error.message, 'error');
+      console.error('Error al cambiar el estado del administrador: ' + error.message);
     }
   };
 
@@ -164,12 +155,12 @@ const GestionAdministradores = () => {
       
       // Actualizar estado local
       const updatedAdmins = administradores.filter(admin => admin.id_admin !== selectedAdminId);
-      setAdministradores(updatedAdmins);
-      showNotification('Administrador eliminado correctamente');
+      setAdministradores(updatedAdmins);      
+      console.log('Administrador eliminado correctamente');
       setShowConfirmDialog(false);
       setSelectedAdminId(null);
     } catch (error) {
-      showNotification('Error al eliminar el administrador: ' + error.message, 'error');
+      console.error('Error al eliminar el administrador: ' + error.message);
     }
   };
 
@@ -187,9 +178,9 @@ const GestionAdministradores = () => {
       await AdminService.createAdmin(newAdminData);
       setShowAddModal(false);
       fetchData(); // Recargar datos
-      showNotification('Administrador agregado correctamente');
+      console.log('Administrador agregado correctamente');
     } catch (error) {
-      showNotification('Error al agregar el administrador: ' + error.message, 'error');
+      console.error('Error al agregar el administrador: ' + error.message);
     }
   };
 
@@ -199,9 +190,9 @@ const GestionAdministradores = () => {
       setShowEditModal(false);
       setEditingAdmin(null);
       fetchData(); // Recargar datos
-      showNotification('Administrador actualizado correctamente');
+      console.log('Administrador actualizado correctamente');
     } catch (error) {
-      showNotification('Error al actualizar el administrador: ' + error.message, 'error');
+      console.error('Error al actualizar el administrador: ' + error.message);
     }
   };
 
@@ -589,21 +580,6 @@ const GestionAdministradores = () => {
                 isEditing={true}
               />
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Notificación toast */}
-      {notification && (
-        <div className={`notification-toast notification-${notification.type}`}>
-          <div className="notification-content">
-            <span className="notification-message">{notification.message}</span>
-            <button 
-              className="notification-close"
-              onClick={() => setNotification(null)}
-            >
-              ×
-            </button>
           </div>
         </div>
       )}

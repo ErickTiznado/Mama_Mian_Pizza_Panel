@@ -50,101 +50,44 @@ import './AgregarContenido.css';
 
 const AgregarContenido = () => {
   const navigate = useNavigate();
-  
-  // Capturar errores globales
-  useEffect(() => {
-    const handleGlobalError = (event) => {
-      console.error('❌ [DEBUG] Error global capturado:', event.error);
-      console.error('❌ [DEBUG] Error message:', event.message);
-      console.error('❌ [DEBUG] Error filename:', event.filename);
-      console.error('❌ [DEBUG] Error line:', event.lineno);
-    };
-
-    const handleUnhandledRejection = (event) => {
-      console.error('❌ [DEBUG] Promise rejection no manejada:', event.reason);
-    };
-
-    window.addEventListener('error', handleGlobalError);
-    window.addEventListener('unhandledrejection', handleUnhandledRejection);
-
-    return () => {
-      window.removeEventListener('error', handleGlobalError);
-      window.removeEventListener('unhandledrejection', handleUnhandledRejection);
-    };
-  }, []);
-    // Verificar si React Router está disponible
-  useEffect(() => {
-    console.log('✅ [INIT] Componente AgregarContenido montado correctamente');
-  }, [navigate]);
-  
   // Obtener datos del usuario autenticado y funciones de autenticación
-  const { 
-    user, 
-    isAuthenticated, 
-    getToken, 
-    checkAuth, 
-    logout, 
-    isTokenValid,
-    isUserAdmin, // 🔧 [TEMP FIX] Usar función helper del contexto
-    getUserRole  // 🔧 [TEMP FIX] Usar función helper del contexto
-  } = useAuth();
+  const { user, isAuthenticated, getToken, checkAuth, logout, isTokenValid } = useAuth();
   
   // Estados para manejo de autenticación
   const [authError, setAuthError] = useState(null);
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true);    // Log para verificar que el usuario esté disponible (solo en desarrollo)
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  
+  // Log para verificar que el usuario esté disponible
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('✅ [AUTH] Usuario autenticado correctamente');
-    }
-  }, [user, isAuthenticated]);
-    // Verificar autenticación al cargar el componente
+    console.log('Usuario autenticado en AgregarContenido:', user);
+  }, [user]);
+  
+  // Verificar autenticación al cargar el componente
   useEffect(() => {
     const verifyAuthentication = () => {
-      console.log('🔍 [DEBUG] Iniciando verificación de autenticación...');
       setIsCheckingAuth(true);
-      
       const token = getToken();
-      console.log('🔍 [DEBUG] Token obtenido:', token ? '✅ Token presente' : '❌ Sin token');
-      console.log('🔍 [DEBUG] isAuthenticated:', isAuthenticated);
-      console.log('🔍 [DEBUG] user:', user);
       
       if (!token || !isTokenValid(token) || !isAuthenticated || !user) {
-        console.warn('⚠️ [DEBUG] Usuario no autenticado o token inválido');
-        console.log('🔍 [DEBUG] Detalles:', {
-          hasToken: !!token,
-          isTokenValid: token ? isTokenValid(token) : false,
-          isAuthenticated,
-          hasUser: !!user
-        });
-        setAuthError('Debe iniciar sesión para acceder a esta función');        // Redirigir al login después de un breve delay
+        console.warn('Usuario no autenticado o token inválido');
+        setAuthError('Debe iniciar sesión para acceder a esta función');
+        // Redirigir al login después de un breve delay
         setTimeout(() => {
-          console.log('🔍 [DEBUG] Redirigiendo a login...');
-          try {
-            logout();
-            navigate('/login');
-          } catch (navError) {
-            console.error('❌ [DEBUG] Error en navegación:', navError);
-            // Fallback: redirección manual
-            window.location.href = '/login';
-          }
-        }, 2000);
-        return;
-      }      // Verificar que el usuario tenga permisos administrativos
-      if (!isUserAdmin(user)) {
-        console.warn('⚠️ [DEBUG] Usuario sin permisos administrativos');
-        setAuthError('No tiene permisos para acceder a esta función');        setTimeout(() => {
-          try {
-            navigate('/');
-          } catch (navError) {
-            console.error('❌ [AUTH] Error en navegación:', navError);
-            // Fallback: redirección manual
-            window.location.href = '/';
-          }
+          logout();
+          navigate('/login');
         }, 2000);
         return;
       }
       
-      console.log('✅ [AUTH] Autenticación verificada correctamente');
+      // Verificar que el usuario tenga permisos administrativos
+      if (user.rol !== 'admin' && user.role !== 'admin') {
+        setAuthError('No tiene permisos para acceder a esta función');
+        setTimeout(() => {
+          navigate('/');
+        }, 2000);
+        return;
+      }
+      
       setAuthError(null);
       setIsCheckingAuth(false);
     };
@@ -158,9 +101,6 @@ const AgregarContenido = () => {
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('todos');
   const [tiposDisponibles, setTiposDisponibles] = useState([]);
-  
-  // Estado para tracking de cambios de estado
-  const [changingStatus, setChangingStatus] = useState(new Set());
   
   // Estados para búsqueda y filtros
   const [searchTerm, setSearchTerm] = useState('');
@@ -179,6 +119,15 @@ const AgregarContenido = () => {
   // Estados para edición
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
+  
+  // Estados para notificaciones
+  const [notification, setNotification] = useState(null);
+
+  // Función para mostrar notificaciones
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000); // Auto-cerrar después de 3 segundos
+  };
 
   // Función para crear headers de autenticación
   const createAuthHeaders = () => {
@@ -192,54 +141,42 @@ const AgregarContenido = () => {
       'Authorization': `Bearer ${token}`
     };
   };
+
   // Función para manejar errores de autenticación en peticiones
   const handleAuthError = (error) => {
-    console.log('🔍 [DEBUG] handleAuthError ejecutándose...');
-    console.log('🔍 [DEBUG] Error recibido:', error);
-    console.log('🔍 [DEBUG] Error response status:', error.response?.status);
-    
     if (error.response?.status === 401) {
-      console.warn('⚠️ [DEBUG] Token expirado o inválido (401)');
+      console.warn('Token expirado o inválido');
       setAuthError('Su sesión ha expirado. Redirigiendo al login...');
+      showNotification('Sesión expirada. Por favor, inicie sesión nuevamente.', 'error');
       setTimeout(() => {
-        console.log('🔍 [DEBUG] Ejecutando logout y redirección...');
         logout();
         navigate('/login');
       }, 2000);
       return true;
     } else if (error.response?.status === 403) {
-      console.warn('⚠️ [DEBUG] Sin permisos (403)');
       setAuthError('No tiene permisos para realizar esta acción');
+      showNotification('No tiene permisos para realizar esta acción.', 'error');
       return true;
     }
-    
-    console.log('🔍 [DEBUG] Error no relacionado con autenticación');
     return false;
   };
+
   // Función para cargar datos desde la API
   const fetchData = async () => {
-    console.log('🔍 [DEBUG] Iniciando fetchData...');
-    
     if (!checkAuth()) {
-      console.error('❌ [DEBUG] checkAuth() falló');
       setError('Debe iniciar sesión para ver el contenido');
       setIsLoading(false);
       return;
     }
 
-    console.log('✅ [DEBUG] checkAuth() exitoso, procediendo con la carga de datos...');
     setIsLoading(true);
-    
     try {
-      console.log('🔍 [DEBUG] Realizando petición a la API...');
       const response = await axios.get('https://api.mamamianpizza.com/api/content/getMenu');
-      console.log('✅ [DEBUG] API Response recibida:', response.data);
-      console.log('🔍 [DEBUG] Menu data sample:', response.data.menu?.[0]);
+      console.log('API Response:', response.data); // Para depuración
+      console.log('Menu data sample:', response.data.menu?.[0]); // Ver estructura del primer elemento
       
       // La API devuelve response.data.menu en lugar de response.data.productos
       const menuData = response.data.menu || [];
-      console.log('🔍 [DEBUG] menuData length:', menuData.length);
-      
       const formattedData = menuData.map(item => {
         // Calcular el precio basado en las opciones disponibles
         const precioMinimo = item.opciones && item.opciones.length > 0 
@@ -267,24 +204,16 @@ const AgregarContenido = () => {
         };
       });
       
-      console.log('✅ [DEBUG] Datos formateados:', formattedData.length, 'elementos');
-      console.log('🔍 [DEBUG] Primer elemento formateado:', formattedData[0]);
-      
+      console.log('Datos formateados:', formattedData);
       setContenidos(formattedData);
       setFilteredItems(formattedData);
       
       // Extraer tipos únicos de los datos para las pestañas
       const tipos = ['todos', ...new Set(formattedData.map(item => item.tipo))];
-      console.log('🔍 [DEBUG] Tipos disponibles para pestañas:', tipos);
       setTiposDisponibles(tipos);
       setError(null);
     } catch (err) {
-      console.error('❌ [DEBUG] Error al cargar los datos:', err);
-      console.error('❌ [DEBUG] Error details:', {
-        message: err.message,
-        response: err.response?.data,
-        status: err.response?.status
-      });
+      console.error('Error al cargar los datos:', err);
       
       // Manejar errores de autenticación
       if (!handleAuthError(err)) {
@@ -295,20 +224,14 @@ const AgregarContenido = () => {
       }
     } finally {
       setIsLoading(false);
-      console.log('🔍 [DEBUG] fetchData completado');
     }
   };
+
   // Cargar datos iniciales desde la API real
   useEffect(() => {
-    console.log('🔍 [DEBUG] useEffect para cargar datos ejecutándose...');
-    console.log('🔍 [DEBUG] isCheckingAuth:', isCheckingAuth, 'authError:', authError);
-    
     // Solo cargar datos si la autenticación está verificada
     if (!isCheckingAuth && !authError) {
-      console.log('✅ [DEBUG] Condiciones cumplidas, llamando fetchData()');
       fetchData();
-    } else {
-      console.log('⏳ [DEBUG] Esperando verificación de autenticación...');
     }
   }, [isCheckingAuth, authError]);
 
@@ -345,6 +268,7 @@ const AgregarContenido = () => {
     // Verificar autenticación antes de permitir edición
     if (!checkAuth()) {
       setAuthError('Debe iniciar sesión para editar contenido');
+      showNotification('Debe iniciar sesión para realizar esta acción.', 'error');
       return;
     }
 
@@ -360,6 +284,7 @@ const AgregarContenido = () => {
     // Verificar autenticación antes de permitir eliminación
     if (!checkAuth()) {
       setAuthError('Debe iniciar sesión para eliminar contenido');
+      showNotification('Debe iniciar sesión para realizar esta acción.', 'error');
       return;
     }
 
@@ -374,6 +299,7 @@ const AgregarContenido = () => {
     // Verificar autenticación antes de proceder
     if (!checkAuth()) {
       setAuthError('Su sesión ha expirado. Por favor, inicie sesión nuevamente.');
+      showNotification('Sesión expirada. Redirigiendo al login...', 'error');
       setTimeout(() => {
         logout();
         navigate('/login');
@@ -432,12 +358,15 @@ const AgregarContenido = () => {
       // Cerrar el diálogo de confirmación
       setShowConfirmDialog(false);
       setSelectedItemId(null);
+      
+      // Mostrar mensaje de éxito
+      showNotification('Contenido eliminado correctamente', 'success');
     } catch (error) {
       console.error('Error al eliminar contenido:', error);
       
       // Manejar errores de autenticación
       if (!handleAuthError(error)) {
-        console.error('Error al eliminar contenido - no es error de autenticación');
+        showNotification('Error al eliminar el contenido. Por favor, inténtalo de nuevo.', 'error');
       }
     } finally {
       setIsLoading(false);
@@ -463,6 +392,7 @@ const AgregarContenido = () => {
     // Verificar autenticación antes de permitir crear nuevo contenido
     if (!checkAuth()) {
       setAuthError('Debe iniciar sesión para crear contenido');
+      showNotification('Debe iniciar sesión para realizar esta acción.', 'error');
       return;
     }
 
@@ -482,60 +412,6 @@ const AgregarContenido = () => {
     setShowEditModal(false);
     setEditingItem(null);
   };
-
-  const handleToggleStatus = async (productId, currentStatus) => {
-  if (!checkAuth()) {
-    setAuthError('Debe iniciar sesión para cambiar el estado del producto');
-    return;
-  }
-
-  if (changingStatus.has(productId)) return; // evita clicks simultáneos
-  setChangingStatus(prev => new Set(prev).add(productId));
-
-  try {
-    const token = getToken();
-    const headers = { 'Authorization': `Bearer ${token}` };
-
-    // Llamada al endpoint toggle
-    const { data } = await axios.put(
-      `https://api.mamamianpizza.com/api/act/${productId}/activar`,
-      {}, // cuerpo vacío
-      { headers }
-    );
-
-    // Actualiza tu lista local con el nuevo estado
-    setContenidos(contenidos.map(item =>
-      item.id === productId
-        ? { ...item, estado: data.activo }
-        : item
-    ));
-    setFilteredItems(filteredItems.map(item =>
-      item.id === productId
-        ? { ...item, estado: data.activo }
-        : item
-    ));
-
-    console.log(`Producto ${data.activo ? 'activado' : 'desactivado'} correctamente`);
-    // Opcional: log en tu servicio de logs
-    await UserLogService.logProductAction(
-      user.id,
-      'UPDATE_STATUS',
-      { id: productId, previous_status: currentStatus, new_status: data.activo },
-      null
-    );
-
-  } catch (err) {
-    if (!handleAuthError(err)) {
-      console.error('Error al cambiar el estado del producto');
-    }
-  } finally {
-    setChangingStatus(prev => {
-      const s = new Set(prev);
-      s.delete(productId);
-      return s;
-    });
-  }
-};
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -574,10 +450,10 @@ const AgregarContenido = () => {
     };
     return colorMap[tipo] || '#6b7280'; // Color por defecto si no se encuentra la categoría
   };
+
   // Renderizar componente principal
   return (
     <div className="admin-content-management">
-    
       {/* Mostrar estado de verificación de autenticación */}
       {isCheckingAuth && (
         <div className="auth-checking-overlay">
@@ -603,7 +479,25 @@ const AgregarContenido = () => {
             <div className="header-title-section">
               <h1 className="main-title">Gestión de Contenido</h1>
               {/* Indicador de usuario autenticado */}
-
+              {user && (
+                <div className="admin-info">
+                  <div className="admin-status">
+                    <FontAwesomeIcon icon={faUser} className="admin-icon" />
+                    <span className="admin-name">{user.nombre || user.username}</span>
+                    <span className="admin-role">({user.rol || user.role})</span>
+                  </div>
+                  <button 
+                    className="logout-btn"
+                    onClick={() => {
+                      logout();
+                      navigate('/login');
+                    }}
+                    title="Cerrar sesión"
+                  >
+                    <FontAwesomeIcon icon={faSignOutAlt} />
+                  </button>
+                </div>
+              )}
             </div>
             <div className="top-controls">
               {/* Solo mostrar botón si está autenticado */}
@@ -754,48 +648,25 @@ const AgregarContenido = () => {
                               </div>
                             </td>
                             <td className="status-cell">
-                              <div className="status-container">
-                                <div
-                                  className={`estado-pill estado-${item.estado ? 'activo' : 'inactivo'} clickable-status ${changingStatus.has(item.id) ? 'changing' : ''}`}
+                              <div
+                                className={`estado-pill estado-${item.estado ? 'activo' : 'inactivo'}`}
+                                style={{
+                                  backgroundColor: item.estado ? '#22c55e' : '#dc2626',
+                                  color: '#ffffff',
+                                  fontWeight: '700'
+                                }}
+                              >
+                                <span
+                                  className="estado-dot"
                                   style={{
-                                    backgroundColor: item.estado ? '#22c55e' : '#dc2626',
-                                    color: '#ffffff',
-                                    fontWeight: '700',
-                                    cursor: changingStatus.has(item.id) ? 'not-allowed' : 'pointer',
-                                    transition: 'all 0.3s ease',
-                                    opacity: changingStatus.has(item.id) ? 0.7 : 1
+                                    backgroundColor: item.estado ? '#16a34a' : '#b91c1c'
                                   }}
-                                  onClick={() => !changingStatus.has(item.id) && handleToggleStatus(item.id, item.estado)}
-                                  title={changingStatus.has(item.id) 
-                                    ? 'Cambiando estado...' 
-                                    : `Click para ${item.estado ? 'desactivar' : 'activar'} este producto`}
-                                >
-                                  <span
-                                    className="estado-dot"
-                                    style={{
-                                      backgroundColor: item.estado ? '#16a34a' : '#b91c1c'
-                                    }}
-                                  ></span>
-                                  {changingStatus.has(item.id) ? (
-                                    <div className="loading-spinner-small"></div>
-                                  ) : (
-                                    <FontAwesomeIcon 
-                                      icon={item.estado ? faCheck : faRotateLeft} 
-                                      className="status-icon" 
-                                    />
-                                  )}
-                                  <span className="estado-text">
-                                    {changingStatus.has(item.id) 
-                                      ? 'Cambiando...' 
-                                      : (item.estado ? 'Activo' : 'Inactivo')
-                                    }
-                                  </span>
-                                </div>
-                                {!changingStatus.has(item.id) && (
-                                  <div className="status-hint">
-                                    <span className="hint-text">Click para cambiar</span>
-                                  </div>
-                                )}
+                                ></span>
+                                <FontAwesomeIcon 
+                                  icon={item.estado ? faCheck : faRotateLeft} 
+                                  className="status-icon" 
+                                />
+                                <span className="estado-text">{item.estado ? 'Activo' : 'Inactivo'}</span>
                               </div>
                             </td>
                             <td className="date-cell">
@@ -1003,6 +874,21 @@ const AgregarContenido = () => {
         isEditing={true}
         user={user}
       />
+
+      {/* Componente de notificación */}
+      {notification && (
+        <div className={`notification-toast notification-${notification.type}`}>
+          <div className="notification-content">
+            <span className="notification-message">{notification.message}</span>
+            <button 
+              className="notification-close"
+              onClick={() => setNotification(null)}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
