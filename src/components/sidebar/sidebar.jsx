@@ -23,15 +23,15 @@ import './sidebar.css';
 const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
   const navigate = useNavigate();
   const { logout } = useAuth();
-  const { notifications, markAllRead, noleidas, canShowNotifications, pushPermission, isPushSupported } = useNotifications();
+  const { notifications, noleidas, markAllRead, formatNotificationMessage, formatNotificationTitle } = useNotifications();
   
-  // Función para contar notificaciones por categoría
-  const getNotificationCountByCategory = (category) => {
-    if (!category) return 0;
+  // Función para contar notificaciones de pedidos
+  const getPedidosNotificationCount = () => {
     return notifications.filter(notif => 
-      notif.tipo === category && !notif.read
+      notif.tipo === 'pedido' && !notif.read
     ).length;
   };
+  
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [activeItem, setActiveItem] = useState('/home');
@@ -45,22 +45,18 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
       id: 'home',
       path: '/home',
       label: 'Inicio',
-      icon: House,
-      hasNotification: false
+      icon: House
     },
     {
       id: 'pedidos',
       path: '/pedidos',
       label: 'Pedidos',
-      icon: ShoppingCart,
-      hasNotification: true,
-      notificationCategory: 'pedido'
+      icon: ShoppingCart
     },    {
       id: 'contenido',
       path: '/AgregarContenido',
       label: 'Contenido',
-      icon: ClipboardList,
-      hasNotification: false
+      icon: ClipboardList
     },
     // {
     //   id: 'inventario',
@@ -81,23 +77,19 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
       id: 'clientes',
       path: '/clientes',
       label: 'Clientes',
-      icon: Users,
-      hasNotification: true,
-      notificationCategory: 'cliente'
+      icon: Users
     },
     {
       id: 'administradores',
       path: '/administradores',
       label: 'Administradores',
-      icon: Settings,
-      hasNotification: false
+      icon: Settings
     },
     {
       id: 'tienda',
       path: 'https://mamamianpizza.com/',
       label: 'Tienda',
       icon: Store,
-      hasNotification: false,
       isExternal: true
     }
   ];
@@ -206,31 +198,113 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeItem === item.path;
-              const notificationCount = item.hasNotification ? getNotificationCountByCategory(item.notificationCategory) : 0;
+              const isPedidos = item.id === 'pedidos';
+              const pedidosCount = isPedidos ? getPedidosNotificationCount() : 0;
               
               return (
                 <li key={item.id} className="sidebar__menu-item">
-                  <button
-                    className={`sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
-                    onClick={() => handleNavigation(item.path, item.isExternal)}
-                    title={isCollapsed ? 
-                      `${item.label}${notificationCount > 0 ? ` (${notificationCount} nuevas)` : ''}` : 
-                      ''
-                    }
-                    aria-label={`${item.label}${notificationCount > 0 ? ` - ${notificationCount} notificaciones nuevas` : ''}`}
-                  >
-                    <div className="sidebar__link-content">
-                      <div className="sidebar__icon-container">
-                        <Icon size={24} className="sidebar__icon" />
-                        {notificationCount > 0 && (
-                          <span className="sidebar__notification-counter">
-                            {notificationCount > 99 ? '99+' : notificationCount}
-                          </span>
+                  <div className="sidebar__menu-item-container">
+                    <button
+                      className={`sidebar__link ${isActive ? 'sidebar__link--active' : ''}`}
+                      onClick={() => handleNavigation(item.path, item.isExternal)}
+                      title={isCollapsed ? item.label : ''}
+                      aria-label={item.label}
+                    >
+                      <div className="sidebar__link-content">
+                        <div className="sidebar__icon-container">
+                          <Icon size={24} className="sidebar__icon" />
+                          {/* Contador sobre el ícono de pedidos cuando está colapsado */}
+                          {isPedidos && isCollapsed && pedidosCount > 0 && (
+                            <span className="sidebar__collapsed-notification-badge">
+                              {pedidosCount > 99 ? '99+' : pedidosCount}
+                            </span>
+                          )}
+                        </div>
+                        {!isCollapsed && <span className="sidebar__label">{item.label}</span>}
+                      </div>
+                    </button>
+                    
+                    {/* Campanita fuera del link cuando no está colapsado */}
+                    {isPedidos && !isCollapsed && (
+                      <div className="sidebar__notification-icon-wrapper" ref={notificationRef}>
+                        <button
+                          className="sidebar__notification-bell-button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleNotifications();
+                          }}
+                          title="Ver notificaciones"
+                        >
+                          <Bell size={22} className="sidebar__notification-icon" />
+                          {pedidosCount > 0 && (
+                            <span className="sidebar__notification-badge">
+                              {pedidosCount > 99 ? '99+' : pedidosCount}
+                            </span>
+                          )}
+                        </button>
+                        
+                        {/* Dropdown de notificaciones */}
+                        {showNotifications && (
+                          <div className="sidebar__notification-dropdown">
+                            <div className="sidebar__notification-header">
+                              <h3>Notificaciones</h3>
+                              {notifications.length > 0 && (
+                                <button 
+                                  className="sidebar__notification-clear"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    markAllRead();
+                                  }}
+                                >
+                                  Marcar todas como leídas
+                                </button>
+                              )}
+                            </div>
+                            <div className="sidebar__notification-list">
+                              {notifications.length === 0 ? (
+                                <div className="sidebar__notification-empty">
+                                  <Bell size={24} />
+                                  <p>No hay notificaciones</p>
+                                </div>
+                              ) : (
+                                notifications.slice(0, 10).map((notification, index) => (
+                                  <div 
+                                    key={`${notification.id_notificacion}-${index}`} 
+                                    className={`sidebar__notification-item ${!notification.read ? 'unread' : ''}`}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      if (notification.tipo === 'pedido') {
+                                        handleNavigation('/pedidos');
+                                        setShowNotifications(false);
+                                      }
+                                    }}
+                                  >
+                                    <div className="sidebar__notification-content">
+                                      <div className="sidebar__notification-title">
+                                        {formatNotificationTitle(notification) || notification.titulo || 'Nueva notificación'}
+                                      </div>
+                                      <div className="sidebar__notification-message">
+                                        {formatNotificationMessage(notification) || notification.mensaje || 'Nueva notificación disponible'}
+                                      </div>
+                                      <div className="sidebar__notification-time">
+                                        {formatNotificationTime(notification.timestamp || notification.fecha_emision)}
+                                      </div>
+                                    </div>
+                                    {notification.icon && (
+                                      React.createElement(notification.icon, { 
+                                        size: 16, 
+                                        className: "sidebar__notification-type-icon" 
+                                      })
+                                    )}
+                                  </div>
+                                ))
+                              )}
+                            </div>
+                          </div>
                         )}
                       </div>
-                      {!isCollapsed && <span className="sidebar__label">{item.label}</span>}
-                    </div>
-                  </button>
+                    )}
+                  </div>
                 </li>
               );
             })}
@@ -238,91 +312,6 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
         </nav>
 
         <div className="sidebar__footer">
-          {/* Notificaciones Bell */}
-          <div className="sidebar__notification-container" ref={notificationRef}>
-            <button 
-              className="sidebar__notification-bell"
-              onClick={toggleNotifications}
-              title={isCollapsed ? 'Notificaciones' : ''}
-              aria-label="Notificaciones"
-            >
-              <Bell size={20} className="sidebar__notification-bell-icon" />
-              {noleidas > 0 && (
-                <span className="sidebar__notification-badge">{noleidas > 99 ? '99+' : noleidas}</span>
-              )}
-              {!isCollapsed && <span>Notificaciones</span>}
-            </button>
-            
-            {/* Indicador de estado de notificaciones push */}
-            {!isCollapsed && (
-              <div className="sidebar__push-status">
-                <div className={`push-status-indicator ${canShowNotifications ? 'enabled' : 'disabled'}`}>
-                  <div className="push-status-dot"></div>
-                  <span className="push-status-text">
-                    {isPushSupported ? 
-                      (canShowNotifications ? 'Push habilitado' : 'Push deshabilitado') :
-                      'Push no soportado'
-                    }
-                  </span>
-                </div>
-              </div>
-            )}
-
-            {showNotifications && (
-              <div className="sidebar__notification-dropdown">
-                <div className="sidebar__notification-header">
-                  <h3>Notificaciones</h3>
-                  {notifications.length > 0 && (
-                    <button 
-                      className="sidebar__notification-clear"
-                      onClick={markAllRead}
-                    >
-                      Marcar todas como leídas
-                    </button>
-                  )}
-                </div>
-                <div className="sidebar__notification-list">
-                  {notifications.length === 0 ? (
-                    <div className="sidebar__notification-empty">
-                      <Bell size={24} />
-                      <p>No hay notificaciones</p>
-                    </div>
-                  ) : (
-                    notifications.slice(0, 10).map((notification, index) => (
-                      <div 
-                        key={`${notification.id_notificacion}-${index}`} 
-                        className="sidebar__notification-item"
-                        onClick={() => {
-                          if (notification.tipo === 'pedido') {
-                            handleNavigation('/pedidos');
-                          }
-                        }}
-                      >
-                        <div className="sidebar__notification-content">
-                          <div className="sidebar__notification-title">
-                            {notification.formattedTitle || notification.titulo || 'Nueva notificación'}
-                          </div>
-                          <div className="sidebar__notification-message">
-                            {notification.formattedMessage || notification.mensaje || 'Nueva notificación disponible'}
-                          </div>
-                          <div className="sidebar__notification-time">
-                            {formatNotificationTime(notification.timestamp || notification.fecha_emision)}
-                          </div>
-                        </div>
-                        {notification.icon && (
-                          React.createElement(notification.icon, { 
-                            size: 16, 
-                            className: "sidebar__notification-icon" 
-                          })
-                        )}
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-
           <button 
             className="sidebar__toggle"
             onClick={toggleSidebar}
