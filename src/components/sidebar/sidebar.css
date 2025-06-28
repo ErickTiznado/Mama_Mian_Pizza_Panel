@@ -870,20 +870,16 @@ margin-left: -10px;
 }
 
 .sidebar__notification-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 100%;
-  margin-left: 12px;
+  position: fixed;
   width: 320px;
   max-height: 400px;
   background: linear-gradient(135deg, #1f2a38 0%, #1a2332 100%);
   border: 1px solid #324357;
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  z-index: 1050;
+  z-index: 9999;
   overflow: hidden;
   backdrop-filter: blur(10px);
-  margin-top: 8px;
 }
 
 .sidebar__notification-header {

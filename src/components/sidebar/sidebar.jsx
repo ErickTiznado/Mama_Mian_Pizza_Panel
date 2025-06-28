@@ -37,6 +37,7 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
   const [activeItem, setActiveItem] = useState('/home');
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const adminRef = useRef();
   const notificationRef = useRef();
 
@@ -126,6 +127,18 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Recalcular posición del dropdown cuando cambie el estado del sidebar
+  useEffect(() => {
+    if (showNotifications && notificationRef.current) {
+      const rect = notificationRef.current.getBoundingClientRect();
+      const sidebarWidth = isCollapsed ? 80 : 280;
+      setDropdownPosition({
+        top: rect.bottom + 8,
+        left: sidebarWidth + 12
+      });
+    }
+  }, [isCollapsed, showNotifications]);
+
   const handleNavigation = (path, isExternal = false) => {
     if (isExternal) {
       window.open(path, '_blank');
@@ -154,6 +167,16 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
   };
 
   const toggleNotifications = () => {
+    if (!showNotifications && notificationRef.current) {
+      // Calcular posición del dropdown
+      const rect = notificationRef.current.getBoundingClientRect();
+      const sidebarWidth = isCollapsed ? 80 : 280;
+      setDropdownPosition({
+        top: rect.bottom + 8,
+        left: sidebarWidth + 12
+      });
+    }
+    
     setShowNotifications(prev => !prev);
     if (!showNotifications && noleidas > 0) {
       markAllRead();
@@ -245,7 +268,13 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
                         
                         {/* Dropdown de notificaciones */}
                         {showNotifications && (
-                          <div className="sidebar__notification-dropdown">
+                          <div 
+                            className="sidebar__notification-dropdown"
+                            style={{
+                              top: `${dropdownPosition.top}px`,
+                              left: `${dropdownPosition.left}px`
+                            }}
+                          >
                             <div className="sidebar__notification-header">
                               <h3>Notificaciones</h3>
                               {notifications.length > 0 && (
