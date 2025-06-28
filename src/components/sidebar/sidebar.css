@@ -872,7 +872,8 @@ margin-left: -10px;
 .sidebar__notification-dropdown {
   position: absolute;
   top: 100%;
-  right: 0;
+  left: 100%;
+  margin-left: 12px;
   width: 320px;
   max-height: 400px;
   background: linear-gradient(135deg, #1f2a38 0%, #1a2332 100%);
@@ -1086,4 +1087,59 @@ margin-left: -10px;
 .sidebar__notification-bell-button:hover .sidebar__notification-icon {
   transform: scale(1.1) rotate(-10deg);
   filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.5));
+}
+
+/* Contador sobre el ícono de pedidos cuando está colapsado */
+.sidebar__collapsed-notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
+  color: white;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border: 2px solid #1f2a38;
+  box-shadow: 0 2px 12px rgba(255, 71, 87, 0.5);
+  animation: pulse 2s infinite;
+  z-index: 10;
+}
+
+/* Ajustes para modo colapsado */
+.sidebar--collapsed .sidebar__menu-item-container {
+  gap: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.sidebar--collapsed .sidebar__link {
+  width: 100%;
+  justify-content: center;
+}
+
+.sidebar--collapsed .sidebar__icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar--collapsed .sidebar__collapsed-notification-badge {
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  font-size: 10px;
+  border-radius: 10px;
+}
+
+.sidebar--collapsed .sidebar__notification-icon-wrapper {
+  display: none;
 }
