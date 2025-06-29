@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../../context/AuthContext';
 import './Login.css';
 
@@ -95,10 +97,11 @@ const Login = () => {
                 onChange={(e) => setContrasena(e.target.value)}
                 required
               />
-              <i
-                className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}
+              <FontAwesomeIcon
+                icon={showPassword ? faEyeSlash : faEye}
                 onClick={togglePassword}
-              ></i>
+                className="password-toggle-icon"
+              />
             </div>
 
             {/* ✅ Restauramos tu mensaje visual de error */}

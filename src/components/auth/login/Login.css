@@ -65,21 +65,24 @@
   position: relative;
 }
 
-.password-container i {
+.password-container .password-toggle-icon {
   position: absolute;
-  top: 80%;
-  right: 10px;
+  top: 50%;
+  right: 15px;
   transform: translateY(-50%);
+  margin-top: 18px;
   cursor: pointer;
   color: #94a3b8;
+  font-size: 16px;
   transition: color 0.2s ease;
+  z-index: 10;
 }
 
-.password-container i:hover {
+.password-container .password-toggle-icon:hover {
   color: #f97316;
 }
 
-.login-error-message {
+.error-message {
   color: #ef4444;
   font-size: 14px;
   margin: 10px 0;
