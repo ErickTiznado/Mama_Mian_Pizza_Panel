@@ -14,10 +14,28 @@
   width: 100%;
 }
 
+.step1-form-group {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #283446;
+  border-radius: 8px;
+  background-color: #0F172A;
+}
+
+.form-group-title {
+  margin: 0 0 1rem 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--orange-accent);
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #283446;
+  text-align: center;
+}
+
 .step1-form-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  width: 100%;
 }
 
 .step1-form-input {
@@ -50,6 +68,30 @@
 .step1-form-input select::placeholder,
 .step1-form-input textarea::placeholder {
   color: #94A3B8;
+}
+
+/* Mejorar los labels principales */
+.step1-form-input label {
+  font-weight: 600;
+  color: #FFFFFF;
+  margin-bottom: 0.5rem;
+  display: block;
+  font-size: 14px;
+}
+
+/* Estilos específicos para campos importantes */
+.step1-form-input:has(#titulo) {
+  border: 2px solid var(--orange-accent);
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: rgba(255, 107, 0, 0.05);
+  margin-bottom: 1.5rem;
+}
+
+.step1-form-input:has(#titulo) label {
+  color: var(--orange-accent);
+  font-size: 16px;
+  font-weight: 700;
 }
 
 /* Estilos para el input de tipo file */
@@ -106,6 +148,24 @@
   padding: 0 0.5rem;
 }
 
+.price-size-container {
+  border: 1px solid #283446;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background-color: #1E293B;
+}
+
+.size-title {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--orange-accent);
+  text-align: center;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #283446;
+}
+
 .prices-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -117,25 +177,107 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  margin-bottom: 12px;
+}
+
+.price-item:last-child {
+  margin-bottom: 0;
+}
+
+.price-item label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 500;
+  color: #FFFFFF;
+  font-size: 14px;
 }
 
 .price-item input {
-  background-color: #1E293B;
+  width: 100%;
+  padding: 8px 12px;
   border: 1px solid #283446;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #1E293B;
   color: #FFFFFF;
-  padding: 0.75rem;
-  border-radius: 0.25rem;
-  font-size: 1rem;
+  transition: border-color 0.2s ease;
 }
 
 .price-item input:focus {
   outline: none;
   border-color: var(--orange-accent);
+  box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.25);
 }
 
-.price-item label {
-  color: #FFFFFF;
+.price-item input[type="url"] {
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.single-price-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Estilos para el separador visual en precio único */
+.single-price-container .price-item:last-child {
+  border-top: 1px solid #283446;
+  padding-top: 12px;
+  margin-top: 4px;
+}
+
+/* Validación visual para URLs */
+.price-item input[type="url"]:invalid:not(:placeholder-shown) {
+  border-color: #dc3545;
+}
+
+.price-item input[type="url"]:valid:not(:placeholder-shown) {
+  border-color: #28a745;
+}
+
+/* Estilos para mostrar URL actual */
+.current-url-display {
+  margin-bottom: 8px;
+  padding: 8px;
+  background-color: #0F172A;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  border-left: 3px solid var(--orange-accent);
+}
+
+.url-label {
+  display: block;
+  font-size: 12px;
+  color: #94A3B8;
+  margin-bottom: 4px;
   font-weight: 500;
+}
+
+.current-url-link {
+  color: var(--orange-accent);
+  text-decoration: none;
+  font-family: monospace;
+  font-size: 13px;
+  word-break: break-all;
+  display: block;
+  transition: color 0.2s ease;
+}
+
+.current-url-link:hover {
+  color: #FF8533;
+  text-decoration: underline;
+}
+
+/* Estilo especial cuando hay URL actual */
+.price-item:has(.current-url-display) input[type="url"] {
+  border-color: #059669;
+  background-color: #064E3B;
+}
+
+.price-item:has(.current-url-display) input[type="url"]:focus {
+  border-color: var(--orange-accent);
+  background-color: #1E293B;
 }
 
 /* Botones */
@@ -275,32 +417,15 @@ input:checked + .slider:before {
 /* Estilos responsivos */
 @media (max-width: 768px) {
   .step1-form-row {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
   
-  .prices-grid {
-    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+  .step1-form-group {
+    padding: 0.75rem;
   }
-}
-
-/* Estilos para vista previa de imagen actual en edición */
-.current-image-preview {
-  margin-bottom: 1rem;
-  padding: 1rem;
-  background-color: #2D3748;
-  border-radius: 0.5rem;
-  border: 1px solid #4A5568;
-}
-
-.current-image-preview span {
-  display: block;
-  color: #A0AEC0;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}
-
-.current-image-thumbnail {
-  border-radius: 0.25rem;
-  border: 1px solid #4A5568;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  .form-group-title {
+    font-size: 14px;
+  }
 }

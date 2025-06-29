@@ -23,41 +23,26 @@ const Step1 = ({ productData, onProductChange, isEditing = false, currentImageUr
   return (
     <div className="step-container">
       <h3>Datos Básicos del Producto</h3>
-        <form className="step1-form">
-        <div className="step1-form-input">
-          <label htmlFor="sesion">Sección *</label>
-          <select
-            id="sesion"
-            name="sesion"
-            value={productData.sesion || ""}
-            onChange={(e) => handleInputChange("sesion", e.target.value)}
-            required
-          >
-            <option value="">Seleccione una sección</option>
-            <option value="Las mas Populares">Las mas Populares</option>
-            <option value="Recomendacion de la casa">Recomendacion de la casa</option>
-            <option value="Banner">Banner</option>
-            <option value="banner final">Banner Final</option>
-            <option value="menu">Menu</option>
-          </select>
-        </div>
+      <form className="step1-form">
+        
+        {/* 1. TÍTULO - Más importante */}
+        {productData.sesion !== "Banner" && productData.sesion !== "banner final" && (
+          <div className="step1-form-input">
+            <label htmlFor="titulo">Título del Producto *</label>
+            <input
+              type="text"
+              id="titulo"
+              name="titulo"
+              value={productData.titulo || ""}
+              onChange={(e) => handleInputChange("titulo", e.target.value)}
+              placeholder="Nombre del producto"
+              required
+            />
+          </div>
+        )}
 
-        <div className="step1-form-input">
-          <label htmlFor="categoria">Categoría *</label>
-          <select
-            id="categoria"
-            name="categoria"
-            value={productData.categoria || ""}
-            onChange={(e) => handleInputChange("categoria", e.target.value)}
-            required
-          >
-            <option value="">Seleccione una categoría</option>
-            <option value="pizza">Pizza</option>
-            <option value="complemento">Complemento</option>
-            <option value="bebida">Bebida</option>
-            <option value="promociones">Promociones</option>
-          </select>
-        </div>        <div className="step1-form-input file-input-container">
+        {/* 2. IMAGEN - Segunda en importancia */}
+        <div className="step1-form-input file-input-container">
           <label htmlFor="imagen">
             {productData.sesion === "Banner" || productData.sesion === "banner final" 
               ? "Imagen o Video del Banner" 
@@ -100,37 +85,64 @@ const Step1 = ({ productData, onProductChange, isEditing = false, currentImageUr
           )}
         </div>
 
-        {/* Solo mostrar título y descripción si NO es Banner o Banner Final */}
+        {/* 3. DESCRIPCIÓN - Tercera en importancia */}
         {productData.sesion !== "Banner" && productData.sesion !== "banner final" && (
-          <>
-            <div className="step1-form-input">
-              <label htmlFor="titulo">Título *</label>
-              <input
-                type="text"
-                id="titulo"
-                name="titulo"
-                value={productData.titulo || ""}
-                onChange={(e) => handleInputChange("titulo", e.target.value)}
-                placeholder="Nombre del producto"
-                required
-              />
-            </div>
-
-            <div className="step1-form-input">
-              <label htmlFor="descripcion">Descripción *</label>
-              <textarea
-                id="descripcion"
-                name="descripcion"
-                value={productData.descripcion || ""}
-                onChange={(e) => handleInputChange("descripcion", e.target.value)}
-                placeholder="Descripción detallada del producto"
-                rows={4}
-                required
-              />
-            </div>
-          </>
+          <div className="step1-form-input">
+            <label htmlFor="descripcion">Descripción del Producto *</label>
+            <textarea
+              id="descripcion"
+              name="descripcion"
+              value={productData.descripcion || ""}
+              onChange={(e) => handleInputChange("descripcion", e.target.value)}
+              placeholder="Descripción detallada del producto"
+              rows={4}
+              required
+            />
+          </div>
         )}
 
+        {/* 4. CATEGORIZACIÓN - Agrupadas juntas */}
+        <div className="step1-form-group">
+          <h4 className="form-group-title">Categorización</h4>
+          <div className="step1-form-row">
+            <div className="step1-form-input">
+              <label htmlFor="sesion">Sección *</label>
+              <select
+                id="sesion"
+                name="sesion"
+                value={productData.sesion || ""}
+                onChange={(e) => handleInputChange("sesion", e.target.value)}
+                required
+              >
+                <option value="">Seleccione una sección</option>
+                <option value="Las mas Populares">Las mas Populares</option>
+                <option value="Recomendacion de la casa">Recomendación de la casa</option>
+                <option value="Banner">Banner</option>
+                <option value="banner final">Banner Final</option>
+                <option value="menu">Menú</option>
+              </select>
+            </div>
+
+            <div className="step1-form-input">
+              <label htmlFor="categoria">Categoría *</label>
+              <select
+                id="categoria"
+                name="categoria"
+                value={productData.categoria || ""}
+                onChange={(e) => handleInputChange("categoria", e.target.value)}
+                required
+              >
+                <option value="">Seleccione una categoría</option>
+                <option value="pizza">Pizza</option>
+                <option value="complemento">Complemento</option>
+                <option value="bebida">Bebida</option>
+                <option value="promociones">Promociones</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* 5. ESTADO - Al final */}
         <div className="step1-form-input">
           <label htmlFor="activo">Estado del Producto</label>
           <div className="switch-container">
@@ -169,10 +181,29 @@ const Step2 = ({ tamanos, productData, onProductChange }) => {
     });
   };
 
+  const handleLinkChange = (id_tamano, value) => {
+    const updatedLinks = {
+      ...productData.links,
+      [id_tamano]: value
+    };
+    
+    onProductChange({
+      ...productData,
+      links: updatedLinks
+    });
+  };
+
   const handleSinglePriceChange = (value) => {
     onProductChange({
       ...productData,
       precio_unico: value
+    });
+  };
+
+  const handleSingleLinkChange = (value) => {
+    onProductChange({
+      ...productData,
+      link_unico: value
     });
   };  // Si es complemento, bebida o promociones, mostrar solo un campo de precio
   if (productData.categoria === "complemento" || productData.categoria === "bebida" || productData.categoria === "promociones") {
@@ -181,7 +212,7 @@ const Step2 = ({ tamanos, productData, onProductChange }) => {
     switch (productData.categoria) {
       case "complemento":
         titulo = "Precio del Complemento";
-        leyenda = "Precio por porción";
+        leyenda = "";
         break;
       case "bebida":
         titulo = "Precio de la Bebida";
@@ -218,6 +249,30 @@ const Step2 = ({ tamanos, productData, onProductChange }) => {
                 required
               />
             </div>
+            <div className="price-item">
+              <label htmlFor="link-unico">URL de Pago</label>
+              {productData.link_unico && (
+                <div className="current-url-display">
+                  <span className="url-label">URL actual:</span>
+                  <a 
+                    href={productData.link_unico} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="current-url-link"
+                  >
+                    {productData.link_unico}
+                  </a>
+                </div>
+              )}
+              <input
+                id="link-unico"
+                type="url"
+                name="link_unico"
+                value={productData.link_unico || ""}
+                onChange={(e) => handleSingleLinkChange(e.target.value)}
+                placeholder="https://ejemplo.com/pago"
+              />
+            </div>
           </div>
         </fieldset>
       </div>
@@ -229,23 +284,49 @@ const Step2 = ({ tamanos, productData, onProductChange }) => {
       <h3>Precios por Tamaño</h3>
       
       <fieldset className="price-fieldset">
-        <legend>Precios por tamaño</legend>
         
         <div className="prices-grid">
           {tamanos.map((tamano) => (
-            <div key={tamano.id_tamano} className="price-item">
-              <label htmlFor={`precio-${tamano.id_tamano}`}>{tamano.nombre}</label>
-              <input
-                id={`precio-${tamano.id_tamano}`}
-                type="number"
-                name={`precios[${tamano.id_tamano}]`}
-                value={productData.precios?.[tamano.id_tamano] || ""}
-                onChange={(e) => handlePriceChange(tamano.id_tamano, e.target.value)}
-                step="0.01"
-                min="0"
-                placeholder="0.00"
-                required
-              />
+            <div key={tamano.id_tamano} className="price-size-container">
+              <h4 className="size-title">{tamano.nombre}</h4>
+              <div className="price-item">
+                <label htmlFor={`precio-${tamano.id_tamano}`}>Precio *</label>
+                <input
+                  id={`precio-${tamano.id_tamano}`}
+                  type="number"
+                  name={`precios[${tamano.id_tamano}]`}
+                  value={productData.precios?.[tamano.id_tamano] || ""}
+                  onChange={(e) => handlePriceChange(tamano.id_tamano, e.target.value)}
+                  step="0.01"
+                  min="0"
+                  placeholder="0.00"
+                  required
+                />
+              </div>
+              <div className="price-item">
+                <label htmlFor={`link-${tamano.id_tamano}`}>URL de Pago</label>
+                {productData.links?.[tamano.id_tamano] && (
+                  <div className="current-url-display">
+                    <span className="url-label">URL actual:</span>
+                    <a 
+                      href={productData.links[tamano.id_tamano]} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="current-url-link"
+                    >
+                      {productData.links[tamano.id_tamano]}
+                    </a>
+                  </div>
+                )}
+                <input
+                  id={`link-${tamano.id_tamano}`}
+                  type="url"
+                  name={`links[${tamano.id_tamano}]`}
+                  value={productData.links?.[tamano.id_tamano] || ""}
+                  onChange={(e) => handleLinkChange(tamano.id_tamano, e.target.value)}
+                  placeholder="https://ejemplo.com/pago"
+                />
+              </div>
             </div>
           ))}
         </div>
@@ -274,7 +355,10 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
     categoria: "",
     imagen: null,
     precios: {},
-    precio_unico: "",    activo: 1
+    precio_unico: "",
+    links: {},
+    link_unico: "",
+    activo: 1
   });
 
   // Verificar autenticación al mostrar el modal
@@ -290,9 +374,12 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
     if (isEditing && editingProduct && show) {
       // Convertir los datos del producto para edición
       const preciosObj = {};
+      const linksObj = {};
       if (editingProduct.opciones) {
         editingProduct.opciones.forEach(opcion => {
           preciosObj[opcion.tamanoId] = opcion.precio.toString();
+          // Usar url_pago que viene del API getMenu
+          linksObj[opcion.tamanoId] = opcion.url_pago || "";
         });
       }
 
@@ -303,7 +390,10 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
         categoria: editingProduct.categoria || editingProduct.tipo || "",
         imagen: null, // Para edición, se mantendrá la imagen actual si no se cambia
         precios: preciosObj,
-        activo: editingProduct.estado ? 1 : 0
+        links: linksObj,
+        precio_unico: editingProduct.precio_unico || "",
+        link_unico: editingProduct.url_pago_unico || editingProduct.link_unico || "",
+        activo: editingProduct.activo ? 1 : 0
       });
     } else if (!isEditing) {
       resetForm();
@@ -384,6 +474,9 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
       categoria: "",
       imagen: null,
       precios: {},
+      precio_unico: "",
+      links: {},
+      link_unico: "",
       activo: 1
     });
     setError(null);
@@ -419,6 +512,21 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
 
   // Función para validar los precios
   const validatePrices = () => {
+    // Si es Banner o Banner Final, no necesita validación de precios
+    if (productData.sesion === "Banner" || productData.sesion === "banner final") {
+      return true;
+    }
+    
+    // Si es complemento, bebida o promociones, validar precio único
+    if (productData.categoria === "complemento" || productData.categoria === "bebida" || productData.categoria === "promociones") {
+      if (!productData.precio_unico || productData.precio_unico <= 0) {
+        console.error('Precio requerido - Por favor ingrese un precio válido para el producto');
+        return false;
+      }
+      return true;
+    }
+    
+    // Para pizzas, validar precios por tamaño
     let valid = true;
     let missingPrices = [];
     
@@ -431,12 +539,7 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
     });
     
     if (!valid) {
-      notificationContext.addNotification({
-        type: 'error',
-        title: 'Precios incompletos',
-        message: `Por favor ingrese precios válidos para: ${missingPrices.join(', ')}`,
-        duration: 5000
-      });
+      console.error(`Precios incompletos - Por favor ingrese precios válidos para: ${missingPrices.join(', ')}`);
     }
     
     return valid;
@@ -485,6 +588,17 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
       
       // Agregar precios al FormData
       formData.append('precios', JSON.stringify(productData.precios));
+      
+      // Agregar links al FormData (como url_pago para el backend)
+      formData.append('url_pagos', JSON.stringify(productData.links));
+      
+      // Agregar precio único y link único si existen
+      if (productData.precio_unico) {
+        formData.append('precio_unico', productData.precio_unico);
+      }
+      if (productData.link_unico) {
+        formData.append('url_pago_unico', productData.link_unico);
+      }
         const url = isEditing 
         ? `${API_URL}/content/updateContent/${editingProduct.id}` 
         : `${API_URL}/content/submit`;
