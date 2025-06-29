@@ -14,8 +14,13 @@ import OrderDetailModal from './components/OrderDetailModal';
 // Importar el nuevo componente OrderTabs en lugar de OrderFilters
 import OrderTabs from './components/OrderTabs';
 import NewOrderModal from './components/NewOrderModal';
+import CustomAlert from '../common/CustomAlert';
+import { useCustomAlert } from '../../hooks/useCustomAlert';
 
 const OrderManager = () => {
+  // Custom Alert Hook
+  const { showAlert, alertConfig, confirm } = useCustomAlert();
+  
   // Estados principales
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -121,15 +126,23 @@ const OrderManager = () => {
 
   // Función para cancelar un pedido
   const handleCancelOrder = async (orderId) => {
-    if (window.confirm("¿Estás seguro que deseas cancelar este pedido?")) {
-      try {
-        await updateOrderStatus(orderId, "cancelado");
-      } catch (err) {
-        console.error("Error canceling order:", err);
+    confirm({
+      type: 'warning',
+      title: 'Cancelar Pedido',
+      message: '¿Estás seguro que deseas cancelar este pedido?',
+      confirmText: 'Sí, cancelar',
+      cancelText: 'No, mantener',
+      onConfirm: async () => {
+        try {
+          await updateOrderStatus(orderId, "cancelado");
+        } catch (err) {
+          console.error("Error canceling order:", err);
+        }
       }
-    }
+    });
   };
 
+  // Función para ver detalles de un pedido
   // Función para ver detalles de un pedido
   const handleViewDetails = (order) => {
     setSelectedOrder(order);
@@ -169,10 +182,17 @@ const OrderManager = () => {
 
   // Función para cambiar el estado de un pedido
   const changeOrderStatus = (orderId, newStatus) => {
-  if (window.confirm(`¿Cambiar estado del pedido a ${getStatusName(newStatus)}?`)) {
-    updateOrderStatus(orderId, newStatus);
-  }
-};
+    confirm({
+      type: 'confirm',
+      title: 'Cambiar Estado',
+      message: `¿Cambiar estado del pedido a ${getStatusName(newStatus)}?`,
+      confirmText: 'Sí, cambiar',
+      cancelText: 'Cancelar',
+      onConfirm: () => {
+        updateOrderStatus(orderId, newStatus);
+      }
+    });
+  };
   // Función para obtener el nombre del estado
   const getStatusName = (status) => {
     const statusMap = {
@@ -465,6 +485,18 @@ const OrderManager = () => {
         getStatusName={getStatusName}
       />
       <NewOrderModal show={showNewOrderModal} onClose={closeModalNewOrder} />
+
+      {/* Custom Alert Modal */}
+      <CustomAlert 
+        show={showAlert}
+        type={alertConfig.type}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        confirmText={alertConfig.confirmText}
+        cancelText={alertConfig.cancelText}
+        onConfirm={alertConfig.onConfirm}
+        onCancel={alertConfig.onCancel}
+      />
 
     </div>
   );
