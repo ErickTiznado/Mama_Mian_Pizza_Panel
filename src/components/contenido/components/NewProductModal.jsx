@@ -181,29 +181,10 @@ const Step2 = ({ tamanos, productData, onProductChange }) => {
     });
   };
 
-  const handleLinkChange = (id_tamano, value) => {
-    const updatedLinks = {
-      ...productData.links,
-      [id_tamano]: value
-    };
-    
-    onProductChange({
-      ...productData,
-      links: updatedLinks
-    });
-  };
-
   const handleSinglePriceChange = (value) => {
     onProductChange({
       ...productData,
       precio_unico: value
-    });
-  };
-
-  const handleSingleLinkChange = (value) => {
-    onProductChange({
-      ...productData,
-      link_unico: value
     });
   };  // Si es complemento, bebida o promociones, mostrar solo un campo de precio
   if (productData.categoria === "complemento" || productData.categoria === "bebida" || productData.categoria === "promociones") {
@@ -249,30 +230,6 @@ const Step2 = ({ tamanos, productData, onProductChange }) => {
                 required
               />
             </div>
-            <div className="price-item">
-              <label htmlFor="link-unico">URL de Pago</label>
-              {productData.link_unico && (
-                <div className="current-url-display">
-                  <span className="url-label">URL actual:</span>
-                  <a 
-                    href={productData.link_unico} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="current-url-link"
-                  >
-                    {productData.link_unico}
-                  </a>
-                </div>
-              )}
-              <input
-                id="link-unico"
-                type="url"
-                name="link_unico"
-                value={productData.link_unico || ""}
-                onChange={(e) => handleSingleLinkChange(e.target.value)}
-                placeholder="https://ejemplo.com/pago"
-              />
-            </div>
           </div>
         </fieldset>
       </div>
@@ -301,30 +258,6 @@ const Step2 = ({ tamanos, productData, onProductChange }) => {
                   min="0"
                   placeholder="0.00"
                   required
-                />
-              </div>
-              <div className="price-item">
-                <label htmlFor={`link-${tamano.id_tamano}`}>URL de Pago</label>
-                {productData.links?.[tamano.id_tamano] && (
-                  <div className="current-url-display">
-                    <span className="url-label">URL actual:</span>
-                    <a 
-                      href={productData.links[tamano.id_tamano]} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="current-url-link"
-                    >
-                      {productData.links[tamano.id_tamano]}
-                    </a>
-                  </div>
-                )}
-                <input
-                  id={`link-${tamano.id_tamano}`}
-                  type="url"
-                  name={`links[${tamano.id_tamano}]`}
-                  value={productData.links?.[tamano.id_tamano] || ""}
-                  onChange={(e) => handleLinkChange(tamano.id_tamano, e.target.value)}
-                  placeholder="https://ejemplo.com/pago"
                 />
               </div>
             </div>
@@ -356,8 +289,6 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
     imagen: null,
     precios: {},
     precio_unico: "",
-    links: {},
-    link_unico: "",
     activo: 1
   });
 
@@ -374,12 +305,9 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
     if (isEditing && editingProduct && show) {
       // Convertir los datos del producto para edición
       const preciosObj = {};
-      const linksObj = {};
       if (editingProduct.opciones) {
         editingProduct.opciones.forEach(opcion => {
           preciosObj[opcion.tamanoId] = opcion.precio.toString();
-          // Usar url_pago que viene del API getMenu
-          linksObj[opcion.tamanoId] = opcion.url_pago || "";
         });
       }
 
@@ -390,9 +318,7 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
         categoria: editingProduct.categoria || editingProduct.tipo || "",
         imagen: null, // Para edición, se mantendrá la imagen actual si no se cambia
         precios: preciosObj,
-        links: linksObj,
         precio_unico: editingProduct.precio_unico || "",
-        link_unico: editingProduct.url_pago_unico || editingProduct.link_unico || "",
         activo: editingProduct.activo ? 1 : 0
       });
     } else if (!isEditing) {
@@ -475,8 +401,6 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
       imagen: null,
       precios: {},
       precio_unico: "",
-      links: {},
-      link_unico: "",
       activo: 1
     });
     setError(null);
@@ -589,15 +513,9 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
       // Agregar precios al FormData
       formData.append('precios', JSON.stringify(productData.precios));
       
-      // Agregar links al FormData (como url_pago para el backend)
-      formData.append('url_pagos', JSON.stringify(productData.links));
-      
-      // Agregar precio único y link único si existen
+      // Agregar precio único si existe
       if (productData.precio_unico) {
         formData.append('precio_unico', productData.precio_unico);
-      }
-      if (productData.link_unico) {
-        formData.append('url_pago_unico', productData.link_unico);
       }
         const url = isEditing 
         ? `${API_URL}/content/updateContent/${editingProduct.id}` 
@@ -670,10 +588,34 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
   
   if (!show) return null;
   
+  // Función para obtener el icono y título del paso actual
+  const getStepInfo = (step) => {
+    switch (step) {
+      case 1:
+        return {
+          icon: productData.sesion === "Banner" || productData.sesion === "banner final" ? "🎨" : "📝",
+          title: productData.sesion === "Banner" || productData.sesion === "banner final" ? "Configuración del Banner" : "Información del Producto"
+        };
+      case 2:
+        return {
+          icon: "💰",
+          title: "Configuración de Precios"
+        };
+      default:
+        return { icon: "📋", title: "Configuración" };
+    }
+  };
+
+  const currentStepInfo = getStepInfo(currentStep);
+
   return (
     <div className="new-order-modal new-product-modal">      <header className="new__order-modal-header">
         <div className="new__order-modal-header-title">
-          <h2>{isEditing ? 'Editar Producto' : 'Nuevo Producto'}</h2>
+          <h2>
+            <span className="step-icon">{currentStepInfo.icon}</span>
+            {isEditing ? 'Editar Producto' : 'Nuevo Producto'}
+            <span className="step-subtitle">- {currentStepInfo.title}</span>
+          </h2>
           <button
             onClick={() => {
               onClose();
@@ -686,7 +628,7 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
         </div>
         <div className="new__order-modal-header-steps">
           <span className="nor-step-progress-text">
-            Paso {currentStep} de {totalSteps}
+            Paso {currentStep} de {totalSteps} - {currentStepInfo.title}
           </span>
           <div className="nor-step-progress-bar-container">
             <div
@@ -742,25 +684,31 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
         <div className="new__order-modal-footer-buttons">
           {currentStep > 1 && (
             <button
-              className="nor-button"
+              className="nor-button nor-button-secondary"
               onClick={prevStep}
               disabled={isLoading}
             >
+              <ArrowLeft size={18} style={{ marginRight: '0.5rem' }} />
               Anterior
             </button>
-          )}          {currentStep < totalSteps ? (
+          )}
+          
+          {currentStep < totalSteps ? (
             <button
-              className="nor-button"
+              className="nor-button nor-button-primary"
               onClick={nextStep}
               disabled={isLoading || !productData.titulo || !productData.descripcion || !productData.sesion || !productData.categoria || (!isEditing && !productData.imagen)}
             >
               Siguiente
+              <span style={{ marginLeft: '0.5rem' }}>→</span>
             </button>
-          ) : (            <button
-              className="nor-button"
+          ) : (
+            <button
+              className="nor-button nor-button-success"
               onClick={handleSubmit}
               disabled={isLoading}
             >
+              <span style={{ marginRight: '0.5rem' }}>✓</span>
               {isEditing ? 'Actualizar Producto' : 'Crear Producto'}
             </button>
           )}
