@@ -39,8 +39,14 @@ export const AuthProvider = ({ children }) => {
     const checkAuthStatus = () => {
       try {
         const token = localStorage.getItem('authToken');
-        const userData = localStorage.getItem('userData');        if (token && userData) {
+        const userData = localStorage.getItem('userData');
+        
+        console.log('🔧 [AUTH DEBUG] Token encontrado:', !!token);
+        console.log('🔧 [AUTH DEBUG] UserData encontrado:', !!userData);
+
+        if (token && userData) {
           const parsedUserData = JSON.parse(userData);
+          console.log('🔧 [AUTH DEBUG] UserData parseado:', parsedUserData);
           
           // 🔧 [TEMP FIX] Asegurar que el usuario tenga un rol
           if (!parsedUserData.rol) {
@@ -50,13 +56,19 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('userData', JSON.stringify(parsedUserData));
           }
           
+          console.log('🔧 [AUTH DEBUG] Rol final del usuario:', parsedUserData.rol);
+          
           if (isTokenValid(token)) {
             setIsAuthenticated(true);
             setUser(parsedUserData);
+            console.log('🔧 [AUTH DEBUG] Usuario autenticado exitosamente');
           } else {
+            console.log('🔧 [AUTH DEBUG] Token inválido, limpiando localStorage');
             localStorage.removeItem('authToken');
             localStorage.removeItem('userData');
           }
+        } else {
+          console.log('🔧 [AUTH DEBUG] No hay token o userData en localStorage');
         }
       } catch (error) {
         console.error('Error al verificar el estado de autenticación:', error);
@@ -68,44 +80,88 @@ export const AuthProvider = ({ children }) => {
     };
 
     checkAuthStatus();
-  }, []);  // 🔧 [TEMP FIX] Función para obtener o asignar el rol del usuario
+  }, []);  // 🔧 Función para obtener o asignar el rol del usuario
   const getUserRole = (userData) => {
-    // Si el usuario ya tiene rol, devolverlo
+    console.log('❌ [GETUSRROLE] === FUNCIÓN getUserRole EJECUTADA ===');
+    console.log('❌ [GETUSRROLE] Esto NO debería ejecutarse si el backend envía rol');
+    console.log('❌ [GETUSRROLE] userData completa:', JSON.stringify(userData, null, 2));
+    console.log('❌ [GETUSRROLE] userData.rol:', userData.rol);
+    
+    // Si el usuario ya tiene rol, devolverlo tal como viene del backend
     if (userData?.rol) {
+      console.log('✅ [GETUSRROLE] Usuario tiene rol del backend:', userData.rol);
       return userData.rol;
     }
     
-    // Si no tiene rol, verificar si es un admin basado en el correo o id_admin
-    if (userData?.id_admin || userData?.correo?.includes('admin') || userData?.correo === 'tiznadoerick3@gmail.com') {
-      console.log('🔧 [TEMP FIX] Asignando rol "admin" basado en criterios');
+    // Esto ya NO debería pasar porque el backend envía el rol
+    console.error('❌ [GETUSRROLE] Usuario SIN rol - investigar por qué llegó aquí');
+    console.error('❌ [GETUSRROLE] Verificar que el login esté usando los campos correctos');
+    console.log('❌ [GETUSRROLE] userData sin rol:', JSON.stringify(userData, null, 2));
+    
+    // Fallback de emergencia
+    if (userData?.id_admin) {
+      console.warn('🔧 [GETUSRROLE] FALLBACK DE EMERGENCIA: Asignando rol "admin"');
       return 'admin';
     }
     
-    // Rol por defecto
-    console.log('🔧 [TEMP FIX] Asignando rol "user" por defecto');
+    console.error('❌ [GETUSRROLE] No se puede determinar el rol del usuario');
+    console.error('❌ [GETUSRROLE] Devolviendo "user" como último recurso');
     return 'user';
   };
 
   // 🔧 [TEMP FIX] Función para verificar permisos de admin
   const isUserAdmin = (userData) => {
     const role = getUserRole(userData);
-    const isAdmin = role === 'admin' || role === 'administrador';
+    const isAdmin = role === 'admin' || role === 'administrador' || role === 'super_admin';
     console.log('🔧 [TEMP FIX] isUserAdmin check - role:', role, 'isAdmin:', isAdmin);
     return isAdmin;
   };  const login = (userData, token) => {
     try {
-      //  [TEMP FIX] Asegurar que el usuario tenga un rol
-      if (!userData.rol) {
-        userData.rol = getUserRole(userData);
-        console.log('🔧 [AUTH] Rol asignado automáticamente:', userData.rol);
+      console.log('🔧 [AUTH DEBUG] === FUNCIÓN LOGIN EJECUTADA ===');
+      console.log('🔧 [AUTH DEBUG] userData recibido:', JSON.stringify(userData, null, 2));
+      console.log('🔧 [AUTH DEBUG] userData.rol recibido:', userData.rol);
+      console.log('🔧 [AUTH DEBUG] typeof userData.rol:', typeof userData.rol);
+      console.log('🔧 [AUTH DEBUG] userData.rol === undefined:', userData.rol === undefined);
+      console.log('🔧 [AUTH DEBUG] userData.rol === null:', userData.rol === null);
+      console.log('🔧 [AUTH DEBUG] userData.rol === "":', userData.rol === '');
+      console.log('🔧 [AUTH DEBUG] !userData.rol:', !userData.rol);
+      
+      // FORZAR el uso del rol que viene del backend sin ninguna modificación
+      let finalUserData = { ...userData };
+      
+      // CRUCIAL: Solo llamar getUserRole si el rol está completamente ausente
+      if (userData.rol === undefined || userData.rol === null || userData.rol === '') {
+        console.error('❌ [AUTH ERROR] Rol completamente ausente, usando fallback');
+        finalUserData.rol = getUserRole(userData);
+      } else {
+        console.log('✅ [AUTH SUCCESS] Usando rol del backend SIN modificaciones:', userData.rol);
+        finalUserData.rol = userData.rol; // Asignación directa y explícita
       }
       
+      console.log('🔧 [AUTH DEBUG] === VERIFICACIÓN ANTES DE GUARDAR ===');
+      console.log('🔧 [AUTH DEBUG] finalUserData.rol:', finalUserData.rol);
+      console.log('🔧 [AUTH DEBUG] typeof finalUserData.rol:', typeof finalUserData.rol);
+      
+      // Guardar en localStorage
+      const dataToSave = JSON.stringify(finalUserData);
+      console.log('🔧 [AUTH DEBUG] Datos a guardar en localStorage:', dataToSave);
+      
       localStorage.setItem('authToken', token);
-      localStorage.setItem('userData', JSON.stringify(userData));
+      localStorage.setItem('userData', dataToSave);
+      
+      // Actualizar estado de React
       setIsAuthenticated(true);
-      setUser(userData);
+      setUser(finalUserData);
+      
+      console.log('🔧 [AUTH DEBUG] === VERIFICACIÓN INMEDIATA POST-GUARDADO ===');
+      const savedData = localStorage.getItem('userData');
+      const parsedSavedData = JSON.parse(savedData);
+      console.log('🔧 [AUTH DEBUG] localStorage userData raw:', savedData);
+      console.log('🔧 [AUTH DEBUG] localStorage userData parsed:', parsedSavedData);
+      console.log('🔧 [AUTH DEBUG] localStorage rol:', parsedSavedData.rol);
+      
     } catch (error) {
-      console.error('Error al guardar los datos de autenticación:', error);
+      console.error('❌ [AUTH ERROR] Error al guardar los datos de autenticación:', error);
     }
   };
   const logout = () => {

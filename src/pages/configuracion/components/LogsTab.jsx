@@ -194,7 +194,7 @@ function LogsTab({
         <h1 className="Logs_main-title">Logs del Sistema</h1>
         <div className="Logs_top-controls">
           <button className="Logs_btn-refresh" onClick={() => cargarLogs(currentPage)}>
-            <RotateCcw size={16} />
+            <RotateCcw size={18} />
             Actualizar
           </button>
         </div>
@@ -202,7 +202,7 @@ function LogsTab({
 
       <div className="Logs_contenido-container">        {/* Search bar similar a AgregarContenido */}
         <div className="Logs_search-bar-container">
-          <Search className="Logs_search-icon" size={16} />
+          <Search className="Logs_search-icon" size={18} />
           <input
             type="text"
             className="Logs_search-input"

@@ -1,4 +1,53 @@
 /* =========================================
+   CORRECCIÓN DE ICONOS ESPECÍFICA
+   ========================================= */
+
+/* Panel icon con clase security */
+.panel-password-change .panel-icon.security {
+  color: var(--password-primary-color) !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+}
+
+/* Iconos en labels de formulario de contraseña */
+.panel-password-change .form-label svg {
+  color: var(--password-primary-color) !important;
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+}
+
+/* Iconos en botones de contraseña */
+.panel-password-change .btn-primary svg,
+.panel-password-change .btn-secondary svg {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+}
+
+/* Iconos de toggle de contraseña */
+.panel-password-change .password-toggle svg {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+}
+
+/* Iconos de validación y alertas */
+.panel-password-change .password-strength svg,
+.panel-password-change .validation-error svg,
+.panel-password-change .alert-icon {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+}
+
+/* =========================================
    CAMBIAR CONTRASEÑA - CSS ESPECÍFICO
    ========================================= */
 

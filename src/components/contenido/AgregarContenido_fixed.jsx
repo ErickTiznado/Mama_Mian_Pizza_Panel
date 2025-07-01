@@ -80,7 +80,7 @@ const AgregarContenido = () => {
       }
       
       // Verificar que el usuario tenga permisos administrativos
-      if (user.rol !== 'admin' && user.role !== 'admin') {
+      if (user.rol !== 'admin' && user.role !== 'admin' && user.rol !== 'super_admin' && user.role !== 'super_admin') {
         setAuthError('No tiene permisos para acceder a esta función');
         setTimeout(() => {
           navigate('/');

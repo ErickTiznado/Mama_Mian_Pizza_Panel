@@ -9,7 +9,7 @@ function SesionAdmin({ cerrarSesion }) {
     <div className="panel-session modern-card">
       <div className="panel-header">
         <div className="panel-title-section">
-          <LogOut size={24} className="panel-icon logout" />
+          <LogOut size={24} className=" logout" />
           <div>
             <h2 className="panel-title">Control de Sesión</h2>
             <p className="panel-subtitle">Administra tu sesión de forma segura</p>
@@ -30,7 +30,7 @@ function SesionAdmin({ cerrarSesion }) {
             className="btn-logout-primary"
             onClick={cerrarSesion}
           >
-            <LogOut size={18} />
+            <LogOut size={20} />
             <span>Cerrar Sesión</span>
           </button>
         </div>

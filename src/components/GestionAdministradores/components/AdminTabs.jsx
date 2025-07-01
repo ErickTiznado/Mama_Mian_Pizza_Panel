@@ -18,13 +18,13 @@ const AdminTabs = ({ activeFilter, handleFilterChange, setPaginaActual, counts =
     },
     {
       key: "super_admin",
-      label: "Super Admin",
+      label: "Dueños",
       icon: <FontAwesomeIcon icon={faUserShield} />,
       color: "#dc2626"
     },
     {
       key: "admin",
-      label: "Administrador",
+      label: "Administradores",
       icon: <FontAwesomeIcon icon={faUserTie} />,
       color: "#2563eb"
     },

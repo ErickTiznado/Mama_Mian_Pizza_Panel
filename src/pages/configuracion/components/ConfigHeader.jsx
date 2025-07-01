@@ -35,7 +35,7 @@ function ConfigHeader({
             <div className="admin-info">
               <span className="admin-name">{adminData.nombre}</span>
               <span className="admin-role">
-                {adminData.rol === 'super_admin' ? 'Super Administrador' : 'Administrador'}
+                {adminData.rol === 'super_admin' ? 'Dueño' : 'Administrador'}
               </span>
             </div>
           </div>

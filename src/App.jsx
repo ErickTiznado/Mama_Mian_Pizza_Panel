@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/navbar/nabvar'
 import Sidebar from './components/sidebar/sidebar';
 import PushNotificationBanner from './components/common/PushNotificationBanner';
+import AuthDebugger from './components/common/AuthDebugger'; // Debug temporal
 import Login from './components/auth/login/Login1';     // Asegúrate que esté bien el nombre del archivo
 import Register from './components/auth/register/Register'; // Ruta correcta al componente Register
 import Recuperar from './components/auth/restore/Recuperar'; // Ruta correcta al componente Recuperar
@@ -39,7 +40,8 @@ function App() {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);  return (
     <AuthProvider>
-        <BrowserRouter>
+      <AuthDebugger /> {/* Debug temporal para diagnosticar problemas */}
+      <BrowserRouter>
           <Routes>
             {/* Ruta principal redirige al login */}
             <Route path="/" element={<Navigate to="/login" />} />

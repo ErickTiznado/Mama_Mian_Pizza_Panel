@@ -255,7 +255,7 @@ const GestionAdministradores = () => {
 
   const getRolDisplayName = (rol) => {
     switch(rol) {
-      case 'super_admin': return 'Super Admin';
+      case 'super_admin': return 'Dueño';
       case 'admin': return 'Administrador';
       case 'moderador': return 'Moderador';
       case 'empleado': return 'Empleado';

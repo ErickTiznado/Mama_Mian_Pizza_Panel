@@ -7,7 +7,6 @@ import {
   Lock,
   Activity,
   FileText,
-  DatabaseBackup,
   Edit,
   X,
   Mail,
@@ -15,13 +14,11 @@ import {
   Calendar,
   Clock,
   RefreshCw,
-  Download,
-  Bell
+  Download
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import AdminService from '../../services/AdminService';
 import LogsService from '../../services/LogsService';
-import PushNotificationSettings from '../../components/common/PushNotificationSettings';
 import "./configuracion.css";
 
 // Importaciones de los componentes modularizados
@@ -30,7 +27,6 @@ import LogsTab from './components/LogsTab';
 import ConfigHeader from './components/ConfigHeader';
 import TabNavigation from './components/TabNavigation';
 import CuentaTab from './components/CuentaTab';
-import BackupTab from './components/BackupTab';
 
 function ConfiguracionAdmin() {  // Hook de autenticación
   const { user, isAuthenticated, logout, loading: authLoading, getToken, checkAuth } = useAuth();
@@ -70,7 +66,6 @@ function ConfiguracionAdmin() {  // Hook de autenticación
   const [busqueda, setBusqueda] = useState("");
   const [tipo, setTipo] = useState("");
   const [estado, setEstado] = useState("");
-  const [backupData, setBackupData] = useState([]);
   
   // Estados para logs reales
   const [logs, setLogs] = useState([]);
@@ -466,45 +461,6 @@ function ConfiguracionAdmin() {  // Hook de autenticación
       },
       // Más entradas de historial...
     ]);
-
-    // Simulamos datos de backup (en un caso real, vendría de una API)
-    setBackupData([
-      {
-        id: 1,
-        nombre: "backup_mamapizza_completo_20230615.sql",
-        descripcion: "Backup completo de la base de datos",
-        tipo: "Completo", 
-        tamaño: "45.7 MB",
-        fecha: "15/06/2023 23:00",
-        estado: "Completado"
-      },
-      {
-        id: 2,
-        nombre: "backup_mamapizza_pedidos_20230614.sql",
-        descripcion: "Backup de la tabla de pedidos",
-        tipo: "Parcial",
-        tamaño: "12.3 MB",
-        fecha: "14/06/2023 23:00",
-        estado: "Completado"
-      },
-      {
-        id: 3,
-        nombre: "backup_mamapizza_clientes_20230613.sql",
-        descripcion: "Backup de la información de clientes",
-        tipo: "Parcial",
-        tamaño: "8.5 MB",
-        fecha: "13/06/2023 23:00",
-        estado: "Completado"
-      },
-      {
-        id: 4,
-        nombre: "backup_mamapizza_completo_20230610.sql",
-        descripcion: "Backup completo de la base de datos",
-        tipo: "Completo",
-        tamaño: "44.2 MB",
-        fecha: "10/06/2023 23:00",
-        estado: "Completado"
-      }    ]);
     
   }, [authLoading, isAuthenticated]);
   
@@ -551,17 +507,15 @@ function ConfiguracionAdmin() {  // Hook de autenticación
             <div className="tabs">
               {[
                 { key: "cuenta", label: "Mi Cuenta", icon: User, description: "Perfil y seguridad" },
-                { key: "notificaciones", label: "Notificaciones", icon: Bell, description: "Configurar notificaciones push" },
                 { key: "historial", label: "Historial", icon: Activity, description: "Actividad reciente" },
                 { key: "logs", label: "Logs del Sistema", icon: FileText, description: "Logs detallados" },
-                { key: "backup", label: "Backups", icon: DatabaseBackup, description: "Respaldos del sistema" },
               ].map(({ key, label, icon: Icon, description }) => (
                 <button
                   key={key}
                   className={`tab ${activeTab === key ? "active" : ""}`}
                   onClick={() => setActiveTab(key)}
                 >
-                  <Icon size={18} className="tab-icon" />
+                  <Icon size={24} className="tab-icon" />
                   <div className="tab-content">
                     <span className="tab-label">{label}</span>
                     <span className="tab-description">{description}</span>
@@ -609,13 +563,6 @@ function ConfiguracionAdmin() {  // Hook de autenticación
               />
             )}
             
-            {/* TAB: NOTIFICACIONES */}
-            {activeTab === "notificaciones" && (
-              <div className="config-panel">
-                <PushNotificationSettings />
-              </div>
-            )}
-            
             {/* TAB: HISTORIAL */}
             {activeTab === "historial" && (
               <HistorialTab
@@ -656,12 +603,6 @@ function ConfiguracionAdmin() {  // Hook de autenticación
                 totalLogs={totalLogs}
                 totalPages={totalPages}
                 cambiarPagina={cambiarPagina}
-              />
-            )}
-              {/* TAB: BACKUP */}
-            {activeTab === "backup" && (
-              <BackupTab
-                backupData={backupData}
               />
             )}
           </div>

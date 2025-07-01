@@ -23,7 +23,7 @@ function TabNavigation({ activeTab, setActiveTab }) {
             className={`tab ${activeTab === key ? "active" : ""}`}
             onClick={() => setActiveTab(key)}
           >
-            <Icon size={18} className="tab-icon" />
+            <Icon size={24} className="tab-icon" />
             <div className="tab-content">
               <span className="tab-label">{label}</span>
               <span className="tab-description">{description}</span>

@@ -61,7 +61,7 @@ function CuentaTab({
           </div>
           <div className="cuenta-header-status">
             <div className="admin-badge">
-              <span className="admin-role">{adminData?.rol === 'super_admin' ? 'Super Admin' : 'Administrador'}</span>
+              <span className="admin-role">{adminData?.rol === 'super_admin' ? 'Dueño' : 'Administrador'}</span>
             </div>
           </div>
         </div>

@@ -50,7 +50,7 @@ function CambiarContrasena({
           </div>
         </div>
         <div className="security-badge">
-          <Shield size={16} />
+          <Shield size={18} />
           <span>Cifrado 256-bit</span>
         </div>
       </div>
@@ -83,7 +83,7 @@ function CambiarContrasena({
         <div className="password-fields">
           <div className="form-group">
             <label className="form-label">
-              <Lock size={16} />
+              <Lock size={18} />
               Contraseña actual
             </label>
             <div className="password-input-wrapper">
@@ -106,7 +106,7 @@ function CambiarContrasena({
 
           <div className="form-group">
             <label className="form-label">
-              <Lock size={16} />
+              <Lock size={18} />
               Nueva contraseña
             </label>
             <div className="password-input-wrapper">
@@ -135,7 +135,7 @@ function CambiarContrasena({
 
           <div className="form-group">
             <label className="form-label">
-              <Lock size={16} />
+              <Lock size={18} />
               Confirmar nueva contraseña
             </label>
             <div className="password-input-wrapper">
@@ -169,7 +169,7 @@ function CambiarContrasena({
             onClick={limpiarCampos}
             disabled={loading}
           >
-            <RefreshCw size={16} />
+            <RefreshCw size={18} />
             Limpiar
           </button>
           
@@ -180,12 +180,12 @@ function CambiarContrasena({
           >
             {loading ? (
               <>
-                <Loader size={16} className="loading-spinner" />
+                <Loader size={18} className="loading-spinner" />
                 Cambiando...
               </>
             ) : (
               <>
-                <Save size={16} />
+                <Save size={18} />
                 Cambiar Contraseña
               </>
             )}

@@ -19,7 +19,7 @@ const AdminForm = ({ adminData = null, onSubmit, onCancel, isEditing = false }) 
 
   // Roles disponibles
   const roles = [
-    { value: 'super_admin', label: 'Super Administrador' },
+    { value: 'super_admin', label: 'Dueño' },
     { value: 'admin', label: 'Administrador' },
     { value: 'moderador', label: 'Moderador' }
   ];

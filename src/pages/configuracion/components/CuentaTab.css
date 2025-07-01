@@ -459,6 +459,70 @@
   }
 }
 
+/* =======================================
+   CORRECCIÓN DE ICONOS ESPECÍFICA
+   ======================================= */
+
+/* Asegurar que panel-icon tenga el tamaño correcto */
+.cuenta-tab-wrapper .panel-icon {
+  color: var(--cuenta-primary-color) !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+}
+
+.cuenta-tab-wrapper .panel-icon.security {
+  color: var(--cuenta-success) !important;
+}
+
+/* Asegurar que info-icon tenga el tamaño correcto */
+.cuenta-tab-wrapper .info-icon {
+  color: var(--cuenta-primary-color) !important;
+  flex-shrink: 0 !important;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+}
+
+/* Iconos en formularios */
+.cuenta-tab-wrapper .form-label svg {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  color: var(--cuenta-primary-color) !important;
+}
+
+/* Iconos en botones */
+.cuenta-tab-wrapper .btn-primary svg,
+.cuenta-tab-wrapper .btn-secondary svg,
+.cuenta-tab-wrapper .btn-logout-primary svg,
+.cuenta-tab-wrapper .edit-toggle-btn svg {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+}
+
+/* Iconos de toggle de contraseña */
+.cuenta-tab-wrapper .password-toggle svg {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+}
+
+/* Iconos de validación */
+.cuenta-tab-wrapper .password-strength svg,
+.cuenta-tab-wrapper .validation-error svg {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+}
+
 /* Asegurar que todos los iconos tengan tamaño visible */
 .cuenta-tab-wrapper svg {
   min-width: 16px;

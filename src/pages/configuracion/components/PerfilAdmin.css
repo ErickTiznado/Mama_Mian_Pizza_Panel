@@ -1,4 +1,46 @@
 /* =========================================
+   CORRECCIÓN DE ICONOS ESPECÍFICA
+   ========================================= */
+
+/* Panel icon específico */
+.panel-perfil-admin .panel-icon {
+  color: var(--perfil-primary-color) !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+}
+
+/* Info icons específicos */
+.panel-perfil-admin .info-icon {
+  color: var(--perfil-primary-color) !important;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Iconos en labels de formulario */
+.panel-perfil-admin .form-label svg {
+  color: var(--perfil-primary-color) !important;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+}
+
+/* Iconos en botones */
+.panel-perfil-admin .btn-primary svg,
+.panel-perfil-admin .btn-secondary svg,
+.panel-perfil-admin .edit-toggle-btn svg {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+}
+
+/* =========================================
    PERFIL ADMIN - CSS ESPECÍFICO
    ========================================= */
 

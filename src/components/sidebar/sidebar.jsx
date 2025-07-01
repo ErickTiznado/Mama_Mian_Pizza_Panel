@@ -22,7 +22,7 @@ import './sidebar.css';
 
 const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const { notifications, noleidas, markAllRead, formatNotificationMessage, formatNotificationTitle } = useNotifications();
   
   // Función para contar notificaciones de pedidos
@@ -46,18 +46,21 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
       id: 'home',
       path: '/home',
       label: 'Inicio',
-      icon: House
+      icon: House,
+      allowedRoles: ['super_admin', 'admin'] // Visible para ambos roles
     },
     {
       id: 'pedidos',
       path: '/pedidos',
       label: 'Pedidos',
-      icon: ShoppingCart
+      icon: ShoppingCart,
+      allowedRoles: ['super_admin', 'admin'] // Visible para ambos roles
     },    {
       id: 'contenido',
       path: '/AgregarContenido',
       label: 'Contenido',
-      icon: ClipboardList
+      icon: ClipboardList,
+      allowedRoles: ['super_admin', 'admin'] // Ahora visible para ambos roles
     },
     // {
     //   id: 'inventario',
@@ -78,22 +81,47 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
       id: 'clientes',
       path: '/clientes',
       label: 'Clientes',
-      icon: Users
+      icon: Users,
+      allowedRoles: ['super_admin', 'admin'] // Visible para ambos roles
     },
     {
       id: 'administradores',
       path: '/administradores',
       label: 'Administradores',
-      icon: Settings
+      icon: Settings,
+      allowedRoles: ['super_admin'] // Solo visible para super_admin (Dueño)
     },
     {
       id: 'tienda',
       path: 'https://mamamianpizza.com/',
       label: 'Tienda',
       icon: Store,
-      isExternal: true
+      isExternal: true,
+      allowedRoles: ['super_admin', 'admin'] // Visible para ambos roles
     }
   ];
+
+  // Filtrar elementos del menú según el rol del usuario
+  const getFilteredMenuItems = () => {
+    console.log('🔧 [SIDEBAR DEBUG] Usuario actual rol:', user?.rol);
+    
+    if (!user || !user.rol) {
+      console.error('❌ [SIDEBAR ERROR] No hay usuario o rol');
+      return [];
+    }
+    
+    const filtered = menuItems.filter(item => {
+      if (!item.allowedRoles) {
+        return true; // Si no se especifican roles, mostrar para todos
+      }
+      return item.allowedRoles.includes(user.rol);
+    });
+    
+    console.log('✅ [SIDEBAR SUCCESS] Items mostrados para rol', user.rol + ':', filtered.map(item => item.label));
+    return filtered;
+  };
+
+  const filteredMenuItems = getFilteredMenuItems();
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -218,7 +246,7 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
 
         <nav className="sidebar__navigation">
           <ul className="sidebar__menu">
-            {menuItems.map((item) => {
+            {filteredMenuItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeItem === item.path;
               const isPedidos = item.id === 'pedidos';

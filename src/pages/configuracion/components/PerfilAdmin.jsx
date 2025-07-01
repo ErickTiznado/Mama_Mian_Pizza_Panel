@@ -30,7 +30,7 @@ function PerfilAdmin({
     <div className="panel-perfil-admin modern-card">
       <div className="panel-header">
         <div className="panel-title-section">
-          <User size={24} className="panel-icon" />
+          <User size={24} className="" />
           <div>
             <h2 className="panel-title">Información Personal</h2>
             <p className="panel-subtitle">Gestiona tu información de perfil</p>
@@ -41,12 +41,12 @@ function PerfilAdmin({
         >
           {modoEdicion ? (
             <>
-              <X size={18} />
+              <X size={20} />
               Cancelar
             </>
           ) : (
             <>
-              <Edit size={18} />
+              <Edit size={20} />
               Editar
             </>
           )}
@@ -64,14 +64,14 @@ function PerfilAdmin({
                 <div className="profile-basic-info">
                   <h3 className="profile-name">{adminData?.nombre || 'Usuario'}</h3>
                   <span className={`status-badge ${adminData?.rol === 'super_admin' ? 'super-admin' : 'admin'}`}>
-                    {adminData?.rol === 'super_admin' ? 'Super Administrador' : 'Administrador'}
+                    {adminData?.rol === 'super_admin' ? 'Dueño' : 'Administrador'}
                   </span>
                 </div>
               </div>
               
               {/* Información adicional integrada */}
               <div className="profile-additional-info">                <div className="info-item">
-                  <Mail size={20} className="info-icon" />
+                  <Mail size={20} className="" />
                   <div className="info-content">
                     <label>Correo electrónico</label>
                     <span>{adminData?.correo || 'No disponible'}</span>
@@ -79,7 +79,7 @@ function PerfilAdmin({
                 </div>
                 
                 <div className="info-item">
-                  <Phone size={20} className="info-icon" />
+                  <Phone size={20} className="" />
                   <div className="info-content">
                     <label>Teléfono</label>
                     <span>{adminData?.celular || 'No disponible'}</span>
@@ -87,7 +87,7 @@ function PerfilAdmin({
                 </div>
                 
                 <div className="info-item">
-                  <Calendar size={20} className="info-icon" />
+                  <Calendar size={20} className="" />
                   <div className="info-content">
                     <label>Miembro desde</label>
                     <span>{formatearFecha(adminData?.fecha_creacion)}</span>
@@ -95,7 +95,7 @@ function PerfilAdmin({
                 </div>
                 
                 <div className="info-item">
-                  <Clock size={20} className="info-icon" />
+                  <Clock size={20} className="" />
                   <div className="info-content">
                     <label>Último acceso</label>
                     <span>{formatearUltimoAcceso(adminData?.ultimo_acceso)}</span>
@@ -113,7 +113,7 @@ function PerfilAdmin({
             <div className="profile-edit-form">
               <div className="form-grid">                <div className="form-group">
                   <label className="form-label">
-                    <User size={18} />
+                    <User size={20} />
                     Nombre completo
                   </label>
                   <input
@@ -127,7 +127,7 @@ function PerfilAdmin({
 
                 <div className="form-group">
                   <label className="form-label">
-                    <Mail size={18} />
+                    <Mail size={20} />
                     Correo electrónico
                   </label>
                   <input
@@ -141,7 +141,7 @@ function PerfilAdmin({
 
                 <div className="form-group">
                   <label className="form-label">
-                    <Phone size={18} />
+                    <Phone size={20} />
                     Teléfono
                   </label>
                   <input
@@ -158,14 +158,14 @@ function PerfilAdmin({
                   onClick={guardarCambiosPerfil}
                   disabled={loading}
                 >
-                  <Save size={18} />
+                  <Save size={20} />
                   {loading ? 'Guardando...' : 'Guardar Cambios'}
                 </button>
                 <button 
                   className="btn-secondary" 
                   onClick={() => setModoEdicion(false)}
                 >
-                  <X size={18} />
+                  <X size={20} />
                   Cancelar
                 </button>
               </div>
