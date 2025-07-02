@@ -137,6 +137,8 @@
   color: var(--ninv-text-primary);
   font-size: 0.875rem;
   transition: all 0.2s ease;
+  height: 2.75rem; /* Altura fija para alineación */
+  box-sizing: border-box;
 }
 
 .ninv-search-input::placeholder {
@@ -152,12 +154,12 @@
 .ninv-search-icon {
   position: absolute;
   left: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 0.875rem; /* Centrado calculado: (2.75rem - 1rem) / 2 = 0.875rem */
   width: 1rem;
   height: 1rem;
   color: var(--ninv-text-muted);
   pointer-events: none;
+  z-index: 1;
 }
 
 /* Filtros */
@@ -168,7 +170,7 @@
 }
 
 .ninv-filter-select {
-  padding: 0.5rem 0.75rem;
+  padding: 0.75rem 0.75rem;
   background-color: var(--ninv-bg-tertiary);
   border: 1px solid var(--ninv-border);
   border-radius: var(--ninv-radius);
@@ -176,6 +178,8 @@
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  height: 2.75rem; /* Altura fija para alineación */
+  box-sizing: border-box;
 }
 
 .ninv-filter-select:focus {
@@ -196,11 +200,13 @@
   background-color: var(--ninv-bg-tertiary);
   border: 1px solid var(--ninv-border);
   border-radius: var(--ninv-radius);
-  padding: 0.5rem 0.75rem;
+  padding: 0.75rem 0.75rem;
   color: var(--ninv-text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 0.875rem;
+  height: 2.75rem; /* Altura fija para alineación */
+  box-sizing: border-box;
 }
 
 .ninv-sort-btn:hover {
@@ -220,19 +226,22 @@
   border-radius: var(--ninv-radius);
   border: 1px solid var(--ninv-border);
   overflow: hidden;
+  height: 2.75rem; /* Altura fija para alineación */
 }
 
 .ninv-view-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
+  padding: 0.75rem 0.75rem;
   background: none;
   border: none;
   color: var(--ninv-text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 0.875rem;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .ninv-view-btn.active {

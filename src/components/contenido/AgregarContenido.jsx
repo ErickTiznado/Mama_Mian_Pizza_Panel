@@ -232,38 +232,46 @@ const AgregarContenido = () => {
     
     try {
       console.log('🔍 [DEBUG] Realizando petición a la API...');
-      const response = await axios.get('https://api.mamamianpizza.com/api/content/getMenu');
+      const response = await axios.get('https://api.mamamianpizza.com/api/content/getAllProducts');
       console.log('✅ [DEBUG] API Response recibida:', response.data);
-      console.log('🔍 [DEBUG] Menu data sample:', response.data.menu?.[0]);
+      console.log('🔍 [DEBUG] Productos data sample:', response.data.productos?.[0]);
       
-      // La API devuelve response.data.menu en lugar de response.data.productos
-      const menuData = response.data.menu || [];
-      console.log('🔍 [DEBUG] menuData length:', menuData.length);
+      // La API devuelve response.data.productos
+      const productosData = response.data.productos || [];
+      console.log('🔍 [DEBUG] productosData length:', productosData.length);
       
-      const formattedData = menuData.map(item => {
-        // Calcular el precio basado en las opciones disponibles
-        const precioMinimo = item.opciones && item.opciones.length > 0 
-          ? Math.min(...item.opciones.map(opcion => opcion.precio))
+      const formattedData = productosData.map(item => {
+        // Calcular el precio basado en los precios disponibles
+        const precioMinimo = item.precios && item.precios.length > 0 
+          ? Math.min(...item.precios.map(precio => precio.precio))
           : 0;
         
         // Crear una cadena con todos los tamaños disponibles
-        const tamanosDisponibles = item.opciones 
-          ? item.opciones.map(opcion => `${opcion.nombre}: $${opcion.precio}`).join(', ')
-          : null;
+        const tamanosDisponibles = item.precios && item.precios.length > 0
+          ? item.precios.map(precio => `${precio.tamano}: $${precio.precio}`).join(', ')
+          : 'Sin precios configurados';
+          
+        // Formatear fecha de creación
+        const fechaCreacion = item.fecha_creacion 
+          ? new Date(item.fecha_creacion).toISOString().split('T')[0]
+          : new Date().toISOString().split('T')[0];
           
         return {
-          id: item.id,
+          id: item.id_producto,
           imagen: item.imagen || 'https://via.placeholder.com/150?text=Sin+imagen',
           titulo: item.titulo,
           descripcion: item.descripcion,
-          tipo: item.categoria || 'Otros', // Usar categoria en lugar de seccion
+          tipo: item.categoria || 'Otros', // Usar categoria del producto
           categoria: item.categoria || 'Otros', // Mantener categoria para compatibilidad
           categoria_descripcion: item.categoria_descripcion || '',
-          opciones: item.opciones || [], // Mantener opciones para edición
-          precio: precioMinimo > 0 ? `Desde $${precioMinimo}` : 'Precio no disponible',
-          tamanos: tamanosDisponibles || 'Sin opciones de tamaño',
+          seccion: item.seccion || '', // Mantener seccion
+          precios: item.precios || [], // Mantener precios para edición
+          precio: precioMinimo > 0 ? `Desde $${precioMinimo}` : 'Sin precio',
+          tamanos: tamanosDisponibles,
           estado: item.activo === 1, // Convertir 0/1 a boolean
-          fecha: new Date().toISOString().split('T')[0] // Fecha actual como respaldo
+          fecha: fechaCreacion,
+          fecha_creacion: item.fecha_creacion,
+          fecha_actualizacion: item.fecha_actualizacion
         };
       });
       
@@ -273,7 +281,7 @@ const AgregarContenido = () => {
       setContenidos(formattedData);
       setFilteredItems(formattedData);
       
-      // Extraer tipos únicos de los datos para las pestañas
+      // Extraer tipos únicos de los datos para las pestañas (usar categorías)
       const tipos = ['todos', ...new Set(formattedData.map(item => item.tipo))];
       console.log('🔍 [DEBUG] Tipos disponibles para pestañas:', tipos);
       setTiposDisponibles(tipos);
@@ -496,7 +504,7 @@ const AgregarContenido = () => {
     const token = getToken();
     const headers = { 'Authorization': `Bearer ${token}` };
 
-    // Llamada al endpoint toggle
+    // Llamada al endpoint toggle usando el id_producto
     const { data } = await axios.put(
       `https://api.mamamianpizza.com/api/act/${productId}/activar`,
       {}, // cuerpo vacío
@@ -504,23 +512,24 @@ const AgregarContenido = () => {
     );
 
     // Actualiza tu lista local con el nuevo estado
+    const newStatus = data.activo === 1;
     setContenidos(contenidos.map(item =>
       item.id === productId
-        ? { ...item, estado: data.activo }
+        ? { ...item, estado: newStatus }
         : item
     ));
     setFilteredItems(filteredItems.map(item =>
       item.id === productId
-        ? { ...item, estado: data.activo }
+        ? { ...item, estado: newStatus }
         : item
     ));
 
-    console.log(`Producto ${data.activo ? 'activado' : 'desactivado'} correctamente`);
+    console.log(`Producto ${newStatus ? 'activado' : 'desactivado'} correctamente`);
     // Opcional: log en tu servicio de logs
     await UserLogService.logProductAction(
       user.id,
       'UPDATE_STATUS',
-      { id: productId, previous_status: currentStatus, new_status: data.activo },
+      { id: productId, previous_status: currentStatus, new_status: newStatus },
       null
     );
 
