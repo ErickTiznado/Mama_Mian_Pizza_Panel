@@ -145,14 +145,14 @@ const OrderDetailModal = ({
                     onClick={handleShowLocationMap}
                   >
                     <FaMapMarkerAlt className="icono-btn" />
-                    Ver en Mapa
+                    Ver Ubicación
                   </button>
                   <button 
                     className="btn-ruta"
                     onClick={handleShowRoute}
                   >
                     <FaRoute className="icono-btn" />
-                    Obtener Ruta
+                    {showRoute ? 'Ocultar Ruta' : 'Obtener Ruta'}
                   </button>
                 </div>
 
@@ -161,7 +161,7 @@ const OrderDetailModal = ({
                   <div className="map-container">
                     <div className="map-header">
                       <h4>
-                        {showRoute ? '🗺️ Ruta al Cliente' : '📍 Ubicación del Cliente'}
+                        {showRoute ? '🗺️ Ruta de Entrega' : '📍 Ubicación del Cliente'}
                       </h4>
                       <button 
                         className="map-close-btn"

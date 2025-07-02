@@ -62,14 +62,15 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
       icon: ClipboardList,
       allowedRoles: ['super_admin', 'admin'] // Ahora visible para ambos roles
     },
-    // {
-    //   id: 'inventario',
-    //   path: '/inventario',
-    //   label: 'Inventario',
-    //   icon: Package,
-    //   hasNotification: true,
-    //   notificationCategory: 'inventario'
-    // },
+    {
+      id: 'inventario',
+      path: '/inventario',
+      label: 'Inventario',
+      icon: Package,
+      hasNotification: true,
+      notificationCategory: 'inventario',
+      allowedRoles: ['super_admin', 'admin']
+    },
     // {
     //   id: 'generadordeinformes',
     //   path: '/generadordeinformes',

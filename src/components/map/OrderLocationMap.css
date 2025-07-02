@@ -77,20 +77,132 @@
   line-height: 1.4;
 }
 
+/* Información de la ruta */
+.route-info {
+  background: linear-gradient(135deg, #FEB248 0%, #f59e0b 100%);
+  color: #821717;
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.route-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.route-loading {
+  text-align: center;
+  font-weight: 600;
+  color: #821717;
+}
+
+.route-loading span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.route-error {
+  text-align: center;
+  color: #dc2626;
+  font-weight: 600;
+  background-color: rgba(239, 68, 68, 0.1);
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.route-distance,
+.route-duration {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.location-warning {
+  margin-top: 8px;
+  padding: 8px;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 4px;
+  font-size: 12px;
+  color: #dc2626;
+}
+
+/* Acciones del mapa */
+.map-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.route-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.navigate-button {
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.navigate-button.google-maps {
+  background: linear-gradient(135deg, #4285F4 0%, #1a73e8 100%);
+  color: white;
+}
+
+.navigate-button.google-maps:hover {
+  background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+}
+
+.navigate-button.waze {
+  background: linear-gradient(135deg, #00D4FF 0%, #0099CC 100%);
+  color: white;
+}
+
+.navigate-button.waze:hover {
+  background: linear-gradient(135deg, #0099CC 0%, #006699 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+}
+
+.navigate-button:active {
+  transform: translateY(0);
+}
+
 .open-maps-button {
   display: inline-block;
   background-color: #FEB248;
   color: #821717;
   text-decoration: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  font-weight: bold;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
   text-align: center;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   width: 100%;
-  max-width: 300px;
-  margin: 0 auto;
-  display: block;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .open-maps-button:hover {
@@ -122,7 +234,24 @@
     height: 300px;
   }
   
-  .route-steps ol {
-    padding-left: 15px;
+  .route-details {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+  
+  .route-distance,
+  .route-duration {
+    justify-content: center;
+  }
+  
+  .map-actions {
+    gap: 8px;
+  }
+  
+  .navigate-button,
+  .open-maps-button {
+    padding: 10px 15px;
+    font-size: 13px;
   }
 }

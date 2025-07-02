@@ -1,0 +1,526 @@
+/* InventoryAlerts.css - Centro de alertas del inventario */
+:root {
+  /* Paleta de colores moderna para inventario */
+  --ninv-bg-primary: #0f172a;
+  --ninv-bg-secondary: #1e293b;
+  --ninv-bg-tertiary: #334155;
+  --ninv-bg-card: #1e293b;
+  --ninv-bg-card-hover: #334155;
+  
+  --ninv-text-primary: #f8fafc;
+  --ninv-text-secondary: #cbd5e1;
+  --ninv-text-muted: #94a3b8;
+  
+  --ninv-accent-blue: #3b82f6;
+  --ninv-accent-green: #10b981;
+  --ninv-accent-yellow: #f59e0b;
+  --ninv-accent-red: #ef4444;
+  --ninv-accent-purple: #8b5cf6;
+  --ninv-accent-orange: #f97316;
+  
+  --ninv-border: #475569;
+  --ninv-border-light: #64748b;
+  
+  --ninv-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --ninv-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  
+  --ninv-radius: 8px;
+  --ninv-radius-lg: 12px;
+}
+
+/* Contenedor principal */
+.ninv-inventory-alerts {
+  width: 100%;
+  padding: 1.5rem;
+  background-color: var(--ninv-bg-primary);
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Header de alertas */
+.ninv-alerts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background-color: var(--ninv-bg-card);
+  padding: 1.5rem;
+  border-radius: var(--ninv-radius-lg);
+  border: 1px solid var(--ninv-border);
+}
+
+.ninv-alerts-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ninv-text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ninv-alerts-title svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--ninv-accent-red);
+}
+
+.ninv-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Botón dismiss all */
+.ninv-btn-dismiss-all {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--ninv-accent-green);
+  color: white;
+  border: none;
+  border-radius: var(--ninv-radius);
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+}
+
+.ninv-btn-dismiss-all:hover {
+  background-color: #059669;
+  transform: translateY(-1px);
+  box-shadow: var(--ninv-shadow);
+}
+
+.ninv-btn-dismiss-all svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Estadísticas de alertas */
+.ninv-alerts-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  background-color: var(--ninv-bg-card);
+  padding: 1.5rem;
+  border-radius: var(--ninv-radius-lg);
+  border: 1px solid var(--ninv-border);
+}
+
+.ninv-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--ninv-bg-tertiary);
+  border-radius: var(--ninv-radius);
+  border: 1px solid var(--ninv-border);
+  transition: all 0.2s ease;
+}
+
+.ninv-stat-card:hover {
+  background-color: var(--ninv-bg-card-hover);
+}
+
+.ninv-stat-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.75rem;
+  border-radius: var(--ninv-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ninv-stat-card.total .ninv-stat-icon {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: var(--ninv-accent-blue);
+}
+
+.ninv-stat-card.critical .ninv-stat-icon {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--ninv-accent-red);
+}
+
+.ninv-stat-card.warning .ninv-stat-icon {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: var(--ninv-accent-yellow);
+}
+
+.ninv-stat-card.stock .ninv-stat-icon {
+  background-color: rgba(139, 92, 246, 0.1);
+  color: var(--ninv-accent-purple);
+}
+
+.ninv-stat-card.expiry .ninv-stat-icon {
+  background-color: rgba(249, 115, 22, 0.1);
+  color: var(--ninv-accent-orange);
+}
+
+.ninv-stat-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.ninv-stat-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ninv-stat-label {
+  font-size: 0.75rem;
+  color: var(--ninv-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.25rem 0;
+}
+
+.ninv-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ninv-text-primary);
+  margin: 0;
+  line-height: 1;
+}
+
+/* Controles de filtros */
+.ninv-alerts-controls {
+  background-color: var(--ninv-bg-card);
+  padding: 1.5rem;
+  border-radius: var(--ninv-radius-lg);
+  border: 1px solid var(--ninv-border);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.ninv-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ninv-filter-label {
+  font-size: 0.875rem;
+  color: var(--ninv-text-secondary);
+  font-weight: 500;
+}
+
+.ninv-filter-select {
+  padding: 0.5rem 0.75rem;
+  background-color: var(--ninv-bg-tertiary);
+  border: 1px solid var(--ninv-border);
+  border-radius: var(--ninv-radius);
+  color: var(--ninv-text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.ninv-filter-select:focus {
+  outline: none;
+  border-color: var(--ninv-accent-blue);
+}
+
+.ninv-filter-select option {
+  background-color: var(--ninv-bg-tertiary);
+  color: var(--ninv-text-primary);
+}
+
+/* Lista de alertas */
+.ninv-alerts-list {
+  background-color: var(--ninv-bg-card);
+  border: 1px solid var(--ninv-border);
+  border-radius: var(--ninv-radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 400px;
+}
+
+.ninv-alert-item {
+  background-color: var(--ninv-bg-tertiary);
+  border: 1px solid var(--ninv-border);
+  border-radius: var(--ninv-radius);
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  position: relative;
+}
+
+.ninv-alert-item:hover {
+  background-color: var(--ninv-bg-card-hover);
+  border-color: var(--ninv-border-light);
+  transform: translateY(-1px);
+  box-shadow: var(--ninv-shadow);
+}
+
+/* Tipos de alerta */
+.ninv-alert-item.critical {
+  border-left: 4px solid var(--ninv-accent-red);
+  background-color: rgba(239, 68, 68, 0.05);
+}
+
+.ninv-alert-item.warning {
+  border-left: 4px solid var(--ninv-accent-yellow);
+  background-color: rgba(245, 158, 11, 0.05);
+}
+
+.ninv-alert-item.info {
+  border-left: 4px solid var(--ninv-accent-blue);
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+/* Icono de alerta */
+.ninv-alert-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.ninv-alert-item.critical .ninv-alert-icon {
+  color: var(--ninv-accent-red);
+}
+
+.ninv-alert-item.warning .ninv-alert-icon {
+  color: var(--ninv-accent-yellow);
+}
+
+.ninv-alert-item.info .ninv-alert-icon {
+  color: var(--ninv-accent-blue);
+}
+
+/* Contenido de alerta */
+.ninv-alert-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.ninv-alert-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ninv-text-primary);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.ninv-alert-description {
+  font-size: 0.875rem;
+  color: var(--ninv-text-secondary);
+  margin: 0 0 0.75rem 0;
+  line-height: 1.5;
+}
+
+.ninv-alert-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: var(--ninv-text-muted);
+}
+
+.ninv-alert-product {
+  font-weight: 500;
+  color: var(--ninv-text-secondary);
+}
+
+.ninv-alert-category {
+  padding: 0.25rem 0.5rem;
+  background-color: var(--ninv-bg-card);
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Botón de dismiss */
+.ninv-alert-dismiss {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--ninv-text-muted);
+  cursor: pointer;
+  border-radius: var(--ninv-radius);
+  transition: all 0.2s ease;
+}
+
+.ninv-alert-dismiss:hover {
+  background-color: var(--ninv-bg-card);
+  color: var(--ninv-text-secondary);
+}
+
+.ninv-alert-dismiss svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Estado vacío */
+.ninv-alerts-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  color: var(--ninv-text-muted);
+}
+
+.ninv-alerts-empty svg {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+  color: var(--ninv-accent-green);
+}
+
+.ninv-alerts-empty h3 {
+  font-size: 1.125rem;
+  color: var(--ninv-text-secondary);
+  margin: 0 0 0.5rem 0;
+}
+
+.ninv-alerts-empty p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+/* Recomendaciones */
+.ninv-recommendations {
+  background-color: var(--ninv-bg-card);
+  border: 1px solid var(--ninv-border);
+  border-radius: var(--ninv-radius-lg);
+  padding: 1.5rem;
+}
+
+.ninv-recommendations-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--ninv-text-primary);
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ninv-recommendations-title svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--ninv-accent-blue);
+}
+
+.ninv-recommendations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ninv-recommendation-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: var(--ninv-bg-tertiary);
+  border-radius: var(--ninv-radius);
+  border: 1px solid var(--ninv-border);
+}
+
+.ninv-recommendation-item svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--ninv-accent-blue);
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.ninv-recommendation-text {
+  font-size: 0.875rem;
+  color: var(--ninv-text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ninv-inventory-alerts {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .ninv-alerts-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .ninv-header-actions {
+    justify-content: stretch;
+  }
+  
+  .ninv-alerts-stats {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .ninv-alerts-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .ninv-alert-item {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .ninv-alert-dismiss {
+    position: static;
+    align-self: flex-end;
+  }
+  
+  .ninv-alert-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .ninv-stat-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .ninv-alert-item {
+    gap: 0.5rem;
+  }
+  
+  .ninv-alert-content {
+    order: 1;
+  }
+  
+  .ninv-alert-icon {
+    order: 0;
+    align-self: center;
+  }
+}

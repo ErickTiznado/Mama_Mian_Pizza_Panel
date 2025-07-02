@@ -5,7 +5,7 @@ import { useJsApiLoader } from '@react-google-maps/api';
 const GOOGLE_MAPS_API_KEY = 'AIzaSyDAiO05_RG1ycHFVfvcUyCEG6g4pfWQ8VY';
 
 // Configuración única para toda la aplicación
-const libraries = ['places', 'directions'];
+const libraries = ['places', 'directions', 'geometry'];
 
 // Hook singleton para Google Maps
 export const useGoogleMaps = () => {
@@ -13,6 +13,8 @@ export const useGoogleMaps = () => {
     googleMapsApiKey: GOOGLE_MAPS_API_KEY,
     libraries,
     preventGoogleFontsLoading: true,
-    version: "weekly"
+    version: "weekly",
+    language: 'es',
+    region: 'SV'
   });
 };

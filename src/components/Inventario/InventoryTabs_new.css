@@ -299,46 +299,6 @@
   box-shadow: var(--ninv-shadow);
 }
 
-/* Banner de error */
-.ninv-error-banner {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
-  background-color: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  border-radius: var(--ninv-radius);
-  color: var(--ninv-accent-red);
-  margin-bottom: 1.5rem;
-  font-size: 0.875rem;
-}
-
-.ninv-error-banner svg {
-  width: 1.25rem;
-  height: 1.25rem;
-  flex-shrink: 0;
-}
-
-.ninv-error-banner span {
-  flex: 1;
-}
-
-.ninv-error-banner button {
-  background-color: var(--ninv-accent-red);
-  color: white;
-  border: none;
-  border-radius: var(--ninv-radius);
-  padding: 0.5rem 1rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.ninv-error-banner button:hover {
-  background-color: #dc2626;
-}
-
 /* Responsive design */
 @media (max-width: 768px) {
   .ninv-inventory-tabs-header {
