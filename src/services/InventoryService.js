@@ -50,16 +50,15 @@ export class InventoryService {
    */
   static async addProduct(productData) {
     try {
-      // Formatear datos según el formato esperado por el backend
+      // Usar exactamente la estructura que espera la base de datos
       const formattedData = {
         nombre: productData.nombre,
         categoria: productData.categoria,
-        cantidad_actual: parseFloat(productData.cantidad_actual || productData.stock),
+        cantidad: parseFloat(productData.cantidad),
         unidad: productData.unidad,
         fecha_caducidad: productData.fecha_caducidad,
         proveedor: productData.proveedor,
-        costo: parseFloat(productData.costo),
-        estado: productData.estado || 'Normal'
+        costo: parseFloat(productData.costo)
       };
 
       const response = await axios.post(
@@ -88,16 +87,15 @@ export class InventoryService {
    */
   static async updateProduct(productId, productData) {
     try {
-      // Formatear datos según el formato esperado por el backend
+      // Usar exactamente la estructura que espera la base de datos
       const formattedData = {
         nombre: productData.nombre,
         categoria: productData.categoria,
-        cantidad_actual: parseFloat(productData.cantidad_actual || productData.stock),
+        cantidad: parseFloat(productData.cantidad),
         unidad: productData.unidad,
         fecha_caducidad: productData.fecha_caducidad,
         proveedor: productData.proveedor,
-        costo: parseFloat(productData.costo),
-        estado: productData.estado || 'Normal'
+        costo: parseFloat(productData.costo)
       };
 
       const response = await axios.put(
