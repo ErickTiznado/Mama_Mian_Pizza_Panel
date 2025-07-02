@@ -69,6 +69,49 @@
     border-top: 1px solid #f0f0f0;
 }
 
+.status-actions {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.reconnect-button, .force-refresh-button {
+    background: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    min-width: 32px;
+    height: 32px;
+}
+
+.reconnect-button:hover, .force-refresh-button:hover {
+    background: #1976d2;
+    transform: translateY(-1px);
+}
+
+.force-refresh-button {
+    background: #ff9800;
+}
+
+.force-refresh-button:hover {
+    background: #f57c00;
+}
+
+.force-refresh-button:active {
+    animation: spin 0.5s ease-in-out;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
 .status-dot {
     width: 8px;
     height: 8px;
@@ -79,6 +122,16 @@
 .status-dot.active {
     background: #4caf50;
     animation: pulse-success 2s infinite;
+}
+
+.status-dot.connecting {
+    background: #2196f3;
+    animation: pulse-connecting 1.5s infinite;
+}
+
+.status-dot.disconnected {
+    background: #f44336;
+    animation: pulse-error 2s infinite;
 }
 
 .status-dot.pending {
@@ -123,6 +176,30 @@
     }
     100% {
         box-shadow: 0 0 0 0 rgba(255, 152, 0, 0);
+    }
+}
+
+@keyframes pulse-connecting {
+    0% {
+        box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 6px rgba(33, 150, 243, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(33, 150, 243, 0);
+    }
+}
+
+@keyframes pulse-error {
+    0% {
+        box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 6px rgba(244, 67, 54, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(244, 67, 54, 0);
     }
 }
 

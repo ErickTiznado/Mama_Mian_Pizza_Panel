@@ -15,17 +15,45 @@ import OrderDetailModal from './components/OrderDetailModal';
 import OrderTabs from './components/OrderTabs';
 import NewOrderModal from './components/NewOrderModal';
 import CustomAlert from '../common/CustomAlert';
+import ConnectionAlert from '../common/ConnectionAlert/ConnectionAlert';
 import { useCustomAlert } from '../../hooks/useCustomAlert';
+import { useNotifications } from '../../hooks/useNotification.jsx';
+import { useOrderNotificationMonitor, useConnectionMonitor } from '../../hooks/useNotificationMonitor.js';
 
 const OrderManager = () => {
   // Custom Alert Hook
   const { showAlert, alertConfig, confirm } = useCustomAlert();
   
+  // Hook para notificaciones
+  const { fetchNoLeidas, connectionStatus } = useNotifications();
+  
+  // Hook para monitorear notificaciones de pedidos específicamente
+  const orderNotificationMonitor = useOrderNotificationMonitor(
+    // Callback para nuevos pedidos
+    (notification) => {
+      console.log('Nuevo pedido recibido:', notification);
+      // Refrescar la lista de pedidos automáticamente
+      fetchAllOrders();
+      // Mostrar alerta de nuevo pedido
+      showAlert({
+        type: 'info',
+        title: 'Nuevo Pedido',
+        message: `Se ha recibido un nuevo pedido: ${notification.formattedMessage || 'Verifique la lista de pedidos'}`
+      });
+    },
+    // Callback para actualizaciones de pedidos
+    (notification) => {
+      console.log('Pedido actualizado:', notification);
+      // Refrescar la lista de pedidos
+      fetchAllOrders();
+    }
+  );
+  
   // Estados principales
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [activeFilter, setActiveFilter] = useState("pendiente");
+  const [activeFilter, setActiveFilter] = useState("todos");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showMap, setShowMap] = useState(false);
@@ -45,9 +73,9 @@ const OrderManager = () => {
   // Base URL para la API
   const API_BASE_URL = "https://api.mamamianpizza.com/api/orders";
 
-  // Cargar pedidos por defecto (pendientes) al montar el componente
+  // Cargar todos los pedidos al montar el componente
   useEffect(() => {
-    fetchOrdersByStatus("pendiente");
+    fetchAllOrders();
   }, []);
 
   // Actualizar filtros cuando cambia el término de búsqueda o periodo
@@ -106,7 +134,12 @@ const OrderManager = () => {
       }
       
       // Refrescar los pedidos después de actualizar el estado
-      fetchOrdersByStatus(activeFilter);
+      fetchAllOrders();
+      
+      // Actualizar contador de notificaciones para reflejar cambios
+      setTimeout(() => {
+        fetchNoLeidas();
+      }, 1000); // Delay para dar tiempo al backend de procesar
 
       console.log("Estado del pedido actualizado correctamente");
     } catch (err) {
@@ -118,10 +151,11 @@ const OrderManager = () => {
   // Función para manejar el cambio de filtro
   const handleFilterChange = (status) => {
     setActiveFilter(status);
-    fetchOrdersByStatus(status);
+    // Remove API call, we'll filter locally
     setFiltrosAplicados(false);
     setSearchTerm('');
     setFiltroSemana('todas');
+    setPaginaActual(1);
   };
 
   // Función para cancelar un pedido
@@ -274,8 +308,11 @@ const OrderManager = () => {
   
   // Aplicar filtros avanzados (semana y búsqueda)
   const aplicarFiltros = () => {
+    // Start with orders filtered by active status
+    let baseOrders = activeFilter === "todos" ? orders : orders.filter(order => order.estado === activeFilter);
+    
     // Filtrar por término de búsqueda
-    let resultados = orders.filter(order => {
+    let resultados = baseOrders.filter(order => {
       // Buscar en código de pedido
       const codigoMatch = order.codigo_pedido?.toLowerCase().includes(searchTerm.toLowerCase());
       // Buscar en nombre de cliente
@@ -348,11 +385,15 @@ const OrderManager = () => {
     setFiltroSemana('todas');
     setFiltrosAplicados(false);
     setPaginaActual(1);
-    // Volver a mostrar todos los pedidos del filtro principal
-    fetchOrdersByStatus(activeFilter);
-  };    // Calcular resultados totales para mostrar en contador
-  const totalPedidos = filtrosAplicados ? filteredOrders.length : orders.length;
+    // Reload all orders when resetting filters
+    fetchAllOrders();
+  };  // Calcular resultados totales para mostrar en contador y filtrar por estado activo
+  const filteredOrdersByStatus = activeFilter === "todos" ? orders : orders.filter(order => order.estado === activeFilter);
+  const displayOrdersForTable = filtrosAplicados ? filteredOrders : filteredOrdersByStatus;
+  const totalPedidos = displayOrdersForTable.length;
+  
   const counts = {
+  todos: orders.length,
   pendiente: orders.filter(p => p.estado === "pendiente").length,
   "en proceso": orders.filter(p => p.estado === "en proceso").length,
   "en camino": orders.filter(p => p.estado === "en camino").length,
@@ -367,11 +408,23 @@ const OrderManager = () => {
       <div className="order_panel">
         <div className="order_header">
           <h1 className="titulo-pedidos">Gestión de Pedidos</h1>
-          <button 
-            className="order_btn-agregar" onClick={handleNerOrderModal}>
-            <FontAwesomeIcon icon={faPlus} style={{ marginRight: '10px' }} />
-            Nuevo Pedido
-          </button>
+          <div className="header-controls">
+            {/* Indicador de estado de notificaciones */}
+            <div className={`notification-status ${connectionStatus}`}>
+              <div className="status-dot"></div>
+              <span className="status-text">
+                {connectionStatus === 'connected' && 'Notificaciones activas'}
+                {connectionStatus === 'connecting' && 'Conectando...'}
+                {connectionStatus === 'disconnected' && 'Sin notificaciones'}
+                {connectionStatus === 'error' && 'Error de conexión'}
+              </span>
+            </div>
+            <button 
+              className="order_btn-agregar" onClick={handleNerOrderModal}>
+              <FontAwesomeIcon icon={faPlus} style={{ marginRight: '10px' }} />
+              Nuevo Pedido
+            </button>
+          </div>
         </div>
         
         <main className="order_main">
@@ -426,7 +479,7 @@ const OrderManager = () => {
           
           {/* Tabla de pedidos */}
           <OrderTable 
-            orders={orders}
+            orders={filteredOrdersByStatus}
             filteredOrders={filteredOrders}
             filtrosAplicados={filtrosAplicados}
             activeFilter={activeFilter}

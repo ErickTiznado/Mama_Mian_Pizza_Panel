@@ -65,6 +65,54 @@
   border: var(--border-slate) 1px solid;
 }
 
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Indicador de estado de notificaciones */
+.notification-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.notification-status .status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.notification-status.connected .status-dot {
+  background: #4caf50;
+  animation: pulse-success 2s infinite;
+}
+
+.notification-status.connecting .status-dot {
+  background: #2196f3;
+  animation: pulse-connecting 1.5s infinite;
+}
+
+.notification-status.disconnected .status-dot,
+.notification-status.error .status-dot {
+  background: #f44336;
+  animation: pulse-error 2s infinite;
+}
+
+.notification-status .status-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+}
+
 /* Título */
 .titulo-pedidos {
   font-size: 1.8rem;
@@ -969,4 +1017,60 @@
 
 .action-buttons .enhanced-btn:not(.status-final):hover {
   opacity: 0.9;
+}
+
+/* Animaciones para los estados de notificación */
+@keyframes pulse-success {
+  0% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(76, 175, 80, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+  }
+}
+
+@keyframes pulse-connecting {
+  0% {
+    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(33, 150, 243, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0);
+  }
+}
+
+@keyframes pulse-error {
+  0% {
+    box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(244, 67, 54, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(244, 67, 54, 0);
+  }
+}
+
+/* Responsive para el header */
+@media (max-width: 768px) {
+  .order_header {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+  
+  .header-controls {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .notification-status {
+    justify-content: center;
+  }
 }

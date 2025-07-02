@@ -5,6 +5,11 @@ import { FaCheck, FaTimes } from 'react-icons/fa';
 const OrderTabs = ({ activeFilter, handleFilterChange, setPaginaActual, counts = {} }) => {
   const tabs = [
     {
+      key: "todos",
+      label: "Todos",
+      icon: <span className="circle-icon" style={{ backgroundColor: "#6c757d" }}></span>
+    },
+    {
       key: "pendiente",
       label: "Pendiente",
       icon: <span className="circle-icon" style={{ backgroundColor: "#ffc107" }}></span>

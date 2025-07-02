@@ -1,0 +1,65 @@
+.force-notification-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.force-notification-btn:hover {
+    background: linear-gradient(135deg, #e55a2b, #e0821a);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+}
+
+.force-notification-btn:active {
+    transform: translateY(0);
+}
+
+.force-notification-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.force-notification-btn .spinning {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.force-notification-btn span {
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .force-notification-btn {
+        right: 10px;
+        top: 10px;
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .force-notification-btn span {
+        display: none;
+    }
+}

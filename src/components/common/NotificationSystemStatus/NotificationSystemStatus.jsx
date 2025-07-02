@@ -8,7 +8,10 @@ const NotificationSystemStatus = () => {
         canShowNotifications, 
         pushPermission, 
         isPushSupported,
-        noleidas
+        noleidas,
+        connectionStatus,
+        reconnectSSE,
+        forceRefresh
     } = useNotifications();
 
     const getSystemStatus = () => {
@@ -22,13 +25,34 @@ const NotificationSystemStatus = () => {
             };
         }
 
-        if (canShowNotifications) {
+        // Verificar estado de conexión SSE primero
+        if (connectionStatus === 'error' || connectionStatus === 'disconnected') {
+            return {
+                status: 'disconnected',
+                color: '#f44336',
+                icon: WifiOff,
+                title: 'Conexión perdida',
+                description: 'Sin conexión con el servidor de notificaciones'
+            };
+        }
+
+        if (connectionStatus === 'connecting') {
+            return {
+                status: 'connecting',
+                color: '#ff9800',
+                icon: Wifi,
+                title: 'Conectando...',
+                description: 'Estableciendo conexión con el servidor'
+            };
+        }
+
+        if (canShowNotifications && connectionStatus === 'connected') {
             return {
                 status: 'active',
                 color: '#4caf50',
                 icon: Check,
                 title: 'Sistema activo',
-                description: 'Las notificaciones push están funcionando correctamente'
+                description: 'Las notificaciones están funcionando correctamente'
             };
         }
 
@@ -76,10 +100,30 @@ const NotificationSystemStatus = () => {
                 <div className={`status-dot ${systemStatus.status}`}></div>
                 <span className="status-text">
                     {systemStatus.status === 'active' && 'Conectado'}
-                    {systemStatus.status === 'pending' && 'Desconectado'}
+                    {systemStatus.status === 'connecting' && 'Conectando...'}
+                    {systemStatus.status === 'disconnected' && 'Desconectado'}
+                    {systemStatus.status === 'pending' && 'Pendiente'}
                     {systemStatus.status === 'blocked' && 'Bloqueado'}
                     {systemStatus.status === 'unsupported' && 'No soportado'}
                 </span>
+                <div className="status-actions">
+                    {(systemStatus.status === 'disconnected' || systemStatus.status === 'error') && (
+                        <button 
+                            className="reconnect-button"
+                            onClick={reconnectSSE}
+                            title="Intentar reconectar"
+                        >
+                            <Wifi size={14} />
+                        </button>
+                    )}
+                    <button 
+                        className="force-refresh-button"
+                        onClick={forceRefresh}
+                        title="Forzar actualización de notificaciones"
+                    >
+                        <Bell size={14} />
+                    </button>
+                </div>
             </div>
         </div>
     );
