@@ -1,0 +1,280 @@
+/* PizzaIngredients.css - Gestión de ingredientes para personalización de pizzas */
+:root {
+  /* Paleta de colores específica para ingredientes de pizza */
+  --ninv-pizza-accent: #ff6b35;
+  --ninv-pizza-light: #ffa366;
+  --ninv-pizza-dark: #cc5429;
+}
+
+/* Contenedor principal */
+.ninv-pizza-ingredients {
+  width: 100%;
+  padding: 1.5rem;
+  background-color: var(--ninv-bg-primary);
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Precio destacado */
+.ninv-card-price {
+  background: linear-gradient(135deg, var(--ninv-pizza-accent), var(--ninv-pizza-light));
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--ninv-radius);
+  font-weight: 700;
+  font-size: 0.875rem;
+  box-shadow: var(--ninv-shadow);
+}
+
+.ninv-price {
+  color: var(--ninv-pizza-accent);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* Modal para seleccionar del inventario */
+.ninv-inventory-modal {
+  max-width: 700px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.ninv-modal-description {
+  color: var(--ninv-text-secondary);
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: var(--ninv-bg-tertiary);
+  border-radius: var(--ninv-radius);
+  border-left: 4px solid var(--ninv-pizza-accent);
+}
+
+.ninv-inventory-list {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid var(--ninv-border);
+  border-radius: var(--ninv-radius);
+  background-color: var(--ninv-bg-secondary);
+}
+
+.ninv-inventory-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--ninv-border);
+  transition: background-color 0.2s ease;
+}
+
+.ninv-inventory-item:hover {
+  background-color: var(--ninv-bg-tertiary);
+}
+
+.ninv-inventory-item:last-child {
+  border-bottom: none;
+}
+
+.ninv-item-info h4 {
+  margin: 0 0 0.25rem 0;
+  color: var(--ninv-text-primary);
+  font-weight: 600;
+}
+
+.ninv-item-info p {
+  margin: 0 0 0.25rem 0;
+  color: var(--ninv-text-secondary);
+  font-size: 0.875rem;
+}
+
+.ninv-item-info small {
+  color: var(--ninv-text-muted);
+  font-size: 0.75rem;
+}
+
+.ninv-btn-select {
+  background-color: var(--ninv-pizza-accent);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--ninv-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+}
+
+.ninv-btn-select:hover {
+  background-color: var(--ninv-pizza-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--ninv-shadow);
+}
+
+/* Estado vacío del inventario */
+.ninv-empty-inventory {
+  padding: 2rem;
+  text-align: center;
+  color: var(--ninv-text-muted);
+  background-color: var(--ninv-bg-tertiary);
+  border-radius: var(--ninv-radius);
+  border: 2px dashed var(--ninv-border);
+}
+
+/* Formulario simple para precio */
+.ninv-form-simple {
+  margin: 1rem 0;
+}
+
+.ninv-ingredient-info {
+  background-color: var(--ninv-bg-tertiary);
+  padding: 1rem;
+  border-radius: var(--ninv-radius);
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--ninv-pizza-accent);
+}
+
+.ninv-ingredient-info h4 {
+  margin: 0 0 0.25rem 0;
+  color: var(--ninv-text-primary);
+  font-weight: 600;
+}
+
+.ninv-ingredient-info p {
+  margin: 0;
+  color: var(--ninv-text-secondary);
+  font-size: 0.875rem;
+}
+
+/* Botones específicos para ingredientes de pizza */
+.ninv-btn-edit {
+  background-color: var(--ninv-pizza-accent);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--ninv-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.ninv-btn-edit:hover {
+  background-color: var(--ninv-pizza-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--ninv-shadow);
+}
+
+.ninv-btn-edit svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Mejoras para la tabla */
+.ninv-table th:nth-child(4),
+.ninv-table td:nth-child(4) {
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Card específico para ingredientes */
+.ninv-product-card {
+  background: linear-gradient(135deg, var(--ninv-bg-card), var(--ninv-bg-secondary));
+  border: 1px solid var(--ninv-border);
+  border-radius: var(--ninv-radius-lg);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: var(--ninv-shadow);
+}
+
+.ninv-product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ninv-shadow-lg);
+  border-color: var(--ninv-pizza-accent);
+}
+
+/* Responsive específico */
+@media (max-width: 768px) {
+  .ninv-pizza-ingredients {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .ninv-inventory-modal {
+    max-width: 95vw;
+    margin: 1rem;
+    max-height: 90vh;
+  }
+  
+  .ninv-inventory-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .ninv-btn-select {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .ninv-card-price {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+/* Animaciones */
+@keyframes ninv-ingredient-appear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ninv-inventory-item {
+  animation: ninv-ingredient-appear 0.3s ease forwards;
+}
+
+/* Estados especiales */
+.ninv-btn-add-product {
+  background: linear-gradient(135deg, var(--ninv-pizza-accent), var(--ninv-pizza-light));
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--ninv-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: var(--ninv-shadow);
+}
+
+.ninv-btn-add-product:hover {
+  background: linear-gradient(135deg, var(--ninv-pizza-dark), var(--ninv-pizza-accent));
+  transform: translateY(-1px);
+  box-shadow: var(--ninv-shadow-lg);
+}
+
+/* Indicador de ingrediente de pizza */
+.ninv-pizza-ingredients .ninv-list-title {
+  color: var(--ninv-text-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ninv-pizza-ingredients .ninv-list-title svg {
+  color: var(--ninv-pizza-accent);
+  width: 1.75rem;
+  height: 1.75rem;
+}

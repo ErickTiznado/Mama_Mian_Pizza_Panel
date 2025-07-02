@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Package, BarChart3, AlertTriangle, Plus } from 'lucide-react';
+import { Package, BarChart3, AlertTriangle, Pizza } from 'lucide-react';
 import './InventoryTabs.css';
 import InventoryDashboard from './InventoryDashboard';
 import InventoryList from './InventoryList';
 import InventoryAlerts from './InventoryAlerts';
+import PizzaIngredients from './PizzaIngredients';
 import InventoryService from '../../services/InventoryService';
 
 const InventoryTabs = () => {
@@ -61,6 +62,12 @@ const InventoryTabs = () => {
       label: 'Inventario',
       icon: Package,
       component: InventoryList
+    },
+    {
+      id: 'pizza-ingredients',
+      label: 'Ingredientes Pizza',
+      icon: Pizza,
+      component: PizzaIngredients
     },
     {
       id: 'alerts',

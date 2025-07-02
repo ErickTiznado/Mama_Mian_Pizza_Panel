@@ -139,6 +139,21 @@
   transform: scale(1.05);
 }
 
+/* Estilo específico para la tab de ingredientes de pizza */
+.ninv-tab-button svg[data-icon="pizza"],
+.ninv-tab-button:has(svg[data-icon="pizza"]) {
+  color: #ff6b35;
+}
+
+.ninv-tab-button:has(svg[data-icon="pizza"]).active {
+  background: linear-gradient(135deg, #ff6b35, #ffa366);
+  color: white;
+}
+
+.ninv-tab-button:has(svg[data-icon="pizza"]).active svg {
+  color: white;
+}
+
 /* Contador de notificaciones en tabs */
 .ninv-tab-badge {
   background: var(--ninv-accent-red);
