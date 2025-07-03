@@ -349,7 +349,6 @@ const ComentariosExperienciasPanel = () => {
       <div className="panel-item-usuario">
         <User size={14} />
         <span>{experiencia.usuario?.nombre || 'Usuario anónimo'}</span>
-        <span className="panel-item-fecha">{new Date(experiencia.fecha).toLocaleDateString()}</span>
       </div>
       
       <div className="panel-item-acciones">
@@ -423,7 +422,6 @@ const ComentariosExperienciasPanel = () => {
       <div className="panel-item-usuario">
         <User size={14} />
         <span>{comentario.usuario?.nombre || 'Usuario anónimo'}</span>
-        <span className="panel-item-fecha">{new Date(comentario.fecha).toLocaleDateString()}</span>
       </div>
       
       <div className="panel-item-acciones">

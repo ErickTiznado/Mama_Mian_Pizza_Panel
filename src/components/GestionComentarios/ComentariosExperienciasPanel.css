@@ -288,11 +288,6 @@
   margin-bottom: 15px;
 }
 
-.panel-item-fecha {
-  margin-left: auto;
-  color: #64748b;
-}
-
 .panel-item-acciones {
   display: flex;
   gap: 10px;
