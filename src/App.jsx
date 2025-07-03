@@ -22,6 +22,7 @@ import Inventario from './components/Inventario/Inventario';
 import Graficas from './pages/graficas/graficas';
 import ConfiguracionAdmin from './pages/configuracion/ConfiguracionAdmin';
 import GeneradorInformes from  './components/GeneradorInformes/GeneradorInformes';
+import GestionComentariosPage from './pages/GestionComentarios/GestionComentarios';
 import './App.css';
 
 function App() {
@@ -80,6 +81,7 @@ function App() {
                         <Route path="/graficas" element={<Graficas />} />
                         <Route path="/configuracion" element={<ConfiguracionAdmin />} />
                         <Route path="/generadordeinformes" element={<GeneradorInformes />} />
+                        <Route path="/comentarios" element={<GestionComentariosPage />} />
                       </Routes>
                     </div>
                     {/* Banner de notificaciones push */}

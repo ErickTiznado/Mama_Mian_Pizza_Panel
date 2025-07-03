@@ -183,6 +183,7 @@ const ClientePerfilModal = ({ cliente, onClose, visible }) => {
       }
     }
   };
+  
   const handleShowInStore = async (id, show) => {
     try {
       // Por ahora solo actualizar el estado local ya que no tienes endpoint específico para visibilidad
@@ -207,7 +208,9 @@ const ClientePerfilModal = ({ cliente, onClose, visible }) => {
       console.error('Error al cambiar visibilidad del comentario:', error);
       alert('Error al cambiar la visibilidad del comentario. Por favor, intenta nuevamente.');
     }
-  };  // Función para contactar cliente por WhatsApp
+  };
+  
+  // Función para contactar cliente por WhatsApp
   const handleContactarCliente = () => {
     const telefono = cliente.contacto?.telefono;
     if (!telefono) {
@@ -245,8 +248,9 @@ Gracias por elegirnos!`;
           </button>
         </header>
         <div className="cliente-perfil-modal-subheader">
-          <p>Información completa del cliente y gestión de comentarios</p>
-        </div>        <div className="cliente-perfil-modal-content">
+          <p>Información completa del cliente y gestión de comentarios y experiencias</p>
+        </div>
+        <div className="cliente-perfil-modal-content">
           <div className="cliente-perfil-modal-columns">
             {/* Columna izquierda - Información personal y Estadísticas */}
             <div className="cliente-perfil-left-section">
@@ -268,7 +272,8 @@ Gracias por elegirnos!`;
                 <div className={`badge-estado ${cliente.estado === 'Activo' ? 'badge-activo' : cliente.estado === 'VIP' ? 'badge-vip' : 'badge-inactivo'}`}>
                   <div className="estado-indicator"></div>
                   {cliente.estado}
-                </div>                <div className="cliente-contacto-info">
+                </div>
+                <div className="cliente-contacto-info">
                   <div className="contacto-item">
                     <Mail size={16} />
                     <span>{cliente.contacto?.correo}</span>
@@ -280,7 +285,8 @@ Gracias por elegirnos!`;
                   <div className="contacto-item">
                     <MapPin size={16} />
                     <span>{cliente.contacto?.direccion || 'Dirección no disponible'}</span>
-                  </div>                  <div className="contacto-item">
+                  </div>
+                  <div className="contacto-item">
                     <Calendar size={16} />
                     <span>{cliente.clienteDesde || 'Cliente desde fecha no disponible'}</span>
                   </div>
@@ -293,7 +299,6 @@ Gracias por elegirnos!`;
                     <MessageCircle size={16} />
                     Contactar por WhatsApp
                   </button>
-
                 </div>
               </div>
 
@@ -325,7 +330,8 @@ Gracias por elegirnos!`;
                     </div>
                     <div className="estadistica-valor dinero-valor">{estadisticas.totalGastado}</div>
                     <div className="estadistica-etiqueta">Total Gastado</div>
-                  </div>                  <div className="estadistica-card">
+                  </div>
+                  <div className="estadistica-card">
                     <div className="estadistica-icono comentarios-icono">
                       <i className="comment-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2">
@@ -350,8 +356,11 @@ Gracias por elegirnos!`;
                   <div className="ultimo-pedido-fecha">{cliente.ultimoPedido || 'No hay pedidos'}</div>
                 </div>
               </div>
-            </div>            {/* Columna derecha - Comentarios */}
+            </div>
+            
+            {/* Columna derecha - Comentarios y Experiencias */}
             <div className="cliente-perfil-right-section">
+              {/* Sección de Comentarios */}
               <div className="cliente-perfil-column comentarios-column">
                 <div className="column-header">
                   <CheckCircle size={18} />
@@ -359,89 +368,183 @@ Gracias por elegirnos!`;
                 </div>
                 
                 <div className="comentarios-container">
-                {comentariosState.length === 0 ? (
-                  <div className="no-comentarios">
-                    <p>Este cliente aún no ha dejado comentarios.</p>
-                  </div>
-                ) : (
-                  comentariosState.map(comentario => (
-                    <div key={comentario.id} className="comentario-card">
-                      <div className="comentario-header">
-                        <div className="comentario-order-id">#{comentario.id}</div>
-                        <div className="comentario-experiencia">
-                          <span>Experiencia</span>
-                          <div className="valoracion">
-                            <span className="valoracion-numero">{comentario.experiencia}</span>
+                  {comentariosState.length === 0 ? (
+                    <div className="no-comentarios">
+                      <p>Este cliente aún no ha dejado comentarios.</p>
+                    </div>
+                  ) : (
+                    comentariosState.map(comentario => (
+                      <div key={comentario.id} className="comentario-card">
+                        <div className="comentario-header">
+                          <div className="comentario-order-id">#{comentario.id}</div>
+                          <div className="comentario-experiencia">
+                            <span>Experiencia</span>
+                            <div className="valoracion">
+                              <span className="valoracion-numero">{comentario.experiencia}</span>
+                              <Star size={16} fill="currentColor" className="valoracion-estrella" />
+                            </div>
+                          </div>
+                          <div className="comentario-fecha">{comentario.fecha}</div>
+                        </div>
+
+                        {/* Mostrar información del producto si está disponible */}
+                        {comentario.producto && (
+                          <div className="comentario-producto">
+                            <span>Producto: </span>
+                            <strong>{comentario.producto.nombre}</strong>
+                          </div>
+                        )}
+
+                        <div className="comentario-texto">
+                          "{comentario.texto}"
+                        </div>
+                        
+                        <div className="comentario-actions">
+                          <div className="comentario-estado">
+                            <span>Estado:</span>
+                            <div className={`badge-${comentario.estado.toLowerCase()}`}>
+                              {comentario.estado === 'Aprobado' ? <CheckCircle size={14} /> : 
+                               comentario.estado === 'Rechazado' ? <XCircle size={14} /> : 
+                               <XCircle size={14} />}
+                              {comentario.estado}
+                            </div>
+                          </div>
+                          
+                          <div className="comentario-acciones-botones">
+                            {comentario.estado !== 'Aprobado' && (
+                              <button 
+                                className="btn-aprobar"
+                                onClick={() => handleApprove(comentario.id)}
+                                title="Aprobar comentario"
+                              >
+                                <CheckCircle size={14} />
+                                Aprobar
+                              </button>
+                            )}
+                            {comentario.estado !== 'Rechazado' && (
+                              <button 
+                                className="btn-rechazar"
+                                onClick={() => handleReject(comentario.id)}
+                                title="Rechazar comentario"
+                              >
+                                <XCircle size={14} />
+                                Rechazar
+                              </button>
+                            )}
+                          </div>
+                          
+                          <div className="comentario-visibilidad">
+                            <span>Mostrar en tienda:</span>
+                            <div className="visibilidad-botones">
+                              <button 
+                                className={`btn-si ${comentario.mostrarEnTienda ? 'active' : ''}`}
+                                onClick={() => handleShowInStore(comentario.id, true)}
+                              >
+                                <CheckCircle size={14} />
+                                SÍ
+                              </button>
+                              <button 
+                                className={`btn-no ${!comentario.mostrarEnTienda ? 'active' : ''}`}
+                                onClick={() => handleShowInStore(comentario.id, false)}
+                              >
+                                <XCircle size={14} />
+                                NO
+                              </button>
+                              <button 
+                                className="btn-eliminar"
+                                onClick={() => handleDelete(comentario.id)}
+                              >
+                                <Trash2 size={14} />
+                                Eliminar
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="comentario-status-indicator">
+                          {comentario.mostrarEnTienda ? 
+                            <span className="status-visible">Visible en la tienda online</span> :
+                            <span className="status-oculto">Oculto en la tienda online</span>
+                          }
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+              
+              {/* Sección de Experiencias */}
+              <div className="cliente-perfil-column experiencias-column">
+                <div className="column-header">
+                  <Award size={18} />
+                  <h3>Experiencias del usuario ({experiencias.length})</h3>
+                </div>
+                
+                <div className="experiencias-container">
+                  {cargandoExperiencias ? (
+                    <div className="cargando-experiencias">
+                      <p>Cargando experiencias...</p>
+                    </div>
+                  ) : errorExperiencias ? (
+                    <div className="error-experiencias">
+                      <p>{errorExperiencias}</p>
+                    </div>
+                  ) : experiencias.length === 0 ? (
+                    <div className="no-experiencias">
+                      <p>Este cliente aún no ha compartido experiencias.</p>
+                    </div>
+                  ) : (
+                    experiencias.map(experiencia => (
+                      <div key={experiencia.id_experiencia} className="experiencia-card">
+                        <div className="experiencia-header">
+                          <div className="experiencia-id">#{experiencia.id_experiencia}</div>
+                          <div className="experiencia-titulo">{experiencia.titulo}</div>
+                          <div className="experiencia-valoracion">
+                            <span className="valoracion-numero">{experiencia.valoracion}</span>
                             <Star size={16} fill="currentColor" className="valoracion-estrella" />
                           </div>
                         </div>
-                        <div className="comentario-fecha">{comentario.fecha}</div>
-                      </div>
-
-                      {/* Mostrar información del producto si está disponible */}
-                      {comentario.producto && (
-                        <div className="comentario-producto">
-                          <span>Producto: </span>
-                          <strong>{comentario.producto.nombre}</strong>
+                        
+                        <div className="experiencia-contenido">
+                          "{experiencia.contenido}"
                         </div>
-                      )}
-
-                      <div className="comentario-texto">
-                        "{comentario.texto}"
-                      </div>                      <div className="comentario-actions">
-                        <div className="comentario-estado">
-                          <span>Estado:</span>
-                          <div className={`badge-${comentario.estado.toLowerCase()}`}>
-                            {comentario.estado === 'Aprobado' ? <CheckCircle size={14} /> : 
-                             comentario.estado === 'Rechazado' ? <XCircle size={14} /> : 
-                             <XCircle size={14} />}
-                            {comentario.estado}
+                        
+                        <div className="experiencia-footer">
+                          <div className="experiencia-estado">
+                            <span>Estado:</span>
+                            <div className={`badge-${experiencia.aprobado ? 'aprobado' : 'pendiente'}`}>
+                              {experiencia.aprobado ? 
+                                <CheckCircle size={14} /> : 
+                                <XCircle size={14} />}
+                              {experiencia.aprobado ? 'Aprobada' : 'Pendiente'}
+                            </div>
                           </div>
-                        </div>
-                        
-                        <div className="comentario-acciones-botones">
-                          {comentario.estado !== 'Aprobado' && (
-                            <button 
-                              className="btn-aprobar"
-                              onClick={() => handleApprove(comentario.id)}
-                              title="Aprobar comentario"
-                            >
-                              <CheckCircle size={14} />
-                              Aprobar
-                            </button>
-                          )}
-                          {comentario.estado !== 'Rechazado' && (
-                            <button 
-                              className="btn-rechazar"
-                              onClick={() => handleReject(comentario.id)}
-                              title="Rechazar comentario"
-                            >
-                              <XCircle size={14} />
-                              Rechazar
-                            </button>
-                          )}
-                        </div>
-                        
-                        <div className="comentario-visibilidad">
-                          <span>Mostrar en tienda:</span>
-                          <div className="visibilidad-botones">
-                            <button 
-                              className={`btn-si ${comentario.mostrarEnTienda ? 'active' : ''}`}
-                              onClick={() => handleShowInStore(comentario.id, true)}
-                            >
-                              <CheckCircle size={14} />
-                              SÍ
-                            </button>
-                            <button 
-                              className={`btn-no ${!comentario.mostrarEnTienda ? 'active' : ''}`}
-                              onClick={() => handleShowInStore(comentario.id, false)}
-                            >
-                              <XCircle size={14} />
-                              NO
-                            </button>
+                          
+                          <div className="experiencia-acciones">
+                            {!experiencia.aprobado && (
+                              <button 
+                                className="btn-aprobar"
+                                onClick={() => handleExperienciaApproval(experiencia.id_experiencia, 1)}
+                                title="Aprobar experiencia"
+                              >
+                                <CheckCircle size={14} />
+                                Aprobar
+                              </button>
+                            )}
+                            {experiencia.aprobado && (
+                              <button 
+                                className="btn-rechazar"
+                                onClick={() => handleExperienciaApproval(experiencia.id_experiencia, 0)}
+                                title="Rechazar experiencia"
+                              >
+                                <XCircle size={14} />
+                                Rechazar
+                              </button>
+                            )}
                             <button 
                               className="btn-eliminar"
-                              onClick={() => handleDelete(comentario.id)}
+                              onClick={() => handleDeleteExperiencia(experiencia.id_experiencia)}
+                              title="Eliminar experiencia"
                             >
                               <Trash2 size={14} />
                               Eliminar
@@ -449,101 +552,9 @@ Gracias por elegirnos!`;
                           </div>
                         </div>
                       </div>
-
-                      <div className="comentario-status-indicator">
-                        {comentario.mostrarEnTienda ? 
-                          <span className="status-visible">Visible en la tienda online</span> :
-                          <span className="status-oculto">Oculto en la tienda online</span>
-                        }
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-            </div>
-            
-            {/* Sección de Experiencias */}
-            <div className="cliente-perfil-column experiencias-column">
-              <div className="column-header">
-                <Award size={18} />
-                <h3>Experiencias del usuario ({experiencias.length})</h3>
-              </div>
-              
-              <div className="experiencias-container">
-                {cargandoExperiencias ? (
-                  <div className="cargando-experiencias">
-                    <p>Cargando experiencias...</p>
-                  </div>
-                ) : errorExperiencias ? (
-                  <div className="error-experiencias">
-                    <p>{errorExperiencias}</p>
-                  </div>
-                ) : experiencias.length === 0 ? (
-                  <div className="no-experiencias">
-                    <p>Este cliente aún no ha compartido experiencias.</p>
-                  </div>
-                ) : (
-                  experiencias.map(experiencia => (
-                    <div key={experiencia.id_experiencia} className="experiencia-card">
-                      <div className="experiencia-header">
-                        <div className="experiencia-id">#{experiencia.id_experiencia}</div>
-                        <div className="experiencia-titulo">{experiencia.titulo}</div>
-                        <div className="experiencia-valoracion">
-                          <span className="valoracion-numero">{experiencia.valoracion}</span>
-                          <Star size={16} fill="currentColor" className="valoracion-estrella" />
-                        </div>
-                      </div>
-                      
-                      <div className="experiencia-contenido">
-                        "{experiencia.contenido}"
-                      </div>
-                      
-                      <div className="experiencia-footer">
-                        <div className="experiencia-estado">
-                          <span>Estado:</span>
-                          <div className={`badge-${experiencia.aprobado ? 'aprobado' : 'pendiente'}`}>
-                            {experiencia.aprobado ? 
-                              <CheckCircle size={14} /> : 
-                              <XCircle size={14} />}
-                            {experiencia.aprobado ? 'Aprobada' : 'Pendiente'}
-                          </div>
-                        </div>
-                        
-                        <div className="experiencia-acciones">
-                          {!experiencia.aprobado && (
-                            <button 
-                              className="btn-aprobar"
-                              onClick={() => handleExperienciaApproval(experiencia.id_experiencia, 1)}
-                              title="Aprobar experiencia"
-                            >
-                              <CheckCircle size={14} />
-                              Aprobar
-                            </button>
-                          )}
-                          {experiencia.aprobado && (
-                            <button 
-                              className="btn-rechazar"
-                              onClick={() => handleExperienciaApproval(experiencia.id_experiencia, 0)}
-                              title="Rechazar experiencia"
-                            >
-                              <XCircle size={14} />
-                              Rechazar
-                            </button>
-                          )}
-                          <button 
-                            className="btn-eliminar"
-                            onClick={() => handleDeleteExperiencia(experiencia.id_experiencia)}
-                            title="Eliminar experiencia"
-                          >
-                            <Trash2 size={14} />
-                            Eliminar
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
+                    ))
+                  )}
+                </div>
               </div>
             </div>
           </div>

@@ -15,7 +15,8 @@ import {
   User,
   LogOut,
   Settings,
-  Bell
+  Bell,
+  MessageCircle
 } from 'lucide-react';
 import Logo from '../../assets/Logo.png';
 import './sidebar.css';
@@ -83,6 +84,15 @@ const Sidebar = ({ onToggle, collapsed: externalCollapsed }) => {
       path: '/clientes',
       label: 'Clientes',
       icon: Users,
+      allowedRoles: ['super_admin', 'admin'] // Visible para ambos roles
+    },
+    {
+      id: 'comentarios',
+      path: '/comentarios',
+      label: 'Comentarios',
+      icon: MessageCircle,
+      hasNotification: true,
+      notificationCategory: 'comentarios',
       allowedRoles: ['super_admin', 'admin'] // Visible para ambos roles
     },
     {

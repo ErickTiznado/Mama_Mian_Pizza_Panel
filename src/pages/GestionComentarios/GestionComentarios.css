@@ -1,0 +1,27 @@
+/* Estilos para la página de gestión de comentarios */
+.gestion-comentarios-page {
+  padding: 20px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 25px;
+}
+
+.page-header h1 {
+  color: #f97316;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.page-description {
+  color: #94a3b8;
+  font-size: 1rem;
+  line-height: 1.5;
+  max-width: 800px;
+}
+
+.page-content {
+  width: 100%;
+}

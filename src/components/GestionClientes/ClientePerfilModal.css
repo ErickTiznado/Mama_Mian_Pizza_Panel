@@ -689,3 +689,180 @@
     font-size: 13px;
   }
 }
+
+/* Estilos para la sección de Experiencias */
+.experiencias-column {
+  background-color: #1e293b;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  border: 1px solid #334155;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.experiencias-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.experiencias-container::-webkit-scrollbar {
+  width: 5px;
+}
+
+.experiencias-container::-webkit-scrollbar-thumb {
+  background-color: #475569;
+  border-radius: 10px;
+}
+
+.experiencias-container::-webkit-scrollbar-track {
+  background-color: #1e293b;
+  border-radius: 10px;
+}
+
+.experiencia-card {
+  background-color: #0f172a;
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid #334155;
+  transition: all 0.2s ease;
+}
+
+.experiencia-card:hover {
+  border-color: #f97316;
+  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.2);
+}
+
+.experiencia-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+}
+
+.experiencia-id {
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.experiencia-titulo {
+  font-weight: 600;
+  color: #f8fafc;
+  font-size: 1.1rem;
+}
+
+.experiencia-valoracion {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #f97316;
+  font-weight: 600;
+}
+
+.experiencia-contenido {
+  color: #e2e8f0;
+  font-style: italic;
+  margin: 10px 0;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  border-left: 3px solid #475569;
+  padding-left: 12px;
+  background-color: #1e293b;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 0.95rem;
+}
+
+.experiencia-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.experiencia-estado {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.experiencia-acciones {
+  display: flex;
+  gap: 8px;
+}
+
+.badge-aprobado,
+.badge-pendiente {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-aprobado {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.badge-pendiente {
+  background-color: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.cargando-experiencias,
+.error-experiencias,
+.no-experiencias {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  color: #94a3b8;
+  font-style: italic;
+  text-align: center;
+}
+
+.error-experiencias {
+  color: #f87171;
+}
+
+/* Estructura para la sección derecha */
+.cliente-perfil-right-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cliente-perfil-column.comentarios-column {
+  margin-bottom: 0;
+}
+
+/* Ajustes para las columnas principales */
+.cliente-perfil-modal-columns {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 30px;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .cliente-perfil-modal-columns {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
