@@ -1,22 +1,25 @@
 /* InventoryAlerts.css - Centro de alertas del inventario */
+/* Importando variables globales de la app */
+@import '../../styles/variables.css';
+
 :root {
-  /* Paleta de colores moderna para inventario */
-  --ninv-bg-primary: #0f172a;
-  --ninv-bg-secondary: #1e293b;
-  --ninv-bg-tertiary: #334155;
-  --ninv-bg-card: #1e293b;
-  --ninv-bg-card-hover: #334155;
+  /* Usando la paleta de colores de MamaMianPizza */
+  --ninv-bg-primary: var(--color-primary);
+  --ninv-bg-secondary: var(--color-secondary);
+  --ninv-bg-tertiary: var(--color-tertiary);
+  --ninv-bg-card: var(--color-bg-secondary);
+  --ninv-bg-card-hover: var(--color-bg-tertiary);
   
-  --ninv-text-primary: #f8fafc;
-  --ninv-text-secondary: #cbd5e1;
-  --ninv-text-muted: #94a3b8;
+  --ninv-text-primary: var(--color-text);
+  --ninv-text-secondary: var(--color-text-light);
+  --ninv-text-muted: var(--color-text-lighter);
   
-  --ninv-accent-blue: #3b82f6;
-  --ninv-accent-green: #10b981;
-  --ninv-accent-yellow: #f59e0b;
-  --ninv-accent-red: #ef4444;
-  --ninv-accent-purple: #8b5cf6;
-  --ninv-accent-orange: #f97316;
+  /* Usando el orange accent como color principal */
+  --ninv-accent-primary: var(--color-accent);
+  --ninv-accent-primary-hover: var(--orange-hover);
+  --ninv-accent-green: var(--color-success);
+  --ninv-accent-yellow: var(--color-warning);
+  --ninv-accent-red: var(--color-danger);
   
   --ninv-border: #475569;
   --ninv-border-light: #64748b;
@@ -141,7 +144,7 @@
 
 .ninv-stat-card.total .ninv-stat-icon {
   background-color: rgba(59, 130, 246, 0.1);
-  color: var(--ninv-accent-blue);
+  color: var(--ninv-accent-primary);
 }
 
 .ninv-stat-card.critical .ninv-stat-icon {
@@ -156,12 +159,12 @@
 
 .ninv-stat-card.stock .ninv-stat-icon {
   background-color: rgba(139, 92, 246, 0.1);
-  color: var(--ninv-accent-purple);
+  color: var(--ninv-accent-primary-hover);
 }
 
 .ninv-stat-card.expiry .ninv-stat-icon {
   background-color: rgba(249, 115, 22, 0.1);
-  color: var(--ninv-accent-orange);
+  color: var(--ninv-accent-primary);
 }
 
 .ninv-stat-icon svg {
@@ -229,7 +232,7 @@
 
 .ninv-filter-select:focus {
   outline: none;
-  border-color: var(--ninv-accent-blue);
+  border-color: var(--ninv-accent-primary);
 }
 
 .ninv-filter-select option {
@@ -280,7 +283,7 @@
 }
 
 .ninv-alert-item.info {
-  border-left: 4px solid var(--ninv-accent-blue);
+  border-left: 4px solid var(--ninv-accent-primary);
   background-color: rgba(59, 130, 246, 0.05);
 }
 
@@ -301,7 +304,7 @@
 }
 
 .ninv-alert-item.info .ninv-alert-icon {
-  color: var(--ninv-accent-blue);
+  color: var(--ninv-accent-primary);
 }
 
 /* Contenido de alerta */
@@ -425,7 +428,7 @@
 .ninv-recommendations-title svg {
   width: 1.25rem;
   height: 1.25rem;
-  color: var(--ninv-accent-blue);
+  color: var(--ninv-accent-primary);
 }
 
 .ninv-recommendations-list {
@@ -447,7 +450,7 @@
 .ninv-recommendation-item svg {
   width: 1rem;
   height: 1rem;
-  color: var(--ninv-accent-blue);
+  color: var(--ninv-accent-primary);
   flex-shrink: 0;
   margin-top: 0.125rem;
 }
@@ -457,6 +460,205 @@
   color: var(--ninv-text-secondary);
   margin: 0;
   line-height: 1.5;
+}
+
+/* Sección especial de alertas de caducidad */
+.ninv-expiry-section {
+  background-color: var(--ninv-bg-card);
+  border-radius: var(--ninv-radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--ninv-accent-red);
+  box-shadow: var(--ninv-shadow);
+}
+
+.ninv-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  margin: 0 0 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--ninv-border);
+  color: var(--ninv-text-primary);
+}
+
+.ninv-section-title svg {
+  color: var(--ninv-accent-red);
+}
+
+.ninv-expiry-subtitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  margin: 1rem 0;
+  padding-left: 0.5rem;
+}
+
+.ninv-expiry-subtitle.critical {
+  color: var(--ninv-accent-red);
+}
+
+.ninv-expiry-subtitle.warning {
+  color: var(--ninv-accent-yellow);
+}
+
+.ninv-expiry-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ninv-alert-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--ninv-bg-primary);
+  border-radius: var(--ninv-radius);
+  padding: 1rem;
+  gap: 0.75rem;
+  border: 1px solid var(--ninv-border);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ninv-alert-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ninv-shadow-lg);
+}
+
+.ninv-alert-card.critical {
+  border-left: 4px solid var(--ninv-accent-red);
+}
+
+.ninv-alert-card.warning {
+  border-left: 4px solid var(--ninv-accent-yellow);
+}
+
+.ninv-alert-card.warning.urgent {
+  border-left: 4px solid var(--ninv-accent-red);
+  animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+  0% {
+    border-left-color: var(--ninv-accent-red);
+  }
+  50% {
+    border-left-color: var(--ninv-accent-yellow);
+  }
+  100% {
+    border-left-color: var(--ninv-accent-red);
+  }
+}
+
+.ninv-alert-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ninv-alert-type {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.ninv-alert-card.critical .ninv-alert-type {
+  color: var(--ninv-accent-red);
+}
+
+.ninv-alert-card.warning .ninv-alert-type {
+  color: var(--ninv-accent-yellow);
+}
+
+.ninv-alert-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ninv-alert-message {
+  font-size: 1rem;
+  color: var(--ninv-text-primary);
+}
+
+.ninv-alert-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.ninv-meta-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ninv-meta-label {
+  color: var(--ninv-text-muted);
+}
+
+.ninv-meta-value {
+  font-weight: 500;
+}
+
+.ninv-meta-value.critical {
+  color: var(--ninv-accent-red);
+}
+
+.ninv-meta-value.warning {
+  color: var(--ninv-accent-yellow);
+}
+
+.ninv-alert-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.ninv-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--ninv-radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.ninv-btn-primary {
+  background-color: var(--ninv-accent-primary);
+  color: white;
+}
+
+.ninv-btn-primary:hover {
+  background-color: var(--ninv-accent-primary-hover);
+}
+
+.ninv-btn-danger {
+  background-color: var(--ninv-accent-red);
+  color: white;
+}
+
+.ninv-btn-danger:hover {
+  background-color: #e11d48;
+}
+
+.ninv-btn-dismiss {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ninv-text-muted);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.ninv-btn-dismiss:hover {
+  color: var(--ninv-text-primary);
 }
 
 /* Responsive */

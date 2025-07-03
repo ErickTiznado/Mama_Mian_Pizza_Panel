@@ -34,7 +34,7 @@ const Restablecer = () => {
     }
 
     try {
-      const response = await axios.put('https://api.mamamianpizza.com/api/auth/reset-password', { 
+      const response = await axios.put('https://api.mamamianpizza.com/api/auth/admin/reset-password', { 
         token, 
         nuevaContrasena 
       });

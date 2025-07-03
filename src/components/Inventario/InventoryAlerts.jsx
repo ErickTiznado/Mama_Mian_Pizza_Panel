@@ -106,6 +106,124 @@ const InventoryAlerts = ({ alerts, inventoryData, onDataUpdate }) => {
     return recommendations;
   };
 
+  // Componente para renderizar la sección de caducidad
+  const ExpiryAlertsSection = () => {
+    const expiryAlerts = alerts.filter(alert => 
+      alert.category === 'expiry' && !dismissedAlerts.has(alert.id)
+    );
+    
+    if (expiryAlerts.length === 0) {
+      return null;
+    }
+    
+    // Agrupar por estado (vencidos vs próximos a vencer)
+    const expired = expiryAlerts.filter(a => a.daysRemaining <= 0);
+    const expiringSoon = expiryAlerts.filter(a => a.daysRemaining > 0);
+    
+    return (
+      <div className="ninv-expiry-section">
+        <h3 className="ninv-section-title">
+          <Clock />
+          Alertas de Caducidad
+        </h3>
+        
+        {expired.length > 0 && (
+          <>
+            <h4 className="ninv-expiry-subtitle critical">
+              <AlertTriangle /> Productos Vencidos ({expired.length})
+            </h4>
+            <div className="ninv-expiry-group">
+              {expired.map(alert => (
+                <div key={alert.id} className="ninv-alert-card critical expiry">
+                  <div className="ninv-alert-header">
+                    <div className="ninv-alert-type">
+                      {getAlertIcon(alert.type)}
+                      <span>{alert.title}</span>
+                    </div>
+                    <button 
+                      className="ninv-btn-dismiss" 
+                      onClick={() => dismissAlert(alert.id)}
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                  
+                  <div className="ninv-alert-content">
+                    <div className="ninv-alert-message">{alert.message}</div>
+                    <div className="ninv-alert-meta">
+                      <div className="ninv-meta-item">
+                        <span className="ninv-meta-label">Fecha de caducidad:</span>
+                        <span className="ninv-meta-value">{alert.date}</span>
+                      </div>
+                      <div className="ninv-meta-item">
+                        <span className="ninv-meta-label">Estado:</span>
+                        <span className="ninv-meta-value critical">Vencido hace {Math.abs(alert.daysRemaining)} días</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="ninv-alert-actions">
+                    <button className="ninv-btn ninv-btn-danger">
+                      Marcar como Descartado
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+        
+        {expiringSoon.length > 0 && (
+          <>
+            <h4 className="ninv-expiry-subtitle warning">
+              <AlertCircle /> Próximos a Vencer ({expiringSoon.length})
+            </h4>
+            <div className="ninv-expiry-group">
+              {expiringSoon.map(alert => (
+                <div key={alert.id} className={`ninv-alert-card warning expiry ${alert.daysRemaining <= 2 ? 'urgent' : ''}`}>
+                  <div className="ninv-alert-header">
+                    <div className="ninv-alert-type">
+                      {getAlertIcon(alert.type)}
+                      <span>{alert.title}</span>
+                    </div>
+                    <button 
+                      className="ninv-btn-dismiss" 
+                      onClick={() => dismissAlert(alert.id)}
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                  
+                  <div className="ninv-alert-content">
+                    <div className="ninv-alert-message">{alert.message}</div>
+                    <div className="ninv-alert-meta">
+                      <div className="ninv-meta-item">
+                        <span className="ninv-meta-label">Fecha de caducidad:</span>
+                        <span className="ninv-meta-value">{alert.date}</span>
+                      </div>
+                      <div className="ninv-meta-item">
+                        <span className="ninv-meta-label">Días restantes:</span>
+                        <span className={`ninv-meta-value ${alert.daysRemaining <= 2 ? 'critical' : 'warning'}`}>
+                          {alert.daysRemaining} día{alert.daysRemaining !== 1 ? 's' : ''}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="ninv-alert-actions">
+                    <button className="ninv-btn ninv-btn-primary">
+                      Marcar para Promoción
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="ninv-inventory-alerts">
       {/* Header con título y acciones */}
@@ -209,7 +327,10 @@ const InventoryAlerts = ({ alerts, inventoryData, onDataUpdate }) => {
         </div>
       </div>
 
-      {/* Lista de alertas */}
+      {/* Sección especial para alertas de caducidad */}
+      {filterType === 'all' || filterType === 'expiry' ? <ExpiryAlertsSection /> : null}
+      
+      {/* Lista general de alertas */}
       <div className="ninv-alerts-list">
         {sortedAlerts.length === 0 ? (
           <div className="ninv-alerts-empty">
@@ -263,6 +384,9 @@ const InventoryAlerts = ({ alerts, inventoryData, onDataUpdate }) => {
           ))}
         </div>
       </div>
+
+      {/* Sección de alertas de caducidad */}
+      <ExpiryAlertsSection />
     </div>
   );
 };

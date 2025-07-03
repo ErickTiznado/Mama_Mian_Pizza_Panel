@@ -1,22 +1,25 @@
 /* InventoryDashboard.css - Dashboard de métricas del inventario */
+/* Importando variables globales de la app */
+@import '../../styles/variables.css';
+
 :root {
-  /* Paleta de colores moderna para inventario */
-  --ninv-bg-primary: #0f172a;
-  --ninv-bg-secondary: #1e293b;
-  --ninv-bg-tertiary: #334155;
-  --ninv-bg-card: #1e293b;
-  --ninv-bg-card-hover: #334155;
+  /* Usando la paleta de colores de MamaMianPizza */
+  --ninv-bg-primary: var(--color-primary);
+  --ninv-bg-secondary: var(--color-secondary);
+  --ninv-bg-tertiary: var(--color-tertiary);
+  --ninv-bg-card: var(--color-bg-secondary);
+  --ninv-bg-card-hover: var(--color-bg-tertiary);
   
-  --ninv-text-primary: #f8fafc;
-  --ninv-text-secondary: #cbd5e1;
-  --ninv-text-muted: #94a3b8;
+  --ninv-text-primary: var(--color-text);
+  --ninv-text-secondary: var(--color-text-light);
+  --ninv-text-muted: var(--color-text-lighter);
   
-  --ninv-accent-blue: #3b82f6;
-  --ninv-accent-green: #10b981;
-  --ninv-accent-yellow: #f59e0b;
-  --ninv-accent-red: #ef4444;
-  --ninv-accent-purple: #8b5cf6;
-  --ninv-accent-orange: #f97316;
+  /* Usando el orange accent como color principal */
+  --ninv-accent-primary: var(--color-accent);
+  --ninv-accent-primary-hover: var(--orange-hover);
+  --ninv-accent-green: var(--color-success);
+  --ninv-accent-yellow: var(--color-warning);
+  --ninv-accent-red: var(--color-danger);
   
   --ninv-border: #475569;
   --ninv-border-light: #64748b;
@@ -54,7 +57,7 @@
   width: 2rem;
   height: 2rem;
   border: 3px solid var(--ninv-border);
-  border-top: 3px solid var(--ninv-accent-blue);
+  border-top: 3px solid var(--ninv-accent-primary);
   border-radius: 50%;
   animation: ninv-spin 1s linear infinite;
 }
@@ -89,7 +92,7 @@
 }
 
 .ninv-metric-card-blue {
-  border-left: 4px solid var(--ninv-accent-blue);
+  border-left: 4px solid var(--ninv-accent-primary);
 }
 
 .ninv-metric-card-green {
@@ -105,11 +108,11 @@
 }
 
 .ninv-metric-card-purple {
-  border-left: 4px solid var(--ninv-accent-purple);
+  border-left: 4px solid var(--ninv-accent-primary-hover);
 }
 
 .ninv-metric-card-orange {
-  border-left: 4px solid var(--ninv-accent-orange);
+  border-left: 4px solid var(--ninv-accent-primary);
 }
 
 /* Header de métrica */
@@ -132,7 +135,7 @@
 
 .ninv-metric-card-blue .ninv-metric-icon {
   background-color: rgba(59, 130, 246, 0.1);
-  color: var(--ninv-accent-blue);
+  color: var(--ninv-accent-primary);
 }
 
 .ninv-metric-card-green .ninv-metric-icon {
@@ -152,12 +155,12 @@
 
 .ninv-metric-card-purple .ninv-metric-icon {
   background-color: rgba(139, 92, 246, 0.1);
-  color: var(--ninv-accent-purple);
+  color: var(--ninv-accent-primary-hover);
 }
 
 .ninv-metric-card-orange .ninv-metric-icon {
   background-color: rgba(249, 115, 22, 0.1);
-  color: var(--ninv-accent-orange);
+  color: var(--ninv-accent-primary);
 }
 
 /* Info de métrica */
@@ -233,7 +236,7 @@
 .ninv-section-title svg {
   width: 1.25rem;
   height: 1.25rem;
-  color: var(--ninv-accent-blue);
+  color: var(--ninv-accent-primary);
 }
 
 /* Grid de alertas rápidas */
@@ -261,7 +264,7 @@
 }
 
 .ninv-alert-item.info {
-  border-left-color: var(--ninv-accent-blue);
+  border-left-color: var(--ninv-accent-primary);
 }
 
 .ninv-alert-icon {
@@ -279,7 +282,7 @@
 }
 
 .ninv-alert-item.info .ninv-alert-icon {
-  color: var(--ninv-accent-blue);
+  color: var(--ninv-accent-primary);
 }
 
 .ninv-alert-content {
@@ -349,7 +352,7 @@
 
 .ninv-category-bar {
   height: 100%;
-  background-color: var(--ninv-accent-blue);
+  background-color: var(--ninv-accent-primary);
   border-radius: 4px;
   transition: width 0.3s ease;
 }

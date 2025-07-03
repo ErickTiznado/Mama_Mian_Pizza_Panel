@@ -7,8 +7,8 @@ import InventoryAlerts from './InventoryAlerts';
 import PizzaIngredients from './PizzaIngredients';
 import InventoryService from '../../services/InventoryService';
 
-const InventoryTabs = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
+const InventoryTabs = ({ initialTab = 'dashboard' }) => {
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [inventoryData, setInventoryData] = useState([]);
   const [inventoryStats, setInventoryStats] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -49,6 +49,18 @@ const InventoryTabs = () => {
   useEffect(() => {
     loadInventoryData();
   }, []);
+  
+  // Efecto para destacar la pestaña de alertas cuando cambia el número de alertas
+  useEffect(() => {
+    // Si hay alertas críticas de caducidad, cambiar automáticamente a la pestaña de alertas
+    const expiryAlerts = alerts.filter(alert => alert.category === 'expiry' && alert.type === 'critical');
+    if (expiryAlerts.length > 0 && activeTab !== 'alerts') {
+      // Solo cambiar automáticamente si no se ha interactuado con la interfaz
+      if (loading) {
+        setActiveTab('alerts');
+      }
+    }
+  }, [alerts, loading]);
 
   const tabs = [
     {

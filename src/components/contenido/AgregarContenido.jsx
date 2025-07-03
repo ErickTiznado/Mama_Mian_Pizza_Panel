@@ -611,8 +611,6 @@ const AgregarContenido = () => {
           <div className="header-section">
             <div className="header-title-section">
               <h1 className="main-title">Gestión de Contenido</h1>
-              {/* Indicador de usuario autenticado */}
-
             </div>
             <div className="top-controls">
               {/* Solo mostrar botón si está autenticado */}

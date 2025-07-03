@@ -22,6 +22,53 @@
   background-color: #1e293b;
 }
 
+/* ALERTA DE CADUCIDAD */
+.inventario-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.expiry-alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #ff3b3b;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  animation: pulse 2s infinite;
+  box-shadow: 0 2px 8px rgba(255, 59, 59, 0.4);
+}
+
+.expiry-alert-banner.warning {
+  background-color: #ff9500;
+  animation: none;
+  box-shadow: 0 2px 8px rgba(255, 149, 0, 0.4);
+}
+
+.expiry-alert-banner svg {
+  flex-shrink: 0;
+}
+
+.expiry-alert-banner .alert-content {
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 /* CONTENEDOR GENERAL */
 .inv-wrapper {
   display: flex;

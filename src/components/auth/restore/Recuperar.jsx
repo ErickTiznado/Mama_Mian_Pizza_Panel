@@ -10,7 +10,7 @@ const Recuperar = () => {
 
   const handleEnviarCodigo = async (e) => {
     e.preventDefault();    try {
-      const response = await axios.post('https://api.mamamianpizza.com/api/auth/request-reset', { correo });
+      const response = await axios.post('https://api.mamamianpizza.com/api/auth/admin/request-reset', { correo });
       setMensaje(response.data.message);
 
       // ✅ Redirigir a VerificarCodigo.jsx pasando el correo como parámetro

@@ -11,7 +11,7 @@ const VerificarCodigo = () => {
   const correo = location.state?.correo;
   const handleVerificarCodigo = async () => {
     try {
-      const response = await axios.post('https://api.mamamianpizza.com/api/auth/verify-reset', { 
+      const response = await axios.post('https://api.mamamianpizza.com/api/auth/admin/verify-reset', { 
         correo, 
         otp: codigo 
       });

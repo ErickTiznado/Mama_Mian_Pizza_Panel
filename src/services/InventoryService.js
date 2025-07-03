@@ -226,9 +226,25 @@ export class InventoryService {
 
         // Alertas de productos próximos a vencer
         if (item.fecha_caducidad) {
-          const expiryDate = new Date(item.fecha_caducidad);
+          // Asegurarse de que la fecha de caducidad es válida
+          let expiryDate;
+          try {
+            // Intentar crear un objeto de fecha con el formato ISO
+            expiryDate = new Date(item.fecha_caducidad);
+            
+            // Verificar si la fecha es válida
+            if (isNaN(expiryDate.getTime())) {
+              console.warn(`Fecha de caducidad inválida para ${item.nombre}: ${item.fecha_caducidad}`);
+              return; // Saltar este producto
+            }
+          } catch (err) {
+            console.warn(`Error al procesar la fecha de caducidad para ${item.nombre}: ${err.message}`);
+            return; // Saltar este producto
+          }
+          
           const daysRemaining = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
           
+          // Producto ya vencido (crítico)
           if (daysRemaining <= 0) {
             alerts.push({
               id: `expiry-${item.id_ingrediente}`,
@@ -241,7 +257,23 @@ export class InventoryService {
               daysRemaining,
               priority: 3
             });
-          } else if (daysRemaining <= 7) {
+          } 
+          // Producto que vence muy pronto (crítico)
+          else if (daysRemaining <= 2) {
+            alerts.push({
+              id: `expiry-${item.id_ingrediente}`,
+              type: 'critical',
+              category: 'expiry',
+              title: 'Vence Muy Pronto',
+              message: `${item.nombre} vence en ${daysRemaining} día${daysRemaining !== 1 ? 's' : ''}`,
+              product: item.nombre,
+              date: expiryDate.toLocaleDateString(),
+              daysRemaining,
+              priority: 3
+            });
+          } 
+          // Producto que vence pronto (advertencia)
+          else if (daysRemaining <= 7) {
             alerts.push({
               id: `expiry-${item.id_ingrediente}`,
               type: 'warning',
@@ -529,6 +561,89 @@ export class InventoryService {
     }
     
     throw error;
+  }
+
+  /**
+   * Verifica específicamente los productos próximos a vencer
+   * @param {number} daysThreshold - Días antes de vencimiento para alertar (por defecto 7 días)
+   * @returns {Promise<Array>} - Lista de alertas de caducidad
+   */
+  static async checkExpiringProducts(daysThreshold = 7) {
+    try {
+      const products = await this.getAllProducts();
+      const today = new Date();
+      const expiryAlerts = [];
+      
+      products.forEach(item => {
+        if (item.fecha_caducidad) {
+          try {
+            const expiryDate = new Date(item.fecha_caducidad);
+            
+            // Verificar si la fecha es válida
+            if (isNaN(expiryDate.getTime())) {
+              console.warn(`Fecha de caducidad inválida para ${item.nombre}: ${item.fecha_caducidad}`);
+              return; // Continuar con el siguiente producto
+            }
+            
+            const daysRemaining = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+            
+            // Producto ya vencido
+            if (daysRemaining <= 0) {
+              expiryAlerts.push({
+                id: `expiry-${item.id_ingrediente}`,
+                type: 'critical',
+                category: 'expiry',
+                title: 'Producto Vencido',
+                message: `${item.nombre} venció el ${expiryDate.toLocaleDateString()}`,
+                product: item.nombre,
+                date: expiryDate.toLocaleDateString(),
+                daysRemaining,
+                priority: 3,
+                productId: item.id_ingrediente
+              });
+            } 
+            // Producto que vence muy pronto (1-2 días)
+            else if (daysRemaining <= 2) {
+              expiryAlerts.push({
+                id: `expiry-${item.id_ingrediente}`,
+                type: 'critical',
+                category: 'expiry',
+                title: 'Vence Muy Pronto',
+                message: `${item.nombre} vence en ${daysRemaining} día${daysRemaining !== 1 ? 's' : ''}`,
+                product: item.nombre,
+                date: expiryDate.toLocaleDateString(),
+                daysRemaining,
+                priority: 3,
+                productId: item.id_ingrediente
+              });
+            }
+            // Producto próximo a vencer según umbral
+            else if (daysRemaining <= daysThreshold) {
+              expiryAlerts.push({
+                id: `expiry-${item.id_ingrediente}`,
+                type: 'warning',
+                category: 'expiry',
+                title: 'Próximo a Vencer',
+                message: `${item.nombre} vence en ${daysRemaining} días`,
+                product: item.nombre,
+                date: expiryDate.toLocaleDateString(),
+                daysRemaining,
+                priority: 2,
+                productId: item.id_ingrediente
+              });
+            }
+          } catch (err) {
+            console.error(`Error al procesar fecha para ${item.nombre}:`, err);
+          }
+        }
+      });
+      
+      // Ordenar alertas por días restantes (más urgentes primero)
+      return expiryAlerts.sort((a, b) => a.daysRemaining - b.daysRemaining);
+    } catch (error) {
+      console.error('Error checking expiring products:', error);
+      throw new Error('Error al verificar productos próximos a vencer');
+    }
   }
 }
 

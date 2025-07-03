@@ -65,31 +65,64 @@
 .search-bar-container {
   display: flex;
   align-items: center;
-  background-color: #0f172a;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 8px 12px;
+  background-color: transparent;
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 0;
+  padding: 6px 0;
   position: relative;
-  width: 500px;
+  width: 400px;
+  transition: all 0.3s ease;
+  height: 40px; /* Set a fixed height to ensure proper centering */
+}
+
+.search-bar-container:focus-within {
+  border-bottom: 1px solid var(--orange-accent);
 }
 
 .search-icon {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
   color: var(--text-secondary);
-  margin-right: 8px;
+  font-size: 0.9rem;
+  pointer-events: none; /* Ensures the icon doesn't interfere with clicks */
+  line-height: 1; /* Ensures proper vertical alignment */
+  display: flex; /* Helps with vertical alignment */
+  align-items: center;
+  justify-content: center;
 }
 
 .cont_search-input {
   background-color: transparent;
   border: none;
   color: var(--text-color);
-  font-size: 1rem;
+  font-size: 0.95rem;
   outline: none;
   width: 100%;
-  padding: 12px 15px 12px 42px;
+  padding: 0 5px 0 30px; /* Removed top/bottom padding to use container height */
+  transition: all 0.3s ease;
+  height: 100%; /* Fill the container height */
+  line-height: 40px; /* Match the container height */
 }
 
 .cont_search-input::placeholder {
   color: var(--text-secondary);
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.cont_search-input:focus::placeholder {
+  opacity: 0.4;
+}
+
+.search-bar-container:hover .search-icon {
+  color: var(--orange-accent);
+  transition: color 0.3s ease;
+}
+
+.search-bar-container:focus-within .search-icon {
+  color: var(--orange-accent);
 }
 
 .btn-add-new {
@@ -704,6 +737,7 @@
   
   .search-bar-container {
     width: 60%;
+    margin-right: 15px;
   }
 }
 
@@ -723,6 +757,7 @@
   
   .search-bar-container {
     width: 100%;
+    margin-bottom: 15px;
   }
   
   .btn-add-new {

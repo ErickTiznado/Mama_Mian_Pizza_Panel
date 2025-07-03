@@ -1,8 +1,11 @@
 /* PizzaIngredients.css - Gestión de ingredientes para personalización de pizzas */
+/* Importando variables globales de la app */
+@import '../../styles/variables.css';
+
 :root {
-  /* Paleta de colores específica para ingredientes de pizza */
-  --ninv-pizza-accent: #ff6b35;
-  --ninv-pizza-light: #ffa366;
+  /* Usando la paleta de colores de MamaMianPizza para ingredientes de pizza */
+  --ninv-pizza-accent: var(--color-accent);
+  --ninv-pizza-light: var(--orange-hover);
   --ninv-pizza-dark: #cc5429;
 }
 
