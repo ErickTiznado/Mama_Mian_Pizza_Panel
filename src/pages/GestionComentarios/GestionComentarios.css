@@ -3,6 +3,12 @@
   padding: 20px;
   max-width: 1600px;
   margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #10182b;
+  min-height: 100vh;
 }
 
 .page-header {
@@ -13,15 +19,10 @@
   color: #f97316;
   font-size: 2rem;
   margin-bottom: 10px;
-}
-
-.page-description {
-  color: #94a3b8;
-  font-size: 1rem;
-  line-height: 1.5;
-  max-width: 800px;
+  font-weight: 700;
 }
 
 .page-content {
   width: 100%;
+  flex: 1;
 }

@@ -62,8 +62,31 @@ const ComentariosExperienciasPanel = () => {
     
     try {
       const respuesta = await getAllExperiencias();
+      
+      // Normalizar los datos de experiencias para tener un formato consistente
+      const experienciasNormalizadas = (respuesta.experiencias || []).map(experiencia => {
+        // Determinar el estado basado en el campo aprobado
+        let estado, aprobado;
+        if (experiencia.aprobado === 1 || experiencia.aprobado === true) {
+          estado = 'aprobado';
+          aprobado = true;
+        } else if (experiencia.aprobado === 0 || experiencia.aprobado === false) {
+          estado = experiencia.rechazado ? 'rechazado' : 'pendiente';
+          aprobado = false;
+        } else {
+          estado = 'pendiente';
+          aprobado = false;
+        }
+        
+        return {
+          ...experiencia,
+          aprobado: aprobado,
+          estado: estado
+        };
+      });
+      
       // Ordenar primero por pendientes y luego por fecha más reciente
-      const experienciasOrdenadas = ordenarPorPrioridad(respuesta.experiencias || []);
+      const experienciasOrdenadas = ordenarPorPrioridad(experienciasNormalizadas);
       setExperiencias(experienciasOrdenadas);
     } catch (error) {
       console.error('Error al cargar experiencias:', error);
@@ -84,21 +107,36 @@ const ComentariosExperienciasPanel = () => {
       const data = await getAllResenas();
       
       // Transformar los datos para tener un formato consistente
-      const comentariosFormateados = (data.resenas || []).map(comentario => ({
-        id: comentario.id,
-        texto: comentario.comentario,
-        fecha: comentario.fecha,
-        valoracion: comentario.valoracion,
-        aprobado: comentario.aprobada === 1,
-        estado: comentario.aprobada === 1 ? 'aprobado' : comentario.aprobada === 0 ? 'rechazado' : 'pendiente',
-        usuario: {
-          id: comentario.id_usuario,
-          nombre: comentario.nombre_usuario || 'Usuario',
-          foto_perfil: comentario.foto_perfil
-        },
-        producto: comentario.producto,
-        mostrarEnTienda: comentario.mostrarEnTienda !== undefined ? comentario.mostrarEnTienda : true
-      }));
+      const comentariosFormateados = (data.resenas || []).map(comentario => {
+        // Determinar el estado basado en el campo aprobada
+        let estado, aprobado;
+        if (comentario.aprobada === 1) {
+          estado = 'aprobado';
+          aprobado = true;
+        } else if (comentario.aprobada === 0) {
+          estado = 'rechazado';
+          aprobado = false;
+        } else {
+          estado = 'pendiente';
+          aprobado = false;
+        }
+        
+        return {
+          id: comentario.id,
+          texto: comentario.comentario,
+          fecha: comentario.fecha,
+          valoracion: comentario.valoracion,
+          aprobado: aprobado,
+          estado: estado,
+          usuario: {
+            id: comentario.id_usuario,
+            nombre: comentario.nombre_usuario || 'Usuario',
+            foto_perfil: comentario.foto_perfil
+          },
+          producto: comentario.producto,
+          mostrarEnTienda: comentario.mostrarEnTienda !== undefined ? comentario.mostrarEnTienda : true
+        };
+      });
       
       // Ordenar primero por pendientes y luego por fecha más reciente
       const comentariosOrdenados = ordenarPorPrioridad(comentariosFormateados);
@@ -116,8 +154,8 @@ const ComentariosExperienciasPanel = () => {
   const ordenarPorPrioridad = (items) => {
     return [...items].sort((a, b) => {
       // Primero, priorizar los pendientes
-      if (a.aprobado === false && b.aprobado === true) return -1;
-      if (a.aprobado === true && b.aprobado === false) return 1;
+      if (a.estado === 'pendiente' && b.estado !== 'pendiente') return -1;
+      if (a.estado !== 'pendiente' && b.estado === 'pendiente') return 1;
       
       // Si ambos tienen el mismo estado de aprobación, ordenar por fecha
       // Asumiendo que la fecha más reciente es mejor
@@ -146,9 +184,9 @@ const ComentariosExperienciasPanel = () => {
     // Aplicar filtro por estado
     if (filtroActivo !== 'todos') {
       if (filtroActivo === 'pendientes') {
-        items = items.filter(item => item.aprobado === false);
+        items = items.filter(item => item.estado === 'pendiente');
       } else if (filtroActivo === 'aprobados') {
-        items = items.filter(item => item.aprobado === true);
+        items = items.filter(item => item.estado === 'aprobado');
       } else if (filtroActivo === 'rechazados') {
         items = items.filter(item => item.estado === 'rechazado');
       }
@@ -194,7 +232,11 @@ const ComentariosExperienciasPanel = () => {
       setExperiencias(prevExperiencias => 
         prevExperiencias.map(exp => 
           exp.id_experiencia === idExperiencia 
-            ? { ...exp, aprobado, estado: aprobado ? 'aprobado' : 'pendiente' }
+            ? { 
+                ...exp, 
+                aprobado: aprobado, 
+                estado: aprobado ? 'aprobado' : 'rechazado' 
+              }
             : exp
         )
       );
@@ -273,7 +315,7 @@ const ComentariosExperienciasPanel = () => {
   const renderExperiencia = (experiencia) => (
     <div 
       key={`exp-${experiencia.id_experiencia}`} 
-      className={`panel-item experiencia-card ${!experiencia.aprobado ? 'pendiente-item' : ''}`}
+      className={`panel-item experiencia-card ${experiencia.estado === 'pendiente' ? 'pendiente-item' : ''}`}
     >
       <div className="panel-item-header">
         <div className="panel-item-tipo">
@@ -285,12 +327,14 @@ const ComentariosExperienciasPanel = () => {
           <span>{experiencia.valoracion}</span>
           <Star size={16} fill="currentColor" />
         </div>
-        <div className={`panel-item-estado ${experiencia.aprobado ? 'estado-aprobado' : 'estado-pendiente'}`}>
-          {experiencia.aprobado ? 
+        <div className={`panel-item-estado ${experiencia.estado === 'aprobado' ? 'estado-aprobado' : experiencia.estado === 'rechazado' ? 'estado-rechazado' : 'estado-pendiente'}`}>
+          {experiencia.estado === 'aprobado' ? 
             <CheckCircle size={14} /> : 
+            experiencia.estado === 'rechazado' ?
+            <XCircle size={14} /> :
             <AlertCircle size={14} />
           }
-          <span>{experiencia.aprobado ? 'Aprobado' : 'Pendiente'}</span>
+          <span>{experiencia.estado === 'aprobado' ? 'Aprobado' : experiencia.estado === 'rechazado' ? 'Rechazado' : 'Pendiente'}</span>
         </div>
       </div>
       
@@ -309,7 +353,7 @@ const ComentariosExperienciasPanel = () => {
       </div>
       
       <div className="panel-item-acciones">
-        {!experiencia.aprobado && (
+        {experiencia.estado !== 'aprobado' && (
           <button 
             className="btn-aprobar"
             onClick={() => handleExperienciaApproval(experiencia.id_experiencia, true)}
@@ -318,7 +362,7 @@ const ComentariosExperienciasPanel = () => {
             Aprobar
           </button>
         )}
-        {experiencia.aprobado && (
+        {experiencia.estado !== 'rechazado' && experiencia.estado !== 'pendiente' && (
           <button 
             className="btn-rechazar"
             onClick={() => handleExperienciaApproval(experiencia.id_experiencia, false)}
@@ -342,7 +386,7 @@ const ComentariosExperienciasPanel = () => {
   const renderComentario = (comentario) => (
     <div 
       key={`com-${comentario.id}`} 
-      className={`panel-item comentario-card ${!comentario.aprobado ? 'pendiente-item' : ''}`}
+      className={`panel-item comentario-card ${comentario.estado === 'pendiente' ? 'pendiente-item' : ''}`}
     >
       <div className="panel-item-header">
         <div className="panel-item-tipo">
@@ -354,12 +398,14 @@ const ComentariosExperienciasPanel = () => {
           <span>{comentario.valoracion}</span>
           <Star size={16} fill="currentColor" />
         </div>
-        <div className={`panel-item-estado ${comentario.aprobado ? 'estado-aprobado' : 'estado-pendiente'}`}>
-          {comentario.aprobado ? 
+        <div className={`panel-item-estado ${comentario.estado === 'aprobado' ? 'estado-aprobado' : comentario.estado === 'rechazado' ? 'estado-rechazado' : 'estado-pendiente'}`}>
+          {comentario.estado === 'aprobado' ? 
             <CheckCircle size={14} /> : 
+            comentario.estado === 'rechazado' ?
+            <XCircle size={14} /> :
             <AlertCircle size={14} />
           }
-          <span>{comentario.aprobado ? 'Aprobado' : 'Pendiente'}</span>
+          <span>{comentario.estado === 'aprobado' ? 'Aprobado' : comentario.estado === 'rechazado' ? 'Rechazado' : 'Pendiente'}</span>
         </div>
       </div>
       
@@ -381,7 +427,7 @@ const ComentariosExperienciasPanel = () => {
       </div>
       
       <div className="panel-item-acciones">
-        {!comentario.aprobado && (
+        {comentario.estado !== 'aprobado' && (
           <button 
             className="btn-aprobar"
             onClick={() => handleComentarioApproval(comentario.id, true)}
@@ -390,7 +436,7 @@ const ComentariosExperienciasPanel = () => {
             Aprobar
           </button>
         )}
-        {comentario.aprobado && (
+        {comentario.estado !== 'rechazado' && comentario.estado !== 'pendiente' && (
           <button 
             className="btn-rechazar"
             onClick={() => handleComentarioApproval(comentario.id, false)}
@@ -412,8 +458,8 @@ const ComentariosExperienciasPanel = () => {
 
   // Contar items pendientes
   const contarPendientes = () => {
-    const experienciasPendientes = experiencias.filter(exp => !exp.aprobado).length;
-    const comentariosPendientes = comentarios.filter(com => !com.aprobado).length;
+    const experienciasPendientes = experiencias.filter(exp => exp.estado === 'pendiente').length;
+    const comentariosPendientes = comentarios.filter(com => com.estado === 'pendiente').length;
     return experienciasPendientes + comentariosPendientes;
   };
   
@@ -423,15 +469,18 @@ const ComentariosExperienciasPanel = () => {
 
   return (
     <div className="comentarios-experiencias-panel">
-      <div className="panel-header">
-        <h2>Gestión de Comentarios y Experiencias</h2>
-        {totalPendientes > 0 && (
-          <div className="pendientes-badge">
-            <AlertCircle size={16} />
-            {totalPendientes} pendientes de revisión
+      {/* Banner de alerta para elementos pendientes */}
+      {totalPendientes > 0 && (
+        <div className="pendientes-alert-banner">
+          <AlertCircle size={20} />
+          <div className="alert-content">
+            <strong>¡Elementos pendientes de revisión!</strong>
+            <span>
+              Hay {totalPendientes} {totalPendientes === 1 ? 'elemento' : 'elementos'} que requieren tu atención.
+            </span>
           </div>
-        )}
-      </div>
+        </div>
+      )}
       
       <div className="panel-filtros">
         <div className="filtro-grupo">

@@ -11,10 +11,6 @@ const GestionComentariosPage = () => {
     <div className="gestion-comentarios-page">
       <header className="page-header">
         <h1>Gestión de Comentarios y Experiencias</h1>
-        <p className="page-description">
-          Administre los comentarios y experiencias de los clientes. Apruebe, rechace o elimine contenido.
-          Se priorizan los elementos pendientes de revisión.
-        </p>
       </header>
       
       <div className="page-content">
