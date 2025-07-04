@@ -27,7 +27,6 @@ const OrderDetailModal = ({
   changeOrderStatus,
   getStatusName
 }) => {
-  const [selectedDeliveryValue, setSelectedDeliveryValue] = useState('');
   const [liveAddress, setLiveAddress] = useState('');
   useEffect(() => {
     const getReverseAddress = async () => {
@@ -50,13 +49,6 @@ const OrderDetailModal = ({
       getReverseAddress();
     }
   }, [selectedOrder, showModal]);
-
-  const handleAssignDelivery = () => {
-    if (!selectedDeliveryValue) return;
-    const [name, phone] = selectedDeliveryValue.split('|');
-    console.log(`Repartidor asignado: ${name} - ${phone}`);
-    // Aquí podrías guardar en backend si hace falta
-  };
 
   if (!showModal || !selectedOrder) return null;
 
@@ -101,26 +93,7 @@ const OrderDetailModal = ({
 
           {/* COLUMNA 2 */}
           <div className="grid-col">
-            <div className="detalle-card">
-              <h3>🚚 Asignar Repartidor</h3>
-              <select
-                className="asignar-select"
-                value={selectedDeliveryValue}
-                onChange={(e) => setSelectedDeliveryValue(e.target.value)}
-              >
-                <option value="">Selecciona un repartidor</option>
-                <option value="Erick|+503 7083 0446">Erick - +503 7083 0446</option>
-                <option value="Yeferin Campos|+503 7905 8406">Yeferin Campos - +503 7905 8406</option>
-              </select>
-              <button
-                className="btn-azul"
-                onClick={handleAssignDelivery}
-                disabled={!selectedDeliveryValue}
-              >
-                <FaTruck style={{ marginRight: '8px' }} />
-                Asignar y Notificar Repartidor
-              </button>
-            </div>            {/* Ubicación en Tiempo Real */}
+            {/* Ubicación en Tiempo Real */}
             <div className="detalle-card">
               <h3>📍 Ubicación en Tiempo Real</h3>
               <div className="card-ubicacion">
