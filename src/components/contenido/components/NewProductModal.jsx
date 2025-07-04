@@ -609,8 +609,9 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
   const currentStepInfo = getStepInfo(currentStep);
 
   return (
-    <div className="new-order-modal new-product-modal">      <header className="new__order-modal-header">
-        <div className="new__order-modal-header-title">
+    <div className="npml-modal">
+      <header className="npml-header">
+        <div className="npml-header-title">
           <h2>
             <span className="step-icon">{currentStepInfo.icon}</span>
             {isEditing ? 'Editar Producto' : 'Nuevo Producto'}
@@ -621,18 +622,18 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
               onClose();
               resetForm();
             }}
-            className="new__order-modal-close-button"
+            className="npml-close-button"
           >
             <X />
           </button>
         </div>
-        <div className="new__order-modal-header-steps">
-          <span className="nor-step-progress-text">
+        <div className="npml-header-steps">
+          <span className="npml-progress-text">
             Paso {currentStep} de {totalSteps} - {currentStepInfo.title}
           </span>
-          <div className="nor-step-progress-bar-container">
+          <div className="npml-progress-bar-container">
             <div
-              className="nor-step-progress-bar"
+              className="npml-progress-bar"
               style={{
                 width: `${(currentStep / totalSteps) * 100}%`,
               }}
@@ -643,11 +644,11 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
       
       {/* Mostrar error si existe */}
       {error && (
-        <div className="error-message">
+        <div className="npml-error-message">
           <strong>Error:</strong> {error}
           <button 
             onClick={() => setError(null)} 
-            className="error-dismiss"
+            className="npml-error-dismiss"
           >
             ×
           </button>
@@ -656,13 +657,13 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
       
       {/* Mostrar loading si está procesando */}
       {isLoading && (
-        <div className="loading-message">
-          <div className="loading-spinner"></div>
+        <div className="npml-loading-message">
+          <div className="npml-loading-spinner"></div>
           <span>Procesando...</span>
         </div>
       )}
       
-      <div className="new__order-modal-content"
+      <div className="npml-content"
         style={{ opacity: isLoading ? 0.6 : 1, pointerEvents: isLoading ? 'none' : 'auto' }}
       >        {currentStep === 1 && (
           <Step1 
@@ -680,35 +681,35 @@ const NewProductModal = ({ show, onClose, onSuccess, editingProduct = null, isEd
         )}
       </div>
       
-      <footer className="new__order-modal-footer">
-        <div className="new__order-modal-footer-buttons">
+      <footer className="npml-footer">
+        <div className="npml-footer-buttons">
           {currentStep > 1 && (
             <button
-              className="nor-button nor-button-secondary"
+              className="npml-button npml-button-secondary"
               onClick={prevStep}
               disabled={isLoading}
             >
-              <ArrowLeft size={18} style={{ marginRight: '0.5rem' }} />
+              <ArrowLeft size={18} />
               Anterior
             </button>
           )}
           
           {currentStep < totalSteps ? (
             <button
-              className="nor-button nor-button-primary"
+              className="npml-button"
               onClick={nextStep}
               disabled={isLoading || !productData.titulo || !productData.descripcion || !productData.sesion || !productData.categoria || (!isEditing && !productData.imagen)}
             >
               Siguiente
-              <span style={{ marginLeft: '0.5rem' }}>→</span>
+              <span>→</span>
             </button>
           ) : (
             <button
-              className="nor-button nor-button-success"
+              className="npml-button npml-button-success"
               onClick={handleSubmit}
               disabled={isLoading}
             >
-              <span style={{ marginRight: '0.5rem' }}>✓</span>
+              <span>✓</span>
               {isEditing ? 'Actualizar Producto' : 'Crear Producto'}
             </button>
           )}

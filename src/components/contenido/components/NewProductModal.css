@@ -1,13 +1,212 @@
-/* CSS específico para NewProductModal, complementa NewOrderModal.css */
+/* CSS específico para NewProductModal con prefijo npml para evitar solapamiento */
 
-.new-product-modal {
-  /* Conserva estilos base de new-order-modal */
-  /* Mantiene alineación central y colores consistentes */
-  z-index: 1001; /* Asegurar que esté por encima de la tabla y otros elementos */
+/* Modal principal con scroll mejorado */
+.npml-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(400px, 90%, 1000px);
   max-height: 90vh;
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #0F172A;
+  border: 1px solid #283446;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  animation: fadeInScale 0.3s ease-out forwards;
+  z-index: 1001;
+  padding: 0;
+  
+  /* Scrollbar personalizado */
+  scrollbar-width: thin;
+  scrollbar-color: #f97316 #1e293b;
+}
+
+.npml-modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.npml-modal::-webkit-scrollbar-track {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+.npml-modal::-webkit-scrollbar-thumb {
+  background: #f97316;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.npml-modal::-webkit-scrollbar-thumb:hover {
+  background: #fb923c;
+}
+
+/* Header no fijo */
+.npml-header {
+  position: static;
+  flex-shrink: 0;
+  background-color: #0F172A;
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid #283446;
+  display: flex;
+  flex-direction: column;
+}
+
+.npml-header-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.npml-header-title h2 {
+  color: #ffffff;
+  font-size: 1.75rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.npml-header-title h2 .step-icon {
+  font-size: 1.5rem;
+  animation: pulse 2s infinite;
+}
+
+.npml-header-title h2 .step-subtitle {
+  color: var(--orange-accent, #f97316);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.npml-close-button {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #94a3b8;
+  transition: color 0.2s ease;
+}
+
+.npml-close-button:hover {
+  color: var(--orange-accent, #f97316);
+}
+
+.npml-header-steps {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+.npml-progress-text {
+  color: var(--orange-accent, #f97316);
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  display: block;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.npml-progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background-color: #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.npml-progress-bar {
+  background: linear-gradient(90deg, #f97316 0%, #fb923c 100%);
+  height: 100%;
+  border-radius: 12px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
+}
+
+/* Contenido sin scroll propio */
+.npml-content {
+  flex: 1;
+  overflow: visible;
+  padding: 1.5rem;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  position: relative;
+}
+
+/* Footer no fijo */
+.npml-footer {
+  position: static;
+  flex-shrink: 0;
+  background-color: #0F172A;
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
+  border-top: 1px solid #283446;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.npml-footer-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
+}
+
+.npml-button {
+  background-color: var(--orange-accent, #f97316);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.npml-button:hover {
+  background-color: #fb923c;
+  transform: translateY(-2px);
+}
+
+.npml-button:active {
+  transform: translateY(0);
+}
+
+.npml-button:disabled {
+  background-color: #4a5568;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.npml-button-secondary {
+  background-color: #4a5568;
+  color: #e2e8f0;
+}
+
+.npml-button-secondary:hover {
+  background-color: #5a6578;
+}
+
+.npml-button-success {
+  background-color: #10b981;
+}
+
+.npml-button-success:hover {
+  background-color: #0d9f71;
 }
 
 .new-product-modal .new__order-modal-header::before {
@@ -336,6 +535,74 @@
   background: rgba(239, 68, 68, 0.3);
   color: #ffffff;
   transform: scale(1.1);
+}
+
+/* Estilos para mensajes de error y loading */
+.npml-error-message {
+  background-color: #dc2626;
+  color: white;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.npml-error-dismiss {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 1rem;
+}
+
+.npml-loading-message {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #1e293b;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  color: #e2e8f0;
+}
+
+.npml-loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #4a5568;
+  border-top: 2px solid #f97316;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Animaciones */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 /* ==========================
@@ -1333,4 +1600,163 @@ input:checked + .slider:before {
   padding: 1.5rem 2rem;
   position: relative;
   flex-shrink: 0;
+}
+
+/* Estilos adicionales para forzar el comportamiento no-sticky */
+.new-product-modal .new__order-modal-header,
+.new-product-modal .new__order-modal-footer {
+  position: static !important;
+  top: unset !important;
+  left: unset !important;
+  right: unset !important;
+  bottom: unset !important;
+  z-index: auto !important;
+  transform: none !important;
+}
+
+/* Asegurar que los elementos internos del header no tengan posicionamiento fijo */
+.new-product-modal .new__order-modal-header-title,
+.new-product-modal .new__order-modal-header-steps,
+.new-product-modal .nor-step-progress-text,
+.new-product-modal .nor-step-progress-bar-container {
+  position: static !important;
+  top: unset !important;
+  left: unset !important;
+  right: unset !important;
+  bottom: unset !important;
+}
+
+/* Asegurar que los elementos internos del footer no tengan posicionamiento fijo */
+.new-product-modal .new__order-modal-footer-buttons,
+.new-product-modal .nor-button {
+  position: static !important;
+  top: unset !important;
+  left: unset !important;
+  right: unset !important;
+  bottom: unset !important;
+}
+
+/* Estilos para los select de sección y categoría */
+.npml-content select {
+  background-color: #10182b !important;
+  color: #e2e8f0 !important;
+  border: 1px solid #283446 !important;
+  border-radius: 5px !important;
+  padding: 10px !important;
+  font-size: 1rem !important;
+  outline: none !important;
+}
+
+.npml-content select:focus {
+  border-color: #f97316 !important;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2) !important;
+}
+
+.npml-content select option {
+  background-color: #10182b !important;
+  color: #e2e8f0 !important;
+  padding: 8px !important;
+}
+
+.npml-content select option:hover {
+  background-color: #1e293b !important;
+}
+
+.npml-content select option:checked {
+  background-color: #f97316 !important;
+  color: #ffffff !important;
+}
+
+/* Estilos generales para todos los inputs del formulario */
+.npml-content input,
+.npml-content textarea {
+  background-color: #10182b !important;
+  color: #e2e8f0 !important;
+  border: 1px solid #283446 !important;
+  border-radius: 5px !important;
+  padding: 10px !important;
+  font-size: 1rem !important;
+  outline: none !important;
+  font-family: inherit !important;
+}
+
+.npml-content input:focus,
+.npml-content textarea:focus {
+  border-color: #f97316 !important;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2) !important;
+}
+
+.npml-content input::placeholder,
+.npml-content textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+.npml-content label {
+  color: #e2e8f0 !important;
+  font-weight: 500 !important;
+  margin-bottom: 0.5rem !important;
+  display: block !important;
+}
+
+/* Estilos específicos para inputs de archivo */
+.npml-content input[type="file"] {
+  background-color: #10182b !important;
+  color: #e2e8f0 !important;
+  border: 2px dashed #283446 !important;
+  border-radius: 5px !important;
+  padding: 15px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.npml-content input[type="file"]:hover {
+  border-color: #f97316 !important;
+  background-color: #1e293b !important;
+}
+
+/* Estilos para checkboxes (switch) */
+.npml-content .switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.npml-content .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.npml-content .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #4a5568;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.npml-content .slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.npml-content input:checked + .slider {
+  background-color: #f97316;
+}
+
+.npml-content input:checked + .slider:before {
+  transform: translateX(26px);
 }

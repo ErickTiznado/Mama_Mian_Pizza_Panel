@@ -511,31 +511,49 @@ const AgregarContenido = () => {
       { headers }
     );
 
-    // Actualiza tu lista local con el nuevo estado
+    // Actualiza tu lista local con el nuevo estado basado en la respuesta del servidor
     const newStatus = data.activo === 1;
-    setContenidos(contenidos.map(item =>
-      item.id === productId
-        ? { ...item, estado: newStatus }
-        : item
-    ));
-    setFilteredItems(filteredItems.map(item =>
-      item.id === productId
-        ? { ...item, estado: newStatus }
-        : item
-    ));
+    
+    // Actualizar contenidos principales
+    setContenidos(prevContenidos => 
+      prevContenidos.map(item =>
+        item.id === productId
+          ? { ...item, estado: newStatus }
+          : item
+      )
+    );
+    
+    // Actualizar filteredItems para reflejar el cambio inmediatamente
+    setFilteredItems(prevFilteredItems => 
+      prevFilteredItems.map(item =>
+        item.id === productId
+          ? { ...item, estado: newStatus }
+          : item
+      )
+    );
 
     console.log(`Producto ${newStatus ? 'activado' : 'desactivado'} correctamente`);
+    console.log('Estado anterior:', currentStatus, '-> Estado nuevo:', newStatus);
+    
     // Opcional: log en tu servicio de logs
     await UserLogService.logProductAction(
       user.id,
       'UPDATE_STATUS',
-      { id: productId, previous_status: currentStatus, new_status: newStatus },
+      { 
+        id: productId, 
+        previous_status: currentStatus, 
+        new_status: newStatus,
+        timestamp: new Date().toISOString()
+      },
       null
     );
 
   } catch (err) {
+    console.error('Error al cambiar el estado del producto:', err);
     if (!handleAuthError(err)) {
-      console.error('Error al cambiar el estado del producto');
+      console.error('Error al cambiar el estado del producto - no es error de autenticación');
+      // Opcional: mostrar mensaje de error al usuario
+      setError('Error al cambiar el estado del producto. Por favor, inténtalo de nuevo.');
     }
   } finally {
     setChangingStatus(prev => {
